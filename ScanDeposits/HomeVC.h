@@ -9,9 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "ScanditSDKOverlayController.h"
 #import "ScanditSDKBarcodePicker.h"
+#import "Barcode.h"
 
 
-#define kScanditSDKAppKey @"gJ9KL2dapvcyJ9iaR442wIX_s4iCsOemFpOo5ZehUC4"
+#define kScanditSDKAppKey @"4w8vXjD2EeOZw8u2pkkjQH4S+hfplxDDtzKnte2lX4s"
 
 @interface HomeVC : UIViewController <ScanditSDKOverlayControllerDelegate>
 

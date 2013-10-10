@@ -26,37 +26,53 @@
 
 #pragma mark Scandit SDK - delegate methods
 - (void)scanditSDKOverlayController:
-(ScanditSDKOverlayController *)scanditSDKOverlayController
-                     didScanBarcode:(NSDictionary *)barcodeResult {
-    NSLog(@"didScanBarcode");
+(ScanditSDKOverlayController *)scanditSDKOverlayController didScanBarcode:(NSDictionary *)barcodeResult {
+    
+    NSDictionary *barcodeDict = barcodeResult;
+    
+    //create our custom model object
+    Barcode *barcodeObject = [Barcode instanceFromDictionary:barcodeResult];
+    DLog(@"didScanBarcode with <<<<barcodeObject>>>>: %@", barcodeObject);
+    
+    //retrieve the barcode string from the barcode recognition engine
+    NSString *barcodeString = barcodeDict[@"barcode"];
+    DLog(@"didScanBarcode with barcodeString: %@", barcodeString);
+    
+    NSString *barcodeSymbology = barcodeDict[@"symbology"];
+    DLog(@"didScanBarcode with barcodeSymbology: %@", barcodeSymbology);
+    
 }
 
 - (void)scanditSDKOverlayController:
 (ScanditSDKOverlayController *)scanditSDKOverlayController
                 didCancelWithStatus:(NSDictionary *)status {
-    NSLog(@"didCancel");
+    DLog(@"didCancel");
 }
 
 - (void)scanditSDKOverlayController:
 (ScanditSDKOverlayController *)scanditSDKOverlayController
                     didManualSearch:(NSString *)input {
-    NSLog(@"didManualSearch");
+    DLog(@"didManualSearch");
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
-    NSLog(@"viewDidLoad");
+    DLog(@"viewDidLoad");
     
     ScanditSDKBarcodePicker *picker =
     [[ScanditSDKBarcodePicker alloc] initWithAppKey:kScanditSDKAppKey];
     picker.overlayController.delegate = self;
     [picker startScanning];
+//    [self.navigationController presentViewController:picker animated:YES completion:nil];
+    
+    
     [self presentViewController:picker animated:YES completion:^{
-        NSLog(@"Test scan picker");
+    [picker setModalPresentationStyle:UIModalPresentationPageSheet];
+    [picker setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
     }];
-     
+    
 }
 
 - (void)didReceiveMemoryWarning

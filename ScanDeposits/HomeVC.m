@@ -54,9 +54,27 @@
     
 }
 
+- (void)alertView:(UIAlertView *)alertView willDismissWithButtonIndex:(NSInteger)buttonIndex {
+    
+    if (buttonIndex == 0) {
+        DLog(@"Cancel button pressed");//correct
+        //start picker again
+    }
+    else
+    {
+         DLog(@"Save button pressed");
+        //Perhaps add data persistence here
+        //Save and start picker again
+    }
+        //UIAlertView has been dismissed so resume scanning mode
+         [picker startScanning];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    _barcodeArray = [NSMutableArray array];
     
 //    [self.navigationController.navigationBar setTintColor:[UIColor blackColor]];
     self.navigationController.navigationBar.barStyle = UIBarStyleBlackTranslucent;
@@ -69,8 +87,8 @@
 //    scanBtn.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:18.0];
     scanBtn.titleLabel.font = [UIFont systemFontOfSize:17.0];
     
-    [scanBtn setFrame:CGRectMake(self.view.frame.size.width/4, self.view.frame.size.height/2, 240, 44)];
-//    scanBtn.backgroundColor = [UIColor colorWithRed:120.0/255.0 green:40.0/255.0 blue:280.0/255.0 alpha:1.0];
+//    [scanBtn setFrame:CGRectMake(self.view.frame.size.width/4, self.view.frame.size.height/2, 180, 44)];
+    [scanBtn setFrame:CGRectMake(20, self.view.frame.size.height/2, 280, 44)];
     [scanBtn addTarget:self action:@selector(buttonTapped:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:scanBtn];
         
@@ -81,30 +99,42 @@
     
 }
 
+
+
 #pragma mark Scandit SDK - delegate methods
 - (void)scanditSDKOverlayController:
 (ScanditSDKOverlayController *)scanditSDKOverlayController didScanBarcode:(NSDictionary *)barcodeResult {
     
     //create our custom model object
     Barcode *barcodeObject = [Barcode instanceFromDictionary:barcodeResult];
+    //Add to collection
+    [_barcodeArray addObject:barcodeObject];
     //retrieve the barcode string from the barcode recognition engine
     DLog(@"barcode from model object>>>>>>>>: %@", barcodeObject.barcode);
     DLog(@"barcode symbology: %@", barcodeObject.symbology);
+    
+    //present alertView and temp stop scanning
+    [picker stopScanning];
+    
+    //ToDo: Create a custom Alert
+    UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"Scanned Successfully" message:[NSString stringWithFormat:@"Barcode is %@", barcodeObject.barcode] delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Save", nil];
+    [alertView show];
     
 }
 
 - (void)scanditSDKOverlayController:
 (ScanditSDKOverlayController *)scanditSDKOverlayController didCancelWithStatus:(NSDictionary *)status {
     
+    DLog(@"status dictionary: %@", status);
     [self.navigationController dismissViewControllerAnimated:YES completion:^{
         [picker stopScanning];
-        //Perhaps add data persitence
     }];
 }
 
 - (void)scanditSDKOverlayController:
 (ScanditSDKOverlayController *)scanditSDKOverlayController didManualSearch:(NSString *)input {
-    DLog(@"didManualSearch");
+    
+    DLog(@"didManualSearch with Input: %@", input);
 }
 
 - (void)didReceiveMemoryWarning

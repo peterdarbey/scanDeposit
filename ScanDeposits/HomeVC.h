@@ -20,4 +20,5 @@
     
 }
 
+@property (strong, nonatomic) NSMutableArray *barcodeArray;
 @end

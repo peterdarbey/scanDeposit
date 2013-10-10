@@ -100,7 +100,6 @@
 }
 
 
-
 #pragma mark Scandit SDK - delegate methods
 - (void)scanditSDKOverlayController:
 (ScanditSDKOverlayController *)scanditSDKOverlayController didScanBarcode:(NSDictionary *)barcodeResult {
@@ -116,9 +115,16 @@
     //present alertView and temp stop scanning
     [picker stopScanning];
     
-    //ToDo: Create a custom Alert
-    UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"Scanned Successfully" message:[NSString stringWithFormat:@"Barcode is %@", barcodeObject.barcode] delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Save", nil];
-    [alertView show];
+    //ToDo: Create a custom Alert -> PopupView.xib
+//    PopupView *popup = [[PopupView alloc]initWithFrame:CGRectMake(100, 100, 240, 160)];
+//    [self.view addSubview:popup];
+    
+    PopupView *popup = [[PopupView alloc]initWithFrame:CGRectMake(100, 100, 240, 160)];
+    [popup showOnView:picker.view];//works
+//    [self.view addSubview:popup];
+    
+//    UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"Scanned Successfully" message:[NSString stringWithFormat:@"Barcode is %@", barcodeObject.barcode] delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Save", nil];
+//    [alertView show];
     
 }
 

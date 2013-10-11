@@ -12,6 +12,7 @@
 
 @property (strong, nonatomic) NSString *barcode;
 @property (strong, nonatomic) NSString *symbology;
+@property (strong, nonatomic) NSDate *currentDate;//NSString
 
 + (Barcode *)instanceFromDictionary:(NSDictionary *)aDictionary;
 - (void)setAttributesFromDictionary:(NSDictionary *)aDictionary;

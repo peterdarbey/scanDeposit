@@ -51,7 +51,10 @@
         [self setValue:value forKey:@"barcode"];//property ivar
     } else if ([key isEqualToString:@"Symbology"]) {
         [self setValue:value forKey:@"symbology"];//property ivar
-    } else {
+    } else if ([key isEqualToString:@"currentDate"]) {
+        [self setValue:value forKey:@"currentDate"];//property ivar
+    }
+    else {
         [super setValue:value forUndefinedKey:key];
     }
     
@@ -65,6 +68,9 @@
     }
     if (self.symbology) {
         [dictionary setObject:self.symbology forKey:@"symbology"];
+    }
+    if (self.currentDate) {
+        [dictionary setObject:self.currentDate forKey:@"currentDate"];
     }
     
     return dictionary;

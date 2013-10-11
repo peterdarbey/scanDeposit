@@ -38,6 +38,8 @@
     [picker.overlayController setToolBarButtonCaption:@"Cancel"];
 //    [picker.overlayController setTextForInitializingCamera:@"Please Wait"];
     [picker startScanning];
+    //set the keyboard type
+//    [picker.overlayController setSearchBarKeyboardType:UIKeyboardTypeNamePhonePad];
     
     [self.navigationController presentViewController:picker animated:YES completion:nil];
     
@@ -54,22 +56,6 @@
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     
 }
-
-//- (void)alertView:(UIAlertView *)alertView willDismissWithButtonIndex:(NSInteger)buttonIndex {
-//    
-//    if (buttonIndex == 0) {
-//        DLog(@"Cancel button pressed");//correct
-//        //start picker again
-//    }
-//    else
-//    {
-//         DLog(@"Save button pressed");
-//        //Perhaps add data persistence here
-//        //Save and start picker again
-//    }
-//        //UIAlertView has been dismissed so resume scanning mode
-//         [picker startScanning];
-//}
 
 - (void)viewDidLoad
 {
@@ -115,6 +101,10 @@
     
     //create our custom model object
     Barcode *barcodeObject = [Barcode instanceFromDictionary:barcodeResult];
+    
+    NSDate *currentDate = [NSDate date];
+    DLog(@"Date is: %@", currentDate);//format date
+    barcodeObject.currentDate = currentDate; //change to NSString property 
     //Add to collection
     [_barcodeArray addObject:barcodeObject];
     //retrieve the barcode string from the barcode recognition engine
@@ -123,44 +113,60 @@
     
     //present alertView and temp stop scanning
     [picker stopScanning];
-    
-    
-//    PopupView *popup = [[PopupView alloc]initWithFrame:CGRectMake(100, 100, 240, 160)];
-//    [self.view addSubview:popup];
-    
-    //ToDo: Create a custom Alert -> AlertView.xib
-//    PopupAV *popup = [[PopupAV alloc]initWithNibName:@"PopupAV" bundle:Nil];
-    AlertView *popup = [AlertView loadFromNibNamed:@"AlertView"];
-    //Add custom delegate method here to restart picker
-    [popup setDelegate:self];
-    popup.barcodeString.text = [NSString stringWithFormat:@"%@", barcodeObject.barcode];
-    [popup showOnView:picker.view];//works
 
-    
-//    UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"Scanned Successfully" message:[NSString stringWithFormat:@"Barcode is %@", barcodeObject.barcode] delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Save", nil];
-//    [alertView show];
-    
+    //Create a custom Alert -> AlertView.xib
+    AlertView *popup = [AlertView loadFromNibNamed:@"AlertView"];
+    //Add custom delegate method here to restart picker scanning
+    [popup setDelegate:self];
+    //set the barcode text
+    popup.barcodeString.text = [NSString stringWithFormat:@"%@", barcodeObject.barcode];
+    [popup showOnView:picker.view];
 }
+
+//-(void)showPopup {
+//    //Create a custom Alert -> AlertView.xib
+//    AlertView *popup = [AlertView loadFromNibNamed:@"AlertView"];
+//    //Add custom delegate method here to restart picker scanning
+//    [popup setDelegate:self];
+//    //set the barcode text
+//    popup.barcodeString.text = [NSString stringWithFormat:@"%@", barcodeObject.barcode];
+//    [popup showOnView:picker.view];
+//}
 
 - (void)scanditSDKOverlayController:
 (ScanditSDKOverlayController *)scanditSDKOverlayController didCancelWithStatus:(NSDictionary *)status {
     
     DLog(@"status dictionary: %@", status);
+//    [picker.overlayController searchBarTextDidEndEditing:picker.overlayController];
     [self.navigationController dismissViewControllerAnimated:YES completion:^{
-        [picker stopScanning];
+        [picker stopScanning];//why cancel
     }];
 }
 
 - (void)scanditSDKOverlayController:
 (ScanditSDKOverlayController *)scanditSDKOverlayController didManualSearch:(NSString *)input {
     
-    DLog(@"didManualSearch with Input: %@", input);
+    NSDictionary *manualDict = @{@"barcode" : input, @"symbology" : @"None defined"};
+    DLog(@"manualDict is: %@", manualDict);
+    
+    //Create our custom model object
+    Barcode *barcodeObject = [Barcode instanceFromDictionary:manualDict];
+    [_barcodeArray addObject:barcodeObject];
+    
+    //Create a custom Alert -> AlertView.xib
+    AlertView *popup = [AlertView loadFromNibNamed:@"AlertView"];
+    //Add custom delegate method here to restart picker scanning
+    [popup setDelegate:self];
+    //set the barcode text
+    popup.barcodeString.text = [NSString stringWithFormat:@"%@", barcodeObject.barcode];
+    [popup showOnView:picker.view];
+    
+    DLog(@"didManualSearch with Inputed from barcodeObject: %@", barcodeObject.barcode);
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 @end

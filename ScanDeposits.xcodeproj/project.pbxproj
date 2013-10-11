@@ -21,7 +21,7 @@
 		BF2C4F711805C08B00A87C18 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF2C4F501805C08B00A87C18 /* UIKit.framework */; };
 		BF2C4F791805C08B00A87C18 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = BF2C4F771805C08B00A87C18 /* InfoPlist.strings */; };
 		BF2C4F7B1805C08B00A87C18 /* ScanDepositsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = BF2C4F7A1805C08B00A87C18 /* ScanDepositsTests.m */; };
-		BF2C4F861805C0E000A87C18 /* HomeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = BF2C4F851805C0E000A87C18 /* HomeVC.m */; };
+		BF2C4F861805C0E000A87C18 /* HomeVC.mm in Sources */ = {isa = PBXBuildFile; fileRef = BF2C4F851805C0E000A87C18 /* HomeVC.mm */; };
 		BF2C4FA01805C23300A87C18 /* beep.wav in Resources */ = {isa = PBXBuildFile; fileRef = BF2C4F881805C23300A87C18 /* beep.wav */; };
 		BF2C4FA11805C23300A87C18 /* camera-swap-icon-pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = BF2C4F891805C23300A87C18 /* camera-swap-icon-pressed.png */; };
 		BF2C4FA21805C23300A87C18 /* camera-swap-icon-pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BF2C4F8A1805C23300A87C18 /* camera-swap-icon-pressed@2x.png */; };
@@ -50,7 +50,7 @@
 		BF2C4FBF1806B14800A87C18 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BF2C4FBE1806B14800A87C18 /* libz.dylib */; };
 		BF2C4FC11806B16B00A87C18 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF2C4FC01806B16B00A87C18 /* AVFoundation.framework */; };
 		BF2C4FC41806C96400A87C18 /* Barcode.m in Sources */ = {isa = PBXBuildFile; fileRef = BF2C4FC31806C96400A87C18 /* Barcode.m */; };
-		BF2C4FC81806E1D400A87C18 /* ScanModeVC.mm in Sources */ = {isa = PBXBuildFile; fileRef = BF2C4FC71806E1D400A87C18 /* ScanModeVC.mm */; };
+		BF2C4FC81806E1D400A87C18 /* ScanModeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = BF2C4FC71806E1D400A87C18 /* ScanModeVC.m */; };
 		BF2C4FCE1806FEB100A87C18 /* blueButton.png in Resources */ = {isa = PBXBuildFile; fileRef = BF2C4FCA1806FEB100A87C18 /* blueButton.png */; };
 		BF2C4FCF1806FEB100A87C18 /* blueButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BF2C4FCB1806FEB100A87C18 /* blueButton@2x.png */; };
 		BF2C4FD01806FEB100A87C18 /* bluebuttonSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = BF2C4FCC1806FEB100A87C18 /* bluebuttonSelected.png */; };
@@ -89,7 +89,7 @@
 		BF2C4F781805C08B00A87C18 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		BF2C4F7A1805C08B00A87C18 /* ScanDepositsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ScanDepositsTests.m; sourceTree = "<group>"; };
 		BF2C4F841805C0E000A87C18 /* HomeVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeVC.h; sourceTree = "<group>"; };
-		BF2C4F851805C0E000A87C18 /* HomeVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeVC.m; sourceTree = "<group>"; };
+		BF2C4F851805C0E000A87C18 /* HomeVC.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = HomeVC.mm; sourceTree = "<group>"; };
 		BF2C4F881805C23300A87C18 /* beep.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = beep.wav; sourceTree = "<group>"; };
 		BF2C4F891805C23300A87C18 /* camera-swap-icon-pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera-swap-icon-pressed.png"; sourceTree = "<group>"; };
 		BF2C4F8A1805C23300A87C18 /* camera-swap-icon-pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera-swap-icon-pressed@2x.png"; sourceTree = "<group>"; };
@@ -123,7 +123,7 @@
 		BF2C4FC21806C96400A87C18 /* Barcode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Barcode.h; sourceTree = "<group>"; };
 		BF2C4FC31806C96400A87C18 /* Barcode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Barcode.m; sourceTree = "<group>"; };
 		BF2C4FC61806E1D400A87C18 /* ScanModeVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanModeVC.h; sourceTree = "<group>"; };
-		BF2C4FC71806E1D400A87C18 /* ScanModeVC.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ScanModeVC.mm; sourceTree = "<group>"; };
+		BF2C4FC71806E1D400A87C18 /* ScanModeVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScanModeVC.m; sourceTree = "<group>"; };
 		BF2C4FCA1806FEB100A87C18 /* blueButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blueButton.png; sourceTree = "<group>"; };
 		BF2C4FCB1806FEB100A87C18 /* blueButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blueButton@2x.png"; sourceTree = "<group>"; };
 		BF2C4FCC1806FEB100A87C18 /* bluebuttonSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bluebuttonSelected.png; sourceTree = "<group>"; };
@@ -206,18 +206,18 @@
 			isa = PBXGroup;
 			children = (
 				BF2C4F871805C23300A87C18 /* ScanditSDK */,
+				BF2C4FC91806FE7900A87C18 /* Assets */,
+				BF2C4FC51806DF5C00A87C18 /* Model Objects */,
 				BF2C4F5B1805C08B00A87C18 /* AppDelegate.h */,
 				BF2C4F5C1805C08B00A87C18 /* AppDelegate.m */,
 				BF2C4F5E1805C08B00A87C18 /* Main_iPhone.storyboard */,
+				BF2C4F841805C0E000A87C18 /* HomeVC.h */,
+				BF2C4F851805C0E000A87C18 /* HomeVC.mm */,
 				BF370325180822A30027AE4F /* AlertView.h */,
 				BF370326180822A90027AE4F /* AlertView.m */,
 				BF3703231808229A0027AE4F /* AlertView.xib */,
-				BF2C4FC91806FE7900A87C18 /* Assets */,
-				BF2C4FC51806DF5C00A87C18 /* Model Objects */,
-				BF2C4F841805C0E000A87C18 /* HomeVC.h */,
-				BF2C4F851805C0E000A87C18 /* HomeVC.m */,
 				BF2C4FC61806E1D400A87C18 /* ScanModeVC.h */,
-				BF2C4FC71806E1D400A87C18 /* ScanModeVC.mm */,
+				BF2C4FC71806E1D400A87C18 /* ScanModeVC.m */,
 				BF2C4F611805C08B00A87C18 /* Main_iPad.storyboard */,
 				BF2C4F671805C08B00A87C18 /* Images.xcassets */,
 				BF2C4F531805C08B00A87C18 /* Supporting Files */,
@@ -428,11 +428,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BF2C4F861805C0E000A87C18 /* HomeVC.m in Sources */,
+				BF2C4F861805C0E000A87C18 /* HomeVC.mm in Sources */,
 				BF2C4FA71805C23300A87C18 /* empty.cpp in Sources */,
 				BF2C4FC41806C96400A87C18 /* Barcode.m in Sources */,
 				BF2C4F5D1805C08B00A87C18 /* AppDelegate.m in Sources */,
-				BF2C4FC81806E1D400A87C18 /* ScanModeVC.mm in Sources */,
+				BF2C4FC81806E1D400A87C18 /* ScanModeVC.m in Sources */,
 				BF370327180822A90027AE4F /* AlertView.m in Sources */,
 				BF2C4F591805C08B00A87C18 /* main.m in Sources */,
 			);

@@ -15,9 +15,6 @@
 
 -(void)showOnView:(UIView*)view;
 
-- (IBAction)dismiss:(id)sender;
-- (IBAction)yesPressed:(id)sender;
-
 +(AlertView*)loadFromNibNamed:(NSString*)nibName;
 
 @property (weak, nonatomic) IBOutlet UIView *zoneBackground;

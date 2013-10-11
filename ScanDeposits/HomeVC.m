@@ -123,7 +123,7 @@
 //    PopupAV *popup = [[PopupAV alloc]initWithNibName:@"PopupAV" bundle:Nil];
     
     AlertView *popup = [AlertView loadFromNibNamed:@"AlertView"];//Works
-//    popup.barcodeString.text = [NSString stringWithFormat:@"Barcode is: %@", barcodeObject.barcode];
+    popup.barcodeString.text = [NSString stringWithFormat:@"%@", barcodeObject.barcode];
     [popup showOnView:picker.view];//works
 //    [picker.view addSubview:popup.view];//Test works no anim
     

@@ -12,12 +12,6 @@
 #import "Barcode.h"
 #import "ScanModeVC.h"
 
-
-//Replace with this
-#import "PopupAV.h"
-
-#import "PopupVC.h"
-
 #import "AlertView.h"
 
 

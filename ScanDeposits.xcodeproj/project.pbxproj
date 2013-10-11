@@ -57,6 +57,7 @@
 		BF2C4FD11806FEB100A87C18 /* blueButtonSelected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BF2C4FCD1806FEB100A87C18 /* blueButtonSelected@2x.png */; };
 		BF3703241808229A0027AE4F /* AlertView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BF3703231808229A0027AE4F /* AlertView.xib */; };
 		BF370327180822A90027AE4F /* AlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = BF370326180822A90027AE4F /* AlertView.m */; };
+		BF370329180844990027AE4F /* bg_gradient.png in Resources */ = {isa = PBXBuildFile; fileRef = BF370328180844990027AE4F /* bg_gradient.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -131,6 +132,7 @@
 		BF3703231808229A0027AE4F /* AlertView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AlertView.xib; sourceTree = "<group>"; };
 		BF370325180822A30027AE4F /* AlertView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AlertView.h; sourceTree = "<group>"; };
 		BF370326180822A90027AE4F /* AlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlertView.m; sourceTree = "<group>"; };
+		BF370328180844990027AE4F /* bg_gradient.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg_gradient.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -295,6 +297,7 @@
 		BF2C4FC91806FE7900A87C18 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				BF370328180844990027AE4F /* bg_gradient.png */,
 				BF2C4FCA1806FEB100A87C18 /* blueButton.png */,
 				BF2C4FCB1806FEB100A87C18 /* blueButton@2x.png */,
 				BF2C4FCC1806FEB100A87C18 /* bluebuttonSelected.png */,
@@ -403,6 +406,7 @@
 				BF2C4FA21805C23300A87C18 /* camera-swap-icon-pressed@2x.png in Resources */,
 				BF2C4FAA1805C23300A87C18 /* flashlight-turn-off-icon.png in Resources */,
 				BF2C4FAD1805C23300A87C18 /* flashlight-turn-on-icon-pressed@2x.png in Resources */,
+				BF370329180844990027AE4F /* bg_gradient.png in Resources */,
 				BF2C4FCE1806FEB100A87C18 /* blueButton.png in Resources */,
 				BF2C4FAC1805C23300A87C18 /* flashlight-turn-on-icon-pressed.png in Resources */,
 				BF2C4FD11806FEB100A87C18 /* blueButtonSelected@2x.png in Resources */,

@@ -91,6 +91,10 @@
     self.transform = CGAffineTransformMakeScale(0.5f, 0.5f);
     
     self.center = view.center;//pass picker.view.center to view
+    self.layer.cornerRadius = 5.0;
+    self.layer.borderColor = [UIColor blackColor].CGColor;
+    self.layer.borderWidth = 1.0;
+    
     
     [view addSubview:_backgroundView];
     [_backgroundView addSubview:self];//Need to add self to background

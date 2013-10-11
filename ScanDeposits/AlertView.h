@@ -21,6 +21,7 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *cancelBtn;
 @property (weak, nonatomic) IBOutlet UIButton *saveBtn;
+@property (strong, nonatomic) IBOutlet UIImageView *imagePlaceHolder;
 
 
 @end

@@ -115,13 +115,16 @@
     //present alertView and temp stop scanning
     [picker stopScanning];
     
-    //ToDo: Create a custom Alert -> PopupView.xib
+    
 //    PopupView *popup = [[PopupView alloc]initWithFrame:CGRectMake(100, 100, 240, 160)];
 //    [self.view addSubview:popup];
     
+    //ToDo: Create a custom Alert -> PopupView.xib
     PopupAV *popup = [[PopupAV alloc]initWithNibName:@"PopupAV" bundle:Nil];
     popup.barcodeString.text = [NSString stringWithFormat:@"Barcode is: %@", barcodeObject.barcode];
     [popup showOnView:picker.view];//works
+//    [picker.view addSubview:popup.view];//Test works no anim
+    
     DLog(@"picker.view.center: %f and Y: %f", picker.view.center.x, picker.view.center.y);//(160, 294)
     
 //    [self.view addSubview:popup];

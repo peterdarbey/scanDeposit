@@ -22,7 +22,8 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        
+        
     }
     return self;
 }
@@ -54,21 +55,21 @@
     
 }
 
-- (void)alertView:(UIAlertView *)alertView willDismissWithButtonIndex:(NSInteger)buttonIndex {
-    
-    if (buttonIndex == 0) {
-        DLog(@"Cancel button pressed");//correct
-        //start picker again
-    }
-    else
-    {
-         DLog(@"Save button pressed");
-        //Perhaps add data persistence here
-        //Save and start picker again
-    }
-        //UIAlertView has been dismissed so resume scanning mode
-         [picker startScanning];
-}
+//- (void)alertView:(UIAlertView *)alertView willDismissWithButtonIndex:(NSInteger)buttonIndex {
+//    
+//    if (buttonIndex == 0) {
+//        DLog(@"Cancel button pressed");//correct
+//        //start picker again
+//    }
+//    else
+//    {
+//         DLog(@"Save button pressed");
+//        //Perhaps add data persistence here
+//        //Save and start picker again
+//    }
+//        //UIAlertView has been dismissed so resume scanning mode
+//         [picker startScanning];
+//}
 
 - (void)viewDidLoad
 {
@@ -91,6 +92,7 @@
     [scanBtn setFrame:CGRectMake(20, self.view.frame.size.height/2, 280, 44)];
     [scanBtn addTarget:self action:@selector(buttonTapped:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:scanBtn];
+    
         
 }
 - (void)viewDidAppear:(BOOL)animated
@@ -99,6 +101,13 @@
     
 }
 
+
+#pragma mark - Custom delegate method
+-(void)startScanning {
+    
+    [picker startScanning];
+    DLog(@"Start scanning delegate");
+}
 
 #pragma mark Scandit SDK - delegate methods
 - (void)scanditSDKOverlayController:
@@ -119,18 +128,14 @@
 //    PopupView *popup = [[PopupView alloc]initWithFrame:CGRectMake(100, 100, 240, 160)];
 //    [self.view addSubview:popup];
     
-    //ToDo: Create a custom Alert -> PopupView.xib
+    //ToDo: Create a custom Alert -> AlertView.xib
 //    PopupAV *popup = [[PopupAV alloc]initWithNibName:@"PopupAV" bundle:Nil];
-    
-    AlertView *popup = [AlertView loadFromNibNamed:@"AlertView"];//Works
+    AlertView *popup = [AlertView loadFromNibNamed:@"AlertView"];
+    //Add custom delegate method here to restart picker
+    [popup setDelegate:self];
     popup.barcodeString.text = [NSString stringWithFormat:@"%@", barcodeObject.barcode];
     [popup showOnView:picker.view];//works
-//    [picker.view addSubview:popup.view];//Test works no anim
-    
-    DLog(@"picker.view.center: %f and Y: %f", picker.view.center.x, picker.view.center.y);//(160, 294)
-    
-//    [self.view addSubview:popup];
-    
+
     
 //    UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"Scanned Successfully" message:[NSString stringWithFormat:@"Barcode is %@", barcodeObject.barcode] delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Save", nil];
 //    [alertView show];

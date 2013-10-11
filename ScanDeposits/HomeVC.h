@@ -17,7 +17,7 @@
 
 #define kScanditSDKAppKey @"4w8vXjD2EeOZw8u2pkkjQH4S+hfplxDDtzKnte2lX4s"
 
-@interface HomeVC : UIViewController <ScanditSDKOverlayControllerDelegate>
+@interface HomeVC : UIViewController <ScanditSDKOverlayControllerDelegate, ResumeScanMode>
 {
     
 }

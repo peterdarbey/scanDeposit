@@ -12,7 +12,9 @@
 #import "Barcode.h"
 #import "ScanModeVC.h"
 
-#import "PopupView.h"
+
+//Replace with this
+#import "PopupAV.h"
 
 
 #define kScanditSDKAppKey @"4w8vXjD2EeOZw8u2pkkjQH4S+hfplxDDtzKnte2lX4s"

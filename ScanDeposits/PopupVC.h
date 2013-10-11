@@ -1,14 +1,14 @@
 //
-//  PopupView.h
+//  PopupVCViewController.h
 //  ScanDeposits
 //
-//  Created by Peter Darbey on 10/10/2013.
+//  Created by Peter Darbey on 11/10/2013.
 //  Copyright (c) 2013 AIB. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
-@interface PopupView : UIView
+@interface PopupVC : UIViewController
 {
     
 }
@@ -18,9 +18,6 @@
 @property (strong, nonatomic) IBOutlet UIButton *cancelBtn;
 
 @property (strong, nonatomic) IBOutlet UIButton *saveBtn;
-@property (strong, nonatomic) IBOutlet UIView *alertView;
-
--(void)showOnView:(UIView*)view;
--(void)setupView;
+@property (strong, nonatomic) IBOutlet UILabel *barcodeString;
 
 @end

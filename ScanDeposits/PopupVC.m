@@ -1,24 +1,32 @@
 //
-//  PopupView.m
+//  PopupVCViewController.m
 //  ScanDeposits
 //
-//  Created by Peter Darbey on 10/10/2013.
+//  Created by Peter Darbey on 11/10/2013.
 //  Copyright (c) 2013 AIB. All rights reserved.
 //
 
-#import "PopupView.h"
+#import "PopupVC.h"
 
-@implementation PopupView
+@interface PopupVC ()
 
-- (id)initWithFrame:(CGRect)frame
+@end
+
+@implementation PopupVC
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
-    self = [super initWithFrame:frame];
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-//        [self buttonStyle:_cancelBtn WithImgName:@"blueButton.png" imgSelectedName:@"bluebuttonSelected" withTitle:@"Cancel"];
-//        
-//        [self buttonStyle:_saveBtn WithImgName:@"blueButton.png" imgSelectedName:@"bluebuttonSelected" withTitle:@"Save"];
+        // Custom initialization
     }
     return self;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    // Do any additional setup after loading the view from its nib.
 }
 
 -(void)setupView {
@@ -26,14 +34,6 @@
     _backgroundView = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [_backgroundView setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:0.0]];//correct
     
-    UIView *bgStretchView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, 100)];
-    bgStretchView.backgroundColor = [UIColor whiteColor];
-
-    [self insertSubview:bgStretchView atIndex:0];
-    
-//    [self insertSubview:bgStretchView aboveSubview:_alertView];//nope
-//    [self.alertView addSubview:bgStretchView];
-
     [self buttonStyle:_cancelBtn WithImgName:@"blueButton.png" imgSelectedName:@"bluebuttonSelected" withTitle:@"Cancel"];
     
     [self buttonStyle:_saveBtn WithImgName:@"blueButton.png" imgSelectedName:@"bluebuttonSelected" withTitle:@"Save"];
@@ -44,20 +44,20 @@
 -(void)showOnView:(UIView*)view {
     [self setupView];
     
-    self.transform = CGAffineTransformMakeScale(0.5f, 0.5f);
+    self.view.transform = CGAffineTransformMakeScale(0.5f, 0.5f);
     
-    self.center = view.center;
+    self.view.center = view.center;
     
     [view addSubview:_backgroundView];
-    [_backgroundView addSubview:self];
+    [_backgroundView addSubview:self.view];
     
     [UIView animateWithDuration:0.2
                      animations:^{
                          [_backgroundView setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:0.5]];
-                         self.transform = CGAffineTransformMakeScale(1.1f, 1.1f);
+                         self.view.transform = CGAffineTransformMakeScale(1.1f, 1.1f);
                      } completion:^(BOOL finished) {
                          [UIView animateWithDuration:0.1 animations:^{
-                             self.transform = CGAffineTransformMakeScale(1.0f, 1.0f);
+                             self.view.transform = CGAffineTransformMakeScale(1.0f, 1.0f);
                          }];
                      }];
 }
@@ -74,5 +74,11 @@
     
 }
 
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
 
 @end

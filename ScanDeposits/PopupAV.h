@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PopupAV : UIViewController
+@interface PopupAV : UIView
 {
     
 }

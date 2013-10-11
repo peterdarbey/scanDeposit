@@ -120,8 +120,10 @@
 //    [self.view addSubview:popup];
     
     //ToDo: Create a custom Alert -> PopupView.xib
-    PopupAV *popup = [[PopupAV alloc]initWithNibName:@"PopupAV" bundle:Nil];
-    popup.barcodeString.text = [NSString stringWithFormat:@"Barcode is: %@", barcodeObject.barcode];
+//    PopupAV *popup = [[PopupAV alloc]initWithNibName:@"PopupAV" bundle:Nil];
+    
+    AlertView *popup = [AlertView loadFromNibNamed:@"AlertView"];//Works
+//    popup.barcodeString.text = [NSString stringWithFormat:@"Barcode is: %@", barcodeObject.barcode];
     [popup showOnView:picker.view];//works
 //    [picker.view addSubview:popup.view];//Test works no anim
     

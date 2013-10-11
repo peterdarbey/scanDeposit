@@ -16,8 +16,10 @@
 @property(nonatomic,strong) UIView *backgroundView;
 
 @property (strong, nonatomic) IBOutlet UIButton *cancelBtn;
-
 @property (strong, nonatomic) IBOutlet UIButton *saveBtn;
 @property (strong, nonatomic) IBOutlet UILabel *barcodeString;
+
+-(void)showOnView:(UIView*)view;
+-(void)setupView;
 
 @end

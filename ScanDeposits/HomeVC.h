@@ -16,6 +16,10 @@
 //Replace with this
 #import "PopupAV.h"
 
+#import "PopupVC.h"
+
+#import "AlertView.h"
+
 
 #define kScanditSDKAppKey @"4w8vXjD2EeOZw8u2pkkjQH4S+hfplxDDtzKnte2lX4s"
 

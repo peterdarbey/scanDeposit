@@ -57,6 +57,8 @@
 		BF2C4FD11806FEB100A87C18 /* blueButtonSelected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BF2C4FCD1806FEB100A87C18 /* blueButtonSelected@2x.png */; };
 		BF2C4FD81807EF8B00A87C18 /* PopupAV.xib in Resources */ = {isa = PBXBuildFile; fileRef = BF2C4FD71807EF8B00A87C18 /* PopupAV.xib */; };
 		BF2C4FDB1807F08E00A87C18 /* PopupAV.m in Sources */ = {isa = PBXBuildFile; fileRef = BF2C4FDA1807F08E00A87C18 /* PopupAV.m */; };
+		BF3703241808229A0027AE4F /* AlertView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BF3703231808229A0027AE4F /* AlertView.xib */; };
+		BF370327180822A90027AE4F /* AlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = BF370326180822A90027AE4F /* AlertView.m */; };
 		BF49F4411807FBEF00D28535 /* PopupVC.m in Sources */ = {isa = PBXBuildFile; fileRef = BF49F43F1807FBEF00D28535 /* PopupVC.m */; };
 		BF49F4421807FBEF00D28535 /* PopupVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = BF49F4401807FBEF00D28535 /* PopupVC.xib */; };
 /* End PBXBuildFile section */
@@ -133,6 +135,9 @@
 		BF2C4FD71807EF8B00A87C18 /* PopupAV.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PopupAV.xib; sourceTree = "<group>"; };
 		BF2C4FD91807F08E00A87C18 /* PopupAV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopupAV.h; sourceTree = "<group>"; };
 		BF2C4FDA1807F08E00A87C18 /* PopupAV.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopupAV.m; sourceTree = "<group>"; };
+		BF3703231808229A0027AE4F /* AlertView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AlertView.xib; sourceTree = "<group>"; };
+		BF370325180822A30027AE4F /* AlertView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AlertView.h; sourceTree = "<group>"; };
+		BF370326180822A90027AE4F /* AlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlertView.m; sourceTree = "<group>"; };
 		BF49F43E1807FBEF00D28535 /* PopupVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopupVC.h; sourceTree = "<group>"; };
 		BF49F43F1807FBEF00D28535 /* PopupVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopupVC.m; sourceTree = "<group>"; };
 		BF49F4401807FBEF00D28535 /* PopupVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PopupVC.xib; sourceTree = "<group>"; };
@@ -220,6 +225,9 @@
 				BF2C4FD91807F08E00A87C18 /* PopupAV.h */,
 				BF2C4FDA1807F08E00A87C18 /* PopupAV.m */,
 				BF2C4FD71807EF8B00A87C18 /* PopupAV.xib */,
+				BF370325180822A30027AE4F /* AlertView.h */,
+				BF370326180822A90027AE4F /* AlertView.m */,
+				BF3703231808229A0027AE4F /* AlertView.xib */,
 				BF2C4FC91806FE7900A87C18 /* Assets */,
 				BF2C4FC51806DF5C00A87C18 /* Model Objects */,
 				BF2C4F841805C0E000A87C18 /* HomeVC.h */,
@@ -406,6 +414,7 @@
 				BF2C4FA11805C23300A87C18 /* camera-swap-icon-pressed.png in Resources */,
 				BF2C4FA31805C23300A87C18 /* camera-swap-icon.png in Resources */,
 				BF2C4FA81805C23300A87C18 /* flashlight-turn-off-icon-pressed.png in Resources */,
+				BF3703241808229A0027AE4F /* AlertView.xib in Resources */,
 				BF2C4FB21805C23300A87C18 /* poweredby.png in Resources */,
 				BF2C4FA61805C23300A87C18 /* scanditsdk.strings in Resources */,
 				BF2C4FA21805C23300A87C18 /* camera-swap-icon-pressed@2x.png in Resources */,
@@ -443,6 +452,7 @@
 				BF2C4FC41806C96400A87C18 /* Barcode.m in Sources */,
 				BF2C4F5D1805C08B00A87C18 /* AppDelegate.m in Sources */,
 				BF2C4FC81806E1D400A87C18 /* ScanModeVC.mm in Sources */,
+				BF370327180822A90027AE4F /* AlertView.m in Sources */,
 				BF2C4F591805C08B00A87C18 /* main.m in Sources */,
 				BF2C4FDB1807F08E00A87C18 /* PopupAV.m in Sources */,
 			);

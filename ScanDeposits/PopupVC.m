@@ -26,7 +26,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+    
+    [self setupView];//test
+    //    [self showOnView:_backgroundView];
 }
 
 -(void)setupView {
@@ -34,22 +36,37 @@
     _backgroundView = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [_backgroundView setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:0.0]];//correct
     
+    [_backgroundView setCenter:self.view.center];//correct
+    //    [_backgroundView addSubview:_bgView];
+    [self.view addSubview:_backgroundView];
+    [_backgroundView bringSubviewToFront:self.view];
+    
+    //    [_backgroundView addSubview:self.view];//No
+    //    [self.view insertSubview:_backgroundView aboveSubview:self.view];
+    
     [self buttonStyle:_cancelBtn WithImgName:@"blueButton.png" imgSelectedName:@"bluebuttonSelected" withTitle:@"Cancel"];
+    
+    [_cancelBtn addTarget:self action:@selector(cancelPressed:) forControlEvents:UIControlEventTouchUpInside];
     
     [self buttonStyle:_saveBtn WithImgName:@"blueButton.png" imgSelectedName:@"bluebuttonSelected" withTitle:@"Save"];
     
     
 }
 
+-(void)cancelPressed:(UIButton *)sender {
+    
+    DLog(@"Cancel Pressed");
+}
+
 -(void)showOnView:(UIView*)view {
-    [self setupView];
+    //    [self setupView];
     
     self.view.transform = CGAffineTransformMakeScale(0.5f, 0.5f);
+    self.view.center = view.center;//picker.view.center-correct
     
-    self.view.center = view.center;
     
-    [view addSubview:_backgroundView];
-    [_backgroundView addSubview:self.view];
+    //    [_backgroundView addSubview:self.view];
+    [view addSubview:self.view];
     
     [UIView animateWithDuration:0.2
                      animations:^{

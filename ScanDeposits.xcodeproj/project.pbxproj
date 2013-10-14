@@ -58,6 +58,8 @@
 		BF3703241808229A0027AE4F /* AlertView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BF3703231808229A0027AE4F /* AlertView.xib */; };
 		BF370327180822A90027AE4F /* AlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = BF370326180822A90027AE4F /* AlertView.m */; };
 		BF370329180844990027AE4F /* bg_gradient.png in Resources */ = {isa = PBXBuildFile; fileRef = BF370328180844990027AE4F /* bg_gradient.png */; };
+		BF370330180C48B50027AE4F /* InputFundsView.m in Sources */ = {isa = PBXBuildFile; fileRef = BF37032E180C48B50027AE4F /* InputFundsView.m */; };
+		BF370331180C48B50027AE4F /* InputFundsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BF37032F180C48B50027AE4F /* InputFundsView.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -133,6 +135,9 @@
 		BF370325180822A30027AE4F /* AlertView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AlertView.h; sourceTree = "<group>"; };
 		BF370326180822A90027AE4F /* AlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlertView.m; sourceTree = "<group>"; };
 		BF370328180844990027AE4F /* bg_gradient.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg_gradient.png; sourceTree = "<group>"; };
+		BF37032D180C48B50027AE4F /* InputFundsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputFundsView.h; sourceTree = "<group>"; };
+		BF37032E180C48B50027AE4F /* InputFundsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InputFundsView.m; sourceTree = "<group>"; };
+		BF37032F180C48B50027AE4F /* InputFundsView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InputFundsView.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -218,6 +223,9 @@
 				BF370325180822A30027AE4F /* AlertView.h */,
 				BF370326180822A90027AE4F /* AlertView.m */,
 				BF3703231808229A0027AE4F /* AlertView.xib */,
+				BF37032D180C48B50027AE4F /* InputFundsView.h */,
+				BF37032E180C48B50027AE4F /* InputFundsView.m */,
+				BF37032F180C48B50027AE4F /* InputFundsView.xib */,
 				BF2C4FC61806E1D400A87C18 /* ScanModeVC.h */,
 				BF2C4FC71806E1D400A87C18 /* ScanModeVC.m */,
 				BF2C4F611805C08B00A87C18 /* Main_iPad.storyboard */,
@@ -397,6 +405,7 @@
 				BF2C4F601805C08B00A87C18 /* Main_iPhone.storyboard in Resources */,
 				BF2C4F571805C08B00A87C18 /* InfoPlist.strings in Resources */,
 				BF2C4FA51805C23300A87C18 /* CHANGELOG.txt in Resources */,
+				BF370331180C48B50027AE4F /* InputFundsView.xib in Resources */,
 				BF2C4FA11805C23300A87C18 /* camera-swap-icon-pressed.png in Resources */,
 				BF2C4FA31805C23300A87C18 /* camera-swap-icon.png in Resources */,
 				BF2C4FA81805C23300A87C18 /* flashlight-turn-off-icon-pressed.png in Resources */,
@@ -438,6 +447,7 @@
 				BF2C4F5D1805C08B00A87C18 /* AppDelegate.m in Sources */,
 				BF2C4FC81806E1D400A87C18 /* ScanModeVC.m in Sources */,
 				BF370327180822A90027AE4F /* AlertView.m in Sources */,
+				BF370330180C48B50027AE4F /* InputFundsView.m in Sources */,
 				BF2C4F591805C08B00A87C18 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

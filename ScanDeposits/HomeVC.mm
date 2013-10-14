@@ -79,6 +79,18 @@
     [scanBtn addTarget:self action:@selector(buttonTapped:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:scanBtn];
     
+    UIButton *moneyBagBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self buttonStyle:moneyBagBtn WithImgName:@"blueButton.png" imgSelectedName:@"blueButtonSelected.png" withTitle:@"MoneyBag"];
+    [moneyBagBtn setFrame:CGRectMake(20, self.view.frame.size.height/3, 280, 44)];
+    [moneyBagBtn addTarget:self action:@selector(moneyBagTapped:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:moneyBagBtn];
+    
+}
+-(void)moneyBagTapped:(UIButton *)sender
+{
+    //Create a custom Alert -> AlertView.xib
+    AlertView *popup = [AlertView loadFromNibNamed:@"InputFundsView"];
+    [popup showOnView:self.view];
 }
 - (void)viewDidAppear:(BOOL)animated
 {

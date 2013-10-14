@@ -50,7 +50,7 @@
     if ([key isEqualToString:@"Barcode"]) {
         [self setValue:value forKey:@"barcode"];//property ivar contains all data?
     } else if ([key isEqualToString:@"Symbology"]) {
-        [self setValue:value forKey:@"symbology"];//property ivar
+        [self setValue:value forKey:@"symbology"];
     } else if ([key isEqualToString:@"Device"]) {
         [self setValue:value forKey:@"device"];//property ivar
     } else if ([key isEqualToString:@"ID"]) {

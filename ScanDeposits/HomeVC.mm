@@ -100,16 +100,42 @@
     
     //Parse barcode string first before init model obj
     NSString *parseString = barcodeResult[@"barcode"];
-//    NSString *device = @"Device";
-    DLog(@"parseString>>>>>: %@", parseString);
+
     
 //    NSPredicate *predicateFilter = [NSPredicate predicateWithFormat:@"code CONTAINS[cd] %@", device];
 //    NSArray *filteredArray = [array filteredArrayUsingPredicate:predicateFilter];
     
-    NSArray *filteredArray = [parseString componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@":"]];
-     DLog(@"filteredArray>>>>>>>>>>>>>>>: %@", filteredArray);
+    NSMutableArray *filteredArray = (NSMutableArray *)[parseString componentsSeparatedByCharactersInSet:
+        [NSCharacterSet characterSetWithCharactersInString:@" "]];
+     DLog(@"filteredArray>>>>>>>>>>>>>>>: %@ %i", filteredArray, filteredArray.count);//27
+    
+//     NSMutableArray *childArray = [NSMutableArray arrayWithCapacity:[filteredArray count]];
+   
+    
+   
+//    NSArray *wordsArr = [parseString componentsSeparatedByString:@" "];
+//    int count = 0;
+//    for (NSString *word in wordsArr) {
+//        if ([word hasPrefix:@"\"\""]) {
+//            count++;
+//            NSLog(@"%dth match: %@", count, word);
+//        }
+//    }
     
     
+//    for (int i = 0; i < [filteredArray count]; i++) {
+//        if ([[filteredArray objectAtIndex:i] isEqualToString:@"\"/"]) {
+//            [filteredArray removeLastObject];
+////        NSString *subString = [NSString stringWithFormat:@"%@,",[filteredArray objectAtIndex:i]];
+////        [childArray addObject:subString];
+////            DLog(@"subString: %@", subString);
+//        }
+//        
+//    }
+           DLog(@"parsed filteredArray: %@", filteredArray);
+    DLog(@"New count: %i", filteredArray.count);//21
+   
+    DLog(@"parseString: %@", parseString);
     
 //    NSString *filteredString = [parseString stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"Device"]];
 //    DLog(@"filteredString: %@", filteredString);

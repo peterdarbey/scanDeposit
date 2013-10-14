@@ -48,11 +48,15 @@
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key {
     
     if ([key isEqualToString:@"Barcode"]) {
-        [self setValue:value forKey:@"barcode"];//property ivar
+        [self setValue:value forKey:@"barcode"];//property ivar contains all data?
     } else if ([key isEqualToString:@"Symbology"]) {
         [self setValue:value forKey:@"symbology"];//property ivar
-    } else if ([key isEqualToString:@"currentDate"]) {
-        [self setValue:value forKey:@"currentDate"];//property ivar
+    } else if ([key isEqualToString:@"Device"]) {
+        [self setValue:value forKey:@"device"];//property ivar
+    } else if ([key isEqualToString:@"ID"]) {
+        [self setValue:value forKey:@"iD"];
+    } else if ([key isEqualToString:@"LodgementType"]) {
+        [self setValue:value forKey:@"lodgementType"];//this may be incorrect
     }
     else {
         [super setValue:value forUndefinedKey:key];
@@ -69,8 +73,14 @@
     if (self.symbology) {
         [dictionary setObject:self.symbology forKey:@"symbology"];
     }
-    if (self.currentDate) {
-        [dictionary setObject:self.currentDate forKey:@"currentDate"];
+    if (self.device) {
+        [dictionary setObject:self.device forKey:@"device"];
+    }
+    if (self.iD) {
+        [dictionary setObject:self.iD forKey:@"ID"];
+    }
+    if (self.lodgementType) {
+        [dictionary setObject:self.lodgementType forKey:@"lodgementType"];
     }
     
     return dictionary;

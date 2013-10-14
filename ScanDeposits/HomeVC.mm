@@ -79,7 +79,6 @@
     [scanBtn addTarget:self action:@selector(buttonTapped:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:scanBtn];
     
-        
 }
 - (void)viewDidAppear:(BOOL)animated
 {
@@ -99,17 +98,32 @@
 - (void)scanditSDKOverlayController:
 (ScanditSDKOverlayController *)scanditSDKOverlayController didScanBarcode:(NSDictionary *)barcodeResult {
     
-    //create our custom model object
-    Barcode *barcodeObject = [Barcode instanceFromDictionary:barcodeResult];
+    //Parse barcode string first before init model obj
+    NSString *parseString = barcodeResult[@"barcode"];
+//    NSString *device = @"Device";
+    DLog(@"parseString>>>>>: %@", parseString);
     
-    NSDate *currentDate = [NSDate date];
-    DLog(@"Date is: %@", currentDate);//format date
-    barcodeObject.currentDate = currentDate; //change to NSString property 
+//    NSPredicate *predicateFilter = [NSPredicate predicateWithFormat:@"code CONTAINS[cd] %@", device];
+//    NSArray *filteredArray = [array filteredArrayUsingPredicate:predicateFilter];
+    
+    NSArray *filteredArray = [parseString componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@":"]];
+     DLog(@"filteredArray>>>>>>>>>>>>>>>: %@", filteredArray);
+    
+    
+    
+//    NSString *filteredString = [parseString stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"Device"]];
+//    DLog(@"filteredString: %@", filteredString);
+    
+    
+    
+    //create our custom model object with the barcode data from the retrieved barcode recognition engine
+    Barcode *barcodeObject = [Barcode instanceFromDictionary:barcodeResult];//will need custom initWith method
+    
+    
     //Add to collection
     [_barcodeArray addObject:barcodeObject];
-    //retrieve the barcode string from the barcode recognition engine
+    
     DLog(@"barcode from model object>>>>>>>>: %@", barcodeObject.barcode);
-    DLog(@"barcode symbology: %@", barcodeObject.symbology);
     
     //present alertView and temp stop scanning
     [picker stopScanning];

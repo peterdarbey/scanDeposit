@@ -10,9 +10,15 @@
 
 @interface Barcode : NSObject
 
-@property (strong, nonatomic) NSString *barcode;
+@property (strong, nonatomic, readonly) NSString *barcode;
 @property (strong, nonatomic) NSString *symbology;
-@property (strong, nonatomic) NSDate *currentDate;//NSString
+//New attributes
+@property (strong, nonatomic, readonly) NSString *device;// -> TDR
+@property (strong, nonatomic, readonly) NSString *iD;// blank
+@property (strong, nonatomic, readonly) NSString *lodgementType;// -> 932388 003
+
+//@property (strong, nonatomic) NSDate *currentDate;//already captured
+
 
 + (Barcode *)instanceFromDictionary:(NSDictionary *)aDictionary;
 - (void)setAttributesFromDictionary:(NSDictionary *)aDictionary;

@@ -10,7 +10,7 @@
 #import "ScanditSDKOverlayController.h"
 #import "ScanditSDKBarcodePicker.h"
 #import "Barcode.h"
-#import "ScanModeVC.h"
+//#import "ScanModeVC.h"
 
 #import "AlertView.h"
 

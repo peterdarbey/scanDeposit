@@ -33,6 +33,7 @@
     [_depositsTV setDelegate:self];
     [_depositsTV setDataSource:self];
     
+    [_depositsTV setBackgroundColor:[UIColor lightGrayColor]];//right
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -59,11 +60,21 @@
     return formattedDate;
 }
 
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    int numberOfBags = 5;
+    return  numberOfBags;//bag count
+}
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return 1;
+    return 1;//should always be 1
 }
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    selectedIndexPath = indexPath;
+    [_depositsTV deselectRowAtIndexPath:indexPath animated:YES];
+}
+
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     static NSString *myIdentifier = @"depositCell";
@@ -72,26 +83,39 @@
     UITextField *bagAmountTF;
     UILabel *bagNumberLbl;
     
+    //1st time thru cell doesnt exist so create else dequeue
     if (cell == nil) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:myIdentifier];
         //Construct textField
-        bagAmountTF = [[UITextField alloc]initWithFrame:CGRectMake(75,cell.bounds.size.height/4, 150, 25)];
+        bagAmountTF = [[UITextField alloc]initWithFrame:CGRectMake(120, cell.bounds.size.height/4, 180, 25)];
         bagAmountTF.tag = BAG_AMOUNT_TF;
         bagAmountTF.textAlignment = NSTextAlignmentRight;
         bagAmountTF.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
-        bagAmountTF.font = [UIFont fontWithName:@"Arial-BoldMT" size:16];
+        bagAmountTF.font = [UIFont systemFontOfSize:17];
         bagAmountTF.textColor = [UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0];//darkGray
+        bagAmountTF.backgroundColor = [UIColor redColor];
+        [cell.contentView addSubview:bagAmountTF];
+        
         
         //Construct Label
-        bagNumberLbl = [[UILabel alloc]initWithFrame:CGRectMake(10, cell.bounds.size.height/4, 100 , 25)];
-        
+        bagNumberLbl = [[UILabel alloc]initWithFrame:CGRectMake(10, cell.bounds.size.height/4, 110 , 25)];
+        bagNumberLbl.tag = BAG_NO_LBL;
+        bagNumberLbl.textAlignment = NSTextAlignmentLeft;
+        bagNumberLbl.font = [UIFont fontWithName:@"Arial-BoldMT" size:15];
+        bagNumberLbl.textColor = [UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0];//blue
+        bagNumberLbl.backgroundColor = [UIColor orangeColor];
+        [cell.contentView addSubview:bagNumberLbl];
         
     }
     else
     {
-        
+        bagAmountTF = (UITextField *)[cell.contentView viewWithTag:BAG_AMOUNT_TF];
+        bagNumberLbl = (UILabel *)[cell.contentView viewWithTag:BAG_NO_LBL];
     }
         bagAmountTF.text = @"Test for now";
+        //set this locally for number but then static/gobal ivar
+        int numberOfBags = 5;
+        bagNumberLbl.text = [NSString stringWithFormat:@"No of Bags: %i", numberOfBags];
     
         return cell;
 }

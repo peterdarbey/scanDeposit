@@ -13,7 +13,7 @@
 
 @interface DepositsVC : UIViewController <UITableViewDataSource, UITableViewDelegate>
 {
-    
+    NSIndexPath *selectedIndexPath;
 }
 
 @property (strong, nonatomic) IBOutlet UITableView *depositsTV;

@@ -1,0 +1,23 @@
+//
+//  CoinBag.h
+//  ScanDeposits
+//
+//  Created by Peter Darbey on 15/10/2013.
+//  Copyright (c) 2013 AIB. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+#import "Bag.h"
+
+@interface CoinBag : NSObject
+{
+    
+}
+
+@property int totalBagCount;
+//setter/getter
++(void)totalNumberOfBags:(NSInteger)count;
+
++(NSInteger)totalNumberOfBags;
+
+@end

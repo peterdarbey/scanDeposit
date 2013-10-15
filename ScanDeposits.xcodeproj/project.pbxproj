@@ -60,6 +60,8 @@
 		BF370330180C48B50027AE4F /* InputFundsView.m in Sources */ = {isa = PBXBuildFile; fileRef = BF37032E180C48B50027AE4F /* InputFundsView.m */; };
 		BF370331180C48B50027AE4F /* InputFundsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BF37032F180C48B50027AE4F /* InputFundsView.xib */; };
 		BF370335180D4DE40027AE4F /* DepositsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = BF370334180D4DE40027AE4F /* DepositsVC.m */; };
+		BF370338180D5C5D0027AE4F /* CoinBag.m in Sources */ = {isa = PBXBuildFile; fileRef = BF370337180D5C5D0027AE4F /* CoinBag.m */; };
+		BF37033B180D5C820027AE4F /* Bag.m in Sources */ = {isa = PBXBuildFile; fileRef = BF37033A180D5C820027AE4F /* Bag.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -138,6 +140,10 @@
 		BF37032F180C48B50027AE4F /* InputFundsView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InputFundsView.xib; sourceTree = "<group>"; };
 		BF370333180D4DE40027AE4F /* DepositsVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DepositsVC.h; sourceTree = "<group>"; };
 		BF370334180D4DE40027AE4F /* DepositsVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DepositsVC.m; sourceTree = "<group>"; };
+		BF370336180D5C5D0027AE4F /* CoinBag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoinBag.h; sourceTree = "<group>"; };
+		BF370337180D5C5D0027AE4F /* CoinBag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoinBag.m; sourceTree = "<group>"; };
+		BF370339180D5C820027AE4F /* Bag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bag.h; sourceTree = "<group>"; };
+		BF37033A180D5C820027AE4F /* Bag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bag.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -291,6 +297,10 @@
 		BF2C4FC51806DF5C00A87C18 /* Model Objects */ = {
 			isa = PBXGroup;
 			children = (
+				BF370339180D5C820027AE4F /* Bag.h */,
+				BF37033A180D5C820027AE4F /* Bag.m */,
+				BF370336180D5C5D0027AE4F /* CoinBag.h */,
+				BF370337180D5C5D0027AE4F /* CoinBag.m */,
 				BF2C4FC21806C96400A87C18 /* Barcode.h */,
 				BF2C4FC31806C96400A87C18 /* Barcode.m */,
 			);
@@ -449,6 +459,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BF37033B180D5C820027AE4F /* Bag.m in Sources */,
 				BF2C4F861805C0E000A87C18 /* HomeVC.mm in Sources */,
 				BF2C4FA71805C23300A87C18 /* empty.cpp in Sources */,
 				BF2C4FC41806C96400A87C18 /* Barcode.m in Sources */,
@@ -456,6 +467,7 @@
 				BF2C4F5D1805C08B00A87C18 /* AppDelegate.m in Sources */,
 				BF370327180822A90027AE4F /* AlertView.m in Sources */,
 				BF370330180C48B50027AE4F /* InputFundsView.m in Sources */,
+				BF370338180D5C5D0027AE4F /* CoinBag.m in Sources */,
 				BF2C4F591805C08B00A87C18 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

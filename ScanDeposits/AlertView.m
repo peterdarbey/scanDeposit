@@ -61,7 +61,18 @@
 -(void)savePressed:(UIButton *)sender {
     
     //Note if behaviour doesnt change encapsulate in a seperate method
-    [self dismissPopupAndResumeScanning];
+    [UIView animateWithDuration:0.3 animations:^{
+        _backgroundView.alpha = 0.0;
+                     } completion:^(BOOL finished) {
+                         [_backgroundView removeFromSuperview];
+                         //call another delegate method
+                         if ([self.delegate respondsToSelector:@selector(presentDepositsViewController)]) {
+                             [self.delegate performSelector:@selector(presentDepositsViewController)];
+                         }
+                     }];
+    
+    
+//    [self dismissPopupAndResumeScanning];
     //ToDo ->Add data persistence if required here
     
 }

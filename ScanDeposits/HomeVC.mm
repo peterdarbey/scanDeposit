@@ -102,6 +102,15 @@
 
 
 #pragma mark - Custom delegate method
+- (void)presentDepositsViewController {
+    
+    DepositsVC *depositsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"DepositsVC"];
+    depositsVC.title = NSLocalizedString(@"Deposits", @"Deposits View");
+    depositsVC.depositsArray = _barcodeArray;//pass the barcodeData collection to our new view
+    [self.navigationController pushViewController:depositsVC animated:YES];
+    DLog(@"Push to viewController delegate method called");
+}
+
 -(void)startScanning {
     
     [picker startScanning];
@@ -114,19 +123,11 @@
     
     //Parse barcode string first before init model obj
     NSString *parseString = barcodeResult[@"barcode"];
-
-    
-//    NSPredicate *predicateFilter = [NSPredicate predicateWithFormat:@"code CONTAINS[cd] %@", device];
-//    NSArray *filteredArray = [array filteredArrayUsingPredicate:predicateFilter];
     
     NSMutableArray *filteredArray = (NSMutableArray *)[parseString componentsSeparatedByCharactersInSet:
         [NSCharacterSet characterSetWithCharactersInString:@" "]];
      DLog(@"filteredArray>>>>>>>>>>>>>>>: %@ %i", filteredArray, filteredArray.count);//27
     
-//     NSMutableArray *childArray = [NSMutableArray arrayWithCapacity:[filteredArray count]];
-   
-    
-   
 //    NSArray *wordsArr = [parseString componentsSeparatedByString:@" "];
 //    int count = 0;
 //    for (NSString *word in wordsArr) {
@@ -135,31 +136,15 @@
 //            NSLog(@"%dth match: %@", count, word);
 //        }
 //    }
-    
-    
-//    for (int i = 0; i < [filteredArray count]; i++) {
-//        if ([[filteredArray objectAtIndex:i] isEqualToString:@"\"/"]) {
-//            [filteredArray removeLastObject];
-////        NSString *subString = [NSString stringWithFormat:@"%@,",[filteredArray objectAtIndex:i]];
-////        [childArray addObject:subString];
-////            DLog(@"subString: %@", subString);
-//        }
-//        
-//    }
-           DLog(@"parsed filteredArray: %@", filteredArray);
-    DLog(@"New count: %i", filteredArray.count);//21
-   
+ 
     DLog(@"parseString: %@", parseString);
     
 //    NSString *filteredString = [parseString stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"Device"]];
 //    DLog(@"filteredString: %@", filteredString);
     
     
-    
     //create our custom model object with the barcode data from the retrieved barcode recognition engine
     Barcode *barcodeObject = [Barcode instanceFromDictionary:barcodeResult];//will need custom initWith method
-    
-    
     //Add to collection
     [_barcodeArray addObject:barcodeObject];
     
@@ -168,6 +153,14 @@
     //present alertView and temp stop scanning
     [picker stopScanning];
 
+    /*********ToDO will need some variation on the barcode scanning process to deter the scan owner ie safe or bag
+    will be a value within the scan data to determine the type of scan owner then on if check for that
+    and displayv accordingly
+    differ alertView perhaps
+    **********/
+    
+    
+    
     //Create a custom Alert -> AlertView.xib
     AlertView *popup = [AlertView loadFromNibNamed:@"AlertView"];
     //Add custom delegate method here to restart picker scanning

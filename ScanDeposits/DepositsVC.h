@@ -17,5 +17,6 @@
 }
 
 @property (strong, nonatomic) IBOutlet UITableView *depositsTV;
+@property (strong, nonatomic) NSMutableArray *depositsArray;
 
 @end

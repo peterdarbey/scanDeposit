@@ -4,10 +4,12 @@
 
 #import <UIKit/UIKit.h>
 #import "AppDelegate.h"
+//#import "DepositsVC.h"
 
 @protocol ResumeScanMode <NSObject>
 
--(void)startScanning;
+- (void)startScanning;
+- (void)presentDepositsViewController;
 
 @end
 
@@ -16,6 +18,8 @@
 -(void)showOnView:(UIView*)view;
 
 +(AlertView*)loadFromNibNamed:(NSString*)nibName;
+
+@property (strong, nonatomic) IBOutlet UITextField *inputAmountTF;
 
 @property (weak, nonatomic) IBOutlet UIView *zoneBackground;
 @property (weak, nonatomic) IBOutlet UILabel *barcodeString;

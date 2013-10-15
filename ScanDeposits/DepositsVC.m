@@ -9,6 +9,11 @@
 #import "DepositsVC.h"
 
 @interface DepositsVC ()
+{
+    
+}
+//private collection member
+//@property (strong, nonatomic) NSMutableArray *depositsArray;
 
 @end
 

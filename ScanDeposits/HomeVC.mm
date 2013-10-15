@@ -36,10 +36,12 @@
     [picker.overlayController showSearchBar:YES];
     [picker.overlayController showToolBar:YES];
     [picker.overlayController setToolBarButtonCaption:@"Cancel"];
-//    [picker.overlayController setTextForInitializingCamera:@"Please Wait"];
+    
+    [picker.overlayController setTextForInitializingCamera:@"Please Wait"];
     [picker startScanning];
     //set the keyboard type
-//    [picker.overlayController setSearchBarKeyboardType:UIKeyboardTypeNamePhonePad];
+    [picker.overlayController setSearchBarKeyboardType:UIKeyboardTypeNamePhonePad];//lose keybopard toolbar
+    
     
     [self.navigationController presentViewController:picker animated:YES completion:nil];
     

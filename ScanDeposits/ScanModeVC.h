@@ -7,12 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ScanditSDKOverlayController.h"
-#import "ScanditSDKBarcodePicker.h"
-#import "Barcode.h"
+//#import "Barcode.h"
 
-
-#define kScanditSDKAppKey @"4w8vXjD2EeOZw8u2pkkjQH4S+hfplxDDtzKnte2lX4s"
 
 @interface ScanModeVC : UIViewController 
 

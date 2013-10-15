@@ -50,7 +50,6 @@
 		BF2C4FBF1806B14800A87C18 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BF2C4FBE1806B14800A87C18 /* libz.dylib */; };
 		BF2C4FC11806B16B00A87C18 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF2C4FC01806B16B00A87C18 /* AVFoundation.framework */; };
 		BF2C4FC41806C96400A87C18 /* Barcode.m in Sources */ = {isa = PBXBuildFile; fileRef = BF2C4FC31806C96400A87C18 /* Barcode.m */; };
-		BF2C4FC81806E1D400A87C18 /* ScanModeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = BF2C4FC71806E1D400A87C18 /* ScanModeVC.m */; };
 		BF2C4FCE1806FEB100A87C18 /* blueButton.png in Resources */ = {isa = PBXBuildFile; fileRef = BF2C4FCA1806FEB100A87C18 /* blueButton.png */; };
 		BF2C4FCF1806FEB100A87C18 /* blueButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BF2C4FCB1806FEB100A87C18 /* blueButton@2x.png */; };
 		BF2C4FD01806FEB100A87C18 /* bluebuttonSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = BF2C4FCC1806FEB100A87C18 /* bluebuttonSelected.png */; };
@@ -60,6 +59,7 @@
 		BF370329180844990027AE4F /* bg_gradient.png in Resources */ = {isa = PBXBuildFile; fileRef = BF370328180844990027AE4F /* bg_gradient.png */; };
 		BF370330180C48B50027AE4F /* InputFundsView.m in Sources */ = {isa = PBXBuildFile; fileRef = BF37032E180C48B50027AE4F /* InputFundsView.m */; };
 		BF370331180C48B50027AE4F /* InputFundsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BF37032F180C48B50027AE4F /* InputFundsView.xib */; };
+		BF370335180D4DE40027AE4F /* DepositsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = BF370334180D4DE40027AE4F /* DepositsVC.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -125,8 +125,6 @@
 		BF2C4FC01806B16B00A87C18 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		BF2C4FC21806C96400A87C18 /* Barcode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Barcode.h; sourceTree = "<group>"; };
 		BF2C4FC31806C96400A87C18 /* Barcode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Barcode.m; sourceTree = "<group>"; };
-		BF2C4FC61806E1D400A87C18 /* ScanModeVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanModeVC.h; sourceTree = "<group>"; };
-		BF2C4FC71806E1D400A87C18 /* ScanModeVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScanModeVC.m; sourceTree = "<group>"; };
 		BF2C4FCA1806FEB100A87C18 /* blueButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blueButton.png; sourceTree = "<group>"; };
 		BF2C4FCB1806FEB100A87C18 /* blueButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blueButton@2x.png"; sourceTree = "<group>"; };
 		BF2C4FCC1806FEB100A87C18 /* bluebuttonSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bluebuttonSelected.png; sourceTree = "<group>"; };
@@ -138,6 +136,8 @@
 		BF37032D180C48B50027AE4F /* InputFundsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputFundsView.h; sourceTree = "<group>"; };
 		BF37032E180C48B50027AE4F /* InputFundsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InputFundsView.m; sourceTree = "<group>"; };
 		BF37032F180C48B50027AE4F /* InputFundsView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InputFundsView.xib; sourceTree = "<group>"; };
+		BF370333180D4DE40027AE4F /* DepositsVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DepositsVC.h; sourceTree = "<group>"; };
+		BF370334180D4DE40027AE4F /* DepositsVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DepositsVC.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -217,11 +217,11 @@
 				BF2C4FC51806DF5C00A87C18 /* Model Objects */,
 				BF2C4F5B1805C08B00A87C18 /* AppDelegate.h */,
 				BF2C4F5C1805C08B00A87C18 /* AppDelegate.m */,
-				BF2C4F5E1805C08B00A87C18 /* Main_iPhone.storyboard */,
 				BF2C4F841805C0E000A87C18 /* HomeVC.h */,
 				BF2C4F851805C0E000A87C18 /* HomeVC.mm */,
-				BF2C4FC61806E1D400A87C18 /* ScanModeVC.h */,
-				BF2C4FC71806E1D400A87C18 /* ScanModeVC.m */,
+				BF370333180D4DE40027AE4F /* DepositsVC.h */,
+				BF370334180D4DE40027AE4F /* DepositsVC.m */,
+				BF2C4F5E1805C08B00A87C18 /* Main_iPhone.storyboard */,
 				BF2C4F611805C08B00A87C18 /* Main_iPad.storyboard */,
 				BF370332180D303A0027AE4F /* PopupViews */,
 				BF2C4F671805C08B00A87C18 /* Images.xcassets */,
@@ -452,8 +452,8 @@
 				BF2C4F861805C0E000A87C18 /* HomeVC.mm in Sources */,
 				BF2C4FA71805C23300A87C18 /* empty.cpp in Sources */,
 				BF2C4FC41806C96400A87C18 /* Barcode.m in Sources */,
+				BF370335180D4DE40027AE4F /* DepositsVC.m in Sources */,
 				BF2C4F5D1805C08B00A87C18 /* AppDelegate.m in Sources */,
-				BF2C4FC81806E1D400A87C18 /* ScanModeVC.m in Sources */,
 				BF370327180822A90027AE4F /* AlertView.m in Sources */,
 				BF370330180C48B50027AE4F /* InputFundsView.m in Sources */,
 				BF2C4F591805C08B00A87C18 /* main.m in Sources */,

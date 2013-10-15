@@ -220,15 +220,10 @@
 				BF2C4F5E1805C08B00A87C18 /* Main_iPhone.storyboard */,
 				BF2C4F841805C0E000A87C18 /* HomeVC.h */,
 				BF2C4F851805C0E000A87C18 /* HomeVC.mm */,
-				BF370325180822A30027AE4F /* AlertView.h */,
-				BF370326180822A90027AE4F /* AlertView.m */,
-				BF3703231808229A0027AE4F /* AlertView.xib */,
-				BF37032D180C48B50027AE4F /* InputFundsView.h */,
-				BF37032E180C48B50027AE4F /* InputFundsView.m */,
-				BF37032F180C48B50027AE4F /* InputFundsView.xib */,
 				BF2C4FC61806E1D400A87C18 /* ScanModeVC.h */,
 				BF2C4FC71806E1D400A87C18 /* ScanModeVC.m */,
 				BF2C4F611805C08B00A87C18 /* Main_iPad.storyboard */,
+				BF370332180D303A0027AE4F /* PopupViews */,
 				BF2C4F671805C08B00A87C18 /* Images.xcassets */,
 				BF2C4F531805C08B00A87C18 /* Supporting Files */,
 			);
@@ -312,6 +307,19 @@
 				BF2C4FCD1806FEB100A87C18 /* blueButtonSelected@2x.png */,
 			);
 			name = Assets;
+			sourceTree = "<group>";
+		};
+		BF370332180D303A0027AE4F /* PopupViews */ = {
+			isa = PBXGroup;
+			children = (
+				BF370325180822A30027AE4F /* AlertView.h */,
+				BF370326180822A90027AE4F /* AlertView.m */,
+				BF3703231808229A0027AE4F /* AlertView.xib */,
+				BF37032D180C48B50027AE4F /* InputFundsView.h */,
+				BF37032E180C48B50027AE4F /* InputFundsView.m */,
+				BF37032F180C48B50027AE4F /* InputFundsView.xib */,
+			);
+			name = PopupViews;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

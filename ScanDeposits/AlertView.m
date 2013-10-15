@@ -5,8 +5,13 @@
 #import "AlertView.h"
 
 @interface AlertView ()
-
+{
+    
+}
+//Private
 @property(nonatomic,strong) UIView *backgroundView;
+@property double bagAmount;
+@property int bagCount;
 
 @end
 
@@ -19,7 +24,9 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        
+        //init here
+        _bagAmount = 000.00;
+        _bagCount = 0;
     }
     
     return self;
@@ -36,7 +43,34 @@
     
     [self buttonStyle:_saveBtn WithImgName:@"blueButton.png" imgSelectedName:@"blueButton.png" withTitle:@"Confirm"];
     [_saveBtn addTarget:self action:@selector(savePressed:) forControlEvents:UIControlEventTouchUpInside];
+    //Not convince that this is the best place to set delegate 
+    [self.inputAmountTF setDelegate:self];
     
+}
+#pragma delegate methods for textField
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
+    
+    return YES;
+}
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
+    
+    
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+    
+//    _bagAmount = (double)[NSString stringWithFormat:@"%f", textField.text.doubleValue];
+    _bagAmount = (double)textField.text.doubleValue;
+    _bagCount += 1;
+    
+    [textField resignFirstResponder];
+    
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    
+    [textField resignFirstResponder];
+    return YES;
 }
 -(void)dismissPopupAndResumeScanning {
     
@@ -65,9 +99,23 @@
         _backgroundView.alpha = 0.0;
                      } completion:^(BOOL finished) {
                          [_backgroundView removeFromSuperview];
+                         NSMutableArray *array = [NSMutableArray array];
+                         
+                         //Init custom model object
+                         Deposit *deposit = [[Deposit alloc]initWithBagNumber:@"987565-4646" bagBarcode:@"987565-4646" bagAmount:_bagAmount bagCount:_bagCount];
+                         //Add to collection before passing to delegate
+                          [array addObject:deposit];
+                         
+//                         Deposit *deposit = [[Deposit alloc]init];
+//                         deposit.bagAmount = _bagAmount;
+//                         deposit.bagCount = _bagCount;
+//                         [array addObject:[NSNumber numberWithDouble:_bagAmount]];
+//                         [array addObject:[NSNumber numberWithInt:_bagCount]];
+//                         [array addObject:deposit];
+                         
                          //call another delegate method
-                         if ([self.delegate respondsToSelector:@selector(presentDepositsViewController)]) {
-                             [self.delegate performSelector:@selector(presentDepositsViewController)];
+                         if ([self.delegate respondsToSelector:@selector(presentDepositsViewController:)]) {
+                             [self.delegate performSelector:@selector(presentDepositsViewController:) withObject:(NSMutableArray *)array];
                          }
                      }];
     

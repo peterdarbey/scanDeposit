@@ -102,11 +102,19 @@
 
 
 #pragma mark - Custom delegate method
-- (void)presentDepositsViewController {
+- (void)presentDepositsViewController:(NSMutableArray *)array {
+    
+    
+    //TEST
+    [picker dismissViewControllerAnimated:YES completion:nil];
+    
     
     DepositsVC *depositsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"DepositsVC"];
     depositsVC.title = NSLocalizedString(@"Deposits", @"Deposits View");
-    depositsVC.depositsArray = _barcodeArray;//pass the barcodeData collection to our new view
+//    depositsVC.depositAmount = [[depositsArray objectAtIndex:0]doubleValue];//should be Bag model or NSdict//pass the barcodeData collection to our new view
+//    depositsVC.depositCount = [[depositsArray objectAtIndex:1]intValue];//should be Bag model or NSdict
+    
+    depositsVC.depositsArray = array;
     [self.navigationController pushViewController:depositsVC animated:YES];
     DLog(@"Push to viewController delegate method called");
 }

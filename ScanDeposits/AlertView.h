@@ -4,16 +4,17 @@
 
 #import <UIKit/UIKit.h>
 #import "AppDelegate.h"
-//#import "DepositsVC.h"
+
+#import "Deposit.h"
 
 @protocol ResumeScanMode <NSObject>
 
 - (void)startScanning;
-- (void)presentDepositsViewController;
+- (void)presentDepositsViewController:(NSMutableArray *)array;
 
 @end
 
-@interface AlertView : UIView
+@interface AlertView : UIView <UITextFieldDelegate>
 
 -(void)showOnView:(UIView*)view;
 
@@ -26,6 +27,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *cancelBtn;
 @property (weak, nonatomic) IBOutlet UIButton *saveBtn;
 @property (strong, nonatomic) IBOutlet UIImageView *imagePlaceHolder;
+
 //Delegate ivar
 @property (weak, nonatomic) id <ResumeScanMode> delegate;
 

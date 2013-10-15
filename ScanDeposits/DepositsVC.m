@@ -92,23 +92,23 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:myIdentifier];
         //Construct textField
-        bagAmountTF = [[UITextField alloc]initWithFrame:CGRectMake(120, cell.bounds.size.height/4, 180, 25)];
+        bagAmountTF = [[UITextField alloc]initWithFrame:CGRectMake(130, cell.bounds.size.height/4, 180, 25)];
         bagAmountTF.tag = BAG_AMOUNT_TF;
-        bagAmountTF.textAlignment = NSTextAlignmentRight;
+        bagAmountTF.textAlignment = NSTextAlignmentLeft;
         bagAmountTF.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
         bagAmountTF.font = [UIFont systemFontOfSize:17];
         bagAmountTF.textColor = [UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0];//darkGray
-        bagAmountTF.backgroundColor = [UIColor redColor];
+        bagAmountTF.backgroundColor = [UIColor clearColor];
         [cell.contentView addSubview:bagAmountTF];
         
         
         //Construct Label
-        bagNumberLbl = [[UILabel alloc]initWithFrame:CGRectMake(10, cell.bounds.size.height/4, 110 , 25)];
+        bagNumberLbl = [[UILabel alloc]initWithFrame:CGRectMake(10, cell.bounds.size.height/4, 120 , 25)];
         bagNumberLbl.tag = BAG_NO_LBL;
         bagNumberLbl.textAlignment = NSTextAlignmentLeft;
         bagNumberLbl.font = [UIFont fontWithName:@"Arial-BoldMT" size:15];
         bagNumberLbl.textColor = [UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0];//blue
-        bagNumberLbl.backgroundColor = [UIColor orangeColor];
+        bagNumberLbl.backgroundColor = [UIColor clearColor];
         [cell.contentView addSubview:bagNumberLbl];
         
     }
@@ -117,9 +117,13 @@
         bagAmountTF = (UITextField *)[cell.contentView viewWithTag:BAG_AMOUNT_TF];
         bagNumberLbl = (UILabel *)[cell.contentView viewWithTag:BAG_NO_LBL];
     }
-        bagAmountTF.text = @"Test for now";
+//        double amount = 000.00;//should add the 0s when a value there
+    
+        Deposit *deposit = [[Deposit alloc]init];
+    
+        bagAmountTF.text = [NSString stringWithFormat:@"Amount is: €%.2f", deposit.bagAmount];//@"€%.2f"
         //set this locally for number but then static/gobal ivar
-        int numberOfBags = 5;
+        int numberOfBags = deposit.bagCount;
         bagNumberLbl.text = [NSString stringWithFormat:@"No of Bags: %i", numberOfBags];
     
         return cell;

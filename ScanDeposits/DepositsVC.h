@@ -11,6 +11,8 @@
 #define BAG_AMOUNT_TF 200
 #define BAG_NO_LBL 150
 
+#import "Deposit.h"
+
 @interface DepositsVC : UIViewController <UITableViewDataSource, UITableViewDelegate>
 {
     NSIndexPath *selectedIndexPath;
@@ -18,5 +20,7 @@
 
 @property (strong, nonatomic) IBOutlet UITableView *depositsTV;
 @property (strong, nonatomic) NSMutableArray *depositsArray;
+//@property double depositAmount;
+//@property int depositCount;
 
 @end

@@ -11,6 +11,7 @@
 #import "ScanditSDKBarcodePicker.h"
 #import "Barcode.h"
 #import "DepositsVC.h"
+#import "Deposit.h"
 
 #import "AlertView.h"
 
@@ -23,4 +24,5 @@
 }
 
 @property (strong, nonatomic) NSMutableArray *barcodeArray;
+@property (strong, nonatomic) NSMutableArray *depositsArray;
 @end

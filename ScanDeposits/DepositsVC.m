@@ -52,18 +52,18 @@
 //    return 10;
 //}
 
-#pragma Format date specifier
--(NSString *)formatMyDateString:(NSString *)ticket
-{
-    // Format the date and time
-    NSDateFormatter *myDateFormatter = [[NSDateFormatter alloc] init];
-    [myDateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
-    
-    NSDate *dateFromString = [myDateFormatter dateFromString:ticket];
-    NSString *formattedDate = [NSDateFormatter localizedStringFromDate: dateFromString dateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterShortStyle];
-    
-    return formattedDate;
-}
+//#pragma Format date specifier
+//-(NSString *)formatMyDateString:(NSString *)ticket
+//{
+//    // Format the date and time
+//    NSDateFormatter *myDateFormatter = [[NSDateFormatter alloc] init];
+//    [myDateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
+//    
+//    NSDate *dateFromString = [myDateFormatter dateFromString:ticket];
+//    NSString *formattedDate = [NSDateFormatter localizedStringFromDate: dateFromString dateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterShortStyle];
+//    
+//    return formattedDate;
+//}
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     int numberOfBags = 5;

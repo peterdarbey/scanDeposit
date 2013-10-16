@@ -104,6 +104,45 @@
     
 }
 
+#pragma Format date specifier
+-(NSString *)formatMyDateString:(NSString *)ticket
+{
+    
+    
+//    //Time stamp here
+//    NSDate *currentDate = [NSDate date];//correct
+//    
+//    NSCalendar *calendar = [[NSCalendar alloc]initWithCalendarIdentifier:NSGregorianCalendar];
+//    
+//    
+//    
+//    
+//    NSDateComponents *expiryDateComponents = [NSDateComponents new];
+//    expiryDateComponents.minute = duration;
+//    
+//    NSDate *expiry = [calendar dateByAddingComponents:expiryDateComponents
+//                                               toDate:currentDate
+//                                              options:0];
+//    
+//    //Date Formatter
+//    NSDateFormatter* myFormatter = [[NSDateFormatter alloc] init];
+//    myFormatter.dateStyle = NSDateFormatterNoStyle;//set for this now NSDateFormatterShortStyle
+//    myFormatter.timeStyle = NSDateFormatterShortStyle;
+//    
+//    DLog(@"%@", [myFormatter stringFromDate:expiry]);
+    
+    
+    
+    // Format the date and time
+    NSDateFormatter *myDateFormatter = [[NSDateFormatter alloc] init];
+    [myDateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
+    
+    NSDate *dateFromString = [myDateFormatter dateFromString:ticket];
+    NSString *formattedDate = [NSDateFormatter localizedStringFromDate: dateFromString dateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterShortStyle];
+    
+    return formattedDate;
+}
+
 
 #pragma mark - Custom delegate method
 - (void)presentDepositsViewController:(NSMutableArray *)array {
@@ -133,6 +172,18 @@
 - (void)scanditSDKOverlayController:
 (ScanditSDKOverlayController *)scanditSDKOverlayController didScanBarcode:(NSDictionary *)barcodeResult {
     
+    
+    //Capture Time stamp here
+    NSDate *currentDate = [NSDate date];//correct
+    
+    
+    // Format the date and time
+    NSDateFormatter *myDateFormatter = [[NSDateFormatter alloc] init];
+    [myDateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
+    
+    NSString *formattedDate = [NSDateFormatter localizedStringFromDate: currentDate dateStyle:                          NSDateFormatterNoStyle timeStyle:NSDateFormatterShortStyle];
+   DLog(@"current formattedDate>>>>>>>: %@", formattedDate);//Yay works -> 12.59
+    
     //Parse barcode string first before init model obj
     NSString *parseString = barcodeResult[@"barcode"];
     
@@ -140,15 +191,6 @@
         [NSCharacterSet characterSetWithCharactersInString:@" "]];
      DLog(@"filteredArray>>>>>>>>>>>>>>>: %@ %i", filteredArray, filteredArray.count);//27
     
-//    NSArray *wordsArr = [parseString componentsSeparatedByString:@" "];
-//    int count = 0;
-//    for (NSString *word in wordsArr) {
-//        if ([word hasPrefix:@"\"\""]) {
-//            count++;
-//            NSLog(@"%dth match: %@", count, word);
-//        }
-//    }
- 
     DLog(@"parseString: %@", parseString);
     
 //    NSString *filteredString = [parseString stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"Device"]];

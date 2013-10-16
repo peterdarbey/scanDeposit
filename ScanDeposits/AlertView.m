@@ -102,7 +102,9 @@
                          NSMutableArray *array = [NSMutableArray array];
                          
                          //Init custom model object
-                         Deposit *deposit = [[Deposit alloc]initWithBagNumber:@"987565-4646" bagBarcode:@"987565-4646" bagAmount:_bagAmount bagCount:_bagCount];
+                         Deposit *deposit = [[Deposit alloc]initWithBagNumber:@"987565-4646"    bagBarcode:@"987565-4646" bagAmount:_bagAmount
+                                                        bagCount:_bagCount timeStamp:_timeString];
+                         
                          //Add to collection before passing to delegate
                           [array addObject:deposit];
                          

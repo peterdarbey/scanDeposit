@@ -20,7 +20,7 @@
 
 @interface HomeVC : UIViewController <ScanditSDKOverlayControllerDelegate, ResumeScanMode>
 {
-    
+    NSString *dateString;// not very OO
 }
 
 @property (strong, nonatomic) NSMutableArray *barcodeArray;

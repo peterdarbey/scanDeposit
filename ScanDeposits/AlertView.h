@@ -15,12 +15,18 @@
 @end
 
 @interface AlertView : UIView <UITextFieldDelegate>
+{
+    
+}
 
 -(void)showOnView:(UIView*)view;
 
 +(AlertView*)loadFromNibNamed:(NSString*)nibName;
 
 @property (strong, nonatomic) IBOutlet UITextField *inputAmountTF;
+
+//temp time ivar
+@property (strong, nonatomic) NSString *timeString;
 
 @property (weak, nonatomic) IBOutlet UIView *zoneBackground;
 @property (weak, nonatomic) IBOutlet UILabel *barcodeString;

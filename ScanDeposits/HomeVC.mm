@@ -105,41 +105,13 @@
 }
 
 #pragma Format date specifier
--(NSString *)formatMyDateString:(NSString *)ticket
+-(NSString *)formatMyDateString
 {
+    //Capture Time stamp here
+    NSDate *currentDate = [NSDate date];//correct
     
-    
-//    //Time stamp here
-//    NSDate *currentDate = [NSDate date];//correct
-//    
-//    NSCalendar *calendar = [[NSCalendar alloc]initWithCalendarIdentifier:NSGregorianCalendar];
-//    
-//    
-//    
-//    
-//    NSDateComponents *expiryDateComponents = [NSDateComponents new];
-//    expiryDateComponents.minute = duration;
-//    
-//    NSDate *expiry = [calendar dateByAddingComponents:expiryDateComponents
-//                                               toDate:currentDate
-//                                              options:0];
-//    
-//    //Date Formatter
-//    NSDateFormatter* myFormatter = [[NSDateFormatter alloc] init];
-//    myFormatter.dateStyle = NSDateFormatterNoStyle;//set for this now NSDateFormatterShortStyle
-//    myFormatter.timeStyle = NSDateFormatterShortStyle;
-//    
-//    DLog(@"%@", [myFormatter stringFromDate:expiry]);
-    
-    
-    
-    // Format the date and time
-    NSDateFormatter *myDateFormatter = [[NSDateFormatter alloc] init];
-    [myDateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
-    
-    NSDate *dateFromString = [myDateFormatter dateFromString:ticket];
-    NSString *formattedDate = [NSDateFormatter localizedStringFromDate: dateFromString dateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterShortStyle];
-    
+    NSString *formattedDate = [NSDateFormatter localizedStringFromDate: currentDate dateStyle:                          NSDateFormatterShortStyle timeStyle:NSDateFormatterShortStyle];
+
     return formattedDate;
 }
 
@@ -172,25 +144,15 @@
 - (void)scanditSDKOverlayController:
 (ScanditSDKOverlayController *)scanditSDKOverlayController didScanBarcode:(NSDictionary *)barcodeResult {
     
-    
-    //Capture Time stamp here
-    NSDate *currentDate = [NSDate date];//correct
+    //ToDo need conditionals to extract the type of barcode that it is i.e. QR -> 1 course of action differ than bagBarcode
     
     
-    // Format the date and time
-    NSDateFormatter *myDateFormatter = [[NSDateFormatter alloc] init];
-    [myDateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
-    
-    NSString *formattedDate = [NSDateFormatter localizedStringFromDate: currentDate dateStyle:                          NSDateFormatterNoStyle timeStyle:NSDateFormatterShortStyle];
-   DLog(@"current formattedDate>>>>>>>: %@", formattedDate);//Yay works -> 12.59
+    //Capture Time stamp here -> when scan bag thats when date/time is created
+    dateString = [self formatMyDateString];
+    DLog(@"dateString: %@", dateString);//16/10/2013 14:08 -> is 24 hr so fine
     
     //Parse barcode string first before init model obj
     NSString *parseString = barcodeResult[@"barcode"];
-    
-    NSMutableArray *filteredArray = (NSMutableArray *)[parseString componentsSeparatedByCharactersInSet:
-        [NSCharacterSet characterSetWithCharactersInString:@" "]];
-     DLog(@"filteredArray>>>>>>>>>>>>>>>: %@ %i", filteredArray, filteredArray.count);//27
-    
     DLog(@"parseString: %@", parseString);
     
 //    NSString *filteredString = [parseString stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"Device"]];
@@ -219,6 +181,8 @@
     AlertView *popup = [AlertView loadFromNibNamed:@"AlertView"];
     //Add custom delegate method here to restart picker scanning
     [popup setDelegate:self];
+    //pass the time
+    popup.timeString = dateString;//not very OO
     //set the barcode text
     popup.barcodeString.text = [NSString stringWithFormat:@"%@", barcodeObject.barcode];
     [popup showOnView:picker.view];

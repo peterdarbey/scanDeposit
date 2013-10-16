@@ -52,19 +52,6 @@
 //    return 10;
 //}
 
-//#pragma Format date specifier
-//-(NSString *)formatMyDateString:(NSString *)ticket
-//{
-//    // Format the date and time
-//    NSDateFormatter *myDateFormatter = [[NSDateFormatter alloc] init];
-//    [myDateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
-//    
-//    NSDate *dateFromString = [myDateFormatter dateFromString:ticket];
-//    NSString *formattedDate = [NSDateFormatter localizedStringFromDate: dateFromString dateStyle:NSDateFormatterNoStyle timeStyle:NSDateFormatterShortStyle];
-//    
-//    return formattedDate;
-//}
-
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     int numberOfBags = 5;
     return  numberOfBags;//bag count
@@ -119,11 +106,16 @@
     }
 //        double amount = 000.00;//should add the 0s when a value there
     
-        Deposit *deposit = [[Deposit alloc]init];
     
-        bagAmountTF.text = [NSString stringWithFormat:@"Amount is: €%.2f", deposit.bagAmount];//@"€%.2f"
+//        Deposit *deposit = [_depositsArray lastObject];//wasnt same model object?
+        Deposit *deposit = [_depositsArray objectAtIndex:indexPath.row];//correct
+    
+        //need getter here for these private ivars
+        bagAmountTF.text = [NSString stringWithFormat:@"Amount is: €%.2f", [deposit countOfBagAmount]];//@"€%.2f"
+        DLog(@"countOfBagAmount: %f", [deposit countOfBagAmount]);
+    
         //set this locally for number but then static/gobal ivar
-        int numberOfBags = deposit.bagCount;
+        int numberOfBags = [deposit countOfBagCount];
         bagNumberLbl.text = [NSString stringWithFormat:@"No of Bags: %i", numberOfBags];
     
         return cell;

@@ -15,19 +15,23 @@
 }
 
 @property int totalBagCount;
-//should be private
-@property (strong, nonatomic) NSString *bagNumber;
-@property int bagCount;
-@property double bagAmount;
-@property (strong, nonatomic) NSString *bagBarcode;
-@property (strong, nonatomic) NSString *timeStamp;
+
+////should be private
+//@property (strong, nonatomic) NSString *bagNumber;
+//@property int bagCount;
+//@property double bagAmount;
+//@property (strong, nonatomic) NSString *bagBarcode;
+//@property (strong, nonatomic) NSString *timeStamp;
 
 //setter/getter
-+(void)setTotalNumberOfBags:(NSInteger)count;
+//+(void)setTotalNumberOfBags:(NSInteger)count;
 
 +(NSInteger)totalNumberOfBags;
 
 - (id)initWithBagNumber:(NSString *)bagNumber bagBarcode:(NSString *)barcode
-              bagAmount:(double)amount bagCount:(int)count;
+              bagAmount:(double)amount bagCount:(int)count timeStamp:(NSString *)time;
+
+- (double)countOfBagAmount;
+- (int)countOfBagCount;
 
 @end

@@ -42,7 +42,7 @@
     [_cancelBtn addTarget:self action:@selector(cancelPressed:) forControlEvents:UIControlEventTouchUpInside];
     
     [self buttonStyle:_saveBtn WithImgName:@"blueButton.png" imgSelectedName:@"blueButton.png" withTitle:@"Confirm"];
-    [_saveBtn addTarget:self action:@selector(savePressed:) forControlEvents:UIControlEventTouchUpInside];
+    [_saveBtn addTarget:self action:@selector(confirmPressed:) forControlEvents:UIControlEventTouchUpInside];
     //Not convince that this is the best place to set delegate 
     [self.inputAmountTF setDelegate:self];
     
@@ -92,7 +92,7 @@
     
 }
 
--(void)savePressed:(UIButton *)sender {
+-(void)confirmPressed:(UIButton *)sender {
     
     //Note if behaviour doesnt change encapsulate in a seperate method
     [UIView animateWithDuration:0.3 animations:^{
@@ -108,12 +108,7 @@
                          //Add to collection before passing to delegate
                           [array addObject:deposit];
                          
-//                         Deposit *deposit = [[Deposit alloc]init];
-//                         deposit.bagAmount = _bagAmount;
-//                         deposit.bagCount = _bagCount;
-//                         [array addObject:[NSNumber numberWithDouble:_bagAmount]];
-//                         [array addObject:[NSNumber numberWithInt:_bagCount]];
-//                         [array addObject:deposit];
+                         //Only call this if the user is finished scanning
                          
                          //call another delegate method
                          if ([self.delegate respondsToSelector:@selector(presentDepositsViewController:)]) {

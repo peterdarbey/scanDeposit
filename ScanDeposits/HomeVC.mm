@@ -27,15 +27,52 @@
     }
     return self;
 }
+- (void)cancelPressed:(UIButton *)sender {
+    
+    DLog(@"Dismiss picker from new barButtonItem");
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+    
+}
 
+- (void)finishedPressed:(UIButton *)sender {
+   
+    DLog(@"Dismiss picker with DONE button");
+    
+    [self presentDepositsViewController:nil];
+        
+}
 - (void)buttonTapped:(UIButton *)sender
 {
     picker =
     [[ScanditSDKBarcodePicker alloc] initWithAppKey:kScanditSDKAppKey];
     picker.overlayController.delegate = self;
     [picker.overlayController showSearchBar:YES];
-    [picker.overlayController showToolBar:YES];
-    [picker.overlayController setToolBarButtonCaption:@"Cancel"];
+//    [picker.overlayController showToolBar:YES];//YES
+//    [picker.overlayController setToolBarButtonCaption:@"Finish"];//thats working
+//    [picker.overlayController setToolbarItems:barButtonsArray];
+    
+    //construct barButtonItems
+    UIBarButtonItem *barBtnCancel = [[UIBarButtonItem alloc]initWithTitle:@"CancelScans" style:UIBarButtonItemStyleBordered target:self action:@selector(cancelPressed:)];
+    [barBtnCancel setTintColor:[UIColor blackColor]];
+    
+    UIBarButtonItem *barBtnDone = [[UIBarButtonItem alloc]initWithTitle:@"FinishedScans" style:UIBarButtonItemStyleBordered target:self action:@selector(finishedPressed:)];
+    [barBtnDone setTintColor:[UIColor blackColor]];
+    
+    //Add a divider for the toolBar barButtonItems
+    UIBarButtonItem *flexible = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    
+    NSArray *barBtnArray = [NSArray arrayWithObjects:barBtnCancel, flexible, barBtnDone, nil];
+    
+    UIToolbar *customTB = [[UIToolbar alloc]initWithFrame:CGRectMake(0 , self.view.frame.size.height - 44, self.view.frame.size.width, 44)];
+    
+//    customTB.backgroundColor = [UIColor blackColor];
+    [customTB setBackgroundColor:[UIColor blackColor]];
+    [customTB setTranslucent:YES];
+    customTB.items = barBtnArray;
+
+    [picker.view addSubview:customTB];//removing setToolBar and using addSubview fixed toolbar setup
+//    [picker.overlayController setToolbarItems:barButtonsArray];
+    
     
     [picker.overlayController setTextForInitializingCamera:@"Please Wait"];
     [picker startScanning];
@@ -121,17 +158,17 @@
     
     
     //TEST
-    [picker dismissViewControllerAnimated:YES completion:nil];
+    [picker dismissViewControllerAnimated:YES completion:^{
+        
+        DepositsVC *depositsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"DepositsVC"];
+        depositsVC.title = NSLocalizedString(@"Deposits", @"Deposits View");
+        depositsVC.depositsArray = array;
+        [self.navigationController pushViewController:depositsVC animated:YES];
+        DLog(@"Push to viewController delegate method called");
+
+    }];
     
     
-    DepositsVC *depositsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"DepositsVC"];
-    depositsVC.title = NSLocalizedString(@"Deposits", @"Deposits View");
-//    depositsVC.depositAmount = [[depositsArray objectAtIndex:0]doubleValue];//should be Bag model or NSdict//pass the barcodeData collection to our new view
-//    depositsVC.depositCount = [[depositsArray objectAtIndex:1]intValue];//should be Bag model or NSdict
-    
-    depositsVC.depositsArray = array;
-    [self.navigationController pushViewController:depositsVC animated:YES];
-    DLog(@"Push to viewController delegate method called");
 }
 
 -(void)startScanning {

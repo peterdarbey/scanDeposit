@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "ScanditSDKOverlayController.h"
 #import "ScanditSDKBarcodePicker.h"
+
 #import "Barcode.h"
 #import "DepositsVC.h"
 #import "Deposit.h"
@@ -20,7 +21,9 @@
 
 @interface HomeVC : UIViewController <ScanditSDKOverlayControllerDelegate, ResumeScanMode>
 {
-    NSString *dateString;// not very OO
+    NSString *dateString;//not very OO
+    NSNotificationCenter *notificationCenter;
+    AlertView *popup;
 }
 
 @property (strong, nonatomic) NSMutableArray *barcodeArray;

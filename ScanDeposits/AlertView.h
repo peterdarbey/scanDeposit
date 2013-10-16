@@ -11,6 +11,7 @@
 
 - (void)startScanning;
 - (void)presentDepositsViewController:(NSMutableArray *)array;
+- (void)passScannedData:(NSMutableArray *)dataArray;
 
 @end
 
@@ -27,6 +28,8 @@
 
 //temp time ivar
 @property (strong, nonatomic) NSString *timeString;
+//conditional test for init custom deposit model object
+@property BOOL confirmed;//ivar so is NO by default
 
 @property (weak, nonatomic) IBOutlet UIView *zoneBackground;
 @property (weak, nonatomic) IBOutlet UILabel *barcodeString;

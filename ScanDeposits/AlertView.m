@@ -32,10 +32,31 @@
     return self;
 }
 
+-(void)testHandler:(NSNotification*)notification
+{
+    NSLog(@"Notification: %@", [notification name]);
+}
+
+-(void)dispatchEvent
+{
+    NSLog(@"SHOULD DISPATCH THE EVENT");
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"objectMoved" object:self];
+    NSLog(@"EVENT DISPATCHED");
+}
 -(void)setupView {
     //Create semi-transparent background
     _backgroundView = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [_backgroundView setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:0.0]];
+    
+    
+    //Test
+    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+    
+    [notificationCenter addObserver:self
+                           selector:@selector(testHandler:)
+                               name:@"objectMoved"
+                             object:nil];//test tomorrow
+    
     
     //Button styling
     [self buttonStyle:_cancelBtn WithImgName:@"blueButton.png" imgSelectedName:@"blueButton.png" withTitle:@"Cancel"];
@@ -78,6 +99,18 @@
         _backgroundView.alpha = 0.0;
     } completion:^(BOOL finished) {
         [_backgroundView removeFromSuperview];
+        
+        //only executed if user presses confirm
+        if (_confirmed) {
+            
+            //Init custom model object and add to collection before passing to delegate
+            NSMutableArray *modelArray = [self createDepositModelObject];
+            //call this delegate method from HomeVC if _confirmPressed
+            if ([self.delegate respondsToSelector:@selector(passScannedData:)]) {
+                [self.delegate performSelector:@selector(passScannedData:) withObject:modelArray];
+            }
+            
+        }
         //dismissed popup and resume scanning mode and save barcode data if applicable
         if ([self.delegate respondsToSelector:@selector(startScanning)]) {
             [self.delegate performSelector:@selector(startScanning)];
@@ -87,39 +120,30 @@
 
 }
 -(void)cancelPressed:(UIButton *)sender {
-    
+    //Cancel does NOT create a deposit model object just dismisses picker 
     [self dismissPopupAndResumeScanning];
     
 }
 
 -(void)confirmPressed:(UIButton *)sender {
     
-    //Note if behaviour doesnt change encapsulate in a seperate method
-    [UIView animateWithDuration:0.3 animations:^{
-        _backgroundView.alpha = 0.0;
-                     } completion:^(BOOL finished) {
-                         [_backgroundView removeFromSuperview];
-                         NSMutableArray *array = [NSMutableArray array];
-                         
-                         //Init custom model object
-                         Deposit *deposit = [[Deposit alloc]initWithBagNumber:@"987565-4646"    bagBarcode:@"987565-4646" bagAmount:_bagAmount
-                                                        bagCount:_bagCount timeStamp:_timeString];
-                         
-                         //Add to collection before passing to delegate
-                          [array addObject:deposit];
-                         
-                         //Only call this if the user is finished scanning
-                         
-                         //call another delegate method
-                         if ([self.delegate respondsToSelector:@selector(presentDepositsViewController:)]) {
-                             [self.delegate performSelector:@selector(presentDepositsViewController:) withObject:(NSMutableArray *)array];
-                         }
-                     }];
+    _confirmed = YES;
+    [self dismissPopupAndResumeScanning];
     
+}
+
+#pragma factory method
+- (NSMutableArray *)createDepositModelObject {
     
-//    [self dismissPopupAndResumeScanning];
-    //ToDo ->Add data persistence if required here
+    NSMutableArray *array = [NSMutableArray array];
     
+    //Init custom model object
+    Deposit *deposit = [[Deposit alloc]initWithBagNumber:@"987565-4646" bagBarcode:@"987565-4646"
+                                               bagAmount: _bagAmount bagCount:_bagCount timeStamp:_timeString];
+    
+    //Add to collection before passing to delegate
+    [array addObject:deposit];
+    return array;
 }
 
 +(AlertView*)loadFromNibNamed:(NSString*)nibName {

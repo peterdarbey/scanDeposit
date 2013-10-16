@@ -27,18 +27,18 @@
     }
     return self;
 }
-- (void)cancelPressed:(UIButton *)sender {
+- (void)cancelScansPressed:(UIButton *)sender {
     
     DLog(@"Dismiss picker from new barButtonItem");
     [self.navigationController dismissViewControllerAnimated:YES completion:nil];
     
 }
 
-- (void)finishedPressed:(UIButton *)sender {
+- (void)finishedScansPressed:(UIButton *)sender {
    
     DLog(@"Dismiss picker with DONE button");
     
-    [self presentDepositsViewController:nil];
+    [self presentDepositsViewController:nil];//alter this
         
 }
 - (void)buttonTapped:(UIButton *)sender
@@ -47,34 +47,29 @@
     [[ScanditSDKBarcodePicker alloc] initWithAppKey:kScanditSDKAppKey];
     picker.overlayController.delegate = self;
     [picker.overlayController showSearchBar:YES];
-//    [picker.overlayController showToolBar:YES];//YES
-//    [picker.overlayController setToolBarButtonCaption:@"Finish"];//thats working
-//    [picker.overlayController setToolbarItems:barButtonsArray];
     
     //construct barButtonItems
-    UIBarButtonItem *barBtnCancel = [[UIBarButtonItem alloc]initWithTitle:@"CancelScans" style:UIBarButtonItemStyleBordered target:self action:@selector(cancelPressed:)];
+    UIBarButtonItem *barBtnCancel = [[UIBarButtonItem alloc]initWithTitle:@"CancelScans" style:UIBarButtonItemStyleBordered target:self action:@selector(cancelScansPressed:)];
     [barBtnCancel setTintColor:[UIColor blackColor]];
     
-    UIBarButtonItem *barBtnDone = [[UIBarButtonItem alloc]initWithTitle:@"FinishedScans" style:UIBarButtonItemStyleBordered target:self action:@selector(finishedPressed:)];
-    [barBtnDone setTintColor:[UIColor blackColor]];
+    UIBarButtonItem *barBtnFinished = [[UIBarButtonItem alloc]initWithTitle:@"FinishedScans" style:UIBarButtonItemStyleBordered target:self action:@selector(finishedScansPressed:)];
+    [barBtnFinished setTintColor:[UIColor blackColor]];
     
     //Add a divider for the toolBar barButtonItems
     UIBarButtonItem *flexible = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     
-    NSArray *barBtnArray = [NSArray arrayWithObjects:barBtnCancel, flexible, barBtnDone, nil];
+    NSArray *barBtnArray = [NSArray arrayWithObjects:barBtnCancel, flexible, barBtnFinished, nil];
     
     UIToolbar *customTB = [[UIToolbar alloc]initWithFrame:CGRectMake(0 , self.view.frame.size.height - 44, self.view.frame.size.width, 44)];
     
-//    customTB.backgroundColor = [UIColor blackColor];
-    [customTB setBackgroundColor:[UIColor blackColor]];
-    [customTB setTranslucent:YES];
+    [customTB setBarStyle:UIBarStyleBlackTranslucent];//works
     customTB.items = barBtnArray;
 
     [picker.view addSubview:customTB];//removing setToolBar and using addSubview fixed toolbar setup
 //    [picker.overlayController setToolbarItems:barButtonsArray];
     
     
-    [picker.overlayController setTextForInitializingCamera:@"Please Wait"];
+    [picker.overlayController setTextForInitializingCamera:@"Please Wait"];//not working yet
     [picker startScanning];
     //set the keyboard type
     [picker.overlayController setSearchBarKeyboardType:UIKeyboardTypeNamePhonePad];//lose keybopard toolbar
@@ -122,19 +117,12 @@
     [scanBtn addTarget:self action:@selector(buttonTapped:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:scanBtn];
     
-    UIButton *moneyBagBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self buttonStyle:moneyBagBtn WithImgName:@"blueButton.png" imgSelectedName:@"blueButtonSelected.png" withTitle:@"MoneyBag"];
-    [moneyBagBtn setFrame:CGRectMake(20, self.view.frame.size.height/3, 280, 44)];
-    [moneyBagBtn addTarget:self action:@selector(moneyBagTapped:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:moneyBagBtn];
-    
+//    //Test
+//    notificationCenter = [NSNotificationCenter defaultCenter];
+//
+//    [notificationCenter addObserver:self selector:@selector(confirmPressed:) name:@"ConfirmedPressed" object:nil];
 }
--(void)moneyBagTapped:(UIButton *)sender
-{
-    //Create a custom Alert -> AlertView.xib
-    AlertView *popup = [AlertView loadFromNibNamed:@"InputFundsView"];
-    [popup showOnView:self.view];
-}
+
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:YES];
@@ -154,6 +142,21 @@
 
 
 #pragma mark - Custom delegate method
+- (void)passScannedData:(NSMutableArray *)dataArray {
+    
+    //TEST
+    [picker dismissViewControllerAnimated:YES completion:^{
+        
+        DepositsVC *depositsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"DepositsVC"];
+        depositsVC.title = NSLocalizedString(@"Deposits", @"Deposits View");
+        depositsVC.depositsArray = dataArray;
+        [self.navigationController pushViewController:depositsVC animated:YES];
+        DLog(@"Push to viewController delegate method called");
+        
+    }];
+
+}
+
 - (void)presentDepositsViewController:(NSMutableArray *)array {
     
     
@@ -215,7 +218,8 @@
     
     
     //Create a custom Alert -> AlertView.xib
-    AlertView *popup = [AlertView loadFromNibNamed:@"AlertView"];
+    popup = [AlertView loadFromNibNamed:@"AlertView"];
+    
     //Add custom delegate method here to restart picker scanning
     [popup setDelegate:self];
     //pass the time

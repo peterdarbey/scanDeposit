@@ -33,7 +33,7 @@
     //ToDo add timeStamp
     _bagNumber = dict[@"BagNumber"];//string
     _bagBarcode = dict[@"Barcode"];
-    _bagAmount = [dict[@"BagAmount"]doubleValue];//Caused crash 
+    _bagAmount = (double)[dict[@"BagAmount"]doubleValue];
     _bagCount = [dict[@"BagCount"]intValue];
     _internalDict = dict;
 
@@ -44,7 +44,7 @@
     
     self = [super init];
     if (self) {
-        NSDictionary *dict = @{@"BagNumber": bagNumber, @"Barcode" : barcode, @"BagAmount" : @[[NSNumber numberWithDouble:amount]], @"BagCount" : @[[NSNumber numberWithInt:count]]};
+        NSDictionary *dict = @{@"BagNumber": bagNumber, @"Barcode" : barcode, @"BagAmount" : [NSNumber numberWithDouble:amount], @"BagCount" : [NSNumber numberWithInt:count]};
         DLog(@"init dict has: %@", dict);
         [self commonInit:dict];
     }

@@ -62,6 +62,12 @@
 		BF370335180D4DE40027AE4F /* DepositsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = BF370334180D4DE40027AE4F /* DepositsVC.m */; };
 		BF370338180D5C5D0027AE4F /* Deposit.m in Sources */ = {isa = PBXBuildFile; fileRef = BF370337180D5C5D0027AE4F /* Deposit.m */; };
 		BF37033B180D5C820027AE4F /* Bag.m in Sources */ = {isa = PBXBuildFile; fileRef = BF37033A180D5C820027AE4F /* Bag.m */; };
+		BF370342180EAEF10027AE4F /* Default-568h.png in Resources */ = {isa = PBXBuildFile; fileRef = BF37033C180EAEF10027AE4F /* Default-568h.png */; };
+		BF370343180EAEF10027AE4F /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BF37033D180EAEF10027AE4F /* Default-568h@2x.png */; };
+		BF370344180EAEF10027AE4F /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = BF37033E180EAEF10027AE4F /* Default.png */; };
+		BF370345180EAEF10027AE4F /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BF37033F180EAEF10027AE4F /* Default@2x.png */; };
+		BF370346180EAEF10027AE4F /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BF370340180EAEF10027AE4F /* Icon.png */; };
+		BF370347180EAEF10027AE4F /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BF370341180EAEF10027AE4F /* Icon@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -144,6 +150,12 @@
 		BF370337180D5C5D0027AE4F /* Deposit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Deposit.m; sourceTree = "<group>"; };
 		BF370339180D5C820027AE4F /* Bag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bag.h; sourceTree = "<group>"; };
 		BF37033A180D5C820027AE4F /* Bag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Bag.m; sourceTree = "<group>"; };
+		BF37033C180EAEF10027AE4F /* Default-568h.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h.png"; sourceTree = "<group>"; };
+		BF37033D180EAEF10027AE4F /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		BF37033E180EAEF10027AE4F /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		BF37033F180EAEF10027AE4F /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		BF370340180EAEF10027AE4F /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		BF370341180EAEF10027AE4F /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -310,6 +322,12 @@
 		BF2C4FC91806FE7900A87C18 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				BF37033C180EAEF10027AE4F /* Default-568h.png */,
+				BF37033D180EAEF10027AE4F /* Default-568h@2x.png */,
+				BF37033E180EAEF10027AE4F /* Default.png */,
+				BF37033F180EAEF10027AE4F /* Default@2x.png */,
+				BF370340180EAEF10027AE4F /* Icon.png */,
+				BF370341180EAEF10027AE4F /* Icon@2x.png */,
 				BF370328180844990027AE4F /* bg_gradient.png */,
 				BF2C4FCA1806FEB100A87C18 /* blueButton.png */,
 				BF2C4FCB1806FEB100A87C18 /* blueButton@2x.png */,
@@ -412,22 +430,27 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BF370346180EAEF10027AE4F /* Icon.png in Resources */,
 				BF2C4FA01805C23300A87C18 /* beep.wav in Resources */,
 				BF2C4FD01806FEB100A87C18 /* bluebuttonSelected.png in Resources */,
 				BF2C4FAB1805C23300A87C18 /* flashlight-turn-off-icon@2x.png in Resources */,
+				BF370344180EAEF10027AE4F /* Default.png in Resources */,
 				BF2C4FCF1806FEB100A87C18 /* blueButton@2x.png in Resources */,
 				BF2C4F631805C08B00A87C18 /* Main_iPad.storyboard in Resources */,
 				BF2C4FAF1805C23300A87C18 /* flashlight-turn-on-icon@2x.png in Resources */,
 				BF2C4F681805C08B00A87C18 /* Images.xcassets in Resources */,
+				BF370347180EAEF10027AE4F /* Icon@2x.png in Resources */,
 				BF2C4FAE1805C23300A87C18 /* flashlight-turn-on-icon.png in Resources */,
 				BF2C4F601805C08B00A87C18 /* Main_iPhone.storyboard in Resources */,
 				BF2C4F571805C08B00A87C18 /* InfoPlist.strings in Resources */,
+				BF370342180EAEF10027AE4F /* Default-568h.png in Resources */,
 				BF2C4FA51805C23300A87C18 /* CHANGELOG.txt in Resources */,
 				BF370331180C48B50027AE4F /* InputFundsView.xib in Resources */,
 				BF2C4FA11805C23300A87C18 /* camera-swap-icon-pressed.png in Resources */,
 				BF2C4FA31805C23300A87C18 /* camera-swap-icon.png in Resources */,
 				BF2C4FA81805C23300A87C18 /* flashlight-turn-off-icon-pressed.png in Resources */,
 				BF3703241808229A0027AE4F /* AlertView.xib in Resources */,
+				BF370343180EAEF10027AE4F /* Default-568h@2x.png in Resources */,
 				BF2C4FB21805C23300A87C18 /* poweredby.png in Resources */,
 				BF2C4FA61805C23300A87C18 /* scanditsdk.strings in Resources */,
 				BF2C4FA21805C23300A87C18 /* camera-swap-icon-pressed@2x.png in Resources */,
@@ -436,6 +459,7 @@
 				BF370329180844990027AE4F /* bg_gradient.png in Resources */,
 				BF2C4FCE1806FEB100A87C18 /* blueButton.png in Resources */,
 				BF2C4FAC1805C23300A87C18 /* flashlight-turn-on-icon-pressed.png in Resources */,
+				BF370345180EAEF10027AE4F /* Default@2x.png in Resources */,
 				BF2C4FD11806FEB100A87C18 /* blueButtonSelected@2x.png in Resources */,
 				BF2C4FB11805C23300A87C18 /* LICENSE-2.0.txt in Resources */,
 				BF2C4FA91805C23300A87C18 /* flashlight-turn-off-icon-pressed@2x.png in Resources */,

@@ -69,6 +69,10 @@
     self.navigationController.navigationBar.barStyle = UIBarStyleBlackTranslucent;
     self.title = NSLocalizedString(@"Home Screen", @"Home Screen");
     
+    //Construct a imageView
+    UIImageView *imgView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"Default-568h.png"]];
+    [self.view addSubview:imgView];
+    
     UIButton *scanBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [self buttonStyle:scanBtn WithImgName:@"blueButton.png" imgSelectedName:@"bluebuttonSelected" withTitle:@"Scan Barcode"];
     

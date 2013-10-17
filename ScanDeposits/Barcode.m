@@ -8,6 +8,22 @@
 
 #import "Barcode.h"
 
+@interface Barcode ()
+{
+    
+}
+
+//private members
+@property (strong, nonatomic) NSString *barcode;
+@property (strong, nonatomic) NSString *branchNSC;
+
+@property (strong, nonatomic) NSString *device;// -> TDR
+@property (strong, nonatomic) NSString *ID;// blank
+
+@end
+
+
+
 @implementation Barcode
 
 + (Barcode *)instanceFromDictionary:(NSDictionary *)aDictionary {
@@ -49,16 +65,13 @@
     
     if ([key isEqualToString:@"Barcode"]) {
         [self setValue:value forKey:@"barcode"];//property ivar contains all data?
-    } else if ([key isEqualToString:@"Symbology"]) {
-        [self setValue:value forKey:@"symbology"];
+    } else if ([key isEqualToString:@"BranchNSC"]) {
+        [self setValue:value forKey:@"branchNSC"];
     } else if ([key isEqualToString:@"Device"]) {
         [self setValue:value forKey:@"device"];//property ivar
     } else if ([key isEqualToString:@"ID"]) {
-        [self setValue:value forKey:@"iD"];
-    } else if ([key isEqualToString:@"LodgementType"]) {
-        [self setValue:value forKey:@"lodgementType"];//this may be incorrect
-    }
-    else {
+        [self setValue:value forKey:@"ID"];
+    } else {
         [super setValue:value forUndefinedKey:key];
     }
     
@@ -70,20 +83,34 @@
     if (self.barcode) {
         [dictionary setObject:self.barcode forKey:@"barcode"];
     }
-    if (self.symbology) {
-        [dictionary setObject:self.symbology forKey:@"symbology"];
+    if (self.branchNSC) {
+        [dictionary setObject:self.branchNSC forKey:@"branchNSC"];
     }
     if (self.device) {
         [dictionary setObject:self.device forKey:@"device"];
     }
-    if (self.iD) {
-        [dictionary setObject:self.iD forKey:@"ID"];
-    }
-    if (self.lodgementType) {
-        [dictionary setObject:self.lodgementType forKey:@"lodgementType"];
+    if (self.ID) {
+        [dictionary setObject:self.ID forKey:@"ID"];
     }
     
     return dictionary;
+}
+
+- (NSString *)branchNSC {
+    
+    return _branchNSC;
+}
+
+- (NSString *)barcodeData {
+    
+    return _barcode;
+}
+- (NSString *)device {
+    
+    return _device;
+}
+- (NSString *)getID {
+    return _ID;
 }
 
 @end

@@ -9,13 +9,17 @@
 #import <Foundation/Foundation.h>
 
 @interface Barcode : NSObject
+{
+    
+}
 
-@property (strong, nonatomic, readonly) NSString *barcode;
-@property (strong, nonatomic) NSString *symbology;
-//New attributes
-@property (strong, nonatomic, readonly) NSString *device;// -> TDR
-@property (strong, nonatomic, readonly) NSString *iD;// blank
-@property (strong, nonatomic, readonly) NSString *lodgementType;// -> 932388 003
+//@property (strong, nonatomic) NSString *barcode;
+//@property (strong, nonatomic) NSString *symbology;
+////New attributes
+//@property (strong, nonatomic) NSString *device;// -> TDR
+//@property (strong, nonatomic) NSString *ID;// blank
+
+//@property (strong, nonatomic, readonly) NSString *lodgementType;// -> 932388 003
 
 //@property (strong, nonatomic) NSDate *currentDate;//already captured
 
@@ -24,5 +28,10 @@
 - (void)setAttributesFromDictionary:(NSDictionary *)aDictionary;
 - (NSDictionary *)dictionaryRepresentation;
 
+//getter
+- (NSString *)branchNSC;
+- (NSString *)barcodeData;
+- (NSString *)device;
+- (NSString *)getID;
 
 @end

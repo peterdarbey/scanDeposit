@@ -10,8 +10,9 @@
 
 @interface Deposit ()
 {
-//    static int testCount;
+   
 }
+
 
 //Private members
 @property (strong, nonatomic) NSString *bagNumber;
@@ -24,12 +25,18 @@
 
 @end
 
+NSInteger totalBagCount = 0;
 
 @implementation Deposit
 {
     
 }
-
+//only called once?
++(void)initialize {
+    if (self == [Deposit class]) {
+        totalBagCount++;
+    }
+}
 -(void) commonInit:(NSDictionary *)dict {
     
     //ToDo add timeStamp
@@ -41,7 +48,7 @@
     _internalDict = dict;
 
 }
-
+//make class method +  instead of -
 - (id)initWithBagNumber:(NSString *)bagNumber bagBarcode:(NSString *)barcode
               bagAmount:(double)amount bagCount:(int)count timeStamp:(NSString *)time {
     
@@ -63,7 +70,7 @@
 +(int)totalNumberOfBags {
     
     //    return _bagCount;
-    return 5;
+    return totalBagCount;
 }
 - (double)countOfBagAmount {
     return _bagAmount;

@@ -35,3 +35,5 @@
 - (int)countOfBagCount;
 
 @end
+
+extern  NSInteger totalBagCount;

@@ -250,7 +250,7 @@
     //Add to collection
     [_barcodeArray addObject:barcodeObject];
     
-    DLog(@"barcode from model object>>>>>>>>: %@", barcodeObject.barcode);
+    DLog(@"barcode from model object>>>>>>>>: %@", [barcodeObject barcodeData]);
     
     //present alertView and temp stop scanning
     [picker stopScanning];
@@ -262,7 +262,7 @@
     **********/
     
     //Create a custom Alert -> AlertView.xib
-    [self showPopup:barcodeObject.barcode];
+    [self showPopup:[barcodeObject barcodeData]];
 }
 
 -(void)showPopup:(NSString *)barcode {
@@ -298,7 +298,7 @@
     [_barcodeArray addObject:barcodeObject];
     
     //Create a custom Alert -> AlertView.xib
-    [self showPopup:barcodeObject.barcode];
+    [self showPopup:[barcodeObject barcodeData]];
     
 //    //Create a custom Alert -> AlertView.xib
 //    AlertView *popup = [AlertView loadFromNibNamed:@"AlertView"];
@@ -308,7 +308,7 @@
 //    popup.barcodeString.text = [NSString stringWithFormat:@"%@", barcodeObject.barcode];
 //    [popup showOnView:picker.view];
     
-    DLog(@"didManualSearch with Inputed from barcodeObject: %@", barcodeObject.barcode);
+    DLog(@"didManualSearch with Inputed from barcodeObject: %@", [barcodeObject barcodeData]);
 }
 
 - (void)didReceiveMemoryWarning

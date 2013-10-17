@@ -108,7 +108,7 @@
     
     
 //        Deposit *deposit = [_depositsArray lastObject];//wasnt same model object?
-        Deposit *deposit = [_depositsArray objectAtIndex:indexPath.row];//correct
+        Deposit *deposit = [_depositsCollection objectAtIndex:indexPath.row];//correct
     
         //need getter here for these private ivars
         bagAmountTF.text = [NSString stringWithFormat:@"Amount is: €%.2f", [deposit countOfBagAmount]];//@"€%.2f"

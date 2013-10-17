@@ -19,7 +19,7 @@
 }
 
 @property (strong, nonatomic) IBOutlet UITableView *depositsTV;
-@property (strong, nonatomic) NSMutableArray *depositsArray;
+@property (strong, nonatomic) NSMutableArray *depositsCollection;
 //@property double depositAmount;
 //@property int depositCount;
 

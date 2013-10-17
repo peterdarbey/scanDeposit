@@ -32,31 +32,11 @@
     return self;
 }
 
--(void)testHandler:(NSNotification*)notification
-{
-    NSLog(@"Notification: %@", [notification name]);
-}
 
--(void)dispatchEvent
-{
-    NSLog(@"SHOULD DISPATCH THE EVENT");
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"objectMoved" object:self];
-    NSLog(@"EVENT DISPATCHED");
-}
 -(void)setupView {
     //Create semi-transparent background
     _backgroundView = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [_backgroundView setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:0.0]];
-    
-    
-    //Test
-    NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-    
-    [notificationCenter addObserver:self
-                           selector:@selector(testHandler:)
-                               name:@"objectMoved"
-                             object:nil];//test tomorrow
-    
     
     //Button styling
     [self buttonStyle:_cancelBtn WithImgName:@"blueButton.png" imgSelectedName:@"blueButton.png" withTitle:@"Cancel"];
@@ -110,7 +90,8 @@
                 [self.delegate performSelector:@selector(passScannedData:) withObject:modelArray];
             }
             
-        }
+        }//close if
+        
         //dismissed popup and resume scanning mode and save barcode data if applicable
         if ([self.delegate respondsToSelector:@selector(startScanning)]) {
             [self.delegate performSelector:@selector(startScanning)];
@@ -124,7 +105,7 @@
     [self dismissPopupAndResumeScanning];
     
 }
-
+//_saveBtn
 -(void)confirmPressed:(UIButton *)sender {
     
     _confirmed = YES;

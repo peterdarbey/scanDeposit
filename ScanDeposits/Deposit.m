@@ -10,7 +10,7 @@
 
 @interface Deposit ()
 {
-   
+//    static int testCount;
 }
 
 //Private members

@@ -37,11 +37,20 @@
 - (void)finishedScansPressed:(UIButton *)sender {
    
     DLog(@"Dismiss picker with DONE button");
-    
-    [self presentDepositsViewController:nil];//alter this
+    [picker dismissViewControllerAnimated:YES completion:^{
+        //needs the deposits data from the AlertView
+        //now pass the deposits data to DepositsVC to pop its tblView
+        DepositsVC *depositsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"DepositsVC"];
+        depositsVC.title = NSLocalizedString(@"Deposits", @"Deposits View");
+        depositsVC.depositsCollection = _depositsArray;
+        [self.navigationController pushViewController:depositsVC animated:YES];
+        DLog(@"Push to viewController delegate method called");
+        
+    }];
         
 }
-- (void)buttonTapped:(UIButton *)sender
+
+- (void)scanBtnTapped:(UIButton *)sender
 {
     picker =
     [[ScanditSDKBarcodePicker alloc] initWithAppKey:kScanditSDKAppKey];
@@ -74,6 +83,8 @@
     //set the keyboard type
     [picker.overlayController setSearchBarKeyboardType:UIKeyboardTypeNamePhonePad];//lose keybopard toolbar
     
+    //Dont need Observer currently
+//    [self dispatchEventOnTouch];
     
     [self.navigationController presentViewController:picker animated:YES completion:nil];
     
@@ -105,7 +116,7 @@
     UIImageView *imgView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"Default-568h.png"]];
     [self.view addSubview:imgView];
     
-    UIButton *scanBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    scanBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [self buttonStyle:scanBtn WithImgName:@"blueButton.png" imgSelectedName:@"bluebuttonSelected" withTitle:@"Scan Barcode"];
     
 
@@ -114,20 +125,51 @@
     
 //    [scanBtn setFrame:CGRectMake(self.view.frame.size.width/4, self.view.frame.size.height/2, 180, 44)];
     [scanBtn setFrame:CGRectMake(20, self.view.frame.size.height/2, 280, 44)];
-    [scanBtn addTarget:self action:@selector(buttonTapped:) forControlEvents:UIControlEventTouchUpInside];
+    [scanBtn addTarget:self action:@selector(scanBtnTapped:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:scanBtn];
     
-//    //Test
-//    notificationCenter = [NSNotificationCenter defaultCenter];
-//
-//    [notificationCenter addObserver:self selector:@selector(confirmPressed:) name:@"ConfirmedPressed" object:nil];
+    
+}
+//Unregister for notifications
+- (void)viewDidDisappear:(BOOL)animated{
+    
+    [notificationCenter removeObserver:self];
+    [super viewDidDisappear:YES];
+}
+-(void)dispatchEventOnTouch
+{
+    //register the control object and associated key with a notification 
+    NSDictionary *userInfo = @{@"scanBtnTapped" : scanBtn};
+    [notificationCenter postNotificationName: @"scanBtnTapped" object:nil userInfo:userInfo];
+    DLog(@"EVENT DISPATCHED");
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:YES];
     
+    //Only subscribe when the view is on screen
+    notificationCenter = [NSNotificationCenter defaultCenter];
+    
+    [notificationCenter addObserver:self
+                           selector:@selector(xibDismissed:)
+                               name:@"scanBtnTapped"
+                             object:nil];//not interested in who posted notification just event
+    
 }
+- (void)xibDismissed:(NSNotification *)notification {
+    
+    
+    NSDictionary *userInfo = notification.userInfo;
+    DLog(@"userInfo: %@", userInfo.description);
+    
+    DLog(@"Test this notification: %@", notification.name);
+    if ([notification.name isEqualToString:@"scanBtnTapped"]) {
+        DLog(@"Notified");//now works
+    }
+    
+}
+
 
 #pragma Format date specifier
 -(NSString *)formatMyDateString
@@ -144,33 +186,43 @@
 #pragma mark - Custom delegate method
 - (void)passScannedData:(NSMutableArray *)dataArray {
     
-    //TEST
-    [picker dismissViewControllerAnimated:YES completion:^{
-        
-        DepositsVC *depositsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"DepositsVC"];
-        depositsVC.title = NSLocalizedString(@"Deposits", @"Deposits View");
-        depositsVC.depositsArray = dataArray;
-        [self.navigationController pushViewController:depositsVC animated:YES];
-        DLog(@"Push to viewController delegate method called");
-        
-    }];
+    DLog(@"dataArray: %@", dataArray);
+    //Pass the deposits data back to self 
+    _depositsArray = dataArray;
+    
+    
+    //When finished pressed dismiss picker and push to DepositsVC passing
+    //passing the scanned deposit model data to the VC
+    
+//    [picker dismissViewControllerAnimated:YES completion:^{
+//        
+//        //Here  is the problem
+//        //Dont call this till user has complete all deposit scans
+//        //How do we know we know when finishedPressed occurrs
+//        
+//        DepositsVC *depositsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"DepositsVC"];
+//        depositsVC.title = NSLocalizedString(@"Deposits", @"Deposits View");
+//        depositsVC.depositsCollection = dataArray;
+//        [self.navigationController pushViewController:depositsVC animated:YES];
+//        DLog(@"Push to viewController delegate method called");
+//        
+//    }];
 
 }
 
 - (void)presentDepositsViewController:(NSMutableArray *)array {
     
-    
-    //TEST
-    [picker dismissViewControllerAnimated:YES completion:^{
-        
-        DepositsVC *depositsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"DepositsVC"];
-        depositsVC.title = NSLocalizedString(@"Deposits", @"Deposits View");
-        depositsVC.depositsArray = array;
-        [self.navigationController pushViewController:depositsVC animated:YES];
-        DLog(@"Push to viewController delegate method called");
-
-    }];
-    
+    //When finished pressed dismiss picker and push to DepositsVC passing
+    //passing the scanned deposit model data to the VC
+//    [picker dismissViewControllerAnimated:YES completion:^{
+//        
+//        DepositsVC *depositsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"DepositsVC"];
+//        depositsVC.title = NSLocalizedString(@"Deposits", @"Deposits View");
+//        depositsVC.depositsCollection = array;
+//        [self.navigationController pushViewController:depositsVC animated:YES];
+//        DLog(@"Push to viewController delegate method called");
+//
+//    }];
     
 }
 
@@ -215,29 +267,21 @@
     differ alertView perhaps
     **********/
     
-    
-    
     //Create a custom Alert -> AlertView.xib
-    popup = [AlertView loadFromNibNamed:@"AlertView"];
-    
+    [self showPopup:barcodeObject.barcode];
+}
+
+-(void)showPopup:(NSString *)barcode {
+    //Create a custom Alert -> AlertView.xib
+    AlertView *popup = [AlertView loadFromNibNamed:@"AlertView"];
     //Add custom delegate method here to restart picker scanning
     [popup setDelegate:self];
     //pass the time
     popup.timeString = dateString;//not very OO
     //set the barcode text
-    popup.barcodeString.text = [NSString stringWithFormat:@"%@", barcodeObject.barcode];
+    popup.barcodeString.text = [NSString stringWithFormat:@"%@", barcode];
     [popup showOnView:picker.view];
 }
-
-//-(void)showPopup {
-//    //Create a custom Alert -> AlertView.xib
-//    AlertView *popup = [AlertView loadFromNibNamed:@"AlertView"];
-//    //Add custom delegate method here to restart picker scanning
-//    [popup setDelegate:self];
-//    //set the barcode text
-//    popup.barcodeString.text = [NSString stringWithFormat:@"%@", barcodeObject.barcode];
-//    [popup showOnView:picker.view];
-//}
 
 - (void)scanditSDKOverlayController:
 (ScanditSDKOverlayController *)scanditSDKOverlayController didCancelWithStatus:(NSDictionary *)status {
@@ -260,12 +304,15 @@
     [_barcodeArray addObject:barcodeObject];
     
     //Create a custom Alert -> AlertView.xib
-    AlertView *popup = [AlertView loadFromNibNamed:@"AlertView"];
-    //Add custom delegate method here to restart picker scanning
-    [popup setDelegate:self];
-    //set the barcode text
-    popup.barcodeString.text = [NSString stringWithFormat:@"%@", barcodeObject.barcode];
-    [popup showOnView:picker.view];
+    [self showPopup:barcodeObject.barcode];
+    
+//    //Create a custom Alert -> AlertView.xib
+//    AlertView *popup = [AlertView loadFromNibNamed:@"AlertView"];
+//    //Add custom delegate method here to restart picker scanning
+//    [popup setDelegate:self];
+//    //set the barcode text
+//    popup.barcodeString.text = [NSString stringWithFormat:@"%@", barcodeObject.barcode];
+//    [popup showOnView:picker.view];
     
     DLog(@"didManualSearch with Inputed from barcodeObject: %@", barcodeObject.barcode);
 }

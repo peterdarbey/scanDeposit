@@ -23,7 +23,7 @@
 {
     NSString *dateString;//not very OO
     NSNotificationCenter *notificationCenter;
-    AlertView *popup;
+    UIButton *scanBtn;
 }
 
 @property (strong, nonatomic) NSMutableArray *barcodeArray;

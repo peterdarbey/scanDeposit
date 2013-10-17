@@ -30,6 +30,9 @@
 
 //getter
 - (NSString *)branchNSC;
+
+- (NSString *)getSymbology;
+
 - (NSString *)barcodeData;
 - (NSString *)device;
 - (NSString *)getID;

@@ -14,6 +14,8 @@
 }
 
 //private members
+@property (strong, nonatomic) NSString *symbology;
+
 @property (strong, nonatomic) NSString *barcode;
 @property (strong, nonatomic) NSString *branchNSC;
 
@@ -65,6 +67,8 @@
     
     if ([key isEqualToString:@"Barcode"]) {
         [self setValue:value forKey:@"barcode"];//property ivar contains all data?
+    } else if ([key isEqualToString:@"Symbology"]) {
+        [self setValue:value forKey:@"symbology"];
     } else if ([key isEqualToString:@"BranchNSC"]) {
         [self setValue:value forKey:@"branchNSC"];
     } else if ([key isEqualToString:@"Device"]) {
@@ -83,6 +87,9 @@
     if (self.barcode) {
         [dictionary setObject:self.barcode forKey:@"barcode"];
     }
+    if (self.symbology) {
+        [dictionary setObject:self.symbology forKey:@"symbology"];
+    }
     if (self.branchNSC) {
         [dictionary setObject:self.branchNSC forKey:@"branchNSC"];
     }
@@ -99,6 +106,10 @@
 - (NSString *)branchNSC {
     
     return _branchNSC;
+}
+- (NSString *)getSymbology {
+    
+    return _symbology;
 }
 
 - (NSString *)barcodeData {

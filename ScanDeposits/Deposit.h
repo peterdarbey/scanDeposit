@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "Bag.h"
 
+#import "AppDelegate.h"
+
 @interface Deposit : NSObject
 {
     
@@ -16,12 +18,6 @@
 
 @property int totalBagCount;
 
-////should be private
-//@property (strong, nonatomic) NSString *bagNumber;
-//@property int bagCount;
-//@property double bagAmount;
-//@property (strong, nonatomic) NSString *bagBarcode;
-//@property (strong, nonatomic) NSString *timeStamp;
 
 //setter/getter
 //+(void)setTotalNumberOfBags:(NSInteger)count;
@@ -34,6 +30,7 @@
 - (double)countOfBagAmount;
 - (int)countOfBagCount;
 
+
 @end
 
-extern  NSInteger totalBagCount;
+extern  NSInteger totalBagCount;//static

@@ -35,6 +35,7 @@ NSInteger totalBagCount = 0;
 +(void)initialize {
     if (self == [Deposit class]) {
         totalBagCount++;
+//        totalBagCount = 0;//NO wont work
     }
 }
 -(void) commonInit:(NSDictionary *)dict {
@@ -58,6 +59,12 @@ NSInteger totalBagCount = 0;
         DLog(@"init dict has: %@", dict);
         //In constructor increment bag count
         _bagCount++;//needs to be a static class ivar
+        
+//        _bagCount += 1;//needs to be static
+       
+        //Use for now
+        AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+        appDelegate.totalBagCount += _bagCount;
         DLog(@"bagCount is: %i", _bagCount);
         [self commonInit:dict];
     }

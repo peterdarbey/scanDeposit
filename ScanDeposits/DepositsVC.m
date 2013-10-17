@@ -34,6 +34,8 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
+    appDelegate = (AppDelegate*)[[UIApplication sharedApplication]delegate];
+    
     //register for callbacks
     [_depositsTV setDelegate:self];
     [_depositsTV setDataSource:self];
@@ -99,13 +101,30 @@
         bagLbl.shadowColor = [UIColor grayColor];
         bagLbl.shadowOffset = CGSizeMake(1.0, 1.0);
 //        [bagLbl setText:[NSString stringWithFormat:@"Total bags: %i", _bagCount]];//[Deposit totalNumberOfBags]
-        [bagLbl setText:[NSString stringWithFormat:@"Total bags: %i", [Deposit totalNumberOfBags]]];
-        DLog(@"BAG COUNT: %i", [Deposit totalNumberOfBags]);
+//        [bagLbl setText:[NSString stringWithFormat:@"Total bags: %i", [Deposit totalNumberOfBags]]];
+        DLog(@"BAG COUNT: %i", [Deposit totalNumberOfBags]);//appDelegate.totalBagCount
+        //TEST
+        [bagLbl setText:[NSString stringWithFormat:@"Total bags: %i",appDelegate.totalBagCount]];
+        DLog(@"BAG COUNT: %i", appDelegate.totalBagCount);
+        
         [bagLbl setUserInteractionEnabled:NO];
         //add to view
         [innerView addSubview:bagLbl];
         
-//        [aView addSubview:bagLbl];
+
+        //Construct another label for amount
+        UILabel *bagAmountLbl = [[UILabel alloc]initWithFrame:CGRectMake(210, 10, 80 , 25)];
+        bagAmountLbl.textAlignment = NSTextAlignmentRight;
+        bagAmountLbl.font = [UIFont fontWithName:@"Arial-BoldMT" size:15];
+        bagAmountLbl.textColor = [UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0];//blue
+        bagAmountLbl.shadowColor = [UIColor grayColor];
+        bagAmountLbl.shadowOffset = CGSizeMake(1.0, 1.0);//better
+        bagAmountLbl.backgroundColor = [UIColor clearColor];
+        [bagAmountLbl setUserInteractionEnabled:NO];
+        [bagAmountLbl setText:[NSString stringWithFormat:@"€%.2f", _totalDepositAmount]];
+        //add to innerView
+        [innerView addSubview:bagAmountLbl];
+
         
         
         //construct a UILabel for total amount
@@ -115,7 +134,9 @@
         amountTF.textAlignment = NSTextAlignmentLeft;
         amountTF.textColor = [UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0];//darkGray
         [amountTF setUserInteractionEnabled:NO];
-        [amountTF setText:[NSString stringWithFormat:@"Total: €%.2f", _totalDepositAmount]];
+//        [amountTF setText:[NSString stringWithFormat:@"Total: €%.2f", _totalDepositAmount]];
+        [amountTF setText:[NSString stringWithFormat:@"Total deposit:"]];
+
         //add to view
         [innerView addSubview:amountTF];
         [aView addSubview:innerView];
@@ -173,6 +194,7 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:myIdentifier];
     
     UITextField *bagAmountTF;
+    UILabel *bagAmountLbl;
     UILabel *bagNumberLbl;
     
     //1st time thru cell doesnt exist so create else dequeue
@@ -197,6 +219,18 @@
         [cell.contentView addSubview:bagAmountTF];
         
         
+        //Construct another label for amount
+        bagAmountLbl = [[UILabel alloc]initWithFrame:CGRectMake(210, cell.bounds.size.height/4, 80 , 25)];
+        bagAmountLbl.tag = BAG_AMOUNT;
+        bagAmountLbl.textAlignment = NSTextAlignmentRight;
+        bagAmountLbl.font = [UIFont fontWithName:@"Arial-BoldMT" size:15];
+        bagAmountLbl.textColor = [UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0];//blue
+        bagAmountLbl.shadowColor = [UIColor grayColor];
+        bagAmountLbl.shadowOffset = CGSizeMake(1.0, 1.0);//better
+        bagAmountLbl.backgroundColor = [UIColor clearColor];
+        [bagAmountLbl setUserInteractionEnabled:NO];
+        [cell.contentView addSubview:bagAmountLbl];
+        
         //Construct Label
         bagNumberLbl = [[UILabel alloc]initWithFrame:CGRectMake(10, cell.bounds.size.height/4, 120 , 25)];
         bagNumberLbl.tag = BAG_NO_LBL;
@@ -213,6 +247,7 @@
     else
     {
         bagAmountTF = (UITextField *)[cell.contentView viewWithTag:BAG_AMOUNT_TF];
+        bagAmountLbl = (UILabel *)[cell.contentView viewWithTag:BAG_AMOUNT];//new property
         bagNumberLbl = (UILabel *)[cell.contentView viewWithTag:BAG_NO_LBL];
     }
 //        double amount = 000.00;//should add the 0s when a value there
@@ -224,8 +259,10 @@
         DLog(@"_totalDepositAmount>>>: %f", _totalDepositAmount);
         DLog(@"_depositsCollection contains: %@", _depositsCollection);
         //need getter here for these private ivars
-        bagAmountTF.text = [NSString stringWithFormat:@"Amount is: €%.2f", [deposit countOfBagAmount]];//@"€%.2f"
+        bagAmountTF.text = [NSString stringWithFormat:@"Amount is:"];//@"€%.2f"
         DLog(@"countOfBagAmount: %f", [deposit countOfBagAmount]);
+    
+        bagAmountLbl.text = [NSString stringWithFormat:@"€%.2f", [deposit countOfBagAmount]];//@"€%.2f"
     
         //set this locally for number but then static/gobal ivar
         int numberOfBags = [deposit countOfBagCount];

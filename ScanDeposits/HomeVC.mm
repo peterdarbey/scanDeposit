@@ -206,18 +206,6 @@
 
 - (void)presentDepositsViewController:(NSMutableArray *)array {
     
-    //When finished pressed dismiss picker and push to DepositsVC passing
-    //passing the scanned deposit model data to the VC
-//    [picker dismissViewControllerAnimated:YES completion:^{
-//        
-//        DepositsVC *depositsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"DepositsVC"];
-//        depositsVC.title = NSLocalizedString(@"Deposits", @"Deposits View");
-//        depositsVC.depositsCollection = array;
-//        [self.navigationController pushViewController:depositsVC animated:YES];
-//        DLog(@"Push to viewController delegate method called");
-//
-//    }];
-    
 }
 
 -(void)startScanning {

@@ -9,13 +9,18 @@
 #import <UIKit/UIKit.h>
 
 #define BAG_AMOUNT_TF 200
+#define BAG_AMOUNT 250
 #define BAG_NO_LBL 150
 
+
 #import "Deposit.h"
+
+#import "AppDelegate.h"
 
 @interface DepositsVC : UIViewController <UITableViewDataSource, UITableViewDelegate>
 {
     NSIndexPath *selectedIndexPath;
+    AppDelegate *appDelegate;
 }
 
 @property (strong, nonatomic) IBOutlet UITableView *depositsTV;

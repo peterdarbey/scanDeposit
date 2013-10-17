@@ -52,6 +52,63 @@
 //    [_depositsTV reloadData];
 }
 
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    if (section == [_depositsTV numberOfSections]-1) {
+        
+    
+        UIView *aView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 85)];
+        [aView setBackgroundColor:[UIColor clearColor]];
+        
+        UIView *innerView = [[UIView alloc]initWithFrame:CGRectMake(10, 20, self.view.frame.size.width -20, 45)];
+        [innerView setBackgroundColor:[UIColor whiteColor]];
+        innerView.layer.cornerRadius = 5.0;
+        
+        //construct a UILabel for text
+        UILabel *bagLbl = [[UILabel alloc]initWithFrame:CGRectMake(10, 10, 120, 25)];
+        [bagLbl setBackgroundColor:[UIColor clearColor]];
+        [bagLbl setFont:[UIFont fontWithName:@"Arial-BoldMT" size:15]];
+        bagLbl.textAlignment = NSTextAlignmentLeft;
+        bagLbl.textColor = [UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0];//blue
+        bagLbl.shadowColor = [UIColor grayColor];
+        bagLbl.shadowOffset = CGSizeMake(1.0, 1.0);
+        [bagLbl setText:[NSString stringWithFormat:@"Total bags: %i", _bagCount]];
+        [bagLbl setUserInteractionEnabled:NO];
+        //add to view
+        [innerView addSubview:bagLbl];
+        
+//        [aView addSubview:bagLbl];
+        
+        //construct a UILabel for total amount
+        UITextField *amountTF = [[UITextField alloc]initWithFrame:CGRectMake(130, 10, 160, 25)];
+        [amountTF setBackgroundColor:[UIColor clearColor]];
+        [amountTF setFont:[UIFont systemFontOfSize:17]];
+        amountTF.textAlignment = NSTextAlignmentLeft;
+        amountTF.textColor = [UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0];//blue
+        [amountTF setUserInteractionEnabled:NO];
+        [amountTF setText:[NSString stringWithFormat:@"Total amount: €%.2f", _totalDepositAmount]];
+        //add to view
+        [innerView addSubview:amountTF];
+        [aView addSubview:innerView];
+
+        return aView;
+    }//close if
+    else
+    {
+        return nil;
+    }
+    
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    
+    if (section== [_depositsTV numberOfSections]-1) {
+        return 85.0;//was 85.0 which was correct but now need a button
+    }
+    else
+    {
+        return 10.0;
+    }
+}
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     
     if (section == 0) {
@@ -92,26 +149,26 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:myIdentifier];
         //Construct textField
-        bagAmountTF = [[UITextField alloc]initWithFrame:CGRectMake(135, cell.bounds.size.height/4, 155, 25)];
+        bagAmountTF = [[UITextField alloc]initWithFrame:CGRectMake(130, cell.bounds.size.height/4, 160, 25)];
         bagAmountTF.tag = BAG_AMOUNT_TF;
         bagAmountTF.textAlignment = NSTextAlignmentLeft;
         bagAmountTF.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
         bagAmountTF.font = [UIFont systemFontOfSize:17];
         bagAmountTF.textColor = [UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0];//darkGray
-    
+        [bagAmountTF setUserInteractionEnabled:NO];
 //        NSAttributedString *attString;
 //        NSShadow* shadow = [[NSShadow alloc] init];
 //        shadow.shadowColor = [UIColor whiteColor];
 //        shadow.shadowOffset = CGSizeMake(0.0f, 1.0f);
 //        [attString addAttribute:NSShadowAttributeName value:shadow range:range];
 //        bagAmountTF.attributedText = attString;
-
+        
         bagAmountTF.backgroundColor = [UIColor clearColor];
         [cell.contentView addSubview:bagAmountTF];
         
         
         //Construct Label
-        bagNumberLbl = [[UILabel alloc]initWithFrame:CGRectMake(10, cell.bounds.size.height/4, 125 , 25)];
+        bagNumberLbl = [[UILabel alloc]initWithFrame:CGRectMake(10, cell.bounds.size.height/4, 120 , 25)];
         bagNumberLbl.tag = BAG_NO_LBL;
         bagNumberLbl.textAlignment = NSTextAlignmentLeft;
         bagNumberLbl.font = [UIFont fontWithName:@"Arial-BoldMT" size:15];
@@ -119,6 +176,7 @@
         bagNumberLbl.shadowColor = [UIColor grayColor];
         bagNumberLbl.shadowOffset = CGSizeMake(1.0, 1.0);//better
         bagNumberLbl.backgroundColor = [UIColor clearColor];
+        [bagNumberLbl setUserInteractionEnabled:NO];
         [cell.contentView addSubview:bagNumberLbl];
         
     }

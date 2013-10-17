@@ -38,6 +38,8 @@
    
     DLog(@"Dismiss picker with DONE button");
     [picker dismissViewControllerAnimated:YES completion:^{
+        //stop picker scanning
+        [picker stopScanning];
         //needs the deposits data from the AlertView
         //now pass the deposits data to DepositsVC to pop its tblView
         DepositsVC *depositsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"DepositsVC"];

@@ -24,6 +24,7 @@
     NSString *dateString;//not very OO
     NSNotificationCenter *notificationCenter;
     UIButton *scanBtn;
+    UIBarButtonItem *barBtnFinished;
 }
 
 @property (strong, nonatomic) NSMutableArray *barcodeArray;

@@ -84,10 +84,10 @@
         if (_confirmed) {
             
             //Init custom model object and add to collection before passing to delegate
-            NSMutableArray *modelArray = [self createDepositModelObject];
+            Deposit *deposit = [self createDepositModelObject];
             //call this delegate method from HomeVC if _confirmPressed
             if ([self.delegate respondsToSelector:@selector(passScannedData:)]) {
-                [self.delegate performSelector:@selector(passScannedData:) withObject:modelArray];
+                [self.delegate performSelector:@selector(passScannedData:) withObject:deposit];
             }
             
         }//close if
@@ -114,17 +114,17 @@
 }
 
 #pragma factory method
-- (NSMutableArray *)createDepositModelObject {
+- (Deposit *)createDepositModelObject {
     
-    NSMutableArray *array = [NSMutableArray array];
+//    NSMutableArray *array = [NSMutableArray array];
     
     //Init custom model object
     Deposit *deposit = [[Deposit alloc]initWithBagNumber:@"987565-4646" bagBarcode:@"987565-4646"
                                                bagAmount: _bagAmount bagCount:_bagCount timeStamp:_timeString];
     
     //Add to collection before passing to delegate
-    [array addObject:deposit];
-    return array;
+//    [array addObject:deposit];
+    return deposit;
 }
 
 +(AlertView*)loadFromNibNamed:(NSString*)nibName {

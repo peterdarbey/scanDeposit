@@ -37,8 +37,12 @@
     //register for callbacks
     [_depositsTV setDelegate:self];
     [_depositsTV setDataSource:self];
+    //self.view setBackgroundColor:[UIColor clearColor]];
+    [_depositsTV setBackgroundColor:[UIColor clearColor]];//right
+    [_depositsTV setBackgroundView:[[UIImageView alloc]initWithImage:
+                                                 [UIImage imageNamed:@"Default-568h.png"]]];
     
-    [_depositsTV setBackgroundColor:[UIColor lightGrayColor]];//right
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -48,19 +52,28 @@
 //    [_depositsTV reloadData];
 }
 
-//- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-//    return 10;
-//}
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    
+    if (section == 0) {
+        return 54;
+    }
+    else
+    {
+        return 10;
+    }
+    
+}
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    int numberOfBags = 5;
-    return  numberOfBags;//bag count
+//    return  numberOfBags;//bag count
+    return [_depositsCollection count];
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return 1;//should always be 1
+    return 1;//will always be one
 }
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     selectedIndexPath = indexPath;
@@ -79,22 +92,32 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:myIdentifier];
         //Construct textField
-        bagAmountTF = [[UITextField alloc]initWithFrame:CGRectMake(130, cell.bounds.size.height/4, 180, 25)];
+        bagAmountTF = [[UITextField alloc]initWithFrame:CGRectMake(135, cell.bounds.size.height/4, 155, 25)];
         bagAmountTF.tag = BAG_AMOUNT_TF;
         bagAmountTF.textAlignment = NSTextAlignmentLeft;
         bagAmountTF.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
         bagAmountTF.font = [UIFont systemFontOfSize:17];
         bagAmountTF.textColor = [UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0];//darkGray
+    
+//        NSAttributedString *attString;
+//        NSShadow* shadow = [[NSShadow alloc] init];
+//        shadow.shadowColor = [UIColor whiteColor];
+//        shadow.shadowOffset = CGSizeMake(0.0f, 1.0f);
+//        [attString addAttribute:NSShadowAttributeName value:shadow range:range];
+//        bagAmountTF.attributedText = attString;
+
         bagAmountTF.backgroundColor = [UIColor clearColor];
         [cell.contentView addSubview:bagAmountTF];
         
         
         //Construct Label
-        bagNumberLbl = [[UILabel alloc]initWithFrame:CGRectMake(10, cell.bounds.size.height/4, 120 , 25)];
+        bagNumberLbl = [[UILabel alloc]initWithFrame:CGRectMake(10, cell.bounds.size.height/4, 125 , 25)];
         bagNumberLbl.tag = BAG_NO_LBL;
         bagNumberLbl.textAlignment = NSTextAlignmentLeft;
         bagNumberLbl.font = [UIFont fontWithName:@"Arial-BoldMT" size:15];
         bagNumberLbl.textColor = [UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0];//blue
+        bagNumberLbl.shadowColor = [UIColor grayColor];
+        bagNumberLbl.shadowOffset = CGSizeMake(1.0, 1.0);//better
         bagNumberLbl.backgroundColor = [UIColor clearColor];
         [cell.contentView addSubview:bagNumberLbl];
         
@@ -108,15 +131,22 @@
     
     
 //        Deposit *deposit = [_depositsArray lastObject];//wasnt same model object?
-        Deposit *deposit = [_depositsCollection objectAtIndex:indexPath.row];//correct
-    
+        Deposit *deposit = [_depositsCollection objectAtIndex:indexPath.section];//correct
+        DLog(@"_depositsCollection contains>>>>>>>>>>>>>>>>>>: %@", _depositsCollection);
         //need getter here for these private ivars
         bagAmountTF.text = [NSString stringWithFormat:@"Amount is: €%.2f", [deposit countOfBagAmount]];//@"€%.2f"
         DLog(@"countOfBagAmount: %f", [deposit countOfBagAmount]);
     
         //set this locally for number but then static/gobal ivar
         int numberOfBags = [deposit countOfBagCount];
-        bagNumberLbl.text = [NSString stringWithFormat:@"No of Bags: %i", numberOfBags];
+        int totalBags = 5;
+        bagNumberLbl.text = [NSString stringWithFormat:@"Bag number: %i", numberOfBags];
+    
+    if (indexPath.section == [_depositsTV numberOfSections]-1) {
+        bagNumberLbl.text = [NSString stringWithFormat:@"Total Bags: %i", totalBags];
+        DLog(@"in IF statement");
+    }
+    
     
         return cell;
 }

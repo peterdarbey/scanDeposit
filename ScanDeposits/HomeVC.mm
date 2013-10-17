@@ -61,7 +61,7 @@
     UIBarButtonItem *barBtnCancel = [[UIBarButtonItem alloc]initWithTitle:@"CancelScans" style:UIBarButtonItemStyleBordered target:self action:@selector(cancelScansPressed:)];
     [barBtnCancel setTintColor:[UIColor blackColor]];
     
-    UIBarButtonItem *barBtnFinished = [[UIBarButtonItem alloc]initWithTitle:@"FinishedScans" style:UIBarButtonItemStyleBordered target:self action:@selector(finishedScansPressed:)];
+    barBtnFinished = [[UIBarButtonItem alloc]initWithTitle:@"FinishedScans" style:UIBarButtonItemStyleBordered target:self action:@selector(finishedScansPressed:)];
     [barBtnFinished setTintColor:[UIColor blackColor]];
     
     //Add a divider for the toolBar barButtonItems
@@ -108,6 +108,10 @@
     
     _barcodeArray = [NSMutableArray array];
     
+     _depositsArray = [NSMutableArray array];
+    
+    barBtnFinished.enabled = NO;
+    
 //    [self.navigationController.navigationBar setTintColor:[UIColor blackColor]];
     self.navigationController.navigationBar.barStyle = UIBarStyleBlackTranslucent;
     self.title = NSLocalizedString(@"Home Screen", @"Home Screen");
@@ -123,8 +127,8 @@
 //    scanBtn.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:18.0];
     scanBtn.titleLabel.font = [UIFont systemFontOfSize:17.0];
     
-//    [scanBtn setFrame:CGRectMake(self.view.frame.size.width/4, self.view.frame.size.height/2, 180, 44)];
-    [scanBtn setFrame:CGRectMake(20, self.view.frame.size.height/2, 280, 44)];
+//    [scanBtn setFrame:CGRectMake(20, self.view.frame.size.height/2, 280, 44)];
+    [scanBtn setFrame:CGRectMake(20, self.view.frame.size.height -60, 280, 44)];
     [scanBtn addTarget:self action:@selector(scanBtnTapped:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:scanBtn];
     
@@ -165,7 +169,7 @@
     
     DLog(@"Test this notification: %@", notification.name);
     if ([notification.name isEqualToString:@"scanBtnTapped"]) {
-        DLog(@"Notified");//now works
+        DLog(@"Notified");//works
     }
     
 }
@@ -175,39 +179,27 @@
 -(NSString *)formatMyDateString
 {
     //Capture Time stamp here
-    NSDate *currentDate = [NSDate date];//correct
+    NSDate *currentDate = [NSDate date];
     
-    NSString *formattedDate = [NSDateFormatter localizedStringFromDate: currentDate dateStyle:                          NSDateFormatterShortStyle timeStyle:NSDateFormatterShortStyle];
+    NSString *formattedDate = [NSDateFormatter localizedStringFromDate: currentDate dateStyle:                          NSDateFormatterShortStyle timeStyle:NSDateFormatterShortStyle];//may need secs
 
     return formattedDate;
 }
 
 
 #pragma mark - Custom delegate method
-- (void)passScannedData:(NSMutableArray *)dataArray {
+- (void)passScannedData:(Deposit *)deposit {
     
-    DLog(@"dataArray: %@", dataArray);
+    DLog(@"dataArray: %@", deposit);
     //Pass the deposits data back to self 
-    _depositsArray = dataArray;
+//    _depositsArray = dataArray;
+//    _depositsArray = [NSMutableArray array];
     
+    [_depositsArray addObject:deposit];
     
-    //When finished pressed dismiss picker and push to DepositsVC passing
-    //passing the scanned deposit model data to the VC
+    //enable finishedScans button now as we have at least 1 scanned deposit
+    barBtnFinished.enabled = YES;
     
-//    [picker dismissViewControllerAnimated:YES completion:^{
-//        
-//        //Here  is the problem
-//        //Dont call this till user has complete all deposit scans
-//        //How do we know we know when finishedPressed occurrs
-//        
-//        DepositsVC *depositsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"DepositsVC"];
-//        depositsVC.title = NSLocalizedString(@"Deposits", @"Deposits View");
-//        depositsVC.depositsCollection = dataArray;
-//        [self.navigationController pushViewController:depositsVC animated:YES];
-//        DLog(@"Push to viewController delegate method called");
-//        
-//    }];
-
 }
 
 - (void)presentDepositsViewController:(NSMutableArray *)array {

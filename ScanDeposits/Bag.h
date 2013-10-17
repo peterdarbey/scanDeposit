@@ -15,7 +15,7 @@
 
 @property int totalBagCount;
 
-+(int)numberOfBags;
+//+(int)numberOfBags;
 
 
 @end

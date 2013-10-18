@@ -40,6 +40,9 @@
     //init string array
     stringArray = [NSMutableArray array];
     
+    [_inputAmountTF setKeyboardType:UIKeyboardTypeNumbersAndPunctuation];
+//    [_inputAmountTF setCo]//accessoryView for KB toolbar
+    
     //Button styling
     [self buttonStyle:_cancelBtn WithImgName:@"blueButton.png" imgSelectedName:@"blueButtonSelected.png" withTitle:@"Cancel"];
     [_cancelBtn addTarget:self action:@selector(cancelPressed:) forControlEvents:UIControlEventTouchUpInside];
@@ -131,16 +134,25 @@
     [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
     NSDecimalNumber *decimal = [NSDecimalNumber decimalNumberWithString:modifiedValue];
     modifiedValue = [formatter stringFromNumber:decimal];
-    if (modifiedValue.length > 7) {
-        DLog(@"Sorry value to big");
-//        textField.placeholder = @"Entry too big, reEnter";
-        //show alert here
-    }
-    else
-    {
+
+    if ([string isEqualToString:@"0"] && modifiedValue.length < 5) {
+        DLog(@"Allow 0 entry");//goes in but not allowed by decimal
         textField.text = modifiedValue;
-//         _bagAmount = (double)textField.text.doubleValue;
     }
+    else if (![string isEqualToString:@"0"] && modifiedValue.length <= 6) {
+        textField.text = modifiedValue;
+        DLog(@"Do not allow 0 entry");
+    }
+    
+//    if (modifiedValue.length > 7) {
+//        DLog(@"Sorry value to big");
+//        //NOTE: problem with the 0 entry
+//        //show alert here
+//    }
+//    else
+//    {
+//        textField.text = modifiedValue;
+//    }
 //    textField.text = modifiedValue;
     
     return NO;

@@ -250,10 +250,8 @@
         bagAmountLbl = (UILabel *)[cell.contentView viewWithTag:BAG_AMOUNT];//new property
         bagNumberLbl = (UILabel *)[cell.contentView viewWithTag:BAG_NO_LBL];
     }
-//        double amount = 000.00;//should add the 0s when a value there
     
-    
-//        Deposit *deposit = [_depositsArray lastObject];//wasnt same model object?
+        //retrieve the deposit object at the specified index
         deposit = [_depositsCollection objectAtIndex:indexPath.section];//correct
         _totalDepositAmount += [deposit countOfBagAmount];
         DLog(@"_totalDepositAmount>>>: %f", _totalDepositAmount);
@@ -268,17 +266,11 @@
         int numberOfBags = [deposit countOfBagCount];
         bagNumberLbl.text = [NSString stringWithFormat:@"Bag number: %i", numberOfBags];
     
-//    if (indexPath.section == [_depositsTV numberOfSections]-1) {
-//        bagNumberLbl.text = [NSString stringWithFormat:@"Total Bags: %i", totalBags];
-//        DLog(@"in IF statement");
-//    }
-    
-    
         return cell;
 }
 
-//- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-//{
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
 //    if( indexPath.row == 0 ) {
 //        if ([tableView numberOfRowsInSection:indexPath.section] == 1) {
 //            cell.backgroundView = [appDelegate styleTableCell:@"singleCell"];
@@ -299,7 +291,8 @@
 //        cell.backgroundView = [appDelegate styleTableCell:@"middle"];
 //        cell.selectedBackgroundView = [appDelegate styleTableCell:@"middle"];
 //    }
-//}
+    
+}
 
 - (void)didReceiveMemoryWarning
 {

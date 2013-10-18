@@ -55,18 +55,74 @@
 }
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
     
-    
+    if ([textField.text length] > 5) {
+        DLog(@"greater than 5 characters disable textField");
+    }
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     
-//    _bagAmount = (double)[NSString stringWithFormat:@"%f", textField.text.doubleValue];
-    _bagAmount = (double)textField.text.doubleValue;
-    _bagCount += 1;
+    if ([textField.text length] > 1) {
+        //enable the button only if the chars dont exceed 5 without decimal
+        //user can only enter 5 numbers without . and 3 on left with .
+        //option: 1 could remove the decmial equation by changing the KB
+        //option: 2 condtionals in shouldChange method
+        
+        //leave this as is
+        _saveBtn.enabled = YES;
+   
+        _bagAmount = (double)textField.text.doubleValue;
+        _bagCount += 1;
+        
+     }
     
     [textField resignFirstResponder];
     
 }
+//better approach
+-(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    //replace what the user entered with this string
+    
+    //if entered text is > 5 lets check its content
+    if (textField.text.length > 4) { //&& [textField.text isEqualToString:@"."]) {
+        DLog(@"Greater than 5");
+       
+        NSArray *editStrArray = [textField.text componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"."]];
+        DLog(@"arrayOfStringComponents>>>>>: %@", editStrArray);
+        NSString *newString = [editStrArray objectAtIndex:0];
+        DLog(@"newString: %@", newString);
+    }
+    
+    
+    //Check the 4th character entered
+    if ([[textField.text stringByReplacingCharactersInRange:range withString:string] length] == 4) {
+        DLog(@"STRING: %@", string);//really a char //current value -> value just entered
+        //4th character entered check if its a @"."
+        if (![string isEqualToString:@"."]) {
+            DLog(@"Right the string has a 4th 0 so too big: %@", string);//hits here
+            // so remove last entry
+//            NSString *edString = [textField.text stringByDeletingLastPathComponent];//might work
+//            NSString *removeString = string;
+            NSString *edString = [textField.text stringByReplacingCharactersInRange:range withString:@"."];
+            DLog(@"edString: %@", edString);//321. worked now tell user
+            textField.text = edString;
+            textField.placeholder = edString;
+        }
+        
+    }//close outter if
+    
+    
+//    UITextField *otherTf = textField == _userNameTF ? _passwordTF : _userNameTF;
+    
+//    if ([[textField.text stringByReplacingCharactersInRange:range withString:string] length] > 0 && [[otherTf text] length] > 0) {
+////        _loginBtn.enabled = YES;
+//    } else {
+////        _loginBtn.enabled = NO;
+//    }
+    
+        return YES;//should be replaced
+}
+
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     
@@ -150,8 +206,9 @@
     [self setupView];
     
     self.transform = CGAffineTransformMakeScale(0.5f, 0.5f);
-    
-    self.center = view.center;//pass picker.view.center to view
+    CGPoint offset = CGPointMake(view.center.x, view.center.y -20);
+//    self.center = view.center;//pass picker.view.center to view
+    self.center = offset;
     self.layer.cornerRadius = 5.0;
     self.layer.borderColor = [UIColor blackColor].CGColor;
     self.layer.borderWidth = 1.0;

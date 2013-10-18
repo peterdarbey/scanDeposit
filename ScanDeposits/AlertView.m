@@ -31,8 +31,36 @@
     
     return self;
 }
+- (void)cancelKBPressed:(UIButton *)sender {
 
+    [_inputAmountTF resignFirstResponder];
+}
+- (void)doneKBPressed:(UIButton *)sender {
+   
+    [_inputAmountTF resignFirstResponder];
+    
+}
+- (UIToolbar *)createCustomKBView {
+    
+    //construct barButtonItems
+    UIBarButtonItem *barBtnCancel = [[UIBarButtonItem alloc]initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(cancelKBPressed:)];
+    [barBtnCancel setTintColor:[UIColor blackColor]];
+    
+    UIBarButtonItem *barBtnFinished = [[UIBarButtonItem alloc]initWithTitle:@"Done" style:UIBarButtonItemStyleBordered target:self action:@selector(doneKBPressed:)];
+    [barBtnFinished setTintColor:[UIColor blueColor]];
+    
+    //Add a divider for the toolBar barButtonItems
+    UIBarButtonItem *flexible = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    
+    NSArray *barBtnArray = [NSArray arrayWithObjects:barBtnCancel, flexible, barBtnFinished, nil];
+    
+    UIToolbar *customTB = [[UIToolbar alloc]initWithFrame:CGRectMake(0 , 0, 50, 44)];
+    
+    [customTB setBarStyle:UIBarStyleBlackTranslucent];
+    customTB.items = barBtnArray;
+    return customTB;
 
+}
 -(void)setupView {
     //Create semi-transparent background
     _backgroundView = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -40,8 +68,11 @@
     //init string array
     stringArray = [NSMutableArray array];
     
-    [_inputAmountTF setKeyboardType:UIKeyboardTypeNumbersAndPunctuation];
-//    [_inputAmountTF setCo]//accessoryView for KB toolbar
+    [_inputAmountTF setKeyboardType:UIKeyboardTypeNumberPad];
+    
+    //construct a keyBoard view to sit on KB
+    [_inputAmountTF setInputAccessoryView:[self createCustomKBView]];
+    
     
     //Button styling
     [self buttonStyle:_cancelBtn WithImgName:@"blueButton.png" imgSelectedName:@"blueButtonSelected.png" withTitle:@"Cancel"];

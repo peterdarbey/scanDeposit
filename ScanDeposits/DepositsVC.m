@@ -56,6 +56,11 @@
 - (void)proceedPressed:(UIButton *)sender {
     
     DLog(@"Proceed pressed");
+    //ToDo package data up to fire off to webservice
+    SubmitVC *submitVC = [self.storyboard instantiateViewControllerWithIdentifier:@"SubmitVC"];
+    [submitVC setTitle:NSLocalizedString(@"Submission Process", @"Submission Process Screen")];
+    [self.navigationController pushViewController:submitVC animated:YES];
+    
 }
 
 -(void)buttonStyle:(UIButton *)button WithImgName:(NSString *)imgName imgSelectedName:(NSString *)selectedName withTitle:(NSString *)title
@@ -135,6 +140,7 @@
         amountTF.textAlignment = NSTextAlignmentLeft;
         amountTF.textColor = [UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0];//darkGray
         [amountTF setUserInteractionEnabled:NO];
+        
 //        [amountTF setText:[NSString stringWithFormat:@"Total: €%.2f", _totalDepositAmount]];
         [amountTF setText:[NSString stringWithFormat:@"Total deposit:"]];
 
@@ -198,6 +204,13 @@
     UILabel *bagAmountLbl;
     UILabel *bagNumberLbl;
     
+//    if (!deposit) {
+        //retrieve the deposit object at the specified index
+        deposit = [_depositsCollection objectAtIndex:indexPath.section];//correct
+        _totalDepositAmount += [deposit countOfBagAmount];//wrong logic should be in model BUG
+//    }
+   
+    
     //1st time thru cell doesnt exist so create else dequeue
     if (cell == nil) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:myIdentifier];
@@ -209,12 +222,6 @@
         bagAmountTF.font = [UIFont systemFontOfSize:17];
         bagAmountTF.textColor = [UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0];//darkGray
         [bagAmountTF setUserInteractionEnabled:NO];
-//        NSAttributedString *attString;
-//        NSShadow* shadow = [[NSShadow alloc] init];
-//        shadow.shadowColor = [UIColor whiteColor];
-//        shadow.shadowOffset = CGSizeMake(0.0f, 1.0f);
-//        [attString addAttribute:NSShadowAttributeName value:shadow range:range];
-//        bagAmountTF.attributedText = attString;
         
         bagAmountTF.backgroundColor = [UIColor clearColor];
         [cell.contentView addSubview:bagAmountTF];
@@ -252,9 +259,10 @@
         bagNumberLbl = (UILabel *)[cell.contentView viewWithTag:BAG_NO_LBL];
     }
     
-        //retrieve the deposit object at the specified index
-        deposit = [_depositsCollection objectAtIndex:indexPath.section];//correct
-        _totalDepositAmount += [deposit countOfBagAmount];
+//        //retrieve the deposit object at the specified index
+//        deposit = [_depositsCollection objectAtIndex:indexPath.section];//correct
+//        _totalDepositAmount += [deposit countOfBagAmount];//this is why BUG
+    
         DLog(@"_totalDepositAmount>>>: %f", _totalDepositAmount);
         DLog(@"_depositsCollection contains: %@", _depositsCollection);
         //need getter here for these private ivars

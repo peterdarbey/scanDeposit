@@ -52,6 +52,24 @@
             </objects>
             <point key="canvasLocation" x="947" y="125"/>
         </scene>
+        <!--SubmitVC-->
+        <scene sceneID="bo2-7b-EAu">
+            <objects>
+                <viewController storyboardIdentifier="SubmitVC" id="XaP-W8-2PE" customClass="SubmitVC" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="WlR-8w-FcT"/>
+                        <viewControllerLayoutGuide type="bottom" id="VGW-O6-qlA"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="VKK-BY-m4W">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zer-d5-yYD" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1349" y="123"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="bg7-Ow-aN0">
             <objects>

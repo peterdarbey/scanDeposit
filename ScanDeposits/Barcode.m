@@ -16,11 +16,12 @@
 //private members
 @property (strong, nonatomic) NSString *symbology;
 
+@property (strong, nonatomic) NSString *process;//Process
 @property (strong, nonatomic) NSString *barcode;
-@property (strong, nonatomic) NSString *branchNSC;
+@property (strong, nonatomic) NSString *branchNSC;//Branch NSC
 
 @property (strong, nonatomic) NSString *device;// -> TDR
-@property (strong, nonatomic) NSString *ID;// blank
+@property (strong, nonatomic) NSString *safeID;//Safe ID
 
 @end
 
@@ -69,12 +70,14 @@
         [self setValue:value forKey:@"barcode"];//property ivar contains all data?
     } else if ([key isEqualToString:@"Symbology"]) {
         [self setValue:value forKey:@"symbology"];
-    } else if ([key isEqualToString:@"BranchNSC"]) {
+    }else if ([key isEqualToString:@"Process"]) {
+        [self setValue:value forKey:@"process"];
+    } else if ([key isEqualToString:@"Branch NSC"]) {
         [self setValue:value forKey:@"branchNSC"];
     } else if ([key isEqualToString:@"Device"]) {
         [self setValue:value forKey:@"device"];//property ivar
-    } else if ([key isEqualToString:@"ID"]) {
-        [self setValue:value forKey:@"ID"];
+    } else if ([key isEqualToString:@"Safe ID"]) {
+        [self setValue:value forKey:@"safeID"];
     } else {
         [super setValue:value forUndefinedKey:key];
     }
@@ -85,19 +88,21 @@
     NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
     
     if (self.barcode) {
-        [dictionary setObject:self.barcode forKey:@"barcode"];
+        [dictionary setObject:self.barcode forKey:@"Barcode"];
     }
     if (self.symbology) {
         [dictionary setObject:self.symbology forKey:@"symbology"];
+    }if (self.process) {
+        [dictionary setObject:self.process forKey:@"Process"];
     }
     if (self.branchNSC) {
-        [dictionary setObject:self.branchNSC forKey:@"branchNSC"];
+        [dictionary setObject:self.branchNSC forKey:@"Branch NSC"];
     }
     if (self.device) {
         [dictionary setObject:self.device forKey:@"device"];
     }
-    if (self.ID) {
-        [dictionary setObject:self.ID forKey:@"ID"];
+    if (self.safeID) {
+        [dictionary setObject:self.safeID forKey:@"Safe ID"];
     }
     
     return dictionary;
@@ -111,6 +116,10 @@
     
     return _symbology;
 }
+- (NSString *)process {
+    
+    return _process;
+}
 
 - (NSString *)barcodeData {
     
@@ -121,7 +130,7 @@
     return _device;
 }
 - (NSString *)getID {
-    return _ID;
+    return _safeID;
 }
 
 @end

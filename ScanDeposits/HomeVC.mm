@@ -225,9 +225,23 @@
     dateString = [self formatMyDateString];
     DLog(@"dateString: %@", dateString);//16/10/2013 14:08 -> is 24 hr so fine
     
+    DLog(@"barcodeResult**********: %@", barcodeResult);
     //Parse barcode string first before init model obj
     NSString *parseString = barcodeResult[@"barcode"];
     DLog(@"parseString: %@", parseString);
+    NSArray *barcodeArray = [parseString componentsSeparatedByString:@"\""];//was @","
+    DLog(@"barcodeArray_____: %@", barcodeArray);
+    NSMutableDictionary *barcodeDict = [NSMutableDictionary dictionary];
+//    for (id object in barcodeArray) {
+//        [barcodeDict setValue:object forKey:@"Branch NSC"];
+//    }
+   
+    for (int i = 0; i < [barcodeArray count]; i++) {
+        [barcodeDict setValue:[barcodeArray objectAtIndex:i] forKey:@"Branch NSC"];
+        [barcodeDict setValue:[barcodeArray objectAtIndex:i] forKey:@"Process"];
+        [barcodeDict setValue:[barcodeArray objectAtIndex:i] forKey:@"Safe ID"];
+    }
+     NSLog(@"barcodeDict: %@", barcodeDict);
     
 //    NSString *filteredString = [parseString stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"Device"]];
 //    DLog(@"filteredString: %@", filteredString);

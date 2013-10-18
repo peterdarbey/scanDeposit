@@ -66,6 +66,7 @@
 		BF370345180EAEF10027AE4F /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BF37033F180EAEF10027AE4F /* Default@2x.png */; };
 		BF370346180EAEF10027AE4F /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BF370340180EAEF10027AE4F /* Icon.png */; };
 		BF370347180EAEF10027AE4F /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BF370341180EAEF10027AE4F /* Icon@2x.png */; };
+		BF37034A18118EC80027AE4F /* SubmitVC.m in Sources */ = {isa = PBXBuildFile; fileRef = BF37034918118EC80027AE4F /* SubmitVC.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -151,6 +152,8 @@
 		BF37033F180EAEF10027AE4F /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		BF370340180EAEF10027AE4F /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		BF370341180EAEF10027AE4F /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
+		BF37034818118EC80027AE4F /* SubmitVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SubmitVC.h; sourceTree = "<group>"; };
+		BF37034918118EC80027AE4F /* SubmitVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubmitVC.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -234,6 +237,8 @@
 				BF2C4F851805C0E000A87C18 /* HomeVC.mm */,
 				BF370333180D4DE40027AE4F /* DepositsVC.h */,
 				BF370334180D4DE40027AE4F /* DepositsVC.m */,
+				BF37034818118EC80027AE4F /* SubmitVC.h */,
+				BF37034918118EC80027AE4F /* SubmitVC.m */,
 				BF2C4F5E1805C08B00A87C18 /* Main_iPhone.storyboard */,
 				BF2C4F611805C08B00A87C18 /* Main_iPad.storyboard */,
 				BF370332180D303A0027AE4F /* PopupViews */,
@@ -480,6 +485,7 @@
 				BF2C4FC41806C96400A87C18 /* Barcode.m in Sources */,
 				BF370335180D4DE40027AE4F /* DepositsVC.m in Sources */,
 				BF2C4F5D1805C08B00A87C18 /* AppDelegate.m in Sources */,
+				BF37034A18118EC80027AE4F /* SubmitVC.m in Sources */,
 				BF370327180822A90027AE4F /* AlertView.m in Sources */,
 				BF370338180D5C5D0027AE4F /* Deposit.m in Sources */,
 				BF2C4F591805C08B00A87C18 /* main.m in Sources */,

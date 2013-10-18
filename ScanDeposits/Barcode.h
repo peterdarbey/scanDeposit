@@ -33,6 +33,7 @@
 
 - (NSString *)getSymbology;
 
+- (NSString *)process;
 - (NSString *)barcodeData;
 - (NSString *)device;
 - (NSString *)getID;

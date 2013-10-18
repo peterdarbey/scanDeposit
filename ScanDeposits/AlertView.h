@@ -17,7 +17,7 @@
 
 @interface AlertView : UIView <UITextFieldDelegate>
 {
-    
+    NSMutableArray *stringArray;
 }
 
 -(void)showOnView:(UIView*)view;

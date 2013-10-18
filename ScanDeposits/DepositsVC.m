@@ -78,7 +78,8 @@
         [aView setBackgroundColor:[UIColor clearColor]];
         //construct an innerView to hole placeHolders
         UIView *innerView = [[UIView alloc]initWithFrame:CGRectMake(10, 20, self.view.frame.size.width -20, 45)];
-        [innerView setBackgroundColor:[UIColor whiteColor]];
+//        [innerView setBackgroundColor:[UIColor lightGrayColor]];//was whiteColor
+        [innerView setBackgroundColor:[UIColor colorWithRed:200.0/255.0 green:200.0/255.0 blue:200.0/255.0 alpha:1.0]];
         innerView.layer.cornerRadius = 5.0;
         
         //construct a button to proceed

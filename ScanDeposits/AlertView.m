@@ -37,6 +37,8 @@
     //Create semi-transparent background
     _backgroundView = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [_backgroundView setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:0.0]];
+    //init string array
+    stringArray = [NSMutableArray array];
     
     //Button styling
     [self buttonStyle:_cancelBtn WithImgName:@"blueButton.png" imgSelectedName:@"blueButtonSelected.png" withTitle:@"Cancel"];
@@ -73,55 +75,116 @@
    
         _bagAmount = (double)textField.text.doubleValue;
         _bagCount += 1;
+        DLog(@"_bagAmount: %f", _bagAmount);
         
      }
     
     [textField resignFirstResponder];
     
 }
-//better approach
--(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    //replace what the user entered with this string
+
+- (NSString *)validateStringFromUserInput:(NSString *)inputText {
     
-    //if entered text is > 5 lets check its content
-    if (textField.text.length > 4) { //&& [textField.text isEqualToString:@"."]) {
-        DLog(@"Greater than 5");
-       
-        NSArray *editStrArray = [textField.text componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"."]];
-        DLog(@"arrayOfStringComponents>>>>>: %@", editStrArray);
-        NSString *newString = [editStrArray objectAtIndex:0];
-        DLog(@"newString: %@", newString);
+    NSMutableArray *editStrArray = (NSMutableArray *)[inputText componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"."]];
+    DLog(@"arrayOfStringComponents>>>>>: %@", editStrArray);
+    [stringArray addObject:[editStrArray lastObject]];
+    NSString *newString = [editStrArray objectAtIndex:0];
+    DLog(@"newString: %@", newString);
+    DLog(@"stringArray: %@", stringArray);
+
+    return newString;
+}
+
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    
+    if([[string stringByTrimmingCharactersInSet:[NSCharacterSet controlCharacterSet]]
+        isEqualToString:@""])
+        return YES;
+    
+    NSString *previousValue = [[[textField.text stringByTrimmingCharactersInSet:[[NSCharacterSet decimalDigitCharacterSet] invertedSet]] stringByReplacingOccurrencesOfString:@"." withString:@""] stringByReplacingOccurrencesOfString:@"," withString:@""];
+    DLog(@"previousValue>>>>>: %@", previousValue);//all without the decimal 1st entery not here until 2nd entered then all entries
+    string = [string stringByTrimmingCharactersInSet:[[NSCharacterSet decimalDigitCharacterSet] invertedSet]];
+    DLog(@"string>>>>>: %@", string);//single current char
+    NSString *modifiedValue = [NSString stringWithFormat:@"%@%@", previousValue, string];
+    DLog(@"modifiedValue>>>>>: %@", modifiedValue);//adds together
+    if ([modifiedValue length] == 1) {
+        
+        modifiedValue = [NSString stringWithFormat:@"0.0%@", string];
+        
+    }
+    
+    else if ([modifiedValue length] == 2) {
+        
+        modifiedValue = [NSString stringWithFormat:@"0.%@%@", previousValue, string];
+        
+    }
+    
+    else if ([modifiedValue length] > 2) {
+        
+        modifiedValue = [NSString stringWithFormat:@"%@.%@",[modifiedValue substringToIndex: modifiedValue.length-2],[modifiedValue substringFromIndex:modifiedValue.length-2]];
+        
     }
     
     
-    //Check the 4th character entered
-    if ([[textField.text stringByReplacingCharactersInRange:range withString:string] length] == 4) {
-        DLog(@"STRING: %@", string);//really a char //current value -> value just entered
-        //4th character entered check if its a @"."
-        if (![string isEqualToString:@"."]) {
-            DLog(@"Right the string has a 4th 0 so too big: %@", string);//hits here
-            // so remove last entry
-//            NSString *edString = [textField.text stringByDeletingLastPathComponent];//might work
-//            NSString *removeString = string;
-            NSString *edString = [textField.text stringByReplacingCharactersInRange:range withString:@"."];
-            DLog(@"edString: %@", edString);//321. worked now tell user
-            textField.text = edString;
-            textField.placeholder = edString;
-        }
-        
-    }//close outter if
+    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+    [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+    NSDecimalNumber *decimal = [NSDecimalNumber decimalNumberWithString:modifiedValue];
+    modifiedValue = [formatter stringFromNumber:decimal];
+    if (modifiedValue.length > 7) {
+        DLog(@"Sorry value to big");
+//        textField.placeholder = @"Entry too big, reEnter";
+        //show alert here
+    }
+    else
+    {
+        textField.text = modifiedValue;
+//         _bagAmount = (double)textField.text.doubleValue;
+    }
+//    textField.text = modifiedValue;
     
+    return NO;
     
-//    UITextField *otherTf = textField == _userNameTF ? _passwordTF : _userNameTF;
-    
-//    if ([[textField.text stringByReplacingCharactersInRange:range withString:string] length] > 0 && [[otherTf text] length] > 0) {
-////        _loginBtn.enabled = YES;
-//    } else {
-////        _loginBtn.enabled = NO;
-//    }
-    
-        return YES;//should be replaced
 }
+
+//better approach
+//-(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+//    //replace what the user entered with this string
+//    
+//    //if entered text is > 5 lets check its content
+//    if ([string isEqualToString:@"."]) {
+//        DLog(@"Less than 4");
+//       
+//        [self validateStringFromUserInput:textField.text];
+////        NSMutableArray *editStrArray = (NSMutableArray *)[textField.text componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"."]];
+////        DLog(@"arrayOfStringComponents>>>>>: %@", editStrArray);
+////        [stringArray addObject:[editStrArray lastObject]];
+////        NSString *newString = [editStrArray objectAtIndex:0];
+////        DLog(@"newString: %@", newString);
+////        DLog(@"stringArray: %@", stringArray);
+//    }
+//    
+//    
+//    //Check the 4th character entered
+//    if ([[textField.text stringByReplacingCharactersInRange:range withString:string] length] == 4) {
+//        DLog(@"STRING: %@", string);//really a char //current value -> value just entered
+//        //4th character entered check if its a @"."
+//        if (![string isEqualToString:@"."]) {
+//            DLog(@"Right the string has a 4th 0 so too big: %@", string);//hits here
+//            // so remove last entry
+////            NSString *edString = [textField.text stringByDeletingLastPathComponent];//might work
+////            NSString *removeString = string;
+//            NSString *edString = [textField.text stringByReplacingCharactersInRange:range withString:@"."];
+//            DLog(@"edString: %@", edString);//321. worked now tell user
+//            textField.text = edString;
+////            textField.placeholder = edString;
+//        }
+//        
+//    }//close outter if
+//    
+//    
+//        return YES;//should be replaced
+//}
 
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {

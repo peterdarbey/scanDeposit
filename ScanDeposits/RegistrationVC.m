@@ -47,6 +47,8 @@
     [_registerTV setDelegate:self];
     [_registerTV setDataSource:self];
     
+//    UIBarButtonItem *doneBtn = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(donePressed:)];
+//    [self.navigationController.navigationItem setRightBarButtonItem:doneBtn];
     
 
 }
@@ -58,9 +60,16 @@
     
 }
 
+- (void)donePressed:(UIButton *)sender {
+    
+    DLog(@"Done Pressed");
+    [self.navigationController dismissViewControllerAnimated:YES completion:^{
+        //ToDo add saving functionality here
+    }];
+}
 - (void)savePressed:(UIButton *)sender {
     //ToDo implement NSUserDefaults
-    DLog(@"savePressed");
+//    DLog(@"savePressed");
     [self.navigationController dismissViewControllerAnimated:YES completion:^{
         //ToDo add saving functionality here
     }];
@@ -70,11 +79,11 @@
     
     if (section == 0) {// && ADMIN) {
         //+44 for navigation bar
-        UIView *topView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, _registerTV.frame.size.width, 174)];//130
+        UIView *topView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, _registerTV.frame.size.width, 180)];//130
         [topView setBackgroundColor:[UIColor clearColor]];
         
         //construct an innerView for the admin section
-        UIView *innerView = [[UIView alloc]initWithFrame:CGRectMake(10, 74, _registerTV.frame.size.width -20, 80)];
+        UIView *innerView = [[UIView alloc]initWithFrame:CGRectMake(10, 77, _registerTV.frame.size.width -20, 80)];
         [innerView setBackgroundColor:[UIColor colorWithRed:200.0/255.0 green:200.0/255.0 blue:200.0/255.0 alpha:1.0]];//dark white;
         innerView.layer.cornerRadius = 5.0;
         
@@ -91,7 +100,7 @@
         
         //construct a UILabel for text
         UILabel *branchNSCLbl = [[UILabel alloc]initWithFrame:CGRectMake(10, 10, 120, 25)];
-        [branchNSCLbl setBackgroundColor:[UIColor grayColor]];
+        [branchNSCLbl setBackgroundColor:[UIColor clearColor]];
         [branchNSCLbl setFont:[UIFont systemFontOfSize:17]];
         branchNSCLbl.textAlignment = NSTextAlignmentLeft;
         branchNSCLbl.textColor = [UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0];//darkGray
@@ -121,7 +130,7 @@
         
         //construct a UITextField for branch NSC
         UITextField *branchNSCTF = [[UITextField alloc]initWithFrame:CGRectMake(120, 10, 180, 25)];
-        [branchNSCTF setBackgroundColor:[UIColor greenColor]];
+        [branchNSCTF setBackgroundColor:[UIColor clearColor]];
         [branchNSCTF setFont:[UIFont systemFontOfSize:17]];
         branchNSCTF.textAlignment = NSTextAlignmentLeft;
         branchNSCTF.textColor = [UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0];//blue
@@ -161,7 +170,7 @@
     
     if (section == 0) {
 //        return 130;//+44
-        return 174;
+        return 180;
     }
     else
     {

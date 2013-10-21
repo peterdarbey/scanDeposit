@@ -14,7 +14,7 @@
 
 #define AIB @"@aib.ie"
 
-@interface RegistrationVC : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@interface RegistrationVC : UIViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
 {
     NSIndexPath *selectedIP;
 }

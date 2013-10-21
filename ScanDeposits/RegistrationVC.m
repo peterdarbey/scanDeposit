@@ -34,7 +34,29 @@
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     
 }
-
+#pragma Delegate textField methods
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    
+    return YES;
+}
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+    if ([textField.text isEqualToString:@"Name"]) {
+        DLog(@"Name textField");
+//        UITextField *nextTF = (UITextField *)
+        //next textField
+//        [textField becomeFirstResponder];
+    }
+    else if ([textField.text isEqualToString:@"Email"])
+    {
+        
+    }
+    else
+    {
+        
+        [textField resignFirstResponder];
+    }
+    
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -131,6 +153,7 @@
         //construct a UITextField for branch NSC
         UITextField *branchNSCTF = [[UITextField alloc]initWithFrame:CGRectMake(120, 10, 180, 25)];
         [branchNSCTF setBackgroundColor:[UIColor clearColor]];
+        [branchNSCTF setDelegate:self];
         [branchNSCTF setFont:[UIFont systemFontOfSize:17]];
         branchNSCTF.textAlignment = NSTextAlignmentLeft;
         branchNSCTF.textColor = [UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0];//blue
@@ -143,6 +166,7 @@
         //construct a 2nd TextField
         UITextField *offCounterTF = [[UITextField alloc]initWithFrame:CGRectMake(120, 45, 180, 25)];
         [offCounterTF setBackgroundColor:[UIColor clearColor]];
+        [offCounterTF setDelegate:self];
         [offCounterTF setFont:[UIFont systemFontOfSize:17]];
         offCounterTF.textAlignment = NSTextAlignmentLeft;
         offCounterTF.textColor = [UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0];//blue
@@ -283,13 +307,18 @@
         [userLbl setText:@"Name"];
         [nameTF setText:[NSString stringWithFormat:@"David Roberts"]];//temp will be dynamic
     }
-    else
+    else if (indexPath.row == 1)
     {
         [userLbl setText:@"Email"];//temp will be dynamic
         [nameTF setText:[NSString stringWithFormat:@"david.h.roberts"]];//hard code here
         //show label with email perfix
         [cell.contentView addSubview:prePopLbl];
         
+    }
+    else
+    {
+        [userLbl setText:@"Staff ID"];//temp will be dynamic
+        [nameTF setText:[NSString stringWithFormat:@"Adminstrator"]];//hard code here
     }
     
     
@@ -300,12 +329,12 @@
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     
 //    return [_depositsCollection count];
-    return 3;//minimum of 1
+    return 1;//minimum of 1
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return 2; //should be 2 for the moment
+    return 3; //should be 2 for the moment
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

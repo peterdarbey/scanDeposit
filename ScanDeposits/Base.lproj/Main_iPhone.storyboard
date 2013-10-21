@@ -52,6 +52,34 @@
             </objects>
             <point key="canvasLocation" x="947" y="125"/>
         </scene>
+        <!--RegistrationVC-->
+        <scene sceneID="yCg-bw-ABr">
+            <objects>
+                <viewController storyboardIdentifier="RegistrationVC" id="aLj-Vj-EiB" customClass="RegistrationVC" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="gsS-Zf-bJA"/>
+                        <viewControllerLayoutGuide type="bottom" id="PmF-pT-bxy"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Usk-Vo-OqS">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="7IW-ms-JAA">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <outlet property="registerTV" destination="7IW-ms-JAA" id="g8Z-Wg-M76"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nfV-Lw-YJy" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1316" y="106"/>
+        </scene>
         <!--SubmitVC-->
         <scene sceneID="bo2-7b-EAu">
             <objects>
@@ -68,7 +96,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zer-d5-yYD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1349" y="123"/>
+            <point key="canvasLocation" x="1407" y="-713"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="bg7-Ow-aN0">

@@ -16,6 +16,8 @@
 
 #import "AlertView.h"
 
+#import "RegistrationVC.h"
+
 
 #define kScanditSDKAppKey @"4w8vXjD2EeOZw8u2pkkjQH4S+hfplxDDtzKnte2lX4s"
 
@@ -29,4 +31,5 @@
 
 @property (strong, nonatomic) NSMutableArray *barcodeArray;
 @property (strong, nonatomic) NSMutableArray *depositsArray;
+@property BOOL isAdmin;
 @end

@@ -107,6 +107,23 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    //check for ADMIN
+    //temp set to YES
+    _isAdmin = YES;
+    if (_isAdmin) {
+        DLog(@"User is ADMIN");
+        RegistrationVC *registerVC = [self.storyboard instantiateViewControllerWithIdentifier:@"RegistrationVC"];
+        UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:registerVC];
+        [navController.navigationBar setBarStyle:UIBarStyleBlackTranslucent];
+        //changed to NO and unbalanced calls stopped
+        [self presentViewController:navController animated:NO completion:^{
+            [registerVC setModalPresentationStyle:UIModalPresentationFullScreen];
+            [registerVC setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
+            [registerVC setTitle:NSLocalizedString(@"Registration Process", @"Registration Process")];
+        }];
+        
+    }
+    
     
     _barcodeArray = [NSMutableArray array];
     
@@ -231,6 +248,8 @@
     DLog(@"parseString: %@", parseString);
     NSArray *barcodeArray = [parseString componentsSeparatedByString:@"\""];//was @","
     DLog(@"barcodeArray_____: %@", barcodeArray);
+    
+    
     NSMutableDictionary *barcodeDict = [NSMutableDictionary dictionary];
 //    for (id object in barcodeArray) {
 //        [barcodeDict setValue:object forKey:@"Branch NSC"];

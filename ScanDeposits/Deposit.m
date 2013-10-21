@@ -31,18 +31,15 @@ NSInteger totalBagCount = 0;
 {
     
 }
-//only called once?
-+(void)initialize {
-    if (self == [Deposit class]) {
-        totalBagCount++;
-//        totalBagCount = 0;//NO wont work
-    }
-}
+
+static NSInteger _totalBagCount;
+static double _totalBagsAmount;
+
 -(void) commonInit:(NSDictionary *)dict {
     
     //ToDo add timeStamp
     _bagNumber = dict[@"BagNumber"];//string
-    _bagBarcode = dict[@"Barcode"];
+    _bagBarcode = dict[@"Barcode"];//process a coin bag
     _bagAmount = (double)[dict[@"BagAmount"]doubleValue];
     _bagCount = [dict[@"BagCount"]intValue];
     _timeStamp = dict[@"Time"];//string
@@ -58,14 +55,15 @@ NSInteger totalBagCount = 0;
         NSDictionary *dict = @{@"BagNumber": bagNumber, @"Barcode" : barcode, @"BagAmount" : [NSNumber numberWithDouble:amount], @"BagCount" : [NSNumber numberWithInt:count], @"Time" : time};
         DLog(@"init dict has: %@", dict);
         //In constructor increment bag count
-        _bagCount++;//needs to be a static class ivar
-        
-//        _bagCount += 1;//needs to be static
+//        _bagCount++;
+        _totalBagCount++;
+        DLog(@"_totalBagCount********: %i", _totalBagCount);
+        _totalBagsAmount += [dict[@"BagAmount"]doubleValue];//retreive the instance amount and Add to total
        
         //Use for now
         AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
         appDelegate.totalBagCount += _bagCount;
-        DLog(@"bagCount is: %i", _bagCount);
+        
         [self commonInit:dict];
     }
     
@@ -73,26 +71,21 @@ NSInteger totalBagCount = 0;
 }
 
 //public getters members
-
-+(int)totalNumberOfBags {
++ (NSInteger)getTotalBagCount {
     
-    //    return _bagCount;
-    return totalBagCount;
+    return _totalBagCount;
 }
++ (double)totalBagsAmount {
+    
+    return _totalBagsAmount;
+}
+
 - (double)countOfBagAmount {
     return _bagAmount;
 }
 - (int)countOfBagCount {
     return _bagCount;
 }
-
-
-//+(void)setTotalNumberOfBags:(NSInteger)count {
-//
-////    _bagCount = count;
-//}
-
-
 
 
 @end

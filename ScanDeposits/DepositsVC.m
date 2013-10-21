@@ -10,8 +10,9 @@
 
 @interface DepositsVC ()
 {
-    Deposit *deposit;
+//    Deposit *deposit;
 }
+
 //private collection member
 //@property (strong, nonatomic) NSMutableArray *depositsArray;
 
@@ -106,12 +107,14 @@
         bagLbl.textColor = [UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0];//blue
         bagLbl.shadowColor = [UIColor grayColor];
         bagLbl.shadowOffset = CGSizeMake(1.0, 1.0);
-//        [bagLbl setText:[NSString stringWithFormat:@"Total bags: %i", _bagCount]];//[Deposit totalNumberOfBags]
+
 //        [bagLbl setText:[NSString stringWithFormat:@"Total bags: %i", [Deposit totalNumberOfBags]]];
-        DLog(@"BAG COUNT: %i", [Deposit totalNumberOfBags]);//appDelegate.totalBagCount
+        DLog(@"BAG COUNT: %i", [Deposit getTotalBagCount]);//appDelegate.totalBagCount
         //TEST
-        [bagLbl setText:[NSString stringWithFormat:@"Total bags: %i",appDelegate.totalBagCount]];
-        DLog(@"BAG COUNT: %i", appDelegate.totalBagCount);
+//        [bagLbl setText:[NSString stringWithFormat:@"Total bags: %i",appDelegate.totalBagCount]];
+        
+        [bagLbl setText:[NSString stringWithFormat:@"Total bags: %i",[Deposit getTotalBagCount]]];
+//        DLog(@"BAG COUNT: %i", appDelegate.totalBagCount);
         
         [bagLbl setUserInteractionEnabled:NO];
         //add to view
@@ -127,7 +130,8 @@
         bagAmountLbl.shadowOffset = CGSizeMake(1.0, 1.0);//better
         bagAmountLbl.backgroundColor = [UIColor clearColor];
         [bagAmountLbl setUserInteractionEnabled:NO];
-        [bagAmountLbl setText:[NSString stringWithFormat:@"€%.2f", _totalDepositAmount]];
+        //retrieve the total bag amount from the class method here
+        [bagAmountLbl setText:[NSString stringWithFormat:@"€%.2f", [Deposit totalBagsAmount]]];
         //add to innerView
         [innerView addSubview:bagAmountLbl];
 
@@ -204,11 +208,8 @@
     UILabel *bagAmountLbl;
     UILabel *bagNumberLbl;
     
-//    if (!deposit) {
-        //retrieve the deposit object at the specified index
-        deposit = [_depositsCollection objectAtIndex:indexPath.section];//correct
-        _totalDepositAmount += [deposit countOfBagAmount];//wrong logic should be in model BUG
-//    }
+    //assign here but not dependent on instance state here so also displayed in view so dont need the specified index
+//        _totalDepositAmount = [Deposit totalBagsAmount];
    
     
     //1st time thru cell doesnt exist so create else dequeue
@@ -234,7 +235,7 @@
         bagAmountLbl.font = [UIFont fontWithName:@"Arial-BoldMT" size:15];
         bagAmountLbl.textColor = [UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0];//blue
         bagAmountLbl.shadowColor = [UIColor grayColor];
-        bagAmountLbl.shadowOffset = CGSizeMake(1.0, 1.0);//better
+        bagAmountLbl.shadowOffset = CGSizeMake(1.0, 1.0);
         bagAmountLbl.backgroundColor = [UIColor clearColor];
         [bagAmountLbl setUserInteractionEnabled:NO];
         [cell.contentView addSubview:bagAmountLbl];
@@ -259,9 +260,7 @@
         bagNumberLbl = (UILabel *)[cell.contentView viewWithTag:BAG_NO_LBL];
     }
     
-//        //retrieve the deposit object at the specified index
-//        deposit = [_depositsCollection objectAtIndex:indexPath.section];//correct
-//        _totalDepositAmount += [deposit countOfBagAmount];//this is why BUG
+        Deposit *deposit = [_depositsCollection objectAtIndex:indexPath.section];
     
         DLog(@"_totalDepositAmount>>>: %f", _totalDepositAmount);
         DLog(@"_depositsCollection contains: %@", _depositsCollection);
@@ -271,35 +270,36 @@
     
         bagAmountLbl.text = [NSString stringWithFormat:@"€%.2f", [deposit countOfBagAmount]];//@"€%.2f"
     
-        //set this locally for number but then static/gobal ivar
-        int numberOfBags = [deposit countOfBagCount];
-        bagNumberLbl.text = [NSString stringWithFormat:@"Bag number: %i", numberOfBags];
+    
+        //get the indiviual bag number from indexPath and add one
+        NSInteger bagRow = indexPath.section;
+        bagNumberLbl.text = [NSString stringWithFormat:@"Bag number: %i", bagRow +1];
     
         return cell;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    if( indexPath.row == 0 ) {
-//        if ([tableView numberOfRowsInSection:indexPath.section] == 1) {
+    if( indexPath.row == 0 ) {
+        if ([tableView numberOfRowsInSection:indexPath.section] == 1) {
 //            cell.backgroundView = [appDelegate styleTableCell:@"singleCell"];
 //            cell.selectedBackgroundView = [appDelegate styleTableCell:@"singleCellSelected"];
-//            
-//        }
-//        else
-//        {
+            
+        }
+        else
+        {
 //            cell.backgroundView = [appDelegate styleTableCell:@"top"];
 //            cell.selectedBackgroundView = [appDelegate styleTableCell:@"top"];
-//        }
-//    }
-//    else if (indexPath.row == [self.tableView numberOfRowsInSection:0] -1 ) {
+        }
+    }
+    else if (indexPath.row == [_depositsTV numberOfRowsInSection:0] -1 ) {
 //        cell.backgroundView = [appDelegate styleTableCell:@"bottom"];
 //        cell.selectedBackgroundView = [appDelegate styleTableCell:@"bottom"];
-//    }
-//    else {
+    }
+    else {
 //        cell.backgroundView = [appDelegate styleTableCell:@"middle"];
 //        cell.selectedBackgroundView = [appDelegate styleTableCell:@"middle"];
-//    }
+    }
     
 }
 

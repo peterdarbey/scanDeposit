@@ -16,14 +16,11 @@
     
 }
 
-@property int totalBagCount;
+//class methods
++ (NSInteger)getTotalBagCount;
++ (double)totalBagsAmount;
 
-
-//setter/getter
-//+(void)setTotalNumberOfBags:(NSInteger)count;
-
-+(NSInteger)totalNumberOfBags;
-
+//instance methods
 - (id)initWithBagNumber:(NSString *)bagNumber bagBarcode:(NSString *)barcode
               bagAmount:(double)amount bagCount:(int)count timeStamp:(NSString *)time;
 
@@ -33,4 +30,4 @@
 
 @end
 
-extern  NSInteger totalBagCount;//static
+//extern  NSInteger totalBagCount;//static

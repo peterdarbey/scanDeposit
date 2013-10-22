@@ -72,10 +72,15 @@
     //init string array
     stringArray = [NSMutableArray array];
     
+    
+    
 //    [_inputAmountTF setKeyboardType:UIKeyboardTypeNumberPad];
 //    
 //    //construct a keyBoard view to sit on KB
 //    [_inputAmountTF setInputAccessoryView:[self createCustomKBView]];
+    
+    _popupTV = [[PopUpTV alloc]initWithFrame:CGRectMake(0, 0, _popupView.frame.size.width, _popupView.frame.size.height) style:UITableViewStyleGrouped];
+    [self.popupView addSubview:_popupTV];//works
     
     
     //Button styling

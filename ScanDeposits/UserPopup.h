@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#import "PopupTV.h"
+
 @interface UserPopup : UIView <UITextFieldDelegate>
 {
     NSMutableArray *stringArray;
@@ -17,17 +19,14 @@
 
 +(UserPopup *)loadFromNibNamed:(NSString*)nibName;
 
-@property (strong, nonatomic) IBOutlet UITextField *nameTF;
-
-@property (strong, nonatomic) IBOutlet UITextField *emailTF;
-
-@property (strong, nonatomic) IBOutlet UITextField *staffIDTF;
 
 @property (weak, nonatomic) IBOutlet UIView *zoneBackground;
+@property (strong, nonatomic) IBOutlet UIView *popupView;
 
 @property (weak, nonatomic) IBOutlet UIButton *cancelBtn;
 @property (weak, nonatomic) IBOutlet UIButton *confirmBtn;
 //@property (strong, nonatomic) IBOutlet UIImageView *imagePlaceHolder;
+@property (strong, nonatomic) PopUpTV *popupTV;
 
 @end
 

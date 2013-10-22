@@ -15,24 +15,6 @@
                     <rect key="frame" x="0.0" y="0.0" width="280" height="256"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter Staff ID" clearsOnBeginEditing="YES" minimumFontSize="17" id="nrq-CM-IaU">
-                            <rect key="frame" x="10" y="118" width="260" height="30"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                            <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="namePhonePad" returnKeyType="done"/>
-                        </textField>
-                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter Email" clearsOnBeginEditing="YES" minimumFontSize="17" id="UtF-QM-H2e">
-                            <rect key="frame" x="10" y="80" width="260" height="30"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                            <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="emailAddress" returnKeyType="next"/>
-                        </textField>
-                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter Name " clearsOnBeginEditing="YES" minimumFontSize="17" id="4Bg-HG-prm">
-                            <rect key="frame" x="10" y="42" width="260" height="30"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                            <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" returnKeyType="next"/>
-                        </textField>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Add User Details" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="m1h-7t-xX3">
                             <rect key="frame" x="10" y="13" width="260" height="21"/>
                             <autoresizingMask key="autoresizingMask"/>
@@ -43,7 +25,7 @@
                             <size key="shadowOffset" width="0.0" height="1"/>
                         </label>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="o6n-pv-B3J">
-                            <rect key="frame" x="10" y="192" width="110" height="44"/>
+                            <rect key="frame" x="15" y="202" width="110" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
@@ -56,7 +38,7 @@
                             </state>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="IyQ-06-mr3">
-                            <rect key="frame" x="160" y="192" width="110" height="44"/>
+                            <rect key="frame" x="155" y="202" width="110" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
@@ -68,6 +50,11 @@
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                         </button>
+                        <view contentMode="scaleToFill" id="ZFW-LN-MEp">
+                            <rect key="frame" x="5" y="39" width="270" height="155"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        </view>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </view>
@@ -76,9 +63,8 @@
             <connections>
                 <outlet property="cancelBtn" destination="o6n-pv-B3J" id="aOk-TM-Hvl"/>
                 <outlet property="confirmBtn" destination="IyQ-06-mr3" id="nlP-T9-QzA"/>
-                <outlet property="emailTF" destination="UtF-QM-H2e" id="Krm-2e-Hdt"/>
-                <outlet property="nameTF" destination="4Bg-HG-prm" id="Brv-0x-IFY"/>
-                <outlet property="staffIDTF" destination="nrq-CM-IaU" id="zPe-jD-2t5"/>
+                <outlet property="popupView" destination="ZFW-LN-MEp" id="ggI-rw-aXd"/>
+                <outlet property="zoneBackground" destination="5PH-eD-7dW" id="Ez4-BL-40Z"/>
             </connections>
         </view>
     </objects>

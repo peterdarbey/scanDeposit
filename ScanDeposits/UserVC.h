@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#import "UserPopup.h"
+
 #define USER_NAME_TF 100
 #define USER_NAME_LBL 200
 

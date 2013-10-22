@@ -53,7 +53,7 @@
     //increment the indexPath.row to retrieve the next cell which contains the next textField
     cell = (UITableViewCell *)[_userTV cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row +1 inSection:indexPath.section]];
     //the next TextField
-    UITextField *nextTF = (UITextField *)[cell.contentView viewWithTag:USER_NAME_TF];
+    UITextField *nextTF = (UITextField *)[cell.contentView viewWithTag:USER_NAME_TF];//100
     return nextTF;
 }
 
@@ -126,11 +126,27 @@
     _userArray = [NSMutableArray arrayWithCapacity:1];//always at least 1 user to use app
     
     
+    UIBarButtonItem *doneBtn = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(donePressed:)];
+    [self.navigationController.navigationItem setRightBarButtonItem:doneBtn];
+    
+    
+}
+
+- (void)donePressed:(UIButton *)sender {
+    
+    DLog(@"Done Pressed");
+    [self.navigationController popViewControllerAnimated:YES];
+//    [self.navigationController dismissViewControllerAnimated:YES completion:^{
+//        //ToDo add saving functionality here
+//    }];
 }
 
 - (void)addUserPressed:(UIButton *)sender {
     DLog(@"Add Another pressed");
     //ToDO bring up a xib view
+    UserPopup *userPopup = [UserPopup loadFromNibNamed:@"UserPopup"];
+    //Add delegate if required
+    [userPopup showOnView:self.view];//test
     
 }
 #pragma tableView presentation methods

@@ -1,0 +1,262 @@
+//
+//  UserPopup.m
+//  ScanDeposits
+//
+//  Created by Peter Darbey on 22/10/2013.
+//  Copyright (c) 2013 AIB. All rights reserved.
+//
+
+#import "UserPopup.h"
+
+@interface UserPopup ()
+{
+    
+}
+//Private
+@property(nonatomic,strong) UIView *backgroundView;
+
+@end
+
+
+@implementation UserPopup
+
+@synthesize zoneBackground = _zoneBackground;
+
+
+- (id)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        //init here
+        
+    }
+    
+    return self;
+}
+//- (void)cancelKBPressed:(UIButton *)sender {
+//    
+//    [_inputAmountTF resignFirstResponder];
+//}
+//- (void)doneKBPressed:(UIButton *)sender {
+//    
+//    [_inputAmountTF resignFirstResponder];
+//    
+//}
+
+//- (UIToolbar *)createCustomKBView {
+//    
+//    //construct barButtonItems
+//    UIBarButtonItem *barBtnCancel = [[UIBarButtonItem alloc]initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(cancelKBPressed:)];
+//    [barBtnCancel setTintColor:[UIColor blackColor]];
+//    
+//    UIBarButtonItem *barBtnFinished = [[UIBarButtonItem alloc]initWithTitle:@"Done" style:UIBarButtonItemStyleBordered target:self action:@selector(doneKBPressed:)];
+//    [barBtnFinished setTintColor:[UIColor blueColor]];
+//    
+//    //Add a divider for the toolBar barButtonItems
+//    UIBarButtonItem *flexible = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+//    
+//    NSArray *barBtnArray = [NSArray arrayWithObjects:barBtnCancel, flexible, barBtnFinished, nil];
+//    
+//    UIToolbar *customTB = [[UIToolbar alloc]initWithFrame:CGRectMake(0 , 0, 50, 44)];
+//    
+//    [customTB setBarStyle:UIBarStyleBlackTranslucent];
+//    customTB.items = barBtnArray;
+//    return customTB;
+//    
+//}
+
+-(void)setupView {
+    //Create semi-transparent background
+    _backgroundView = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    [_backgroundView setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:0.0]];
+    //init string array
+    stringArray = [NSMutableArray array];
+    
+//    [_inputAmountTF setKeyboardType:UIKeyboardTypeNumberPad];
+//    
+//    //construct a keyBoard view to sit on KB
+//    [_inputAmountTF setInputAccessoryView:[self createCustomKBView]];
+    
+    
+    //Button styling
+    [self buttonStyle:_cancelBtn WithImgName:@"blueButton.png" imgSelectedName:@"blueButtonSelected.png" withTitle:@"Cancel"];
+    [_cancelBtn addTarget:self action:@selector(cancelPressed:) forControlEvents:UIControlEventTouchUpInside];
+    
+    [self buttonStyle:_confirmBtn WithImgName:@"blueButton.png" imgSelectedName:@"blueButtonSelected.png" withTitle:@"Confirm"];
+    [_confirmBtn addTarget:self action:@selector(confirmPressed:) forControlEvents:UIControlEventTouchUpInside];
+    //Not convince that this is the best place to set delegate
+//    [self.inputAmountTF setDelegate:self];
+    
+}
+
+#pragma delegate methods for textField
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+    
+    if ([textField.text length] > 1) {
+        //enable the button only if the chars dont exceed 5 without decimal
+        //user can only enter 5 numbers without . and 3 on left with .
+        //option: 1 could remove the decmial equation by changing the KB
+        //option: 2 condtionals in shouldChange method
+        
+        //leave this as is
+        _confirmBtn.enabled = YES;
+        
+    }
+    
+    [textField resignFirstResponder];
+    
+}
+
+- (NSString *)validateStringFromUserInput:(NSString *)inputText {
+    
+    NSMutableArray *editStrArray = (NSMutableArray *)[inputText componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"."]];
+    DLog(@"arrayOfStringComponents>>>>>: %@", editStrArray);
+    [stringArray addObject:[editStrArray lastObject]];
+    NSString *newString = [editStrArray objectAtIndex:0];
+    DLog(@"newString: %@", newString);
+    DLog(@"stringArray: %@", stringArray);
+    
+    return newString;
+}
+
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    
+    if([[string stringByTrimmingCharactersInSet:[NSCharacterSet controlCharacterSet]]
+        isEqualToString:@""])
+        return YES;
+    
+   
+    
+    return NO;
+    
+}
+
+//better approach
+//-(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+//    //replace what the user entered with this string
+//
+//    //if entered text is > 5 lets check its content
+//    if ([string isEqualToString:@"."]) {
+//        DLog(@"Less than 4");
+//
+//        [self validateStringFromUserInput:textField.text];
+////        NSMutableArray *editStrArray = (NSMutableArray *)[textField.text componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"."]];
+////        DLog(@"arrayOfStringComponents>>>>>: %@", editStrArray);
+////        [stringArray addObject:[editStrArray lastObject]];
+////        NSString *newString = [editStrArray objectAtIndex:0];
+////        DLog(@"newString: %@", newString);
+////        DLog(@"stringArray: %@", stringArray);
+//    }
+//
+//
+//    //Check the 4th character entered
+//    if ([[textField.text stringByReplacingCharactersInRange:range withString:string] length] == 4) {
+//        DLog(@"STRING: %@", string);//really a char //current value -> value just entered
+//        //4th character entered check if its a @"."
+//        if (![string isEqualToString:@"."]) {
+//            DLog(@"Right the string has a 4th 0 so too big: %@", string);//hits here
+//            // so remove last entry
+////            NSString *edString = [textField.text stringByDeletingLastPathComponent];//might work
+////            NSString *removeString = string;
+//            NSString *edString = [textField.text stringByReplacingCharactersInRange:range withString:@"."];
+//            DLog(@"edString: %@", edString);//321. worked now tell user
+//            textField.text = edString;
+////            textField.placeholder = edString;
+//        }
+//
+//    }//close outter if
+//
+//
+//        return YES;//should be replaced
+//}
+
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    
+    [textField resignFirstResponder];
+    return YES;
+}
+-(void)dismissPopupAndResumeScanning {
+    
+    [UIView animateWithDuration:0.3 animations:^{
+        _backgroundView.alpha = 0.0;
+    } completion:^(BOOL finished) {
+        [_backgroundView removeFromSuperview];
+        
+    }];
+    
+}
+-(void)cancelPressed:(UIButton *)sender {
+    //Cancel does NOT create a deposit model object just dismisses picker
+    [self dismissPopupAndResumeScanning];
+    
+}
+//_saveBtn
+-(void)confirmPressed:(UIButton *)sender {
+    
+    [self dismissPopupAndResumeScanning];
+    
+}
+
+#pragma factory method
+//- (User *)createDepositModelObject {
+//    
+//    //    NSMutableArray *array = [NSMutableArray array];
+//    
+//    //Init custom model object
+//    User *user = [[Deposit alloc]initWithBagNumber:@"987565-4646" bagBarcode:@"987565-4646"
+//                                               bagAmount: _bagAmount bagCount:_bagCount timeStamp:_timeString];
+//    
+//    //Add to collection before passing to delegate
+//    //    [array addObject:deposit];
+//    return user;
+//}
+
++(UserPopup *)loadFromNibNamed:(NSString*)nibName {
+    NSArray *xib = [[NSBundle mainBundle] loadNibNamed:nibName owner:self options:nil];
+    UserPopup *userPopup = [xib objectAtIndex:0];
+    return userPopup;
+}
+
+//Button styling
+-(void)buttonStyle:(UIButton *)button WithImgName:(NSString *)imgName imgSelectedName:(NSString *)selectedName withTitle:(NSString *)title
+{
+    //button parameters
+    UIImage *stretchButon = [[UIImage imageNamed:imgName] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 10, 10, 10)];
+    [button setBackgroundImage:stretchButon forState:UIControlStateNormal];
+    UIImage *stretchSelectedButton = [[UIImage imageNamed:selectedName] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 10, 10, 10)];
+    [button setBackgroundImage:stretchSelectedButton forState:UIControlStateHighlighted];
+    [button setTitle:title forState:UIControlStateNormal];
+    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    
+}
+
+-(void)showOnView:(UIView*)view {
+    [self setupView];
+    
+    self.transform = CGAffineTransformMakeScale(0.5f, 0.5f);
+    CGPoint offset = CGPointMake(view.center.x, view.center.y -20);
+    //    self.center = view.center;//pass picker.view.center to view
+    self.center = offset;
+    self.layer.cornerRadius = 5.0;
+    self.layer.borderColor = [UIColor blackColor].CGColor;
+    self.layer.borderWidth = 1.0;
+    
+    
+    [view addSubview:_backgroundView];
+    [_backgroundView addSubview:self];//Need to add self to background
+    
+    [UIView animateWithDuration:0.2
+                     animations:^{
+                         [_backgroundView setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:0.5]];
+                         self.transform = CGAffineTransformMakeScale(1.1f, 1.1f);
+                     } completion:^(BOOL finished) {
+                         [UIView animateWithDuration:0.1 animations:^{
+                             self.transform = CGAffineTransformMakeScale(1.0f, 1.0f);
+                         }];
+                     }];
+}
+
+
+@end

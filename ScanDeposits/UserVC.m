@@ -45,47 +45,72 @@
     
     return YES;
 }
-
-- (void)textFieldDidEndEditing:(UITextField *)textField {
-    
+- (UITextField *)returnNextTextField:(UITextField *)textField {
+    //retrieve the cell that contains the textField
     UITableViewCell *cell = (UITableViewCell *)textField.superview.superview;
     NSIndexPath *indexPath = [_userTV indexPathForCell:cell];
-    DLog(@"IndexPath of cell: %@", indexPath);//[0, 0] correct
     
-    cell = (UITableViewCell *)[_userTV cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
-    
-    DLog(@"IndexPath of next cell: %@", indexPath);//[0, 1] correct
+    //increment the indexPath.row to retrieve the next cell which contains the next textField
+    cell = (UITableViewCell *)[_userTV cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row +1 inSection:indexPath.section]];
+    //the next TextField
     UITextField *nextTF = (UITextField *)[cell.contentView viewWithTag:USER_NAME_TF];
+    return nextTF;
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+    //for conditional
+    UITableViewCell *cell = (UITableViewCell *)textField.superview.superview;
+    NSIndexPath *indexPath = [_userTV indexPathForCell:cell];
     
+    UITextField *nextTF;
+    
+    //textField superview corresponds to
     if (indexPath.row == 0) {
-        DLog(@"Its the Name field");
-        [nextTF nextResponder];//goes here
+        //if TF is not empty resign/assign
+        if (![textField.text isEqualToString:@""] && [textField.text length] > 1) {
+            DLog(@"Name textField");
+            [textField resignFirstResponder];//resign 1st
+            //assign text to user ivar
+            
+            //next TextField
+            nextTF = [self returnNextTextField:textField];
+            [nextTF becomeFirstResponder];
+        }//close inner if
+        else
+        {
+            //possibly display error message
+            [textField becomeFirstResponder];
+        }
+        
     }
-    if (indexPath.row == 1) {
-        
-        
-        
-        [nextTF nextResponder];
-    }
-    
-    if ([textField.text isEqualToString:@""]) {
-        DLog(@"Name textField");
-        
-        //        UITextField *nextTF = (UITextField *)
-        //next textField
-        //        [textField becomeFirstResponder];
-    }
-    else if ([textField.text isEqualToString:@"Email"])
-    {
-        
+    else if (indexPath.row == 1) {
+        //if TF is not empty resign/assign
+        if (![textField.text isEqualToString:@""] && [textField.text length] > 1) {
+            //resign previous responder status
+            [textField resignFirstResponder];
+            nextTF = [self returnNextTextField:textField];
+            [nextTF becomeFirstResponder];
+        }//close inner if
+        else
+        {
+            [textField becomeFirstResponder];
+        }
+            
     }
     else
-    {
-        
-        [textField resignFirstResponder];
+    {   //pass code 6 digits
+        if (![textField.text isEqualToString:@""] && [textField.text length] >= 6) {
+            //resign previous responder status
+            [textField resignFirstResponder];
+        }//close inner if
+        else
+        {
+            [textField becomeFirstResponder];
+        }
     }
     
 }
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -150,7 +175,7 @@
     }
     else
     {
-        return 20;//10
+        return 20;
     }
     
 }
@@ -212,7 +237,6 @@
         [userNameTF setBackgroundColor:[UIColor clearColor]];
         userNameTF.tag = USER_NAME_TF;
         userNameTF.textAlignment = NSTextAlignmentLeft;
-//        userNameTF.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
         userNameTF.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;//thats the 1
         [userNameTF setFont:[UIFont systemFontOfSize:15.0]];
         userNameTF.textColor = [UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0];//blue
@@ -251,6 +275,8 @@
         [userNameTF setReturnKeyType:UIReturnKeyNext];
         [userNameTF enablesReturnKeyAutomatically];
         [userNameTF setClearsOnBeginEditing:YES];
+        [userNameTF setAutocapitalizationType:UITextAutocapitalizationTypeWords];
+        [userNameTF setAutocorrectionType:UITextAutocorrectionTypeNo];
     }
     else if (indexPath.row == 1)
     {
@@ -261,6 +287,8 @@
         [userNameTF setReturnKeyType:UIReturnKeyNext];
         [userNameTF enablesReturnKeyAutomatically];
         [userNameTF setClearsOnBeginEditing:YES];
+        [userNameTF setAutocapitalizationType:UITextAutocapitalizationTypeNone];
+        [userNameTF setAutocorrectionType:UITextAutocorrectionTypeNo];
     }
     else
     {
@@ -271,6 +299,8 @@
         [userNameTF setReturnKeyType:UIReturnKeyDone];
         [userNameTF enablesReturnKeyAutomatically];
         [userNameTF setClearsOnBeginEditing:YES];
+        [userNameTF setAutocapitalizationType:UITextAutocapitalizationTypeNone];
+        [userNameTF setAutocorrectionType:UITextAutocorrectionTypeNo];
     }
     
     

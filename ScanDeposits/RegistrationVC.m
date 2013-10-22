@@ -41,24 +41,74 @@
     
     return YES;
 }
+
+- (UITextField *)returnNextTextField:(UITextField *)textField {
+    //retrieve the cell that contains the textField
+    UITableViewCell *cell = (UITableViewCell *)textField.superview.superview;
+    NSIndexPath *indexPath = [_registerTV indexPathForCell:cell];
+    
+    //increment the indexPath.row to retrieve the next cell which contains the next textField
+    cell = (UITableViewCell *)[_registerTV cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row +1 inSection:indexPath.section]];
+    //the next TextField
+    UITextField *nextTF = (UITextField *)[cell.contentView viewWithTag:USER_NAME_TF];
+    return nextTF;
+}
+
 - (void)textFieldDidEndEditing:(UITextField *)textField {
-    if ([textField.text isEqualToString:@"Name"]) {
-        DLog(@"Name textField");
-//        UITextField *nextTF = (UITextField *)
-        //next textField
-//        [textField becomeFirstResponder];
-    }
-    else if ([textField.text isEqualToString:@"Email"])
-    {
+    //for conditional
+    UITableViewCell *cell = (UITableViewCell *)textField.superview.superview;
+    NSIndexPath *indexPath = [_registerTV indexPathForCell:cell];
+    
+    UITextField *nextTF;
+    
+    //textField superview corresponds to
+    //Name
+    if (indexPath.row == 0) {
+        //if TF is not empty resign/assign
+        if (![textField.text isEqualToString:@""] && [textField.text length] > 1) {
+            [textField resignFirstResponder];//resign 1st
+            //assign text to user ivar
+            
+            //next TextField
+            nextTF = [self returnNextTextField:textField];
+            [nextTF becomeFirstResponder];
+        }//close inner if
+        else
+        {
+            //possibly display error message
+            [textField becomeFirstResponder];
+        }
         
     }
-    else
-    {
+    //Email
+    else if (indexPath.row == 1) {
+        //if TF is not empty resign/assign
+        if (![textField.text isEqualToString:@""] && [textField.text length] > 1) {
+            //resign previous responder status
+            [textField resignFirstResponder];
+            nextTF = [self returnNextTextField:textField];
+            [nextTF becomeFirstResponder];
+        }//close inner if
+        else
+        {
+            [textField becomeFirstResponder];
+        }
         
-        [textField resignFirstResponder];
+    }
+    else //Staff ID
+    {   //pass code 6 digits
+        if (![textField.text isEqualToString:@""] && [textField.text length] >= 6) {
+            //resign previous responder status
+            [textField resignFirstResponder];
+        }//close inner if
+        else
+        {
+            [textField becomeFirstResponder];
+        }
     }
     
 }
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -274,7 +324,7 @@
         nameTF.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         [nameTF setFont:[UIFont systemFontOfSize:15.0]];
         nameTF.textColor = [UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0];//blue
-        [nameTF setUserInteractionEnabled:NO];
+        [nameTF setUserInteractionEnabled:YES];
         
         //set textField delegate
         [nameTF setDelegate:self];
@@ -326,6 +376,8 @@
         [nameTF setReturnKeyType:UIReturnKeyNext];
         [nameTF enablesReturnKeyAutomatically];
         [nameTF setClearsOnBeginEditing:YES];
+        [nameTF setAutocapitalizationType:UITextAutocapitalizationTypeWords];
+        [nameTF setAutocorrectionType:UITextAutocorrectionTypeNo];
     }
     else if (indexPath.row == 1)
     {
@@ -338,6 +390,8 @@
         [nameTF setReturnKeyType:UIReturnKeyNext];
         [nameTF enablesReturnKeyAutomatically];
         [nameTF setClearsOnBeginEditing:YES];
+        [nameTF setAutocapitalizationType:UITextAutocapitalizationTypeNone];
+        [nameTF setAutocorrectionType:UITextAutocorrectionTypeNo];
     }
     else
     {
@@ -348,6 +402,8 @@
         [nameTF setReturnKeyType:UIReturnKeyDone];
         [nameTF enablesReturnKeyAutomatically];
         [nameTF setClearsOnBeginEditing:YES];
+        [nameTF setAutocapitalizationType:UITextAutocapitalizationTypeNone];
+        [nameTF setAutocorrectionType:UITextAutocorrectionTypeNo];
     }
     
     

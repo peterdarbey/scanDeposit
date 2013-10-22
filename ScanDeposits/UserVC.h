@@ -19,5 +19,6 @@
 
 @property (strong, nonatomic) IBOutlet UITableView *userTV;
 @property (strong, nonatomic) NSMutableArray *userArray;
+@property (strong, nonatomic) NSString *nameString, *emailString, *staffIDString;
 
 @end

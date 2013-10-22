@@ -119,7 +119,7 @@
         [self presentViewController:navController animated:NO completion:^{
             [registerVC setModalPresentationStyle:UIModalPresentationFullScreen];
             [registerVC setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
-            [registerVC setTitle:NSLocalizedString(@"Registration Process", @"Registration Process")];
+            [registerVC setTitle:NSLocalizedString(@"Admin Settings", @"Adminstrator Settings")];
         }];
         
     }

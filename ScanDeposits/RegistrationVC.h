@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#import "UserVC.h"
+
 #define NAME_TF 100
 #define USER_LBL 250
 #define EMAIL_PREPOP 200

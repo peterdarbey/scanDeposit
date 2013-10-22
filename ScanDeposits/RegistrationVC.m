@@ -37,6 +37,8 @@
 #pragma Delegate textField methods
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     
+    [textField resignFirstResponder];
+    
     return YES;
 }
 - (void)textFieldDidEndEditing:(UITextField *)textField {
@@ -92,7 +94,11 @@
 - (void)addPressed:(UIButton *)sender {
     //ToDo implement NSUserDefaults
     DLog(@"addPressed");
-    //ToDO push to new User/Reg VC
+    
+    //Push to new User/Reg VC
+    UserVC *userVC = [self.storyboard instantiateViewControllerWithIdentifier:@"UserVC"];
+    [userVC setTitle:NSLocalizedString(@"User Registration", @"User Registration Process Screen")];
+    [self.navigationController pushViewController:userVC animated:YES];
     
     
 }
@@ -109,13 +115,14 @@
         innerView.layer.cornerRadius = 5.0;
         
         //construct a UILabel for the Admin section
-        UILabel *adminLbl = [[UILabel alloc]initWithFrame:CGRectMake(10, 51.5, 110, 25)];
-        [adminLbl setText:@"Adminstrator"];
-        [adminLbl setFont:[UIFont fontWithName:@"Helvetica" size:17]];//check spelling
-        [adminLbl setTextColor:[UIColor blackColor]];
+        UILabel *adminLbl = [[UILabel alloc]initWithFrame:CGRectMake(20, 51.5, 180, 25)];
+        [adminLbl setText:@"Administrator Details"];
+        [adminLbl setFont:[UIFont fontWithName:@"Helvetica" size:17]];
+//        [adminLbl setFont:[UIFont systemFontOfSize:17]];
+        [adminLbl setTextColor:[UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0]];//darkGray
         [adminLbl setBackgroundColor:[UIColor clearColor]];
-        adminLbl.shadowColor = [UIColor grayColor];
-        adminLbl.shadowOffset = CGSizeMake(1.0, 1.0);
+        adminLbl.shadowColor = [UIColor whiteColor];
+        adminLbl.shadowOffset = CGSizeMake(0.0, 1.0);
         [topView addSubview:adminLbl];
         
         
@@ -153,11 +160,14 @@
         UITextField *branchNSCTF = [[UITextField alloc]initWithFrame:CGRectMake(120, 10, 180, 25)];
         [branchNSCTF setBackgroundColor:[UIColor clearColor]];
         [branchNSCTF setDelegate:self];
-        [branchNSCTF setFont:[UIFont systemFontOfSize:17]];
+        [branchNSCTF setFont:[UIFont systemFontOfSize:15]];
         branchNSCTF.textAlignment = NSTextAlignmentLeft;
+        branchNSCTF.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         branchNSCTF.textColor = [UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0];//blue
         [branchNSCTF setUserInteractionEnabled:NO];
         [branchNSCTF setText:[NSString stringWithFormat:@"Branch Value"]];//pop dynamically
+        //set TextField delegate
+        [branchNSCTF setDelegate:self];
         
         //add to view
         [innerView addSubview:branchNSCTF];
@@ -166,12 +176,14 @@
         UITextField *offCounterTF = [[UITextField alloc]initWithFrame:CGRectMake(120, 45, 180, 25)];
         [offCounterTF setBackgroundColor:[UIColor clearColor]];
         [offCounterTF setDelegate:self];
-        [offCounterTF setFont:[UIFont systemFontOfSize:17]];
+        [offCounterTF setFont:[UIFont systemFontOfSize:15]];
         offCounterTF.textAlignment = NSTextAlignmentLeft;
+        offCounterTF.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         offCounterTF.textColor = [UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0];//blue
         [offCounterTF setUserInteractionEnabled:NO];
         [offCounterTF setText:[NSString stringWithFormat:@"Counter Value"]];//pop dynamically
-        
+        //set textField delegate
+        [offCounterTF setDelegate:self];
         //add to view
         [innerView addSubview:offCounterTF];
         
@@ -254,14 +266,18 @@
         
        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:myIdentifier];
         
-        nameTF = [[UITextField alloc]initWithFrame:CGRectMake(80, cell.bounds.size.height/4, 210, 25)];
+        nameTF = [[UITextField alloc]initWithFrame:CGRectMake(90, cell.bounds.size.height/4, 200, 25)];
         [nameTF setBackgroundColor:[UIColor clearColor]];
         nameTF.tag = NAME_TF;
         nameTF.textAlignment = NSTextAlignmentLeft;
 //        nameTF.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
-        [nameTF setFont:[UIFont systemFontOfSize:17.0]];
+        nameTF.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        [nameTF setFont:[UIFont systemFontOfSize:15.0]];
         nameTF.textColor = [UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0];//blue
         [nameTF setUserInteractionEnabled:NO];
+        
+        //set textField delegate
+        [nameTF setDelegate:self];
         
         [cell.contentView addSubview:nameTF];
         
@@ -278,7 +294,7 @@
         
         [cell.contentView addSubview:userLbl];
         
-        //construct prePop label
+        //construct prePop label// May not need append a string @aib.ie to end of string
         prePopLbl = [[UILabel alloc]initWithFrame:CGRectMake(230, cell.bounds.size.height/4, 60, 25)];
         prePopLbl.tag = EMAIL_PREPOP;
         prePopLbl.textAlignment = NSTextAlignmentRight;
@@ -305,6 +321,11 @@
     if (indexPath.row == 0) {
         [userLbl setText:@"Name"];
         [nameTF setText:[NSString stringWithFormat:@"David Roberts"]];//temp will be dynamic
+        //set keyboard type
+        [nameTF setKeyboardType:UIKeyboardTypeDefault];
+        [nameTF setReturnKeyType:UIReturnKeyNext];
+        [nameTF enablesReturnKeyAutomatically];
+        [nameTF setClearsOnBeginEditing:YES];
     }
     else if (indexPath.row == 1)
     {
@@ -312,12 +333,21 @@
         [nameTF setText:[NSString stringWithFormat:@"david.h.roberts"]];//hard code here
         //show label with email perfix
         [cell.contentView addSubview:prePopLbl];
-        
+        //set keyboard type
+        [nameTF setKeyboardType:UIKeyboardTypeEmailAddress];
+        [nameTF setReturnKeyType:UIReturnKeyNext];
+        [nameTF enablesReturnKeyAutomatically];
+        [nameTF setClearsOnBeginEditing:YES];
     }
     else
     {
         [userLbl setText:@"Staff ID"];//temp will be dynamic
         [nameTF setText:[NSString stringWithFormat:@"Adminstrator"]];//hard code here
+        //set keyboard type
+        [nameTF setKeyboardType:UIKeyboardTypeNumbersAndPunctuation];
+        [nameTF setReturnKeyType:UIReturnKeyDone];
+        [nameTF enablesReturnKeyAutomatically];
+        [nameTF setClearsOnBeginEditing:YES];
     }
     
     

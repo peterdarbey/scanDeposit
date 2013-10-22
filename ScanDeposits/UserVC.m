@@ -38,13 +38,64 @@
     
 }
 
+#pragma Delegate textField methods
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    
+    [textField resignFirstResponder];
+    
+    return YES;
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+    
+    UITableViewCell *cell = (UITableViewCell *)textField.superview.superview;
+    NSIndexPath *indexPath = [_userTV indexPathForCell:cell];
+    DLog(@"IndexPath of cell: %@", indexPath);//[0, 0] correct
+    
+    cell = (UITableViewCell *)[_userTV cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
+    
+    DLog(@"IndexPath of next cell: %@", indexPath);//[0, 1] correct
+    UITextField *nextTF = (UITextField *)[cell.contentView viewWithTag:USER_NAME_TF];
+    
+    if (indexPath.row == 0) {
+        DLog(@"Its the Name field");
+        [nextTF nextResponder];//goes here
+    }
+    if (indexPath.row == 1) {
+        
+        
+        
+        [nextTF nextResponder];
+    }
+    
+    if ([textField.text isEqualToString:@""]) {
+        DLog(@"Name textField");
+        
+        //        UITextField *nextTF = (UITextField *)
+        //next textField
+        //        [textField becomeFirstResponder];
+    }
+    else if ([textField.text isEqualToString:@"Email"])
+    {
+        
+    }
+    else
+    {
+        
+        [textField resignFirstResponder];
+    }
+    
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	
+    //Set delegate to self
     [_userTV setDataSource:self];
     [_userTV setDelegate:self];
+    
     [_userTV setBackgroundColor:[UIColor clearColor]];
+    [_userTV setBackgroundView:[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"Default-568h.png"]]];
     
     //init userCollection
     _userArray = [NSMutableArray arrayWithCapacity:1];//always at least 1 user to use app
@@ -52,48 +103,54 @@
     
 }
 
-- (void)addPressed:(UIButton *)sender {
-    DLog(@"Add pressed");
+- (void)addUserPressed:(UIButton *)sender {
+    DLog(@"Add Another pressed");
     //ToDO bring up a xib view
     
 }
 #pragma tableView presentation methods
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    
-    if (section == 0) {// && ADMIN) {
-        //+44 for navigation bar
-        UIView *topView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, _userTV.frame.size.width, 100)];//130
-        [topView setBackgroundColor:[UIColor greenColor]];
-        
-        //construct a UILabel for the Admin section
-        UILabel *userLbl = [[UILabel alloc]initWithFrame:CGRectMake(10, 10.5, 110, 25)];
-        [userLbl setText:@"User Details"];
-        [userLbl setFont:[UIFont fontWithName:@"Helvetica" size:17]];
-        [userLbl setTextColor:[UIColor blackColor]];
-        [userLbl setBackgroundColor:[UIColor clearColor]];
-        userLbl.shadowColor = [UIColor grayColor];
-        userLbl.shadowOffset = CGSizeMake(1.0, 1.0);
-        [topView addSubview:userLbl];
+//- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+//    
+//    if (section == 0) {// && ADMIN) {
+//        //+44 for navigation bar
+//        UIView *topView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, _userTV.frame.size.width, 80)];//130
+//        [topView setBackgroundColor:[UIColor greenColor]];
+//        
+//        //construct a UILabel for the Admin section
+//        UILabel *userLbl = [[UILabel alloc]initWithFrame:CGRectMake(10, 10.5, 110, 25)];
+//        [userLbl setText:@"User Details"];
+//        [userLbl setFont:[UIFont fontWithName:@"Helvetica" size:17]];
+//        [userLbl setTextColor:[UIColor blackColor]];
+//        [userLbl setBackgroundColor:[UIColor clearColor]];
+//        userLbl.shadowColor = [UIColor grayColor];
+//        userLbl.shadowOffset = CGSizeMake(1.0, 1.0);
+//        [topView addSubview:userLbl];
+//
+//        return topView;
+//        
+//    }//close if
+//    
+//    else 
+//    {
+//        return nil;
+//    }
+//    
+//}
 
-        return topView;
-        
-    }//close if
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     
-    else 
-    {
-        return nil;
-    }
+    NSString *titleName = [NSString stringWithFormat:@"User Details"];
+    return titleName;
     
 }
-
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     
     if (section == 0) {
-        return 100;
+        return 84;
     }
     else
     {
-        return 10;
+        return 20;//10
     }
     
 }
@@ -112,8 +169,8 @@
         UIButton *saveBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [saveBtn setFrame:CGRectMake(10, 23, 300, 44)];
         [saveBtn setUserInteractionEnabled:YES];
-        [saveBtn addTarget:self action:@selector(addPressed:) forControlEvents:UIControlEventTouchUpInside];
-        [self buttonStyle:saveBtn WithImgName:@"blueButton.png" imgSelectedName:@"blueButtonSelected.png" withTitle:@"ADD ANOTHER USER"];
+        [saveBtn addTarget:self action:@selector(addUserPressed:) forControlEvents:UIControlEventTouchUpInside];
+        [self buttonStyle:saveBtn WithImgName:@"blueButton.png" imgSelectedName:@"blueButtonSelected.png" withTitle:@"ADD MORE USERS"];
         
         //add to parent view
         [bottomView addSubview:saveBtn];
@@ -151,14 +208,18 @@
         
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:myIdentifier];
         
-        userNameTF = [[UITextField alloc]initWithFrame:CGRectMake(80, cell.bounds.size.height/4, 210, 25)];
-        [userNameTF setBackgroundColor:[UIColor redColor]];
+        userNameTF = [[UITextField alloc]initWithFrame:CGRectMake(90, cell.bounds.size.height/4, 200, 25)];
+        [userNameTF setBackgroundColor:[UIColor clearColor]];
         userNameTF.tag = USER_NAME_TF;
         userNameTF.textAlignment = NSTextAlignmentLeft;
 //        userNameTF.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
+        userNameTF.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;//thats the 1
         [userNameTF setFont:[UIFont systemFontOfSize:15.0]];
         userNameTF.textColor = [UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0];//blue
-        [userNameTF setUserInteractionEnabled:NO];
+        [userNameTF setUserInteractionEnabled:YES];
+        
+        //set textField delegate
+        [userNameTF setDelegate:self];
         //Add TF to cell
         [cell.contentView addSubview:userNameTF];
         
@@ -169,7 +230,7 @@
         userNameLbl.textColor = [UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0];//darkGray
         userNameLbl.shadowColor = [UIColor grayColor];
         userNameLbl.shadowOffset = CGSizeMake(1.0, 1.0);
-        userNameLbl.backgroundColor = [UIColor blueColor];
+        userNameLbl.backgroundColor = [UIColor clearColor];
         [userNameLbl setUserInteractionEnabled:NO];
         
         [cell.contentView addSubview:userNameLbl];
@@ -185,16 +246,31 @@
     if (indexPath.row == 0) {
         [userNameTF setText:[NSString stringWithFormat:@"David Roberts"]];//temp will be dynamic
         [userNameLbl setText:@"Name"];
+        //set keyboard type
+        [userNameTF setKeyboardType:UIKeyboardTypeDefault];
+        [userNameTF setReturnKeyType:UIReturnKeyNext];
+        [userNameTF enablesReturnKeyAutomatically];
+        [userNameTF setClearsOnBeginEditing:YES];
     }
     else if (indexPath.row == 1)
     {
         [userNameTF setText:[NSString stringWithFormat:@"david.h.roberts"]];//hard code here
         [userNameLbl setText:@"Email"];//temp will be dynamic
+        //set keyboard type
+        [userNameTF setKeyboardType:UIKeyboardTypeEmailAddress];
+        [userNameTF setReturnKeyType:UIReturnKeyNext];
+        [userNameTF enablesReturnKeyAutomatically];
+        [userNameTF setClearsOnBeginEditing:YES];
     }
     else
     {
         [userNameTF setText:[NSString stringWithFormat:@"6 Digit code"]];//hard code here
         [userNameLbl setText:@"Staff ID"];//temp will be dynamic
+        //set keyboard type
+        [userNameTF setKeyboardType:UIKeyboardTypeNumbersAndPunctuation];
+        [userNameTF setReturnKeyType:UIReturnKeyDone];
+        [userNameTF enablesReturnKeyAutomatically];
+        [userNameTF setClearsOnBeginEditing:YES];
     }
     
     

@@ -45,7 +45,16 @@
     [_depositsTV setBackgroundView:[[UIImageView alloc]initWithImage:
                                                  [UIImage imageNamed:@"Default-568h.png"]]];
     
+    //TODO
+    //Add editable code for fields
+    UIBarButtonItem *editBBtn = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editPressed:)];
     
+    [self.navigationController.navigationItem setRightBarButtonItem:editBBtn];
+    
+}
+- (void)editPressed:(UIButton *)sender {
+    
+    DLog(@"Edit presssed");
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -58,9 +67,9 @@
     
     DLog(@"Proceed pressed");
     //ToDo package data up to fire off to webservice
-    SubmitVC *submitVC = [self.storyboard instantiateViewControllerWithIdentifier:@"SubmitVC"];
-    [submitVC setTitle:NSLocalizedString(@"Submission Process", @"Submission Process Screen")];
-    [self.navigationController pushViewController:submitVC animated:YES];
+//    SubmitVC *submitVC = [self.storyboard instantiateViewControllerWithIdentifier:@"SubmitVC"];
+//    [submitVC setTitle:NSLocalizedString(@"Submission Process", @"Submission Process Screen")];
+//    [self.navigationController pushViewController:submitVC animated:YES];
     
 }
 
@@ -142,6 +151,7 @@
         [amountTF setBackgroundColor:[UIColor clearColor]];
         [amountTF setFont:[UIFont systemFontOfSize:17]];
         amountTF.textAlignment = NSTextAlignmentLeft;
+        amountTF.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         amountTF.textColor = [UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0];//darkGray
         [amountTF setUserInteractionEnabled:NO];
         
@@ -219,7 +229,8 @@
         bagAmountTF = [[UITextField alloc]initWithFrame:CGRectMake(130, cell.bounds.size.height/4, 160, 25)];
         bagAmountTF.tag = BAG_AMOUNT_TF;
         bagAmountTF.textAlignment = NSTextAlignmentLeft;
-        bagAmountTF.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
+//        bagAmountTF.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
+        bagAmountTF.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         bagAmountTF.font = [UIFont systemFontOfSize:17];
         bagAmountTF.textColor = [UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0];//darkGray
         [bagAmountTF setUserInteractionEnabled:NO];
@@ -244,7 +255,7 @@
         bagNumberLbl = [[UILabel alloc]initWithFrame:CGRectMake(10, cell.bounds.size.height/4, 120 , 25)];
         bagNumberLbl.tag = BAG_NO_LBL;
         bagNumberLbl.textAlignment = NSTextAlignmentLeft;
-        bagNumberLbl.font = [UIFont fontWithName:@"Arial-BoldMT" size:15];
+        bagNumberLbl.font = [UIFont fontWithName:@"Arial-BoldMT" size:15];//17
         bagNumberLbl.textColor = [UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0];//blue
         bagNumberLbl.shadowColor = [UIColor grayColor];
         bagNumberLbl.shadowOffset = CGSizeMake(1.0, 1.0);//better

@@ -12,7 +12,7 @@
 #define USER_NAME_LBL 200
 
 
-@interface UserVC : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@interface UserVC : UIViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
 {
     NSIndexPath *selectedIP;
 }

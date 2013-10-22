@@ -68,6 +68,7 @@
 		BF370347180EAEF10027AE4F /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BF370341180EAEF10027AE4F /* Icon@2x.png */; };
 		BF37034A18118EC80027AE4F /* SubmitVC.m in Sources */ = {isa = PBXBuildFile; fileRef = BF37034918118EC80027AE4F /* SubmitVC.m */; };
 		BF37034D181539160027AE4F /* RegistrationVC.m in Sources */ = {isa = PBXBuildFile; fileRef = BF37034C181539160027AE4F /* RegistrationVC.m */; };
+		BF370350181674820027AE4F /* UserVC.m in Sources */ = {isa = PBXBuildFile; fileRef = BF37034F181674820027AE4F /* UserVC.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -157,6 +158,8 @@
 		BF37034918118EC80027AE4F /* SubmitVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SubmitVC.m; sourceTree = "<group>"; };
 		BF37034B181539160027AE4F /* RegistrationVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegistrationVC.h; sourceTree = "<group>"; };
 		BF37034C181539160027AE4F /* RegistrationVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegistrationVC.m; sourceTree = "<group>"; };
+		BF37034E181674820027AE4F /* UserVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserVC.h; sourceTree = "<group>"; };
+		BF37034F181674820027AE4F /* UserVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserVC.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -242,6 +245,8 @@
 				BF370334180D4DE40027AE4F /* DepositsVC.m */,
 				BF37034B181539160027AE4F /* RegistrationVC.h */,
 				BF37034C181539160027AE4F /* RegistrationVC.m */,
+				BF37034E181674820027AE4F /* UserVC.h */,
+				BF37034F181674820027AE4F /* UserVC.m */,
 				BF2C4F5E1805C08B00A87C18 /* Main_iPhone.storyboard */,
 				BF2C4F611805C08B00A87C18 /* Main_iPad.storyboard */,
 				BF37034818118EC80027AE4F /* SubmitVC.h */,
@@ -487,6 +492,7 @@
 				BF37033B180D5C820027AE4F /* Bag.m in Sources */,
 				BF2C4F861805C0E000A87C18 /* HomeVC.mm in Sources */,
 				BF2C4FA71805C23300A87C18 /* empty.cpp in Sources */,
+				BF370350181674820027AE4F /* UserVC.m in Sources */,
 				BF2C4FC41806C96400A87C18 /* Barcode.m in Sources */,
 				BF370335180D4DE40027AE4F /* DepositsVC.m in Sources */,
 				BF2C4F5D1805C08B00A87C18 /* AppDelegate.m in Sources */,

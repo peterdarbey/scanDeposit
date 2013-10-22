@@ -89,12 +89,11 @@
         //ToDo add saving functionality here
     }];
 }
-- (void)savePressed:(UIButton *)sender {
+- (void)addPressed:(UIButton *)sender {
     //ToDo implement NSUserDefaults
-//    DLog(@"savePressed");
-    [self.navigationController dismissViewControllerAnimated:YES completion:^{
-        //ToDo add saving functionality here
-    }];
+    DLog(@"addPressed");
+    //ToDO push to new User/Reg VC
+    
     
 }
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
@@ -216,8 +215,8 @@
         UIButton *saveBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [saveBtn setFrame:CGRectMake(10, 23, 300, 44)];
         [saveBtn setUserInteractionEnabled:YES];
-        [saveBtn addTarget:self action:@selector(savePressed:) forControlEvents:UIControlEventTouchUpInside];
-        [self buttonStyle:saveBtn WithImgName:@"blueButton.png" imgSelectedName:@"blueButtonSelected.png" withTitle:@"SAVE"];
+        [saveBtn addTarget:self action:@selector(addPressed:) forControlEvents:UIControlEventTouchUpInside];
+        [self buttonStyle:saveBtn WithImgName:@"blueButton.png" imgSelectedName:@"blueButtonSelected.png" withTitle:@"ADD USER"];
         
         //add to parent view
         [bottomView addSubview:saveBtn];
@@ -259,7 +258,7 @@
         [nameTF setBackgroundColor:[UIColor clearColor]];
         nameTF.tag = NAME_TF;
         nameTF.textAlignment = NSTextAlignmentLeft;
-        nameTF.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
+//        nameTF.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
         [nameTF setFont:[UIFont systemFontOfSize:17.0]];
         nameTF.textColor = [UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0];//blue
         [nameTF setUserInteractionEnabled:NO];

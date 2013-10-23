@@ -17,6 +17,7 @@
 @protocol UserModelDelegate <NSObject>
 
 - (void)returnUserModel:(User *)user;
+- (void)refreshView;
 
 @end
 

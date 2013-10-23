@@ -7,6 +7,7 @@
 //
 
 #import "UserVC.h"
+#import "User.h"
 
 
 @interface UserVC ()
@@ -27,12 +28,26 @@
     return self;
 }
 #pragma custom delegate method from UserPopup
+
+- (void)refreshView {
+    
+    [_userTV reloadData];
+    DLog(@"ReloadData called");
+}
 - (void)returnUserModel:(User *)user {
     
     DLog(@"user returned to UserVC: %@", user);
     //ToDo add the returned user model to an array and use to pop the TableView
-    [_userArray addObject:user];
-    DLog(@"_userArray: %@", _userArray);
+    [_userArray addObject:user];//dict
+    //Test
+    [_dataSource addObject:user];
+    DLog(@"_dataSource here: %@", _dataSource);//note each user is a dict
+   
+    //Dont need
+    NSDictionary *initialsDict = @{@"Initials" : [user userInitials]};
+    [_initialsArray addObject:initialsDict];
+    DLog(@"initialsArray in UserVC: %@", _initialsArray);
+    
     
 }
 
@@ -132,8 +147,13 @@
     [_userTV setBackgroundColor:[UIColor clearColor]];
     [_userTV setBackgroundView:[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"Default-568h.png"]]];
     
-    //init userCollection
+    //inititize all userCollections
     _userArray = [NSMutableArray arrayWithCapacity:1];//always at least 1 user to use app
+    
+    _initialsArray = [NSMutableArray array];
+    
+    _dataSource = [NSMutableArray array];
+    
     
     
     UIBarButtonItem *doneBtn = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(donePressed:)];
@@ -262,6 +282,16 @@
     UITextField *userNameTF;
     UILabel *userNameLbl;
    
+    //init users here
+    if ([_dataSource count] >= 1) {
+        _user = [_dataSource objectAtIndex:indexPath.section];//could be row
+    }
+    else
+    {
+        DLog(@"Dont display any data");
+    }
+
+    
     
     if (cell == nil) {
         
@@ -302,8 +332,21 @@
         userNameLbl = (UILabel *)[cell.contentView viewWithTag:USER_NAME_LBL];
     }
     
+    
+    //init users here
+//    if ([_dataSource count] >= 1) {
+//        user = [_dataSource objectAtIndex:indexPath.section];//could be row
+//        if (indexPath.row == 0) {
+//            [userNameTF setText:[NSString stringWithFormat:@"%@", [user userName]]];
+//        }
+//    }
+    
+    
+    
     if (indexPath.row == 0) {
-        [userNameTF setText:[NSString stringWithFormat:@"David Roberts"]];//temp will be dynamic
+//        [userNameTF setText:[NSString stringWithFormat:@"David Roberts"]];//temp will be dynamic
+        //Test
+        [userNameTF setText:[NSString stringWithFormat:@"%@", [_user userName]]];//works
         [userNameLbl setText:@"Name"];
         //set keyboard type
         [userNameTF setKeyboardType:UIKeyboardTypeDefault];
@@ -344,8 +387,8 @@
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     
-    if ([_userArray count] >= 1) {
-        return [_userArray count];//minimum 1 or 2
+    if ([_dataSource count] >= 1) {
+        return [_dataSource count];//minimum 1 or 2 oh watch section data 
     }
     else
     {
@@ -356,12 +399,22 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return 3;//static not dynamic 
+    if ([_dataSource count] >= 1) {
+        return [[_dataSource objectAtIndex:section]count];//currently a dict NOTE user doesnt have a count method
+    }
+    else
+    {
+        return 3;//static not dynamic
+    }
+    
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     selectedIP = indexPath;
+    //tapped
+    _isSelected = YES;
+    
     [_userTV deselectRowAtIndexPath:indexPath animated:YES];
 }
 

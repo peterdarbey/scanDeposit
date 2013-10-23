@@ -67,6 +67,26 @@ static BOOL __isAdmin;
     return __isAdmin;
 }
 
+- (NSString *)userName {
+    return _name;
+}
+
+- (NSString *)userEMail {
+    return _eMail;
+}
+- (NSString *)userStaffID {
+    
+    return _staffID;
+}
+- (NSString *)userInitials {
+    
+    return _initials;
+}
+
+- (int)count {
+    return [_internalDict count];
+}
+
 @end
 
 

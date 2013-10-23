@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 #import "UserPopup.h"
+@class User;
 
 
 #define USER_NAME_TF 100
@@ -18,10 +19,15 @@
 @interface UserVC : UIViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UserModelDelegate>
 {
     NSIndexPath *selectedIP;
+    
 }
 
 @property (strong, nonatomic) IBOutlet UITableView *userTV;
 @property (strong, nonatomic) NSMutableArray *userArray;
 @property (strong, nonatomic) NSString *nameString, *emailString, *staffIDString;
+@property (strong, nonatomic) NSMutableArray *initialsArray;
+@property (strong, nonatomic) NSMutableArray *dataSource;
+@property (strong, nonatomic) User *user;
+@property BOOL isSelected;
 
 @end

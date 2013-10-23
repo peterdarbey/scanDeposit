@@ -174,7 +174,7 @@
     [textField resignFirstResponder];
     return YES;
 }
--(void)dismissPopupAndResumeScanning {
+-(void)dismissPopup {
     
     [UIView animateWithDuration:0.3 animations:^{
         _backgroundView.alpha = 0.0;
@@ -186,7 +186,7 @@
 }
 -(void)cancelPressed:(UIButton *)sender {
     //Cancel does NOT create a deposit model object just dismisses picker
-    [self dismissPopupAndResumeScanning];
+    [self dismissPopup];
     
 }
 //_saveBtn
@@ -211,10 +211,13 @@
         if ([self.userDelegate respondsToSelector:@selector(returnUserModel:)]) {
             [self.userDelegate performSelector:@selector(returnUserModel:) withObject:user];
             DLog(@"Custom User Delegate preformed");
+            //need another delegate method to refresh the tblView
         }
-        
+        if ([self.userDelegate respondsToSelector:@selector(refreshView)]) {
+            [self.userDelegate performSelector:@selector(refreshView)];//called works
+        }
     }
-    [self dismissPopupAndResumeScanning];//Not right yet
+    [self dismissPopup];
     
 }
 

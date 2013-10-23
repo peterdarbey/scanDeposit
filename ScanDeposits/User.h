@@ -19,4 +19,10 @@
 
 + (BOOL)isAdminUser;
 
+- (NSString *)userName;
+- (NSString *)userEMail;
+- (NSString *)userStaffID;
+- (NSString *)userInitials;
+- (int)count;
+
 @end

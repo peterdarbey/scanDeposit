@@ -8,8 +8,9 @@
 
 #import "RegistrationVC.h"
 
-#import "UserVC.h"
 #import "User.h"
+#import "UserVC.h"
+#import "PopupTV.h"
 
 @interface RegistrationVC ()
 
@@ -150,6 +151,8 @@
     //Push to new User/Reg VC
     UserVC *userVC = [self.storyboard instantiateViewControllerWithIdentifier:@"UserVC"];
     [userVC setTitle:NSLocalizedString(@"User Registration", @"User Registration Process Screen")];
+    //set custom delegate here
+
     [self.navigationController pushViewController:userVC animated:YES];
     [self.navigationController.navigationBar setBarStyle:UIBarStyleBlackTranslucent];
 //     UIBarButtonItem *doneBtn = [[UIBarButtonItem alloc]initWithBarButtonSystemItem: UIBarButtonSystemItemDone target:self action:@selector(donePressed:)];//not appearing

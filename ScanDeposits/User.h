@@ -17,5 +17,6 @@
 
 //getters
 
++ (BOOL)isAdminUser;
 
 @end

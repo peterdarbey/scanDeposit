@@ -9,6 +9,16 @@
 #import <UIKit/UIKit.h>
 
 @class PopUpTV;
+@class User;
+@class UserVC;
+
+@class UserPopup;
+
+@protocol UserModelDelegate <NSObject>
+
+- (void)returnUserModel:(User *)user;
+
+@end
 
 @interface UserPopup : UIView <UITextFieldDelegate>
 {
@@ -19,6 +29,8 @@
 
 +(UserPopup *)loadFromNibNamed:(NSString*)nibName;
 
+//custom delegate ivar
+@property (weak, nonatomic) id<UserModelDelegate> userDelegate;
 
 @property (weak, nonatomic) IBOutlet UIView *zoneBackground;
 @property (strong, nonatomic) IBOutlet UIView *popupView;

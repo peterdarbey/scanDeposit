@@ -17,6 +17,7 @@
 @property (strong, nonatomic) NSString *name;
 @property (strong, nonatomic) NSString *eMail;
 @property (strong, nonatomic) NSString *staffID;
+//@property BOOL adminstrator;
 
 @property (strong, nonatomic) NSDictionary *internalDict;
 
@@ -26,12 +27,16 @@
 
 @implementation User
 
+static BOOL __isAdmin;
+
 - (void)commonInit:(NSDictionary *)dict {
     
-    //init the private properties 
+    //init and assign the private properties 
     _name = dict[@"Name"];
     _eMail = dict[@"Email"];
     _staffID = dict[@"StaffID"];
+//    _adminstrator = [dict[@"Administrator"] boolValue];//assigning NO as default to adminstrator
+    __isAdmin = [dict[@"Adminstrator"] boolValue];//assign to static variable
     _internalDict = dict;
     
 }
@@ -40,8 +45,11 @@
     
     self = [super init];
     if (self) {
+        //construct a dict
         NSDictionary *dict = @{@"Name" : name, @"Email" : eMail,
-                            @"StaffID" : staffId, @"Adminstrator" : @(NO)};//test <- [NSNumber numberWithBool:isAdmin]
+                               @"StaffID" : staffId, @"Adminstrator" : [NSNumber numberWithBool:isAdmin]};//@(NO)};test <-
+        
+        __isAdmin = isAdmin;//could be smarter
         
         DLog(@"init dict has: %@", dict);
         
@@ -50,6 +58,11 @@
     }
     
     return self;
+}
+
++ (BOOL)isAdminUser {
+    
+    return __isAdmin;
 }
 
 @end

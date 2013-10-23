@@ -7,7 +7,7 @@
 //
 
 #import "UserVC.h"
-#import "UserPopup.h"
+
 
 @interface UserVC ()
 {
@@ -25,6 +25,14 @@
         // Custom initialization
     }
     return self;
+}
+#pragma custom delegate method from UserPopup
+- (void)returnUserModel:(User *)user {
+    
+    //ToDo add the returned user model to an array and use to pop the TableView
+    [_userArray addObject:user];
+    
+    
 }
 
 -(void)buttonStyle:(UIButton *)button WithImgName:(NSString *)imgName imgSelectedName:(NSString *)selectedName withTitle:(NSString *)title
@@ -146,7 +154,8 @@
     DLog(@"Add Another pressed");
     //ToDO bring up a xib view
     UserPopup *userPopup = [UserPopup loadFromNibNamed:@"UserPopup"];
-    //Add delegate if required
+    //Add delegate if required -> its the UserPopup delegate set to self this UserVC class
+    [userPopup setUserDelegate:self];//correct
     [userPopup showOnView:self.view];//test
     
 }

@@ -7,7 +7,7 @@
 //
 
 #import "PopupTV.h"
-#import "User.h"
+//#import "User.h"
 
 @implementation PopUpTV
 
@@ -70,10 +70,12 @@
     if (indexPath.row == 0) {
         //if TF is not empty resign/assign
         if (![textField.text isEqualToString:@""] && [textField.text length] > 1) {
-            DLog(@"Name textField");
+            
             [textField resignFirstResponder];//resign 1st
             //assign text to user ivar
+            _name = textField.text;
             
+            DLog(@"NameString: %@", _name);
             //next TextField
             nextTF = [self returnNextTextField:textField];
             [nextTF becomeFirstResponder];
@@ -90,17 +92,23 @@
         if (![textField.text isEqualToString:@""] && [textField.text length] > 1) {
             //resign previous responder status
             [textField resignFirstResponder];
+            _eMail = textField.text;
+            DLog(@"eMailString: %@", _eMail);
+            //next textFiueld
             nextTF = [self returnNextTextField:textField];
             [nextTF becomeFirstResponder];
         }//close inner if
         else
         {
+            //assign staffID here
+            _staffID = textField.text;
+            DLog(@"staffID: %@", _staffID);
             [textField becomeFirstResponder];
         }
         
     }
     else
-    {   //pass code 6 digits
+    {   //pass code 6 digits -> staffID field
         if (![textField.text isEqualToString:@""] && [textField.text length] >= 6) {
             //resign previous responder status
             [textField resignFirstResponder];
@@ -109,6 +117,13 @@
         {
             [textField becomeFirstResponder];
         }
+    }
+    
+    if (_name && _eMail && _staffID) {
+        DLog(@"Enter create User model conditional");
+        //Not right place for User model init
+        //no confirm button to enable
+        
     }
     
 }
@@ -141,6 +156,7 @@
         [userNameTF setFont:[UIFont systemFontOfSize:15.0]];
         //set the minimum size of this email field
         [userNameTF setMinimumFontSize:14.0];
+        [userNameTF ]
         
         userNameTF.textColor = [UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0];//blue
         [userNameTF setUserInteractionEnabled:YES];

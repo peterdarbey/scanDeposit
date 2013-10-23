@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@class User;
+//@class User;
+#import "User.h"
 
 #define USER_NAME_TF 100
 #define USER_NAME_LBL 200
@@ -18,6 +19,9 @@
     NSIndexPath *selectedIP;
 }
 
+@property  (strong, nonatomic) NSString *name;
+@property  (strong, nonatomic) NSString *eMail;
+@property  (strong, nonatomic) NSString *staffID;
 
 @end
 

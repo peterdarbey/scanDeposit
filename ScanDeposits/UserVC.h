@@ -8,14 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+#import "UserPopup.h"
 
-@class UserPopup;
 
 #define USER_NAME_TF 100
 #define USER_NAME_LBL 200
 
 
-@interface UserVC : UIViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
+@interface UserVC : UIViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UserModelDelegate>
 {
     NSIndexPath *selectedIP;
 }

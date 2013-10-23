@@ -5,7 +5,7 @@
 #import <UIKit/UIKit.h>
 #import "AppDelegate.h"
 
-#import "Deposit.h"
+@class Deposit;
 
 @protocol ResumeScanMode <NSObject>
 

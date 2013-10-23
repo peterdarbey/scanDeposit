@@ -4,6 +4,8 @@
 
 #import "AlertView.h"
 
+#import "Deposit.h"
+
 @interface AlertView ()
 {
     

@@ -7,9 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Bag.h"
 
-#import "AppDelegate.h"
 
 @interface Deposit : NSObject
 {

@@ -8,7 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-#import "UserVC.h"
+@class User;
+@class UserVC;
+
 
 #define NAME_TF 100
 #define USER_LBL 250

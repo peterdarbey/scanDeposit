@@ -12,7 +12,7 @@
 #define BAG_AMOUNT 250
 #define BAG_NO_LBL 150
 
-#import "Deposit.h"
+@class Deposit;
 
 #import "AppDelegate.h"
 

@@ -8,6 +8,8 @@
 
 #import "DepositsVC.h"
 
+#import "Deposit.h"
+
 @interface DepositsVC ()
 {
 //    Deposit *deposit;

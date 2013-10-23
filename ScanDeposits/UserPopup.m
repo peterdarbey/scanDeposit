@@ -8,6 +8,8 @@
 
 #import "UserPopup.h"
 
+#import "PopupTV.h"
+
 @interface UserPopup ()
 {
     
@@ -33,15 +35,6 @@
     
     return self;
 }
-//- (void)cancelKBPressed:(UIButton *)sender {
-//    
-//    [_inputAmountTF resignFirstResponder];
-//}
-//- (void)doneKBPressed:(UIButton *)sender {
-//    
-//    [_inputAmountTF resignFirstResponder];
-//    
-//}
 
 //- (UIToolbar *)createCustomKBView {
 //    
@@ -73,9 +66,6 @@
     stringArray = [NSMutableArray array];
     
     
-    
-//    [_inputAmountTF setKeyboardType:UIKeyboardTypeNumberPad];
-//    
 //    //construct a keyBoard view to sit on KB
 //    [_inputAmountTF setInputAccessoryView:[self createCustomKBView]];
     
@@ -241,7 +231,7 @@
     [self setupView];
     
     self.transform = CGAffineTransformMakeScale(0.5f, 0.5f);
-    CGPoint offset = CGPointMake(view.center.x, view.center.y -20);
+    CGPoint offset = CGPointMake(view.center.x, view.center.y -15);
     //    self.center = view.center;//pass picker.view.center to view
     self.center = offset;
     self.layer.cornerRadius = 5.0;

@@ -8,6 +8,11 @@
 
 #import "HomeVC.h"
 
+#import "Barcode.h"
+#import "DepositsVC.h"
+#import "Deposit.h"
+#import "RegistrationVC.h"
+
 
 @interface HomeVC ()
 {

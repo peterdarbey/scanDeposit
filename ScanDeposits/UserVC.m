@@ -7,6 +7,7 @@
 //
 
 #import "UserVC.h"
+#import "UserPopup.h"
 
 @interface UserVC ()
 {

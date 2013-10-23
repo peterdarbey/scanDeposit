@@ -8,7 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PopUpTV : UITableView  <UITableViewDataSource, UITableViewDelegate>
+@class User;
+
+#define USER_NAME_TF 100
+#define USER_NAME_LBL 200
+
+@interface PopUpTV : UITableView  <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
 {
     NSIndexPath *selectedIP;
 }

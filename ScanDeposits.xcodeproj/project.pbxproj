@@ -71,6 +71,7 @@
 		BF3703521816D47B0027AE4F /* UserPopup.xib in Resources */ = {isa = PBXBuildFile; fileRef = BF3703511816D47B0027AE4F /* UserPopup.xib */; };
 		BF3703551816D5860027AE4F /* UserPopup.m in Sources */ = {isa = PBXBuildFile; fileRef = BF3703541816D5860027AE4F /* UserPopup.m */; };
 		BF37035A1816E1880027AE4F /* PopupTV.m in Sources */ = {isa = PBXBuildFile; fileRef = BF3703591816E1880027AE4F /* PopupTV.m */; };
+		BF37035F1817C6480027AE4F /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = BF37035E1817C6480027AE4F /* User.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -165,6 +166,8 @@
 		BF3703541816D5860027AE4F /* UserPopup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserPopup.m; sourceTree = "<group>"; };
 		BF3703581816E1870027AE4F /* PopupTV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopupTV.h; sourceTree = "<group>"; };
 		BF3703591816E1880027AE4F /* PopupTV.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopupTV.m; sourceTree = "<group>"; };
+		BF37035D1817C6480027AE4F /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		BF37035E1817C6480027AE4F /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -328,6 +331,8 @@
 				BF370337180D5C5D0027AE4F /* Deposit.m */,
 				BF2C4FC21806C96400A87C18 /* Barcode.h */,
 				BF2C4FC31806C96400A87C18 /* Barcode.m */,
+				BF37035D1817C6480027AE4F /* User.h */,
+				BF37035E1817C6480027AE4F /* User.m */,
 			);
 			name = "Model Objects";
 			sourceTree = "<group>";
@@ -506,6 +511,7 @@
 				BF3703551816D5860027AE4F /* UserPopup.m in Sources */,
 				BF37035A1816E1880027AE4F /* PopupTV.m in Sources */,
 				BF370335180D4DE40027AE4F /* DepositsVC.m in Sources */,
+				BF37035F1817C6480027AE4F /* User.m in Sources */,
 				BF2C4F5D1805C08B00A87C18 /* AppDelegate.m in Sources */,
 				BF37034D181539160027AE4F /* RegistrationVC.m in Sources */,
 				BF370327180822A90027AE4F /* AlertView.m in Sources */,

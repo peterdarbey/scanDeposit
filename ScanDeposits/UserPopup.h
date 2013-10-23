@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-#import "PopupTV.h"
+@class PopUpTV;
 
 @interface UserPopup : UIView <UITextFieldDelegate>
 {

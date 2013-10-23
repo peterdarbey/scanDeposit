@@ -8,6 +8,9 @@
 
 #import "RegistrationVC.h"
 
+#import "UserVC.h"
+#import "User.h"
+
 @interface RegistrationVC ()
 
 @end

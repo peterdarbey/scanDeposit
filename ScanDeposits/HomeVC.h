@@ -10,13 +10,13 @@
 #import "ScanditSDKOverlayController.h"
 #import "ScanditSDKBarcodePicker.h"
 
-#import "Barcode.h"
-#import "DepositsVC.h"
-#import "Deposit.h"
-
+//delegate method need import
 #import "AlertView.h"
 
-#import "RegistrationVC.h"
+@class Barcode;
+@class Deposit;
+@class DepositsVC;
+@class RegistrationVC;
 
 
 #define kScanditSDKAppKey @"4w8vXjD2EeOZw8u2pkkjQH4S+hfplxDDtzKnte2lX4s"

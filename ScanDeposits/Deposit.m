@@ -37,7 +37,6 @@ static double _totalBagsAmount;
 
 -(void) commonInit:(NSDictionary *)dict {
     
-    //ToDo add timeStamp
     _bagNumber = dict[@"BagNumber"];//string
     _bagBarcode = dict[@"Barcode"];//process a coin bag
     _bagAmount = (double)[dict[@"BagAmount"]doubleValue];
@@ -60,9 +59,9 @@ static double _totalBagsAmount;
         DLog(@"_totalBagCount********: %i", _totalBagCount);
         _totalBagsAmount += [dict[@"BagAmount"]doubleValue];//retreive the instance amount and Add to total
        
-        //Use for now
-        AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-        appDelegate.totalBagCount += _bagCount;
+//        //Use for now
+//        AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+//        appDelegate.totalBagCount += _bagCount;
         
         [self commonInit:dict];
     }

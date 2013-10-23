@@ -192,8 +192,9 @@
 //_saveBtn
 -(void)confirmPressed:(UIButton *)sender {
     
+    DLog(@"_popupTV.staffID: %@", _popupTV.staffID);//null why
     
-    if (_popupTV.name && _popupTV.eMail && _popupTV.staffID) {
+    if (_popupTV.name && _popupTV.eMail && _popupTV.staffID && _popupTV.initials) {
         DLog(@"Enter create User model conditional");
         //Not right place for User model init
         
@@ -201,7 +202,7 @@
         
         //create user model set NO as default for isAdmin and pass back to the UserVC
         User *user = [[User alloc]initWithName:_popupTV.name eMail:_popupTV.eMail
-                                       staffID:_popupTV.staffID isAdmin:NO];
+                                       staffID:_popupTV.staffID Initials:_popupTV.initials isAdmin:NO];
         
         //NOTE never Admin when this method is called from the PopupTV class
         DLog(@"User>>>>>: %@", user);
@@ -213,7 +214,7 @@
         }
         
     }
-    
+    [self dismissPopupAndResumeScanning];//Not right yet
     
 }
 

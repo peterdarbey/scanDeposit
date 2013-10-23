@@ -17,6 +17,7 @@
 @property (strong, nonatomic) NSString *name;
 @property (strong, nonatomic) NSString *eMail;
 @property (strong, nonatomic) NSString *staffID;
+@property (strong, nonatomic) NSString *initials;//for section header
 //@property BOOL adminstrator;
 
 @property (strong, nonatomic) NSDictionary *internalDict;
@@ -35,21 +36,22 @@ static BOOL __isAdmin;
     _name = dict[@"Name"];
     _eMail = dict[@"Email"];
     _staffID = dict[@"StaffID"];
-//    _adminstrator = [dict[@"Administrator"] boolValue];//assigning NO as default to adminstrator
-    __isAdmin = [dict[@"Adminstrator"] boolValue];//assign to static variable
+    _initials = dict[@"Initials"];//test
+    __isAdmin = [dict[@"Adminstrator"] boolValue];//assign to static variable, NO as default unless admin
     _internalDict = dict;
     
 }
 
-- (id)initWithName:(NSString *)name eMail:(NSString *)eMail staffID:(NSString *)staffId isAdmin:(BOOL)isAdmin {
+- (id)initWithName:(NSString *)name eMail:(NSString *)eMail staffID:(NSString *)staffId
+                                 Initials:(NSString *)initials isAdmin:(BOOL)isAdmin {
     
     self = [super init];
     if (self) {
         //construct a dict
         NSDictionary *dict = @{@"Name" : name, @"Email" : eMail,
-                               @"StaffID" : staffId, @"Adminstrator" : [NSNumber numberWithBool:isAdmin]};//@(NO)};test <-
+                               @"StaffID" : staffId, @"Initials" : initials, @"Adminstrator" : [NSNumber numberWithBool:isAdmin]};//@(NO)};test <-
         
-        __isAdmin = isAdmin;//could be smarter
+//        __isAdmin = isAdmin;//could be smarter
         
         DLog(@"init dict has: %@", dict);
         

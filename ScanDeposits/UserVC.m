@@ -29,9 +29,10 @@
 #pragma custom delegate method from UserPopup
 - (void)returnUserModel:(User *)user {
     
+    DLog(@"user returned to UserVC: %@", user);
     //ToDo add the returned user model to an array and use to pop the TableView
     [_userArray addObject:user];
-    
+    DLog(@"_userArray: %@", _userArray);
     
 }
 
@@ -123,7 +124,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	
+    
     //Set delegate to self
     [_userTV setDataSource:self];
     [_userTV setDelegate:self];
@@ -139,6 +140,13 @@
     [self.navigationController.navigationItem setRightBarButtonItem:doneBtn];
     
     
+}
+//not called
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:YES];
+    
+    //set conditional for reloadData
+    [_userTV reloadData];
 }
 
 - (void)donePressed:(UIButton *)sender {
@@ -267,6 +275,7 @@
         [userNameTF setFont:[UIFont systemFontOfSize:15.0]];
         userNameTF.textColor = [UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0];//blue
         [userNameTF setUserInteractionEnabled:YES];
+        [userNameTF setEnablesReturnKeyAutomatically:YES];//Test
         
         //set textField delegate
         [userNameTF setDelegate:self];
@@ -335,13 +344,19 @@
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     
-    //    return [_userArray count];
-    return 1;//minimum of 1
+    if ([_userArray count] >= 1) {
+        return [_userArray count];//minimum 1 or 2
+    }
+    else
+    {
+        return 1;//minimum of 1
+    }
+    
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return 3;
+    return 3;//static not dynamic 
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

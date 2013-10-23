@@ -22,6 +22,7 @@
 @property  (strong, nonatomic) NSString *name;
 @property  (strong, nonatomic) NSString *eMail;
 @property  (strong, nonatomic) NSString *staffID;
+@property  (strong, nonatomic) NSString *initials;
 
 @end
 

@@ -46,6 +46,13 @@
 //    }
 }
 
+#pragma Delegate textField methods
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    
+    [textField resignFirstResponder];
+    
+    return YES;
+}
 
 - (UITextField *)returnNextTextField:(UITextField *)textField {
     //retrieve the cell that contains the textField
@@ -73,7 +80,46 @@
             
             [textField resignFirstResponder];//resign 1st
             //assign text to user ivar
-            _name = textField.text;
+            self.name = textField.text;//Mmm
+            if (self.name) {
+                NSMutableArray *lettersArray = [NSMutableArray array];
+                //separates the strings into separate elements in an array
+                NSArray *initialsArray = [textField.text componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                DLog(@"initialsArray: %@", initialsArray);//correct
+                //iterate over collection
+                for (int i = 0; i < [initialsArray count]; i++ ) {
+                    //each word in array
+                    NSString *word = [initialsArray objectAtIndex:i];
+                    //extract 1st letter only
+                    NSString *firstLetter = [word substringToIndex:1];//works
+                    [lettersArray addObject:firstLetter];
+                    
+                }//close for loop
+                
+                if ([lettersArray count] == 1) {
+                    NSString *appendedInitials = [lettersArray objectAtIndex:0];
+                    self.initials = appendedInitials;
+                    DLog(@"<< 1 >> self.initials: %@", self.initials);//DH
+                }
+                
+                if ([lettersArray count] == 2) {
+                    NSString *initials = [lettersArray objectAtIndex:0];
+                    NSString *appendedInitials = [initials stringByAppendingString:[lettersArray objectAtIndex:1]];
+                    self.initials = appendedInitials;
+                    DLog(@"<< 2 >> self.initials: %@", self.initials);//DH
+                }
+                else if ([lettersArray count] >2)
+                {
+                    NSString *initials = [lettersArray objectAtIndex:0];
+                    NSString *appendedInitials = [initials stringByAppendingString:[lettersArray objectAtIndex:1]];//crash
+                    appendedInitials = [appendedInitials stringByAppendingString:[lettersArray objectAtIndex:2]];
+                    self.initials = appendedInitials;
+                    DLog(@"<< 3 >> self.initials: %@", self.initials);//DHR
+                }
+                
+            }//close if
+            //should use shouldReplaceCharactersInRange method
+            
             
             DLog(@"NameString: %@", _name);
             //next TextField
@@ -92,7 +138,7 @@
         if (![textField.text isEqualToString:@""] && [textField.text length] > 1) {
             //resign previous responder status
             [textField resignFirstResponder];
-            _eMail = textField.text;
+            self.eMail = textField.text;
             DLog(@"eMailString: %@", _eMail);
             //next textFiueld
             nextTF = [self returnNextTextField:textField];
@@ -100,9 +146,6 @@
         }//close inner if
         else
         {
-            //assign staffID here
-            _staffID = textField.text;
-            DLog(@"staffID: %@", _staffID);
             [textField becomeFirstResponder];
         }
         
@@ -112,6 +155,11 @@
         if (![textField.text isEqualToString:@""] && [textField.text length] >= 6) {
             //resign previous responder status
             [textField resignFirstResponder];
+            
+            //assign staffID here
+            self.staffID = textField.text;
+            DLog(@"staffID: %@", self.staffID);
+            
         }//close inner if
         else
         {
@@ -120,7 +168,7 @@
     }
     
     if (_name && _eMail && _staffID) {
-        DLog(@"Enter create User model conditional");
+        DLog(@"<<<<<<<<<<<< Enter create User model conditional >>>>>>>>>");
         //Not right place for User model init
         //no confirm button to enable
         
@@ -156,7 +204,7 @@
         [userNameTF setFont:[UIFont systemFontOfSize:15.0]];
         //set the minimum size of this email field
         [userNameTF setMinimumFontSize:14.0];
-        [userNameTF ]
+        [userNameTF setEnablesReturnKeyAutomatically:YES];
         
         userNameTF.textColor = [UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0];//blue
         [userNameTF setUserInteractionEnabled:YES];

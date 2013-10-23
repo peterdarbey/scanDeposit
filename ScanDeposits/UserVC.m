@@ -148,7 +148,7 @@
     [_userTV setBackgroundView:[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"Default-568h.png"]]];
     
     //inititize all userCollections
-    _userArray = [NSMutableArray arrayWithCapacity:1];//always at least 1 user to use app
+    _userArray = [NSMutableArray array];//Empty always at least 1 user to use app just stop user deleting last 1 or 2 entries
     
     _initialsArray = [NSMutableArray array];
     
@@ -166,7 +166,7 @@
     [super viewWillAppear:YES];
     
     //set conditional for reloadData
-    [_userTV reloadData];
+//    [_userTV reloadData];
 }
 
 - (void)donePressed:(UIButton *)sender {
@@ -304,7 +304,10 @@
         userNameTF.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;//thats the 1
         [userNameTF setFont:[UIFont systemFontOfSize:15.0]];
         userNameTF.textColor = [UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0];//blue
-        [userNameTF setUserInteractionEnabled:YES];
+        //ToDo add a BOOL for editable or not
+//        [userNameTF setUserInteractionEnabled:YES];
+        
+        [userNameTF setUserInteractionEnabled:NO];
         [userNameTF setEnablesReturnKeyAutomatically:YES];//Test
         
         //set textField delegate
@@ -358,7 +361,7 @@
     }
     else if (indexPath.row == 1)
     {
-        [userNameTF setText:[NSString stringWithFormat:@"david.h.roberts"]];//hard code here
+        [userNameTF setText:[NSString stringWithFormat:@"%@", [_user userEMail]]];//hard code here
         [userNameLbl setText:@"Email"];//temp will be dynamic
         //set keyboard type
         [userNameTF setKeyboardType:UIKeyboardTypeEmailAddress];
@@ -368,10 +371,23 @@
         [userNameTF setAutocapitalizationType:UITextAutocapitalizationTypeNone];
         [userNameTF setAutocorrectionType:UITextAutocorrectionTypeNo];
     }
-    else
+    else if (indexPath.row == 2)
     {
-        [userNameTF setText:[NSString stringWithFormat:@"6 Digit code"]];//hard code here
+        [userNameTF setText:[NSString stringWithFormat:@"%@", [_user userStaffID]]];//hard code here
         [userNameLbl setText:@"Staff ID"];//temp will be dynamic
+        //set keyboard type
+        [userNameTF setKeyboardType:UIKeyboardTypeEmailAddress];
+        [userNameTF setReturnKeyType:UIReturnKeyNext];
+        [userNameTF enablesReturnKeyAutomatically];
+        [userNameTF setClearsOnBeginEditing:YES];
+        [userNameTF setAutocapitalizationType:UITextAutocapitalizationTypeNone];
+        [userNameTF setAutocorrectionType:UITextAutocorrectionTypeNo];
+    }
+
+    else //or leave as 3 entries
+    {
+        [userNameTF setText:[NSString stringWithFormat:@"%@", [_user userInitials]]];//hard code here
+        [userNameLbl setText:@"Initials"];//temp will be dynamic
         //set keyboard type
         [userNameTF setKeyboardType:UIKeyboardTypeNumbersAndPunctuation];
         [userNameTF setReturnKeyType:UIReturnKeyDone];
@@ -404,7 +420,8 @@
     }
     else
     {
-        return 3;//static not dynamic
+//        return 3;//static not dynamic
+        return 0;//dont display anything
     }
     
 }

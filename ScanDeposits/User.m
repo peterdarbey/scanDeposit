@@ -84,7 +84,8 @@ static BOOL __isAdmin;
 }
 
 - (int)count {
-    return [_internalDict count];
+//    return [_internalDict count];
+    return 4;
 }
 
 @end

@@ -216,6 +216,63 @@
 //    
 //}
 
+
+//-(void)checkForExpansionOfZones:(NSIndexPath *)path
+//{
+//    NSMutableArray *zoneNames = [NSMutableArray array];
+//    
+//    _isSelected = YES;
+//    
+//    //Added to fix issue with arrows
+//    for (int i = 0; i < [self numberOfSectionsInTableView:self.userTV]; i++) {
+//        if ([[_dataSource objectAtIndex:i]count] == 1 && i != selectedIP.section) {
+//            [UIView animateWithDuration:0.3 animations:^{
+////                iv.transform = CGAffineTransformMakeRotation(0);imageView
+//            }];
+//        }
+//    }//close loop
+//    
+//    
+//    if (path) {
+//        
+//        NSMutableArray *indexArray = [[NSMutableArray alloc] init];
+//        
+//        if([[_dataSource objectAtIndex:selectedIP.section]count] == 1) {
+//            //iterate over filtered names
+//            for (int j = 0; j < _dataSource.count; j++) {
+//                _user = [_dataSource objectAtIndex:j];
+//                [zoneNames addObject:_user.userName];
+//                
+//                NSIndexPath *index = [NSIndexPath indexPathForRow: j+1 inSection:path.section]; // Note: We offset by 1 because we're not inserting the zeroth item as this is the Parking Authority.
+//                [indexArray addObject:index];
+//                
+//                [[_dataSource objectAtIndex:path.section]addObject:[zoneNames objectAtIndex:j]];//Add selected section to datasource subObj level
+//            }
+//            //Selected section and opening
+//            if (([_dataSource objectAtIndex:selectedIP.section]) && ([[_dataSource objectAtIndex:selectedIP.section]count] > 1)) {
+////                UITableViewCell *cell = [self.userTV cellForRowAtIndexPath:path];
+////                iv = cell.imageView;
+//                [UIView animateWithDuration:0.3 animations:^{
+//                    // Rotate the arrow
+////                    iv.transform = CGAffineTransformMakeRotation(M_PI_2);//rotate down
+//                }];
+//            }
+//            [_userTV insertRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationTop];
+//            
+//            //while still sections in tblView that are not selected close
+//            for (int i = 0; i < [self numberOfSectionsInTableView:self.userTV]; i++) {
+//                if (i != selectedIP.section) {//if not selected call
+////                    [self closeSectionIfOpen:i];//close
+//                }
+//            }
+//        }
+//        else {
+//            // Already expanded, close it up!
+////            [self closeSections:path];
+//        }
+//    }
+//}
+
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     
     NSString *titleName = [NSString stringWithFormat:@"User Details"];
@@ -249,7 +306,7 @@
         [saveBtn setFrame:CGRectMake(10, 23, 300, 44)];
         [saveBtn setUserInteractionEnabled:YES];
         [saveBtn addTarget:self action:@selector(addUserPressed:) forControlEvents:UIControlEventTouchUpInside];
-        [self buttonStyle:saveBtn WithImgName:@"blueButton.png" imgSelectedName:@"blueButtonSelected.png" withTitle:@"ADD MORE USERS"];
+        [self buttonStyle:saveBtn WithImgName:@"blueButton.png" imgSelectedName:@"blueButtonSelected.png" withTitle:@"ADD USERS"];
         
         //add to parent view
         [bottomView addSubview:saveBtn];
@@ -371,7 +428,7 @@
         [userNameTF setAutocapitalizationType:UITextAutocapitalizationTypeNone];
         [userNameTF setAutocorrectionType:UITextAutocorrectionTypeNo];
     }
-    else if (indexPath.row == 2)
+    else if (indexPath.row == 2)//probably just 3 cells as initials will be on section header
     {
         [userNameTF setText:[NSString stringWithFormat:@"%@", [_user userStaffID]]];//hard code here
         [userNameLbl setText:@"Staff ID"];//temp will be dynamic

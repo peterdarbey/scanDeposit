@@ -235,7 +235,7 @@
     }
     
     if (indexPath.row == 0) {
-        [userNameTF setText:[NSString stringWithFormat:@"David Roberts"]];//temp will be dynamic
+//        [userNameTF setText:[NSString stringWithFormat:@"David Roberts"]];//temp will be dynamic
         [userNameLbl setText:@"Name"];
         
         //set keyboard type

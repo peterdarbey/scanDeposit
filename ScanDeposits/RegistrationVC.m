@@ -287,7 +287,7 @@
         [saveBtn setFrame:CGRectMake(10, 23, 300, 44)];
         [saveBtn setUserInteractionEnabled:YES];
         [saveBtn addTarget:self action:@selector(addPressed:) forControlEvents:UIControlEventTouchUpInside];
-        [self buttonStyle:saveBtn WithImgName:@"blueButton.png" imgSelectedName:@"blueButtonSelected.png" withTitle:@"ADD USER"];
+        [self buttonStyle:saveBtn WithImgName:@"blueButton.png" imgSelectedName:@"blueButtonSelected.png" withTitle:@"USER SETTINGS"];
         
         //add to parent view
         [bottomView addSubview:saveBtn];

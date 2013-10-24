@@ -49,7 +49,7 @@ static BOOL __isAdmin;
     if (self) {
         //construct a dict
         NSDictionary *dict = @{@"Name" : name, @"Email" : eMail,
-                               @"StaffID" : staffId, @"Initials" : initials, @"Adminstrator" : [NSNumber numberWithBool:isAdmin]};//@(NO)};test <-
+                               @"StaffID" : staffId, @"Initials" : initials, @"Adminstrator" : [NSNumber numberWithBool:isAdmin]};//@(NO)};test <- //@YES
         
 //        __isAdmin = isAdmin;//could be smarter
         

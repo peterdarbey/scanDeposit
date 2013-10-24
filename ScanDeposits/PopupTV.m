@@ -81,7 +81,7 @@
             [textField resignFirstResponder];//resign 1st
             //assign text to user ivar
             self.name = textField.text;//Mmm
-            if (self.name) {
+            if (self.name) { //Watch for doble spaces
                 NSMutableArray *lettersArray = [NSMutableArray array];
                 //separates the strings into separate elements in an array
                 NSArray *initialsArray = [textField.text componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
@@ -91,8 +91,14 @@
                     //each word in array
                     NSString *word = [initialsArray objectAtIndex:i];
                     //extract 1st letter only
-                    NSString *firstLetter = [word substringToIndex:1];//works
-                    [lettersArray addObject:firstLetter];
+                    if ([word length] > 0) {
+                        NSString *firstLetter = [word substringToIndex:1];//works
+                        [lettersArray addObject:firstLetter];
+                    }
+                    else
+                    {
+                        DLog(@"Less than 1 char -> space");
+                    }
                     
                 }//close for loop
                 

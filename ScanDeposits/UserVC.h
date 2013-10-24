@@ -19,7 +19,7 @@
 @interface UserVC : UIViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UserModelDelegate>
 {
     NSIndexPath *selectedIP;
-    NSDictionary *initialsDict;
+    NSMutableDictionary *initialsDict;
     
 }
 
@@ -30,5 +30,6 @@
 @property (strong, nonatomic) NSMutableArray *dataSource;
 @property (strong, nonatomic) User *user;
 @property BOOL isSelected;
+@property BOOL isExpanded;
 
 @end

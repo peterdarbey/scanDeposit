@@ -131,6 +131,7 @@
     
     _dataSource = [NSMutableArray array];
     
+    initialsDict = [NSMutableDictionary dictionary];
     
     
     UIBarButtonItem *doneBtn = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(donePressed:)];
@@ -313,21 +314,6 @@
     //properties
     UITextField *userNameTF;
     UILabel *userNameLbl;
-   
-    //init users here
-    if ([_dataSource count] >= 1) {
-        _user = [_dataSource objectAtIndex:indexPath.section];//could be row
-        
-    }
-    else
-    {
-        DLog(@"Dont display any data");
-        if (initialsDict){
-            //populate with the initials from each user
-        }
-    }
-
-    
     
     if (cell == nil) {
         
@@ -366,67 +352,70 @@
         
     }
     else
-    {   //retreive the properties
+    {   //retrieve the properties
         userNameTF = (UITextField *)[cell.contentView viewWithTag:USER_NAME_TF];
         userNameLbl = (UILabel *)[cell.contentView viewWithTag:USER_NAME_LBL];
     }
     
+    //After cell creation process only, show a tableView if the datasource is init with users
     
-    
-    //set inidivual cells
-    if (indexPath.row == 0) {
-//        [userNameTF setText:[NSString stringWithFormat:@"David Roberts"]];//temp will be dynamic
-        //Test
-        [userNameTF setText:[NSString stringWithFormat:@"%@", [_user userName]]];//works
-        [userNameLbl setText:@"Name"];
-        //set keyboard type
-        [userNameTF setKeyboardType:UIKeyboardTypeDefault];
-        [userNameTF setReturnKeyType:UIReturnKeyNext];
-        [userNameTF enablesReturnKeyAutomatically];
-        [userNameTF setClearsOnBeginEditing:YES];
-        [userNameTF setAutocapitalizationType:UITextAutocapitalizationTypeWords];
-        [userNameTF setAutocorrectionType:UITextAutocorrectionTypeNo];
-    }
-    else if (indexPath.row == 1)
+    //init users here
+    if ([_dataSource count] >= 1) {
+        //retrieve the user for each section
+        _user = [_dataSource objectAtIndex:indexPath.section];//section as row is constantly 1
+        DLog(@"_dataSource array contains: %@ and Row: %i", _dataSource, indexPath.section);//different users, starts at 0 index
+       
+        //generate headers from user model initials property -> Moved to returnedUserModel instead
+        
+        if (_initialsArray) {
+            NSDictionary *entryDict = [_initialsArray objectAtIndex:indexPath.section];
+            DLog(@"entryDict>>>: %@", entryDict);
+            [userNameTF setText:[NSString stringWithFormat:@"%@", entryDict[@"Initial"]]];
+            //set UILabel name
+            [userNameLbl setText:@"Initials"];
+        };
+        
+    }//close if
+    else
     {
-        [userNameTF setText:[NSString stringWithFormat:@"%@", [_user userEMail]]];//hard code here
-        [userNameLbl setText:@"Email"];//temp will be dynamic
-        //set keyboard type
-        [userNameTF setKeyboardType:UIKeyboardTypeEmailAddress];
-        [userNameTF setReturnKeyType:UIReturnKeyNext];
-        [userNameTF enablesReturnKeyAutomatically];
-        [userNameTF setClearsOnBeginEditing:YES];
-        [userNameTF setAutocapitalizationType:UITextAutocapitalizationTypeNone];
-        [userNameTF setAutocorrectionType:UITextAutocorrectionTypeNo];
-    }
-    else if (indexPath.row == 2)//probably just 3 cells as initials will be on section header
-    {
-        [userNameTF setText:[NSString stringWithFormat:@"%@", [_user userStaffID]]];//hard code here
-        [userNameLbl setText:@"Staff ID"];//temp will be dynamic
-        //set keyboard type
-        [userNameTF setKeyboardType:UIKeyboardTypeEmailAddress];
-        [userNameTF setReturnKeyType:UIReturnKeyNext];
-        [userNameTF enablesReturnKeyAutomatically];
-        [userNameTF setClearsOnBeginEditing:YES];
-        [userNameTF setAutocapitalizationType:UITextAutocapitalizationTypeNone];
-        [userNameTF setAutocorrectionType:UITextAutocorrectionTypeNo];
+        DLog(@"Dont display any data");//dont need this condition
     }
 
-    else //or leave as 3 entries
-    {
-        [userNameTF setText:[NSString stringWithFormat:@"%@", [_user userInitials]]];//hard code here
-        [userNameLbl setText:@"Initials"];//temp will be dynamic
-        //set keyboard type
-        [userNameTF setKeyboardType:UIKeyboardTypeNumbersAndPunctuation];
-        [userNameTF setReturnKeyType:UIReturnKeyDone];
-        [userNameTF enablesReturnKeyAutomatically];
-        [userNameTF setClearsOnBeginEditing:YES];
-        [userNameTF setAutocapitalizationType:UITextAutocapitalizationTypeNone];
-        [userNameTF setAutocorrectionType:UITextAutocorrectionTypeNo];
-    }
-    
+    //If expanded only
+    if (_isExpanded) {
+        
+        //set inidivual cells
+        if (indexPath.row == 0) {
+    //        [userNameTF setText:[NSString stringWithFormat:@"David Roberts"]];//temp will be dynamic
+            //Test
+            [userNameTF setText:[NSString stringWithFormat:@"%@", [_user userName]]];//works
+            [userNameLbl setText:@"Name"];
+            //set keyboard type
+        }
+        else if (indexPath.row == 1)
+        {
+            [userNameTF setText:[NSString stringWithFormat:@"%@", [_user userEMail]]];//hard code here
+            [userNameLbl setText:@"Email"];//temp will be dynamic
+            //set keyboard type
+        }
+        else if (indexPath.row == 2)//probably just 3 cells as initials will be on section header
+        {
+            [userNameTF setText:[NSString stringWithFormat:@"%@", [_user userStaffID]]];//hard code here
+            [userNameLbl setText:@"Staff ID"];//temp will be dynamic
+            //set keyboard type
+        }
+
+        else //or leave as 3 entries
+        {
+            [userNameTF setText:[NSString stringWithFormat:@"%@", [_user userInitials]]];//hard code here
+            [userNameLbl setText:@"Initials"];//temp will be dynamic
+            //set keyboard type
+        }
+        
+    }//close if expanded
     
     return cell;
+    
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -444,7 +433,10 @@
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
     if ([_dataSource count] >= 1) {
-        return [[_dataSource objectAtIndex:section]count];//currently a dict NOTE user doesnt have a count method
+//        return [[_dataSource objectAtIndex:section]count];//NOTE user doesnt have a count method
+        
+        //user doesnt have a count method
+        return 1; //for now
     }
     else
     {
@@ -461,68 +453,72 @@
     //tapped
     _isSelected = YES;
     
-    
-    
-
-//    if (isAlreadyInserted) {
-//        [self miniMizeThisRows:ar];
-//    } else {
-//        NSUInteger count = indexPath.row + 1;
-//        NSMutableArray *arCells = [NSMutableArray array];
-//        for (NSDictionary *dInner in ar) {
-//            [arCells addObject:[NSIndexPath indexPathForRow:count inSection:0]];
-//            [arrLast addObject:dInner];
-//            [arraylist insertObject:dInner atIndex:count++];
-//        }
-//        [_userTV insertRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationTop];
-//    }
-//    
-//    if (discardedItems.count > 0) {
-//        [_dataSource removeObjectsAtIndexes:discardedItems];
-//        [_userTV deleteRowsAtIndexPaths:arrIndex withRowAnimation:UITableViewRowAnimationNone];
-//    }
-    
+    //check we have a tblView 1st before expanding or collasping
+    if (_user) {
+        
+        //call expand here but also check for expansion 1st]
+        if (_isExpanded) {
+            [self collaspeMyTableViewWithIndex:selectedIP];
+        }
+        else
+        {
+            //expand
+            [self expandMyTableViewWithIndex:selectedIP andUser:_user];
+        }
+    }
     
     
     [_userTV deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-- (void)expandMyTableViewWithIndex:(NSIndexPath *)indexPath {
+- (void)expandMyTableViewWithIndex:(NSIndexPath *)indexPath andUser:(User *)user {
     
     NSMutableArray *indexArray = [NSMutableArray array];
      NSUInteger count = indexPath.row + 1;
     
     for (NSDictionary *userDict in _dataSource) {
-        [indexArray addObject:[NSIndexPath indexPathForRow:count inSection:0]];
-        
+        [_dataSource addObject:[NSIndexPath indexPathForRow:count inSection:0]];
+        [_dataSource insertObject:user atIndex:count];
     }
      [_userTV insertRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationTop];
+
+}
+
+- (void)collaspeMyTableViewWithIndex:(NSIndexPath *)indexPath {
     
+    NSMutableArray *indexArray = [NSMutableArray array];
+    NSUInteger count = indexPath.row + 1;
     
+        if ([_dataSource count] >= 1) {
+            [_dataSource removeObjectAtIndex:count];//was indexes
+            [_userTV deleteRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationNone];
+        }
 }
 
 #pragma custom delegate method from UserPopup
-
+//happens as a result of confirnBtn pressed in xib 
 - (void)returnUserModel:(User *)user {
     
-    DLog(@"user returned to UserVC: %@", user);
     //ToDo add the returned user model to an array and use to pop the TableView
     [_userArray addObject:user];//dict
-    //Test
+    //Ad to the dataSource array
     [_dataSource addObject:user];
-    DLog(@"_dataSource here: %@", _dataSource);//note each user is a dict
-    
-    //initial displayed headers
-    initialsDict = @{@"Initials" : [user userInitials]};
+    DLog(@"_dataSource here in returnUserModel: %@", _dataSource);//note each user is a dict
+    //populate my initialDict here also (not cellForRow)
+    //generate headers from user model initials property
+    [initialsDict setObject:[user userInitials] forKey:@"Initial"];
+    //Add to collection
     [_initialsArray addObject:initialsDict];
-    DLog(@"initialsArray in UserVC: %@", _initialsArray);
+    DLog(@"initialsArray in returnUserModel: %@", _initialsArray)
     
+//    [_userTV reloadData];
+//    DLog(@"ReloadData called in returnUserModel");
 }
-
+//may not need this delegate method
 - (void)refreshView {
 
     [_userTV reloadData];
-    DLog(@"ReloadData called");
+    DLog(@"ReloadData called in refreshView");
     //call contractTableView method
 }
 

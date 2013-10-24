@@ -19,6 +19,7 @@
 @interface UserVC : UIViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UserModelDelegate>
 {
     NSIndexPath *selectedIP;
+    NSDictionary *initialsDict;
     
 }
 

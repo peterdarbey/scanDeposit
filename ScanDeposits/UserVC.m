@@ -27,29 +27,6 @@
     }
     return self;
 }
-#pragma custom delegate method from UserPopup
-
-- (void)refreshView {
-    
-    [_userTV reloadData];
-    DLog(@"ReloadData called");
-}
-- (void)returnUserModel:(User *)user {
-    
-    DLog(@"user returned to UserVC: %@", user);
-    //ToDo add the returned user model to an array and use to pop the TableView
-    [_userArray addObject:user];//dict
-    //Test
-    [_dataSource addObject:user];
-    DLog(@"_dataSource here: %@", _dataSource);//note each user is a dict
-   
-    //Dont need
-    NSDictionary *initialsDict = @{@"Initials" : [user userInitials]};
-    [_initialsArray addObject:initialsDict];
-    DLog(@"initialsArray in UserVC: %@", _initialsArray);
-    
-    
-}
 
 -(void)buttonStyle:(UIButton *)button WithImgName:(NSString *)imgName imgSelectedName:(NSString *)selectedName withTitle:(NSString *)title
 {
@@ -231,21 +208,19 @@
 //            }];
 //        }
 //    }//close loop
-//    
-//    
+
 //    if (path) {
-//        
 //        NSMutableArray *indexArray = [[NSMutableArray alloc] init];
-//        
+
 //        if([[_dataSource objectAtIndex:selectedIP.section]count] == 1) {
 //            //iterate over filtered names
 //            for (int j = 0; j < _dataSource.count; j++) {
 //                _user = [_dataSource objectAtIndex:j];
 //                [zoneNames addObject:_user.userName];
-//                
+
 //                NSIndexPath *index = [NSIndexPath indexPathForRow: j+1 inSection:path.section]; // Note: We offset by 1 because we're not inserting the zeroth item as this is the Parking Authority.
 //                [indexArray addObject:index];
-//                
+
 //                [[_dataSource objectAtIndex:path.section]addObject:[zoneNames objectAtIndex:j]];//Add selected section to datasource subObj level
 //            }
 //            //Selected section and opening
@@ -342,10 +317,14 @@
     //init users here
     if ([_dataSource count] >= 1) {
         _user = [_dataSource objectAtIndex:indexPath.section];//could be row
+        
     }
     else
     {
         DLog(@"Dont display any data");
+        if (initialsDict){
+            //populate with the initials from each user
+        }
     }
 
     
@@ -393,16 +372,8 @@
     }
     
     
-    //init users here
-//    if ([_dataSource count] >= 1) {
-//        user = [_dataSource objectAtIndex:indexPath.section];//could be row
-//        if (indexPath.row == 0) {
-//            [userNameTF setText:[NSString stringWithFormat:@"%@", [user userName]]];
-//        }
-//    }
     
-    
-    
+    //set inidivual cells
     if (indexPath.row == 0) {
 //        [userNameTF setText:[NSString stringWithFormat:@"David Roberts"]];//temp will be dynamic
         //Test
@@ -486,11 +457,75 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     selectedIP = indexPath;
+    
     //tapped
     _isSelected = YES;
     
+    
+    
+
+//    if (isAlreadyInserted) {
+//        [self miniMizeThisRows:ar];
+//    } else {
+//        NSUInteger count = indexPath.row + 1;
+//        NSMutableArray *arCells = [NSMutableArray array];
+//        for (NSDictionary *dInner in ar) {
+//            [arCells addObject:[NSIndexPath indexPathForRow:count inSection:0]];
+//            [arrLast addObject:dInner];
+//            [arraylist insertObject:dInner atIndex:count++];
+//        }
+//        [_userTV insertRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationTop];
+//    }
+//    
+//    if (discardedItems.count > 0) {
+//        [_dataSource removeObjectsAtIndexes:discardedItems];
+//        [_userTV deleteRowsAtIndexPaths:arrIndex withRowAnimation:UITableViewRowAnimationNone];
+//    }
+    
+    
+    
     [_userTV deselectRowAtIndexPath:indexPath animated:YES];
 }
+
+- (void)expandMyTableViewWithIndex:(NSIndexPath *)indexPath {
+    
+    NSMutableArray *indexArray = [NSMutableArray array];
+     NSUInteger count = indexPath.row + 1;
+    
+    for (NSDictionary *userDict in _dataSource) {
+        [indexArray addObject:[NSIndexPath indexPathForRow:count inSection:0]];
+        
+    }
+     [_userTV insertRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationTop];
+    
+    
+}
+
+#pragma custom delegate method from UserPopup
+
+- (void)returnUserModel:(User *)user {
+    
+    DLog(@"user returned to UserVC: %@", user);
+    //ToDo add the returned user model to an array and use to pop the TableView
+    [_userArray addObject:user];//dict
+    //Test
+    [_dataSource addObject:user];
+    DLog(@"_dataSource here: %@", _dataSource);//note each user is a dict
+    
+    //initial displayed headers
+    initialsDict = @{@"Initials" : [user userInitials]};
+    [_initialsArray addObject:initialsDict];
+    DLog(@"initialsArray in UserVC: %@", _initialsArray);
+    
+}
+
+- (void)refreshView {
+
+    [_userTV reloadData];
+    DLog(@"ReloadData called");
+    //call contractTableView method
+}
+
 
 - (void)didReceiveMemoryWarning
 {

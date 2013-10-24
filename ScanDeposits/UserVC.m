@@ -133,6 +133,10 @@
     
     initialsDict = [NSMutableDictionary dictionary];
     
+    _expandedArray = [NSMutableArray array];
+    
+    userDetailsArray = [NSMutableArray array];
+    
     
     UIBarButtonItem *doneBtn = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(donePressed:)];
     [self.navigationController.navigationItem setRightBarButtonItem:doneBtn];
@@ -194,61 +198,6 @@
 //    
 //}
 
-
-//-(void)checkForExpansionOfZones:(NSIndexPath *)path
-//{
-//    NSMutableArray *zoneNames = [NSMutableArray array];
-//    
-//    _isSelected = YES;
-//    
-//    //Added to fix issue with arrows
-//    for (int i = 0; i < [self numberOfSectionsInTableView:self.userTV]; i++) {
-//        if ([[_dataSource objectAtIndex:i]count] == 1 && i != selectedIP.section) {
-//            [UIView animateWithDuration:0.3 animations:^{
-////                iv.transform = CGAffineTransformMakeRotation(0);imageView
-//            }];
-//        }
-//    }//close loop
-
-//    if (path) {
-//        NSMutableArray *indexArray = [[NSMutableArray alloc] init];
-
-//        if([[_dataSource objectAtIndex:selectedIP.section]count] == 1) {
-//            //iterate over filtered names
-//            for (int j = 0; j < _dataSource.count; j++) {
-//                _user = [_dataSource objectAtIndex:j];
-//                [zoneNames addObject:_user.userName];
-
-//                NSIndexPath *index = [NSIndexPath indexPathForRow: j+1 inSection:path.section]; // Note: We offset by 1 because we're not inserting the zeroth item as this is the Parking Authority.
-//                [indexArray addObject:index];
-
-//                [[_dataSource objectAtIndex:path.section]addObject:[zoneNames objectAtIndex:j]];//Add selected section to datasource subObj level
-//            }
-//            //Selected section and opening
-//            if (([_dataSource objectAtIndex:selectedIP.section]) && ([[_dataSource objectAtIndex:selectedIP.section]count] > 1)) {
-////                UITableViewCell *cell = [self.userTV cellForRowAtIndexPath:path];
-////                iv = cell.imageView;
-//                [UIView animateWithDuration:0.3 animations:^{
-//                    // Rotate the arrow
-////                    iv.transform = CGAffineTransformMakeRotation(M_PI_2);//rotate down
-//                }];
-//            }
-//            [_userTV insertRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationTop];
-//            
-//            //while still sections in tblView that are not selected close
-//            for (int i = 0; i < [self numberOfSectionsInTableView:self.userTV]; i++) {
-//                if (i != selectedIP.section) {//if not selected call
-////                    [self closeSectionIfOpen:i];//close
-//                }
-//            }
-//        }
-//        else {
-//            // Already expanded, close it up!
-////            [self closeSections:path];
-//        }
-//    }
-//}
-
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     
     NSString *titleName = [NSString stringWithFormat:@"User Details"];
@@ -266,7 +215,6 @@
     }
     
 }
-
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
     
@@ -357,23 +305,48 @@
         userNameLbl = (UILabel *)[cell.contentView viewWithTag:USER_NAME_LBL];
     }
     
+    
+    
     //After cell creation process only, show a tableView if the datasource is init with users
     
-    //init users here
-    if ([_dataSource count] >= 1) {
+    //Only enters here when dataSource is init when thr returnUserModel method is called on confirmBtn press
+    if ([userDetailsArray count] >= 1) {//[_dataSource count] {
         //retrieve the user for each section
-        _user = [_dataSource objectAtIndex:indexPath.section];//section as row is constantly 1
-        DLog(@"_dataSource array contains: %@ and Row: %i", _dataSource, indexPath.section);//different users, starts at 0 index
-       
-        //generate headers from user model initials property -> Moved to returnedUserModel instead
+//        _user = [_dataSource objectAtIndex:indexPath.section];//section as row is constantly 1
         
-        if (_initialsArray) {
+        
+        //all the meaningful data I need -> 3
+//        _userArray = [userDetailsArray objectAtIndex:indexPath.section];//assigning a string
+        _userArray = userDetailsArray; //assigning 3 objects
+        DLog(@"userArray contains: %@ in Section: %i", _userArray, indexPath.section);//different users, starts at 0 index   3 items in section: 0
+    
+        
+        //if expanded add extra items to array
+        if (_isSelected) {
+            //add array to dataSource if expanded
+            [_dataSource addObjectsFromArray:userDetailsArray];
+            DLog(@"dataSource now contains >>>: %@", _dataSource);
+            //retrieves an array and then a string
+            [userNameTF setText:[NSString stringWithFormat:@"%@", [[_dataSource objectAtIndex:indexPath.section]    objectAtIndex:indexPath.row]]];
+            
+            //set UILabel name with allKey values from _dataSource
+            NSArray *allKeys = [_dataSource objectAtIndex:indexPath.section];
+//            NSArray *allKeys = [userDict allKeys];
+            DLog(@"All keys: %@", allKeys);
+//            NSArray *allValues = [allKeys objectAtIndex:indexPath.section];
+//            [userNameLbl setText:[NSString stringWithFormat:@"%@", [allValues objectAtIndex:indexPath.section]]];
+            [userNameLbl setText:@"Initials"];//needs to be allKeys Again
+        }
+        
+        else //not expanded so just show 1 entry -> the initials
+        {
+            //Maybe add _dataSource here the inital string
             NSDictionary *entryDict = [_initialsArray objectAtIndex:indexPath.section];
-            DLog(@"entryDict>>>: %@", entryDict);
+            DLog(@"entryDict>>>: %@", entryDict);//Initial = P;
             [userNameTF setText:[NSString stringWithFormat:@"%@", entryDict[@"Initial"]]];
             //set UILabel name
             [userNameLbl setText:@"Initials"];
-        };
+        }
         
     }//close if
     else
@@ -381,38 +354,6 @@
         DLog(@"Dont display any data");//dont need this condition
     }
 
-    //If expanded only
-    if (_isExpanded) {
-        
-        //set inidivual cells
-        if (indexPath.row == 0) {
-    //        [userNameTF setText:[NSString stringWithFormat:@"David Roberts"]];//temp will be dynamic
-            //Test
-            [userNameTF setText:[NSString stringWithFormat:@"%@", [_user userName]]];//works
-            [userNameLbl setText:@"Name"];
-            //set keyboard type
-        }
-        else if (indexPath.row == 1)
-        {
-            [userNameTF setText:[NSString stringWithFormat:@"%@", [_user userEMail]]];//hard code here
-            [userNameLbl setText:@"Email"];//temp will be dynamic
-            //set keyboard type
-        }
-        else if (indexPath.row == 2)//probably just 3 cells as initials will be on section header
-        {
-            [userNameTF setText:[NSString stringWithFormat:@"%@", [_user userStaffID]]];//hard code here
-            [userNameLbl setText:@"Staff ID"];//temp will be dynamic
-            //set keyboard type
-        }
-
-        else //or leave as 3 entries
-        {
-            [userNameTF setText:[NSString stringWithFormat:@"%@", [_user userInitials]]];//hard code here
-            [userNameLbl setText:@"Initials"];//temp will be dynamic
-            //set keyboard type
-        }
-        
-    }//close if expanded
     
     return cell;
     
@@ -420,28 +361,45 @@
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     
+    //if we have something to display then display
     if ([_dataSource count] >= 1) {
-        return [_dataSource count];//minimum 1 or 2 oh watch section data 
-    }
+        
+        if (_isSelected) {
+            return [_dataSource count];
+        }
+        else //not expanded
+        {
+            return [_dataSource count];//or _dataSource in theory //should be 1
+        }
+        
+    }//close if
     else
     {
-        return 1;//minimum of 1
+        return 0;
     }
     
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
+    //if we have data
     if ([_dataSource count] >= 1) {
-//        return [[_dataSource objectAtIndex:section]count];//NOTE user doesnt have a count method
+        //then check if its expanded or not
+        if (_isSelected) {
+            return [[_dataSource objectAtIndex:section]count];
+        }
+        else //not expanded
+        {
+//            return [_dataSource count];//or initialsArray in theory
+            return 1;//or initialsArray in theory
+        }
         
-        //user doesnt have a count method
-        return 1; //for now
-    }
+    }//close if
+    
     else
     {
-//        return 3;//static not dynamic
-        return 0;//dont display anything
+        //no data yet so return 0;
+        return 0;
     }
     
 }
@@ -457,31 +415,36 @@
     if (_user) {
         
         //call expand here but also check for expansion 1st]
-        if (_isExpanded) {
+        if (_isSelected && _isExpanded) {
             [self collaspeMyTableViewWithIndex:selectedIP];
+            _isExpanded = NO;
         }
         else
         {
             //expand
-            [self expandMyTableViewWithIndex:selectedIP andUser:_user];
+            [self expandMyTableViewWithIndex:selectedIP andUser:_user];//crashing here
+             _isExpanded = YES;
         }
     }
-    
     
     [_userTV deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (void)expandMyTableViewWithIndex:(NSIndexPath *)indexPath andUser:(User *)user {
     
-    NSMutableArray *indexArray = [NSMutableArray array];
-     NSUInteger count = indexPath.row + 1;
+    NSMutableArray *indexArray = [[NSMutableArray alloc]init];
     
-    for (NSDictionary *userDict in _dataSource) {
-        [_dataSource addObject:[NSIndexPath indexPathForRow:count inSection:0]];
-        [_dataSource insertObject:user atIndex:count];
+    //populate expandArray with these entries
+    for (int i = 0; i < [_userTV numberOfRowsInSection:indexPath.section]; i++) {
+        NSIndexPath *index = [NSIndexPath indexPathForRow: i inSection:indexPath.section]; // Note: We offset by 1 because we're not inserting the zeroth item as this is the Parking Authority.//was i+1
+        [indexArray addObject:index];
+        DLog(@"userDetailsArray before: %@", userDetailsArray);
+        [[userDetailsArray objectAtIndex:indexPath.section]addObject:[_initialsArray objectAtIndex:indexPath.section]];//Add selected section to datasource subObj level
+        DLog(@"userDetailsArray after: %@", userDetailsArray);
     }
-     [_userTV insertRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationTop];
-
+//    [_userTV reloadData];
+     [_userTV insertRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationTop];//indexPath is wrong
+    
 }
 
 - (void)collaspeMyTableViewWithIndex:(NSIndexPath *)indexPath {
@@ -499,26 +462,37 @@
 //happens as a result of confirnBtn pressed in xib 
 - (void)returnUserModel:(User *)user {
     
-    //ToDo add the returned user model to an array and use to pop the TableView
-    [_userArray addObject:user];//dict
-    //Ad to the dataSource array
-    [_dataSource addObject:user];
-    DLog(@"_dataSource here in returnUserModel: %@", _dataSource);//note each user is a dict
+    //assign to _user
+    _user = user;
+    
+    
+    //Just take what I need the meaningful 3 user properties
+    [userDetailsArray addObject:[user userName]];
+    [userDetailsArray addObject:[user userEMail]];
+    [userDetailsArray addObject:[user userStaffID]];
+//    DLog(@"userDetailsArray **********: %@", userDetailsArray);//has what I need
+    //ok to add here
+    [_dataSource addObject:[user userInitials]];
+    DLog(@"_dataSource: %@", _dataSource);//should be initized
+    //and the title for header
+    //generate headers from user model initials property -> Moved to returnedUserModel instead NOPE HERE
+    [initialsDict setObject:[user userInitials] forKey:@"Initial"];//doesnt work in retunedUserModel?
+    [_initialsArray addObject:initialsDict];
+//    DLog(@"_initialsArray: %@", _initialsArray);//has what I need
+    
+    
+    //Add to the dataSource array
+//    [_dataSource addObject:user];
+//    DLog(@"_dataSource here in returnUserModel: %@", _dataSource);//note each user is a dict
+    
     //populate my initialDict here also (not cellForRow)
     //generate headers from user model initials property
-    [initialsDict setObject:[user userInitials] forKey:@"Initial"];
-    //Add to collection
-    [_initialsArray addObject:initialsDict];
-    DLog(@"initialsArray in returnUserModel: %@", _initialsArray)
-    
-//    [_userTV reloadData];
-//    DLog(@"ReloadData called in returnUserModel");
 }
 //may not need this delegate method
 - (void)refreshView {
 
     [_userTV reloadData];
-    DLog(@"ReloadData called in refreshView");
+//    DLog(@"ReloadData called in refreshView");
     //call contractTableView method
 }
 
@@ -528,5 +502,13 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
+//temp method
+- (IBAction)tblViewPress:(id)sender {
+    DLog(@"Add Another pressed");
+    //ToDO bring up a xib view
+    UserPopup *userPopup = [UserPopup loadFromNibNamed:@"UserPopup"];
+    //Add delegate if required -> its the UserPopup delegate set to self this UserVC class
+    [userPopup setUserDelegate:self];//correct
+    [userPopup showOnView:self.view];//test
+}
 @end

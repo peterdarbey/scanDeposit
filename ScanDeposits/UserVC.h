@@ -21,7 +21,10 @@
     NSIndexPath *selectedIP;
     NSMutableDictionary *initialsDict;
     
+    NSMutableArray *userDetailsArray;
+    
 }
+- (IBAction)tblViewPress:(id)sender;
 
 @property (strong, nonatomic) IBOutlet UITableView *userTV;
 @property (strong, nonatomic) NSMutableArray *userArray;
@@ -31,5 +34,7 @@
 @property (strong, nonatomic) User *user;
 @property BOOL isSelected;
 @property BOOL isExpanded;
+//array for expanding tbls
+@property (strong, nonatomic) NSMutableArray *expandedArray;
 
 @end

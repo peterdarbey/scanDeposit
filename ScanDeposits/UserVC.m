@@ -315,17 +315,30 @@
             NSDictionary *userDict = @{@"Name" : [_user userName], @"Email" : [_user userEMail], @"Staff ID" : [_user userStaffID]};//count 3
             
             DLog(@"userDict new: %@", userDict);
-            NSArray *allKeys = [userDict allKeys];
-            DLog(@"All keys: %@", allKeys);//correct
-//            NSArray *allValues = [userDict objectsForKeys:allKeys notFoundMarker:@"Not available"];
-            //May need to sort using NSComparator -> correct
-            NSComparisonResult compResult;
+            
+//            NSArray *allKeys = [userDict allKeys];
+//            DLog(@"All keys: %@", allKeys);//correct
+           
+            
+           //Sort items first
+            NSArray *replaceKeys = (NSArray *)[[userDict allKeys]sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2){
+                NSString *s1 = (NSString *) obj1;
+                NSString *s2 = (NSString *) obj2;
+                return [s1 compare:s2];
+            }];
+            
+            DLog(@"replaceKeys: %@", replaceKeys);//correct
+             NSArray *allValues = [userDict objectsForKeys:replaceKeys notFoundMarker:@"Not available"];
+            DLog(@"allValues: %@", allValues);//correct
+            
+//            //display the text for the TF from the collection //try user and just retrieve 3 values as above
+//             [userNameTF setText:[NSString stringWithFormat:@"%@", [[_dataSource objectAtIndex:indexPath.section]    objectAtIndex:indexPath.row]]];//allValues would work
             
             //display the text for the TF from the collection //try user and just retrieve 3 values as above
-             [userNameTF setText:[NSString stringWithFormat:@"%@", [[_dataSource objectAtIndex:indexPath.section]    objectAtIndex:indexPath.row]]];//allValues would work
+            [userNameTF setText:[NSString stringWithFormat:@"%@", [allValues objectAtIndex:indexPath.row]]];//allValues would work
             
             //display the text for the Label from the collection
-            [userNameLbl setText:[NSString stringWithFormat:@"%@", [allKeys objectAtIndex:indexPath.row]]];
+            [userNameLbl setText:[NSString stringWithFormat:@"%@", [replaceKeys objectAtIndex:indexPath.row]]];
             
         }
         
@@ -337,6 +350,18 @@
         }
         
     }//close if
+    
+        if ([_dataSource count] >= 1) {
+            
+            if (indexPath.row == 0) {
+                cell.backgroundColor = [UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0];//light white
+//                cell.accessoryView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"arrow.png"]];
+            }
+            else
+            {
+                cell.backgroundColor = [UIColor whiteColor];
+            }
+        }//close if
     
     return cell;
     
@@ -422,7 +447,7 @@
     //check that its not open
     if([[_dataSource objectAtIndex:selectedIP.section]count] == 1) {
         
-        for (int i = 0; i < 3; i++) { //[_userArray count]
+        for (int i = 0; i < 3; i++) { //[_userArray count] shoulb be +1 count 4
             NSIndexPath *index = [NSIndexPath indexPathForRow: i inSection:selectedIP.section];//offset by 1
             [indexArray addObject:index];
 //             [[_dataSource objectAtIndex:selectedIP.section]addObject:_user];//Add selected section to datasource subObj level
@@ -432,23 +457,6 @@
          [_userTV insertRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationBottom];
         
     }
-    
-    
-//    //add array to dataSource if selected
-//    for (int i = 0; i < [_userTV numberOfRowsInSection:selectedIP.section]; i++) {
-//        NSIndexPath *index = [NSIndexPath indexPathForRow: i+1 inSection:indexPath.section]; // Note: We offset by 1 because we're not inserting the zeroth item as this is the Parking Authority.//was i+1
-//        [indexArray addObject:index];
-//        DLog(@"_dataSource before: %@", _dataSource);
-//        [[_dataSource objectAtIndex:indexPath.section]addObject:_user];//Add selected section to datasource subObj level
-//            //add array to dataSource if selected
-////        [[_dataSource objectAtIndex:indexPath.section]addObject:[_user userName]];//all user details here
-////        [[_dataSource objectAtIndex:indexPath.section]addObject:[_user userEMail]];
-////        [[_dataSource objectAtIndex:indexPath.section]addObject:[_user userStaffID]];
-//        DLog(@"_dataSource after: %@", _dataSource);
-//    }
-//
-//     [_userTV insertRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationTop];//indexPath is wrong
-    
 }
 
 - (void)collaspeMyTableViewWithIndex:(NSIndexPath *)indexPath {
@@ -487,13 +495,13 @@
 //    [array addObject:[user userName]];
 //    [array addObject:[user userEMail]];
 //    [array addObject:[user userStaffID]];
+//    [_userArray addObject:array];
     
     [_userArray addObject:[user userName]];
     [_userArray addObject:[user userEMail]];
     [_userArray addObject:[user userStaffID]];
     //isAdmin
-    //TEST
-//    [_userArray addObject:array];
+
     DLog(@"_userArray____: %@", _userArray);
     
     //Construct an array to populate the headers with initials

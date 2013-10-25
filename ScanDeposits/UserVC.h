@@ -24,7 +24,6 @@
     NSMutableArray *userDetailsArray;
     
 }
-- (IBAction)tblViewPress:(id)sender;
 
 @property (strong, nonatomic) IBOutlet UITableView *userTV;
 @property (strong, nonatomic) NSMutableArray *userArray;

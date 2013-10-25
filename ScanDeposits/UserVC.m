@@ -310,40 +310,52 @@
     //After cell creation process only, show a tableView if the datasource is init with users
     
     //Only enters here when dataSource is init when thr returnUserModel method is called on confirmBtn press
-    if ([userDetailsArray count] >= 1) {//[_dataSource count] {
+    if ([_dataSource count] >= 1) {//[_dataSource count] {
         //retrieve the user for each section
 //        _user = [_dataSource objectAtIndex:indexPath.section];//section as row is constantly 1
         
         
         //all the meaningful data I need -> 3
 //        _userArray = [userDetailsArray objectAtIndex:indexPath.section];//assigning a string
-        _userArray = userDetailsArray; //assigning 3 objects
+        [_userArray addObject:[userDetailsArray objectAtIndex:indexPath.section]];//assigning 3 objects was
+//        _userArray = userDetailsArray;
         DLog(@"userArray contains: %@ in Section: %i", _userArray, indexPath.section);//different users, starts at 0 index   3 items in section: 0
-    
+//        [[_dataSource objectAtIndex:indexPath.section]addObject:_user];
+        DLog(@"test dataSource now -> %@", _dataSource);
         
         //if expanded add extra items to array
         if (_isSelected) {
             //add array to dataSource if expanded
-            [_dataSource addObjectsFromArray:userDetailsArray];
-            DLog(@"dataSource now contains >>>: %@", _dataSource);
+//            [[_dataSource objectAtIndex:indexPath.section]addObject:_user];
+//            [[_dataSource objectAtIndex:indexPath.section]addObject:[_user userName]];//all user details here
+//            [[_dataSource objectAtIndex:indexPath.section]addObject:[_user userEMail]];
+//            [[_dataSource objectAtIndex:indexPath.section]addObject:[_user userStaffID]];
+            
+//            [_dataSource addObjectsFromArray:userDetailsArray];//userDetailsArray user represents a section
+            DLog(@"dataSource now contains->: %@", _dataSource);
             //retrieves an array and then a string
-            [userNameTF setText:[NSString stringWithFormat:@"%@", [[_dataSource objectAtIndex:indexPath.section]    objectAtIndex:indexPath.row]]];
+//            [userNameTF setText:[NSString stringWithFormat:@"%@", [[_dataSource objectAtIndex:indexPath.section]    objectAtIndex:indexPath.row]]];
+             [userNameTF setText:[NSString stringWithFormat:@"%@", [[_dataSource objectAtIndex:indexPath.section]    objectAtIndex:indexPath.row]]];
             
             //set UILabel name with allKey values from _dataSource
-            NSArray *allKeys = [_dataSource objectAtIndex:indexPath.section];
+//            NSDictionary *userDict = (NSDictionary *)[_dataSource objectAtIndex:indexPath.section];
 //            NSArray *allKeys = [userDict allKeys];
-            DLog(@"All keys: %@", allKeys);
-//            NSArray *allValues = [allKeys objectAtIndex:indexPath.section];
-//            [userNameLbl setText:[NSString stringWithFormat:@"%@", [allValues objectAtIndex:indexPath.section]]];
-            [userNameLbl setText:@"Initials"];//needs to be allKeys Again
+//            DLog(@"All keys: %@", allKeys);
+//            NSArray *allValues = [userDict allValues];
+//            [userNameLbl setText:[NSString stringWithFormat:@"%@", [allValues objectAtIndex:indexPath.row]]];
+            
+            NSArray *array = (NSArray *)[_dataSource objectAtIndex:indexPath.section];
+//            NSArray *allValues = [array objectAtIndex:indexPath.section];
+            [userNameLbl setText:[NSString stringWithFormat:@"%@", [array objectAtIndex:indexPath.row]]];
+//            [userNameLbl setText:@"Initials"];//needs to be allKeys Again
         }
         
         else //not expanded so just show 1 entry -> the initials
         {
             //Maybe add _dataSource here the inital string
-            NSDictionary *entryDict = [_initialsArray objectAtIndex:indexPath.section];
+            NSDictionary *entryDict = [_initialsArray objectAtIndex:indexPath.row];
             DLog(@"entryDict>>>: %@", entryDict);//Initial = P;
-            [userNameTF setText:[NSString stringWithFormat:@"%@", entryDict[@"Initial"]]];
+            [userNameTF setText:[NSString stringWithFormat:@"%@", [[_dataSource objectAtIndex:indexPath.section]objectAtIndex:indexPath.row]]];//yes
             //set UILabel name
             [userNameLbl setText:@"Initials"];
         }
@@ -364,18 +376,19 @@
     //if we have something to display then display
     if ([_dataSource count] >= 1) {
         
-        if (_isSelected) {
-            return [_dataSource count];
-        }
-        else //not expanded
-        {
-            return [_dataSource count];//or _dataSource in theory //should be 1
-        }
+//        if (_isSelected) {
+//            return [_dataSource count];//
+//        }
+//        else //not expanded
+//        {
+//            return [_dataSource count];//or _dataSource in theory //should be 1
+//        }
+        return [_dataSource count];
         
     }//close if
     else
     {
-        return 0;
+        return 1;//on launch show the button
     }
     
 }
@@ -419,7 +432,7 @@
             [self collaspeMyTableViewWithIndex:selectedIP];
             _isExpanded = NO;
         }
-        else
+        else if (_isSelected)
         {
             //expand
             [self expandMyTableViewWithIndex:selectedIP andUser:_user];//crashing here
@@ -430,17 +443,22 @@
     [_userTV deselectRowAtIndexPath:indexPath animated:YES];
 }
 
+//This method addds the objects to the dataSource not the cellForRow
 - (void)expandMyTableViewWithIndex:(NSIndexPath *)indexPath andUser:(User *)user {
     
     NSMutableArray *indexArray = [[NSMutableArray alloc]init];
     
-    //populate expandArray with these entries
-    for (int i = 0; i < [_userTV numberOfRowsInSection:indexPath.section]; i++) {
-        NSIndexPath *index = [NSIndexPath indexPathForRow: i inSection:indexPath.section]; // Note: We offset by 1 because we're not inserting the zeroth item as this is the Parking Authority.//was i+1
+    //populate expandArray with these entries indexArray not correct as is the number or rows
+    for (int i = 0; i < [_userTV numberOfRowsInSection:selectedIP.section]; i++) {
+        NSIndexPath *index = [NSIndexPath indexPathForRow: i+1 inSection:indexPath.section]; // Note: We offset by 1 because we're not inserting the zeroth item as this is the Parking Authority.//was i+1
         [indexArray addObject:index];
-        DLog(@"userDetailsArray before: %@", userDetailsArray);
-        [[userDetailsArray objectAtIndex:indexPath.section]addObject:[_initialsArray objectAtIndex:indexPath.section]];//Add selected section to datasource subObj level
-        DLog(@"userDetailsArray after: %@", userDetailsArray);
+        DLog(@"_dataSource before: %@", _dataSource);
+//        [[_dataSource objectAtIndex:indexPath.section]addObject:_user];//Add selected section to datasource subObj level
+               
+        [[_dataSource objectAtIndex:indexPath.section]addObject:[_user userName]];//all user details here
+//        [[_dataSource objectAtIndex:indexPath.section]addObject:[_user userEMail]];
+//        [[_dataSource objectAtIndex:indexPath.section]addObject:[_user userStaffID]];
+        DLog(@"_dataSource after: %@", _dataSource);
     }
 //    [_userTV reloadData];
      [_userTV insertRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationTop];//indexPath is wrong
@@ -470,10 +488,18 @@
     [userDetailsArray addObject:[user userName]];
     [userDetailsArray addObject:[user userEMail]];
     [userDetailsArray addObject:[user userStaffID]];
-//    DLog(@"userDetailsArray **********: %@", userDetailsArray);//has what I need
+    //isAdmin
+    //try user and just retrieve 3 values as above
+//    [userDetailsArray addObject:user];
+//    [_userArray addObject:user];
+    DLog(@"userDetailsArray **********: %@", userDetailsArray);//has what I need
     //ok to add here
-    [_dataSource addObject:[user userInitials]];
-    DLog(@"_dataSource: %@", _dataSource);//should be initized
+    
+    NSMutableArray *initArray = [NSMutableArray array];
+    [initArray addObject:[user userInitials]];
+    [_dataSource addObject:initArray];
+    DLog(@"_dataSource with initArray: %@", _dataSource);//should be initized
+    
     //and the title for header
     //generate headers from user model initials property -> Moved to returnedUserModel instead NOPE HERE
     [initialsDict setObject:[user userInitials] forKey:@"Initial"];//doesnt work in retunedUserModel?
@@ -501,14 +527,5 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-//temp method
-- (IBAction)tblViewPress:(id)sender {
-    DLog(@"Add Another pressed");
-    //ToDO bring up a xib view
-    UserPopup *userPopup = [UserPopup loadFromNibNamed:@"UserPopup"];
-    //Add delegate if required -> its the UserPopup delegate set to self this UserVC class
-    [userPopup setUserDelegate:self];//correct
-    [userPopup showOnView:self.view];//test
 }
 @end

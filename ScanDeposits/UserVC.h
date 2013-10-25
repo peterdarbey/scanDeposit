@@ -19,21 +19,18 @@
 @interface UserVC : UIViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UserModelDelegate>
 {
     NSIndexPath *selectedIP;
-    NSMutableDictionary *initialsDict;
     
-    NSMutableArray *userDetailsArray;
+//    NSDictionary *userDict;
     
 }
 
 @property (strong, nonatomic) IBOutlet UITableView *userTV;
 @property (strong, nonatomic) NSMutableArray *userArray;
 @property (strong, nonatomic) NSString *nameString, *emailString, *staffIDString;
-@property (strong, nonatomic) NSMutableArray *initialsArray;
 @property (strong, nonatomic) NSMutableArray *dataSource;
 @property (strong, nonatomic) User *user;
 @property BOOL isSelected;
 @property BOOL isExpanded;
-//array for expanding tbls
-@property (strong, nonatomic) NSMutableArray *expandedArray;
+
 
 @end

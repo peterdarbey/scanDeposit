@@ -77,6 +77,68 @@
 //    }
 
     
+    
+    
+    
+    
+    
+    
+    
+    
+//    //Only enters here when dataSource is init when thr returnUserModel method is called on confirmBtn press
+//    if ([_dataSource count] >= 1) {//[_dataSource count] {
+//        //retrieve the user for each section
+//        //        _user = [_dataSource objectAtIndex:indexPath.section];//section as row is constantly 1
+//        
+//        
+//        //all the meaningful data I need -> 3
+//        //        _userArray = [userDetailsArray objectAtIndex:indexPath.section];//assigning a string
+//        [_userArray addObject:[userDetailsArray objectAtIndex:indexPath.section]];//assigning 3 objects was
+//        //        _userArray = userDetailsArray;
+//        DLog(@"userArray contains: %@ in Section: %i", _userArray, indexPath.section);//different users, starts at 0 index   3 items in section: 0
+//        //        [[_dataSource objectAtIndex:indexPath.section]addObject:_user];
+//        DLog(@"test dataSource now -> %@", _dataSource);
+//        
+//        //if expanded add extra items to array
+//        if (_isSelected) {
+//            //add array to dataSource if expanded
+//            //            [[_dataSource objectAtIndex:indexPath.section]addObject:_user];
+//            //            [[_dataSource objectAtIndex:indexPath.section]addObject:[_user userName]];//all user details here
+//            //            [[_dataSource objectAtIndex:indexPath.section]addObject:[_user userEMail]];
+//            //            [[_dataSource objectAtIndex:indexPath.section]addObject:[_user userStaffID]];
+//            
+//            //            [_dataSource addObjectsFromArray:userDetailsArray];//userDetailsArray user represents a section
+//            DLog(@"dataSource now contains->: %@", _dataSource);
+//            //retrieves an array and then a string
+//            //            [userNameTF setText:[NSString stringWithFormat:@"%@", [[_dataSource objectAtIndex:indexPath.section]    objectAtIndex:indexPath.row]]];
+//            [userNameTF setText:[NSString stringWithFormat:@"%@", [[_dataSource objectAtIndex:indexPath.section]    objectAtIndex:indexPath.row]]];
+//            
+//            //set UILabel name with allKey values from _dataSource
+//            //            NSDictionary *userDict = (NSDictionary *)[_dataSource objectAtIndex:indexPath.section];
+//            //            NSArray *allKeys = [userDict allKeys];
+//            //            DLog(@"All keys: %@", allKeys);
+//            //            NSArray *allValues = [userDict allValues];
+//            //            [userNameLbl setText:[NSString stringWithFormat:@"%@", [allValues objectAtIndex:indexPath.row]]];
+//            
+//            NSArray *array = (NSArray *)[_dataSource objectAtIndex:indexPath.section];
+//            //            NSArray *allValues = [array objectAtIndex:indexPath.section];
+//            [userNameLbl setText:[NSString stringWithFormat:@"%@", [array objectAtIndex:indexPath.row]]];
+//            //            [userNameLbl setText:@"Initials"];//needs to be allKeys Again
+//        }
+//        
+//        else //not expanded so just show 1 entry -> the initials
+//        {
+//            //Maybe add _dataSource here the inital string
+//            NSDictionary *entryDict = [_initialsArray objectAtIndex:indexPath.row];
+//            DLog(@"entryDict>>>: %@", entryDict);//Initial = P;
+//            [userNameTF setText:[NSString stringWithFormat:@"%@", [[_dataSource objectAtIndex:indexPath.section]objectAtIndex:indexPath.row]]];//yes
+//            //set UILabel name
+//            [userNameLbl setText:@"Initials"];
+//        }
+//        
+//    }//close if
+
+    
 }
 
 @end

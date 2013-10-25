@@ -35,7 +35,7 @@ static BOOL __isAdmin;
     //init and assign the private properties 
     _name = dict[@"Name"];
     _eMail = dict[@"Email"];
-    _staffID = dict[@"StaffID"];
+    _staffID = dict[@"Staff ID"];
     _initials = dict[@"Initials"];//test
     __isAdmin = [dict[@"Adminstrator"] boolValue];//assign to static variable, NO as default unless admin
     _internalDict = dict;
@@ -49,7 +49,7 @@ static BOOL __isAdmin;
     if (self) {
         //construct a dict
         NSDictionary *dict = @{@"Name" : name, @"Email" : eMail,
-                               @"StaffID" : staffId, @"Initials" : initials, @"Adminstrator" : [NSNumber numberWithBool:isAdmin]};//@(NO)};test <- //@YES
+                               @"Staff ID" : staffId, @"Initials" : initials, @"Adminstrator" : [NSNumber numberWithBool:isAdmin]};//@(NO)};test <- //@YES
         
 //        __isAdmin = isAdmin;//could be smarter
         

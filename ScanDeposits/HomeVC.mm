@@ -163,12 +163,13 @@
     [scanBtn addTarget:self action:@selector(scanBtnTapped:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:scanBtn];
     
+    //How to use the app wording to be revised 
     UITextView *helpTV = [[UITextView alloc]initWithFrame:CGRectMake(10, 54, self.view.frame.size.width -20, 200)];
     [helpTV setText:@"How to use this app\n\nPlease scan the external device (ATM) barcode.\nThen scan the bag barcode and enter the amount for each deposit.\nFinally press proceed to confirm email"];
     
     [helpTV setBackgroundColor:[UIColor clearColor]];
     [helpTV setFont:[UIFont systemFontOfSize:18]];
-    [helpTV setTextColor:[UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0]];//darkGray
+    [helpTV setTextColor:[UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0]];//blue
     [helpTV setEditable:NO];
     [helpTV setUserInteractionEnabled:NO];
     [helpTV setTextAlignment:NSTextAlignmentCenter];

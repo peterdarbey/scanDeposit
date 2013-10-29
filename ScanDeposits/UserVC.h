@@ -20,6 +20,8 @@
 {
     NSIndexPath *selectedIP;
     
+    UIImageView *iv;
+    
 //    NSDictionary *userDict;
     
 }
@@ -29,6 +31,9 @@
 @property (strong, nonatomic) NSString *nameString, *emailString, *staffIDString;
 @property (strong, nonatomic) NSMutableArray *dataSource;
 @property (strong, nonatomic) User *user;
+
+@property (strong, nonatomic) NSMutableArray *eachUserArray;
+
 @property BOOL isSelected;
 @property BOOL isExpanded;
 

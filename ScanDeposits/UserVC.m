@@ -129,6 +129,7 @@
     
     _dataSource = [NSMutableArray array];
     
+    _eachUserArray = [NSMutableArray array];
     
     UIBarButtonItem *doneBtn = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(donePressed:)];
     [self.navigationController.navigationItem setRightBarButtonItem:doneBtn];
@@ -246,6 +247,20 @@
     }
 }
 
+- (NSArray *)sortCollectionWithDictionary:(NSDictionary *)dict {
+    
+    //Sort items first
+    NSArray *replaceKeys = (NSArray *)[[dict allKeys]sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2){
+        NSString *s1 = (NSString *) obj1;
+        NSString *s2 = (NSString *) obj2;
+        return [s1 compare:s2];
+    }];
+    
+    DLog(@"replaceKeys: %@", replaceKeys);
+    return replaceKeys;
+    
+}
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
@@ -332,14 +347,17 @@
             
 //            //display the text for the TF from the collection //try user and just retrieve 3 values as above
 //             [userNameTF setText:[NSString stringWithFormat:@"%@", [[_dataSource objectAtIndex:indexPath.section]    objectAtIndex:indexPath.row]]];//allValues starts 1 index up? work
-            
+            	
             
             //display the text for the TF from the collection //try user and just retrieve 3 values as above
             [userNameTF setText:[NSString stringWithFormat:@"%@", [allValues objectAtIndex:indexPath.row]]];//allValues would work                      //tried _userArray
             
             //display the text for the Label from the collection
             [userNameLbl setText:[NSString stringWithFormat:@"%@", [replaceKeys objectAtIndex:indexPath.row]]];
-            
+         
+            //works but not sure about the keys
+//            [userNameTF setText:[NSString stringWithFormat:@"%@",[[_dataSource objectAtIndex:selectedIP.section]objectAtIndex:indexPath.row]]];//works problem is the keys
+           
         }
         
         else //not expanded so just show 1 entry -> the initials
@@ -452,6 +470,7 @@
             NSIndexPath *index = [NSIndexPath indexPathForRow: i+1 inSection:selectedIP.section];//offset by 1
             [indexArray addObject:index];
 //             [[_dataSource objectAtIndex:selectedIP.section]addObject:_user];//Add selected section to datasource subObj level
+            //what my data structure is
             [[_dataSource objectAtIndex:selectedIP.section]addObject:[_userArray objectAtIndex:i]];//tried indexPath.row]
             DLog(@"_userArray: %@", _userArray);//im losing the 1st item from userDict?
         }

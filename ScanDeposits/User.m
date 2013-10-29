@@ -18,6 +18,8 @@
 @property (strong, nonatomic) NSString *eMail;
 @property (strong, nonatomic) NSString *staffID;
 @property (strong, nonatomic) NSString *initials;//for section header
+
+@property (strong, nonatomic) NSString *password;
 //@property BOOL adminstrator;
 
 @property (strong, nonatomic) NSDictionary *internalDict;
@@ -38,18 +40,26 @@ static BOOL __isAdmin;
     _staffID = dict[@"Staff ID"];
     _initials = dict[@"Initials"];//test
     __isAdmin = [dict[@"Adminstrator"] boolValue];//assign to static variable, NO as default unless admin
+    //if admin they have a password so assign to ivar/property
+    if (__isAdmin) {
+        _password = dict[@"Password"];
+    }
+    else //not admin so set to nil
+    {
+        _password = nil;
+    }
     _internalDict = dict;
     
 }
 
 - (id)initWithName:(NSString *)name eMail:(NSString *)eMail staffID:(NSString *)staffId
-                                 Initials:(NSString *)initials isAdmin:(BOOL)isAdmin {
+          Initials:(NSString *)initials isAdmin:(BOOL)isAdmin withPassword:(NSString *)password {
     
     self = [super init];
     if (self) {
         //construct a dict
         NSDictionary *dict = @{@"Name" : name, @"Email" : eMail,
-                               @"Staff ID" : staffId, @"Initials" : initials, @"Adminstrator" : [NSNumber numberWithBool:isAdmin]};//@(NO)};test <- //@YES
+                               @"Staff ID" : staffId, @"Initials" : initials, @"Adminstrator" : [NSNumber numberWithBool:isAdmin], @"Password" : password};//@(NO)};test <- //@YES
         
 //        __isAdmin = isAdmin;//could be smarter
         
@@ -82,10 +92,13 @@ static BOOL __isAdmin;
     
     return _initials;
 }
+- (NSString *)userPassword {
+    return _password;
+}
 
 - (int)count {
-//    return [_internalDict count];
-    return 4;
+    return [_internalDict count];
+//    return 4;
 }
 
 @end

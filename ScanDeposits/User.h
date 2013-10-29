@@ -13,7 +13,7 @@
     
 }
 
-- (id)initWithName:(NSString *)name eMail:(NSString *)eMail staffID:(NSString *)staffId Initials:(NSString *)initials isAdmin:(BOOL)isAdmin;
+- (id)initWithName:(NSString *)name eMail:(NSString *)eMail staffID:(NSString *)staffId Initials:(NSString *)initials isAdmin:(BOOL)isAdmin withPassword:(NSString *)password;
 
 //getters
 
@@ -23,6 +23,7 @@
 - (NSString *)userEMail;
 - (NSString *)userStaffID;
 - (NSString *)userInitials;
+- (NSString *)userPassword;
 - (int)count;
 
 @end

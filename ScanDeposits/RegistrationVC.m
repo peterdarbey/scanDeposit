@@ -131,13 +131,27 @@
             _staffID = textField.text;
             
             if (_name && _eMail && _staffID && _initials) { //should work fine
-                
+                //assign to adminPassword
+                _adminPassword = [_staffID stringByAppendingString:_initials];
                 //create user model set YES as its the Administrator settings
-                User *user = [[User alloc]initWithName:_name eMail:_eMail
-                                               staffID:_staffID Initials:_initials isAdmin:YES];
+                //only allow to admin users
+                if ([_adminArray count] <= 2) {//shoul be greater than doesnt work cause array is below fix with capacity
                 
-                //Add the user to the _adminArray
-                [_adminArray addObject:user];
+                    User *user = [[User alloc]initWithName:_name eMail:_eMail
+                                                   staffID:_staffID Initials:_initials
+                                                   isAdmin:YES withPassword:_adminPassword];                    
+                    //Create a local array
+                    NSMutableArray *localUserArray = [NSMutableArray array];
+                    [localUserArray addObject:[user userName]];
+                    [localUserArray addObject:[user userEMail]];
+                    [localUserArray addObject:[user userStaffID]];
+                    [localUserArray addObject:[user userPassword]];
+                   //Add to the overAll collection
+                    [_adminArray addObject:localUserArray];
+                    DLog(@"_adminArray__: %@ with Count: %i ", _adminArray, [_adminArray count]);
+                    
+                }//close if
+                
                 //reloadData
                 [_registerTV reloadData];
             }
@@ -238,7 +252,7 @@
         stringArray = [NSMutableArray array];
     
     //ToDo init admins array with the associated admins if exist from file
-    _adminArray = [NSMutableArray array];
+    _adminArray = [NSMutableArray arrayWithCapacity:2];
     
      [_registerTV setBackgroundColor:[UIColor clearColor]];
      [_registerTV setBackgroundView:[[UIImageView alloc]initWithImage:
@@ -483,18 +497,33 @@
         
     }
     
-    if ([_adminArray count] > 1) {
+    //create the array of label values for fields
+    NSArray *array = @[@"Name", @"Email", @"Staff ID", @"Admin Password"];
+    //always remains constant
+    [userLbl setText:[NSString stringWithFormat:@"%@", [array objectAtIndex:indexPath.row]]];
+    
+    if ([_adminArray count] > 1) { //maybe >=1
         //pop tblView with the admin details
-        [userLbl setText:@"Name"];
-        [nameTF setText:[NSString stringWithFormat:@"David Roberts"]];//temp will be dynamic
+
+        //retrieve the admin at the specified index
+//        NSMutableArray *array = [_adminArray objectAtIndex:indexPath.section];
+        
+//        [userLbl setText:[NSString stringWithFormat:@"%@", [array objectAtIndex:indexPath.row]]];
+        [nameTF setText:[NSString stringWithFormat:@"%@", [[_adminArray objectAtIndex:indexPath.section]objectAtIndex:indexPath.row]]];
+        DLog(@"_adminArray in cellForRowAtIndex: %@", _adminArray);
+        
     }
     else
     {
         //use the stored plist of values
+        //populate here also
+//        [userLbl setText:[NSString stringWithFormat:@"%@", [array objectAtIndex:indexPath.row]]];
+        
+         [nameTF setPlaceholder:[NSString stringWithFormat:@"Auto generated password"]];
     }
     
     if (indexPath.row == 0) { //indexPath.section && //actually section doesnt matter
-        [userLbl setText:@"Name"];
+//        [userLbl setText:@"Name"];
 //        [nameTF setText:[NSString stringWithFormat:@"David Roberts"]];//temp will be dynamic
         [nameTF setPlaceholder:[NSString stringWithFormat:@"Enter Name"]];//temp will be dynamic
         //set keyboard type
@@ -507,7 +536,7 @@
     }
     else if (indexPath.row == 1)
     {
-        [userLbl setText:@"Email"];//temp will be dynamic
+//        [userLbl setText:@"Email"];//temp will be dynamic
 //        [nameTF setText:[NSString stringWithFormat:@"david.h.roberts"]];//hard code here
         [nameTF setPlaceholder:[NSString stringWithFormat:@"Enter Email"]];
         //set keyboard type
@@ -520,7 +549,7 @@
     }
     else if (indexPath.row == 2)
     {
-        [userLbl setText:@"Staff ID"];//temp will be dynamic
+//        [userLbl setText:@"Staff ID"];//temp will be dynamic
 //        [nameTF setText:[NSString stringWithFormat:@"Adminstrator"]];//hard code here
         [nameTF setPlaceholder:[NSString stringWithFormat:@"Staff ID"]];
         //set keyboard type
@@ -533,16 +562,16 @@
     }
     else // Password field
     {
-        [userLbl setText:@"Admin password"];
+//        [userLbl setText:@"Admin password"];
         //first time wont exist
-        if (_staffID && _initials) {
-            NSString *passwordString = [_staffID stringByAppendingString:_initials];
-            [nameTF setText:[NSString stringWithFormat:@"%@", passwordString]];
-            DLog(@"passwordString: %@", passwordString);
+        if (_adminPassword && [_adminArray count] > 1) {
+//            [nameTF setText:[NSString stringWithFormat:@"%@", passwordString]];
+            [nameTF setText:[NSString stringWithFormat:@"%@", [[_adminArray objectAtIndex:indexPath.section]objectAtIndex:indexPath.row]]];//change to indexPath: 0 perhaps
+            DLog(@"_adminArray: %@", _adminArray);
         }
         else
         {
-            [nameTF setPlaceholder:[NSString stringWithFormat:@"Password is initials after Staff ID"]];
+            [nameTF setPlaceholder:[NSString stringWithFormat:@"Auto generated password"]];
         }
         
     }

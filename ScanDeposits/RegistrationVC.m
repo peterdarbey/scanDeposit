@@ -125,9 +125,10 @@
     [_registerTV setDelegate:self];
     [_registerTV setDataSource:self];
     
-//    UIBarButtonItem *doneBtn = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(donePressed:)];
+    UIBarButtonItem *doneBtn = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(donePressed:)];
 //    [self.navigationController.navigationItem setRightBarButtonItem:doneBtn];
     
+    [self.navigationItem setRightBarButtonItem:doneBtn];//Mmm worked
 
 }
 
@@ -168,86 +169,86 @@
         UIView *topView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, _registerTV.frame.size.width, 84)];//130
         [topView setBackgroundColor:[UIColor clearColor]];
         
-//        //construct an innerView for the admin section
-//        UIView *innerView = [[UIView alloc]initWithFrame:CGRectMake(10, 77, _registerTV.frame.size.width -20, 80)];
-//        [innerView setBackgroundColor:[UIColor colorWithRed:200.0/255.0 green:200.0/255.0 blue:200.0/255.0 alpha:1.0]];//dark white;
-//        innerView.layer.cornerRadius = 5.0;
-//        
-//        //construct a UILabel for the Admin section
-//        UILabel *adminLbl = [[UILabel alloc]initWithFrame:CGRectMake(20, 51.5, 180, 25)];
-//        [adminLbl setText:@"Administrator Details"];
-//        [adminLbl setFont:[UIFont fontWithName:@"Helvetica" size:17]];
-////        [adminLbl setFont:[UIFont systemFontOfSize:17]];
-//        [adminLbl setTextColor:[UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0]];//darkGray
-//        [adminLbl setBackgroundColor:[UIColor clearColor]];
-//        adminLbl.shadowColor = [UIColor whiteColor];
-//        adminLbl.shadowOffset = CGSizeMake(0.0, 1.0);
-//        [topView addSubview:adminLbl];
-//        
-//        
-//        //construct a UILabel for text
-//        UILabel *branchNSCLbl = [[UILabel alloc]initWithFrame:CGRectMake(10, 10, 120, 25)];
-//        [branchNSCLbl setBackgroundColor:[UIColor clearColor]];
-//        [branchNSCLbl setFont:[UIFont systemFontOfSize:17]];
-//        branchNSCLbl.textAlignment = NSTextAlignmentLeft;
-//        branchNSCLbl.textColor = [UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0];//darkGray
-//        branchNSCLbl.shadowColor = [UIColor whiteColor];
-//        branchNSCLbl.shadowOffset = CGSizeMake(1.0, 1.0);
-//        [branchNSCLbl setText:[NSString stringWithFormat:@"Branch NSC"]];
-//        
-//        [branchNSCLbl setUserInteractionEnabled:NO];
-//        //add to view
-//        [innerView addSubview:branchNSCLbl];
-//        
-//        
-//        //Construct another label for amount
-//        UILabel *offCounterLbl = [[UILabel alloc]initWithFrame:CGRectMake(10, 45, 120, 25)];
-//        offCounterLbl.textAlignment = NSTextAlignmentLeft;
-//        [offCounterLbl setFont:[UIFont systemFontOfSize:17]];
-//        offCounterLbl.textColor = [UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0];//darkGray
-//        offCounterLbl.shadowColor = [UIColor whiteColor];
-//        offCounterLbl.shadowOffset = CGSizeMake(1.0, 1.0);//better
-//        offCounterLbl.backgroundColor = [UIColor clearColor];
-//        [offCounterLbl setUserInteractionEnabled:NO];
-//        //retrieve the total bag amount from the class method here
-//        [offCounterLbl setText:[NSString stringWithFormat:@"Off-Counter"]];
-//        //add to innerView
-//        [innerView addSubview:offCounterLbl];
-//        
-//        
-//        //construct a UITextField for branch NSC
-//        UITextField *branchNSCTF = [[UITextField alloc]initWithFrame:CGRectMake(120, 10, 180, 25)];
-//        [branchNSCTF setBackgroundColor:[UIColor clearColor]];
-//        [branchNSCTF setDelegate:self];
-//        [branchNSCTF setFont:[UIFont systemFontOfSize:15]];
-//        branchNSCTF.textAlignment = NSTextAlignmentLeft;
-//        branchNSCTF.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-//        branchNSCTF.textColor = [UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0];//blue
-//        [branchNSCTF setUserInteractionEnabled:NO];
-//        [branchNSCTF setText:[NSString stringWithFormat:@"Branch Value"]];//pop dynamically
-//        //set TextField delegate
-//        [branchNSCTF setDelegate:self];
-//        
-//        //add to view
-//        [innerView addSubview:branchNSCTF];
-//        
-//        //construct a 2nd TextField
-//        UITextField *offCounterTF = [[UITextField alloc]initWithFrame:CGRectMake(120, 45, 180, 25)];
-//        [offCounterTF setBackgroundColor:[UIColor clearColor]];
-//        [offCounterTF setDelegate:self];
-//        [offCounterTF setFont:[UIFont systemFontOfSize:15]];
-//        offCounterTF.textAlignment = NSTextAlignmentLeft;
-//        offCounterTF.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-//        offCounterTF.textColor = [UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0];//blue
-//        [offCounterTF setUserInteractionEnabled:NO];
-//        [offCounterTF setText:[NSString stringWithFormat:@"Counter Value"]];//pop dynamically
-//        //set textField delegate
-//        [offCounterTF setDelegate:self];
-//        //add to view
-//        [innerView addSubview:offCounterTF];
-//        
-//        //add to UIView hierarchy
-//        [topView addSubview:innerView];
+        //construct an innerView for the admin section
+        UIView *innerView = [[UIView alloc]initWithFrame:CGRectMake(10, 77, _registerTV.frame.size.width -20, 80)];
+        [innerView setBackgroundColor:[UIColor colorWithRed:200.0/255.0 green:200.0/255.0 blue:200.0/255.0 alpha:1.0]];//dark white;
+        innerView.layer.cornerRadius = 5.0;
+        
+        //construct a UILabel for the Admin section
+        UILabel *adminLbl = [[UILabel alloc]initWithFrame:CGRectMake(20, 51.5, 180, 25)];
+        [adminLbl setText:@"Administrator Details"];
+        [adminLbl setFont:[UIFont fontWithName:@"Helvetica" size:17]];
+//        [adminLbl setFont:[UIFont systemFontOfSize:17]];
+        [adminLbl setTextColor:[UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0]];//darkGray
+        [adminLbl setBackgroundColor:[UIColor clearColor]];
+        adminLbl.shadowColor = [UIColor whiteColor];
+        adminLbl.shadowOffset = CGSizeMake(0.0, 1.0);
+        [topView addSubview:adminLbl];
+        
+        
+        //construct a UILabel for text
+        UILabel *branchNSCLbl = [[UILabel alloc]initWithFrame:CGRectMake(10, 10, 120, 25)];
+        [branchNSCLbl setBackgroundColor:[UIColor clearColor]];
+        [branchNSCLbl setFont:[UIFont systemFontOfSize:17]];
+        branchNSCLbl.textAlignment = NSTextAlignmentLeft;
+        branchNSCLbl.textColor = [UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0];//darkGray
+        branchNSCLbl.shadowColor = [UIColor whiteColor];
+        branchNSCLbl.shadowOffset = CGSizeMake(1.0, 1.0);
+        [branchNSCLbl setText:[NSString stringWithFormat:@"Branch NSC"]];
+        
+        [branchNSCLbl setUserInteractionEnabled:NO];
+        //add to view
+        [innerView addSubview:branchNSCLbl];
+        
+        
+        //Construct another label for amount
+        UILabel *offCounterLbl = [[UILabel alloc]initWithFrame:CGRectMake(10, 45, 120, 25)];
+        offCounterLbl.textAlignment = NSTextAlignmentLeft;
+        [offCounterLbl setFont:[UIFont systemFontOfSize:17]];
+        offCounterLbl.textColor = [UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0];//darkGray
+        offCounterLbl.shadowColor = [UIColor whiteColor];
+        offCounterLbl.shadowOffset = CGSizeMake(1.0, 1.0);//better
+        offCounterLbl.backgroundColor = [UIColor clearColor];
+        [offCounterLbl setUserInteractionEnabled:NO];
+        //retrieve the total bag amount from the class method here
+        [offCounterLbl setText:[NSString stringWithFormat:@"Off-Counter"]];
+        //add to innerView
+        [innerView addSubview:offCounterLbl];
+        
+        
+        //construct a UITextField for branch NSC
+        UITextField *branchNSCTF = [[UITextField alloc]initWithFrame:CGRectMake(120, 10, 180, 25)];
+        [branchNSCTF setBackgroundColor:[UIColor clearColor]];
+        [branchNSCTF setDelegate:self];
+        [branchNSCTF setFont:[UIFont systemFontOfSize:15]];
+        branchNSCTF.textAlignment = NSTextAlignmentLeft;
+        branchNSCTF.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        branchNSCTF.textColor = [UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0];//blue
+        [branchNSCTF setUserInteractionEnabled:NO];
+        [branchNSCTF setText:[NSString stringWithFormat:@"Branch Value"]];//pop dynamically
+        //set TextField delegate
+        [branchNSCTF setDelegate:self];
+        
+        //add to view
+        [innerView addSubview:branchNSCTF];
+        
+        //construct a 2nd TextField
+        UITextField *offCounterTF = [[UITextField alloc]initWithFrame:CGRectMake(120, 45, 180, 25)];
+        [offCounterTF setBackgroundColor:[UIColor clearColor]];
+        [offCounterTF setDelegate:self];
+        [offCounterTF setFont:[UIFont systemFontOfSize:15]];
+        offCounterTF.textAlignment = NSTextAlignmentLeft;
+        offCounterTF.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        offCounterTF.textColor = [UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0];//blue
+        [offCounterTF setUserInteractionEnabled:NO];
+        [offCounterTF setText:[NSString stringWithFormat:@"Counter Value"]];//pop dynamically
+        //set textField delegate
+        [offCounterTF setDelegate:self];
+        //add to view
+        [innerView addSubview:offCounterTF];
+        
+        //add to UIView hierarchy
+        [topView addSubview:innerView];
         
         return topView;
         
@@ -264,7 +265,7 @@
     
     if (section == 0) {
 //        return 130;//+44
-        return 84;//180
+        return 180;//180 //84
     }
     else
     {

@@ -18,6 +18,8 @@
 @class DepositsVC;
 @class RegistrationVC;
 
+@class UserVC;
+
 
 #define kScanditSDKAppKey @"4w8vXjD2EeOZw8u2pkkjQH4S+hfplxDDtzKnte2lX4s"
 
@@ -28,6 +30,8 @@
     UIButton *scanBtn;
     UIBarButtonItem *barBtnFinished;
 }
+
+@property (strong, nonatomic) IBOutlet UITextView *howToUseTV;
 
 @property (strong, nonatomic) NSMutableArray *barcodeArray;
 @property (strong, nonatomic) NSMutableArray *depositsArray;

@@ -13,6 +13,8 @@
 #import "Deposit.h"
 #import "RegistrationVC.h"
 
+#import "UserVC.h"
+
 
 @interface HomeVC ()
 {
@@ -109,6 +111,11 @@
     
 }
 
+//- (void)finishedPressed:(UIButton *)sender {
+//    
+//    DLog(@"FinishedPressed");
+//}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -120,6 +127,7 @@
         RegistrationVC *registerVC = [self.storyboard instantiateViewControllerWithIdentifier:@"RegistrationVC"];
         UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:registerVC];
         [navController.navigationBar setBarStyle:UIBarStyleBlackTranslucent];
+        
         //changed to NO and unbalanced calls stopped
         [self presentViewController:navController animated:NO completion:^{
             [registerVC setModalPresentationStyle:UIModalPresentationFullScreen];
@@ -144,10 +152,9 @@
     UIImageView *imgView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"Default-568h.png"]];
     [self.view addSubview:imgView];
     
+    //construct the scanBtn
     scanBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [self buttonStyle:scanBtn WithImgName:@"blueButton.png" imgSelectedName:@"bluebuttonSelected" withTitle:@"Scan Barcode"];
-    
-
 //    scanBtn.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:18.0];
     scanBtn.titleLabel.font = [UIFont systemFontOfSize:17.0];
     
@@ -156,8 +163,20 @@
     [scanBtn addTarget:self action:@selector(scanBtnTapped:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:scanBtn];
     
+    UITextView *helpTV = [[UITextView alloc]initWithFrame:CGRectMake(10, 54, self.view.frame.size.width -20, 200)];
+    [helpTV setText:@"How to use this app\n\nPlease scan the external device (ATM) barcode.\nThen scan the bag barcode and enter the amount for each deposit.\nFinally press proceed to confirm email"];
+    
+    [helpTV setBackgroundColor:[UIColor clearColor]];
+    [helpTV setFont:[UIFont systemFontOfSize:18]];
+    [helpTV setTextColor:[UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0]];//darkGray
+    [helpTV setEditable:NO];
+    [helpTV setUserInteractionEnabled:NO];
+    [helpTV setTextAlignment:NSTextAlignmentCenter];
+    
+    [self.view addSubview:helpTV];
     
 }
+
 //Unregister for notifications
 - (void)viewDidDisappear:(BOOL)animated{
     

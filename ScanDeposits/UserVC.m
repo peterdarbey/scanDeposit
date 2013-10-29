@@ -131,8 +131,8 @@
     
     _eachUserArray = [NSMutableArray array];
     
-    UIBarButtonItem *doneBtn = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(donePressed:)];
-    [self.navigationController.navigationItem setRightBarButtonItem:doneBtn];
+//    UIBarButtonItem *doneBtn = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(donePressed:)];
+//    [self.navigationController.navigationItem setRightBarButtonItem:doneBtn];
     
     
 }
@@ -147,10 +147,14 @@
 - (void)donePressed:(UIButton *)sender {
     
     DLog(@"Done Pressed");
-    [self.navigationController popViewControllerAnimated:YES];
+//    [self.navigationController popViewControllerAnimated:YES];
 //    [self.navigationController dismissViewControllerAnimated:YES completion:^{
 //        //ToDo add saving functionality here
 //    }];
+    
+//    [self.navigationController popToRootViewControllerAnimated:YES];//Pushes to previous navController as I instaniated another one
+    [self.navigationController popViewControllerAnimated:YES];
+    
 }
 
 - (void)addUserPressed:(UIButton *)sender {
@@ -215,7 +219,7 @@
     if (section == [_userTV numberOfSections] -1)
     {
         
-        UIView *bottomView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, _userTV.frame.size.width, 90)];
+        UIView *bottomView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, _userTV.frame.size.width, 130)];//90
         [bottomView setBackgroundColor:[UIColor clearColor]];
         
         //construct a button to save user details in NSUserDefaults
@@ -227,6 +231,17 @@
         
         //add to parent view
         [bottomView addSubview:saveBtn];
+        
+        //construct a Done button to push back to rootViewController
+        //construct a button to save user details in NSUserDefaults
+        UIButton *doneBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [doneBtn setFrame:CGRectMake(10, 77, 300, 44)];
+        [doneBtn setUserInteractionEnabled:YES];
+        [doneBtn addTarget:self action:@selector(donePressed:) forControlEvents:UIControlEventTouchUpInside];
+        [self buttonStyle:doneBtn WithImgName:@"blueButton.png" imgSelectedName:@"blueButtonSelected.png" withTitle:@"DONE"];
+        
+        //add to parent view
+        [bottomView addSubview:doneBtn];
         return bottomView;
     }
     else
@@ -239,7 +254,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
     
     if (section== [_userTV numberOfSections] -1) {
-        return 90.0;
+        return 130.0;//90
     }
     else
     {
@@ -493,17 +508,6 @@
 //    [localUserArray addObject:[user userInitials]];//add this initials and isAdmin if required
      [_eachUserArray addObject:localUserArray];
      DLog(@"_eachUserArray__: %@ with Count: %i ", _eachUserArray, [_eachUserArray count]);
-    
-    
-    //gobal adding to other entries ie count 6 2nd time through
-//    [_userArray addObject:[user userName]];
-//    [_userArray addObject:[user userEMail]];
-//    [_userArray addObject:[user userStaffID]];
-
-    //Add to another array so its not overwritten on each returned user object
-//    [_eachUserArray addObject:_userArray];//will be for each section
-//    DLog(@"_userArray__: %@ with Count: %i ", _userArray, [_userArray count]);
-    
    
     
     //Construct an array to populate the headers with initials

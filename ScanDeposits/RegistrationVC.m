@@ -13,6 +13,15 @@
 #import "PopupTV.h"
 
 @interface RegistrationVC ()
+{
+    
+}
+
+@property (strong, nonatomic) NSString *name;
+@property (strong, nonatomic) NSString *eMail;
+@property (strong, nonatomic) NSString *staffID;
+@property (strong, nonatomic) NSString *initials;
+@property (strong, nonatomic) NSString *adminPassword;
 
 @end
 
@@ -69,10 +78,11 @@
     //Name
     if (indexPath.row == 0) {
         //if TF is not empty resign/assign
-        if (![textField.text isEqualToString:@""] && [textField.text length] > 1) {
+        if (![textField.text isEqualToString:@""] && [textField.text length] > 3) {
             [textField resignFirstResponder];//resign 1st
             //assign text to user ivar
-            
+            _name = textField.text;
+            DLog(@"Name: %@", _name);
             //next TextField
             nextTF = [self returnNextTextField:textField];
             [nextTF becomeFirstResponder];
@@ -87,9 +97,12 @@
     //Email
     else if (indexPath.row == 1) {
         //if TF is not empty resign/assign
-        if (![textField.text isEqualToString:@""] && [textField.text length] > 1) {
+        if (![textField.text isEqualToString:@""] && [textField.text length] > 3) {
             //resign previous responder status
             [textField resignFirstResponder];
+            //create email with the address apended to it
+            textField.text = [self addEMailToString:textField.text];
+            //next TextField become ist responder
             nextTF = [self returnNextTextField:textField];
             [nextTF becomeFirstResponder];
         }//close inner if
@@ -99,20 +112,52 @@
         }
         
     }
-    else //Staff ID
+    else //Staff ID then generate Adminstrator password
     {   //pass code 6 digits
         if (![textField.text isEqualToString:@""] && [textField.text length] >= 6) {
             //resign previous responder status
             [textField resignFirstResponder];
+            //assign text to user ivar
+            _staffID = textField.text;
+            
         }//close inner if
         else
         {
             [textField becomeFirstResponder];
         }
     }
+
     
 }
 
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    
+    if([string isEqualToString:@"@"]) {
+        DLog(@"STRING: %@", string);
+        [textField resignFirstResponder];
+        return NO;//works
+    }
+    
+    return YES;
+    
+}
+
+//creates a string with @aib.ie appended to the end
+- (NSString *)addEMailToString:(NSString *)text {
+    
+    NSArray *eMailArray = (NSArray *)[text componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"@"]];
+    DLog(@"eMailArray: %@", eMailArray);
+    //if eMailArray is initilaized retrieve the first component at index:0
+    if (eMailArray) {
+        NSString *emailString = [eMailArray objectAtIndex:0];
+        _eMail = [emailString stringByAppendingString:AIB];
+        DLog(@"_eMail********: %@", _eMail);
+    }
+    NSString *eMailPrefix = _eMail;
+    
+    return eMailPrefix;
+    
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -126,9 +171,12 @@
     [_registerTV setDataSource:self];
     
     UIBarButtonItem *doneBtn = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(donePressed:)];
+    [self.navigationItem setRightBarButtonItem:doneBtn];//Mmm worked
+    
 //    [self.navigationController.navigationItem setRightBarButtonItem:doneBtn];
     
-    [self.navigationItem setRightBarButtonItem:doneBtn];//Mmm worked
+    
+    
 
 }
 
@@ -152,14 +200,9 @@
     //Push to new User/Reg VC
     UserVC *userVC = [self.storyboard instantiateViewControllerWithIdentifier:@"UserVC"];
     [userVC setTitle:NSLocalizedString(@"User Registration", @"User Registration Process Screen")];
-    //set custom delegate here
 
     [self.navigationController pushViewController:userVC animated:YES];
     [self.navigationController.navigationBar setBarStyle:UIBarStyleBlackTranslucent];
-//     UIBarButtonItem *doneBtn = [[UIBarButtonItem alloc]initWithBarButtonSystemItem: UIBarButtonSystemItemDone target:self action:@selector(donePressed:)];//not appearing
-//    
-//    [self.navigationController.navigationItem setRightBarButtonItem:doneBtn];
-    
     
 }
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {

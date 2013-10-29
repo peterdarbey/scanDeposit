@@ -81,7 +81,7 @@
         if (![textField.text isEqualToString:@""] && [textField.text length] > 3) {
             [textField resignFirstResponder];//resign 1st
             //assign text to user ivar
-             self.name = textField.text;//Mmm
+             self.name = textField.text;
              DLog(@"Name: %@", _name);
             
             if (self.name) {
@@ -129,11 +129,15 @@
             [textField resignFirstResponder];
             //assign text to user ivar
             _staffID = textField.text;
-            if (_name && _eMail && _staffID) {
+            
+            if (_name && _eMail && _staffID && _initials) { //should work fine
                 
-                //create user model set NO as default for isAdmin and pass back to the UserVC
+                //create user model set YES as its the Administrator settings
                 User *user = [[User alloc]initWithName:_name eMail:_eMail
                                                staffID:_staffID Initials:_initials isAdmin:YES];
+                
+                //Add the user to the _adminArray
+                [_adminArray addObject:user];
                 
             }
             
@@ -208,14 +212,19 @@
 //creates a string with @aib.ie appended to the end
 - (NSString *)addEMailToString:(NSString *)text {
     
-    NSArray *eMailArray = (NSArray *)[text componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"@"]];
-    DLog(@"eMailArray: %@", eMailArray);
-    //if eMailArray is initilaized retrieve the first component at index:0
-    if (eMailArray) {
-        NSString *emailString = [eMailArray objectAtIndex:0];
-        _eMail = [emailString stringByAppendingString:AIB];
-        DLog(@"_eMail********: %@", _eMail);
-    }
+    if (text) {
+        
+        NSArray *eMailArray = (NSArray *)[text componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"@"]];
+        DLog(@"eMailArray: %@", eMailArray);
+        //if eMailArray is initilaized retrieve the first component at index:0
+        if (eMailArray) {
+            NSString *emailString = [eMailArray objectAtIndex:0];
+            _eMail = [emailString stringByAppendingString:AIB];
+            DLog(@"_eMail********: %@", _eMail);
+        }
+        
+    }//close if
+    
     NSString *eMailPrefix = _eMail;
     
     return eMailPrefix;
@@ -228,7 +237,7 @@
         stringArray = [NSMutableArray array];
     
     //ToDo init admins array with the associated admins if exist from file
-    
+    _adminArray = [NSMutableArray array];
     
      [_registerTV setBackgroundColor:[UIColor clearColor]];
      [_registerTV setBackgroundView:[[UIImageView alloc]initWithImage:
@@ -473,9 +482,20 @@
         
     }
     
-    if (indexPath.row == 0) {
+    if ([_adminArray count] > 1) {
+        //pop tblView with the admin details
         [userLbl setText:@"Name"];
         [nameTF setText:[NSString stringWithFormat:@"David Roberts"]];//temp will be dynamic
+    }
+    else
+    {
+        //use the stored plist of values
+    }
+    
+    if (indexPath.row == 0) { //indexPath.section && //actually section doesnt matter
+        [userLbl setText:@"Name"];
+//        [nameTF setText:[NSString stringWithFormat:@"David Roberts"]];//temp will be dynamic
+        [nameTF setPlaceholder:[NSString stringWithFormat:@"Enter Name"]];//temp will be dynamic
         //set keyboard type
         [nameTF setKeyboardType:UIKeyboardTypeDefault];
         [nameTF setReturnKeyType:UIReturnKeyNext];
@@ -487,8 +507,8 @@
     else if (indexPath.row == 1)
     {
         [userLbl setText:@"Email"];//temp will be dynamic
-        [nameTF setText:[NSString stringWithFormat:@"david.h.roberts"]];//hard code here
-        
+//        [nameTF setText:[NSString stringWithFormat:@"david.h.roberts"]];//hard code here
+        [nameTF setPlaceholder:[NSString stringWithFormat:@"Enter Email"]];
         //set keyboard type
         [nameTF setKeyboardType:UIKeyboardTypeEmailAddress];
         [nameTF setReturnKeyType:UIReturnKeyNext];
@@ -497,10 +517,11 @@
         [nameTF setAutocapitalizationType:UITextAutocapitalizationTypeNone];
         [nameTF setAutocorrectionType:UITextAutocorrectionTypeNo];
     }
-    else
+    else if (indexPath.row == 2)
     {
         [userLbl setText:@"Staff ID"];//temp will be dynamic
-        [nameTF setText:[NSString stringWithFormat:@"Adminstrator"]];//hard code here
+//        [nameTF setText:[NSString stringWithFormat:@"Adminstrator"]];//hard code here
+        [nameTF setPlaceholder:[NSString stringWithFormat:@"Staff ID"]];
         //set keyboard type
         [nameTF setKeyboardType:UIKeyboardTypeNumbersAndPunctuation];
         [nameTF setReturnKeyType:UIReturnKeyDone];
@@ -509,7 +530,21 @@
         [nameTF setAutocapitalizationType:UITextAutocapitalizationTypeNone];
         [nameTF setAutocorrectionType:UITextAutocorrectionTypeNo];
     }
-    
+    else // Password field
+    {
+        [userLbl setText:@"Admin password"];
+        //first time wont exist
+        if (_staffID && _initials) {
+            NSString *passwordString = [_staffID stringByAppendingString:_initials];
+            [nameTF setText:[NSString stringWithFormat:@"%@", passwordString]];
+            DLog(@"passwordString: %@", passwordString);
+        }
+        else
+        {
+            [nameTF setPlaceholder:[NSString stringWithFormat:@"Password is initials after Staff ID"]];
+        }
+        
+    }
     
         return cell;
     
@@ -517,18 +552,33 @@
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     
-//    return [_depositsCollection count];
-    return 1;//minimum of 1
+    //if _userArray has more than 1 user use its count
+    if ([_adminArray count] > 1) {
+        return [_adminArray count];//always 2 anyhow
+    }
+    else //default to 2
+    {
+        return 2;//Could be 2 admin associated with an account
+    }
+    
+    
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    
-    return 3; //should be 2 for the moment
+    //user details will be the count
+    if ([_adminArray count] > 1) {
+        return 4; //[[_adminArray objectAtIndex:indexPath.section]count];//which will be 4
+    }
+    else //default to 4
+    {
+        return 4;
+    }
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     selectedIP = indexPath;
+    
     [_registerTV deselectRowAtIndexPath:indexPath animated:YES];
 }
 

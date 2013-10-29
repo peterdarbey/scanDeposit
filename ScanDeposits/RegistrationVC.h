@@ -26,5 +26,7 @@
 
 @property (strong, nonatomic) IBOutlet UITableView *registerTV;
 
+@property (strong,nonatomic) NSMutableArray *adminArray;
+
 
 @end

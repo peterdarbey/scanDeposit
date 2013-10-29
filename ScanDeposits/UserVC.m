@@ -312,56 +312,23 @@
     }
     
     
-    //After cell creation process only, show a tableView if the datasource is init with users
     if ([_dataSource count] >= 1 && _user) {
-        DLog(@"dataSource now contains->: %@", _dataSource);
         
         //if selected add extra items to array in expand method
-        if (_isSelected) {
-            //add array to dataSource if expanded
-//            [[_dataSource objectAtIndex:indexPath.section]addObject:_user];//[_user userName];
-        
-            //retrieve the user for each section //not necessary as its in _user = user but anyhow
-//            _user = [_userArray objectAtIndex:indexPath.section];//NSCFString passed
+        if (_isSelected && _isExpanded) { //add !_isEXpanded
             
-            //Need to extract the _user properties
-            //Then this -> to fetch the right user
-//            _user = (User *)[_userArray objectAtIndex:indexPath.section];
+            //Construct keys for iteration
+            NSArray *userKeys = @[@"Initials", @"Name", @"Email", @"Staff ID"];
             
-            //HIDE
-           NSDictionary *userDict = @{@"Name" : [_user userName], @"Email" : [_user userEMail], @"Staff ID" : [_user userStaffID], @"Initials" : [_user userInitials]};//count 3 -> now 4as added initials
-            DLog(@"userDict new: %@", userDict);
+            //_dataSource has the appropreiate _userArray containing the 3 fields of each user
+            [userNameTF setText:[NSString stringWithFormat:@"%@", [[_dataSource objectAtIndex:indexPath.section]    objectAtIndex:indexPath.row]]];
+            [userNameLbl setText:[NSString stringWithFormat:@"%@", [userKeys objectAtIndex:indexPath.row]]];
             
-           //Sort items first
-            NSArray *replaceKeys = (NSArray *)[[userDict allKeys]sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2){
-                NSString *s1 = (NSString *) obj1;
-                NSString *s2 = (NSString *) obj2;
-                return [s1 compare:s2];
-            }];
-            
-            DLog(@"replaceKeys: %@", replaceKeys);//correct
-             NSArray *allValues = [userDict objectsForKeys:replaceKeys notFoundMarker:@"Not available"];
-            DLog(@"allValues: %@", allValues);//correct
-            
-             DLog(@"COUNT>>>>>>>>>: %i", [[_dataSource objectAtIndex:indexPath.section]count]);//count 4
-            
-//            //display the text for the TF from the collection //try user and just retrieve 3 values as above
-//             [userNameTF setText:[NSString stringWithFormat:@"%@", [[_dataSource objectAtIndex:indexPath.section]    objectAtIndex:indexPath.row]]];//allValues starts 1 index up? work
-            	
-            
-            //display the text for the TF from the collection //try user and just retrieve 3 values as above
-            [userNameTF setText:[NSString stringWithFormat:@"%@", [allValues objectAtIndex:indexPath.row]]];//allValues would work                      //tried _userArray
-            
-            //display the text for the Label from the collection
-            [userNameLbl setText:[NSString stringWithFormat:@"%@", [replaceKeys objectAtIndex:indexPath.row]]];
-         
-            //works but not sure about the keys
-//            [userNameTF setText:[NSString stringWithFormat:@"%@",[[_dataSource objectAtIndex:selectedIP.section]objectAtIndex:indexPath.row]]];//works problem is the keys
-           
-        }
+        }//close if
         
         else //not expanded so just show 1 entry -> the initials
         {
+            //set UITextField Initials
             [userNameTF setText:[NSString stringWithFormat:@"%@", [[_dataSource objectAtIndex:indexPath.section]objectAtIndex:indexPath.row]]];//yes
             //set UILabel name
             [userNameLbl setText:@"Initials"];
@@ -373,13 +340,13 @@
             
             if (indexPath.row == 0) {
                 cell.backgroundColor = [UIColor colorWithRed:210.0/255.0 green:210.0/255.0 blue:210.0/255.0 alpha:1.0];//light white
-//                cell.accessoryView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"rightArrow.png"]];
-//                cell.imageView.image = [UIImage imageNamed:@"rightArrow.png"];//correct
+                cell.imageView.image = [UIImage imageNamed:@"rightArrow.png"];//add resource
+                
             }
             else
             {
                 cell.backgroundColor = [UIColor whiteColor];
-                //cell.imageView.image = nil;
+                cell.imageView.image = nil;
             }
         }//close if
     
@@ -391,9 +358,6 @@
     
     //if we have something to display then display
     if ([_dataSource count] >= 1) {
-        
-//        if (_isSelected) {
-//            return [_dataSource count];}
         
         return [_dataSource count];
         
@@ -435,26 +399,24 @@
     _isSelected = YES;
     
     //check we have a tblView 1st before expanding or collasping
-    if (_user) {
+    if ([_dataSource count] >= 1) {
         
         //call expand here but also check for expansion 1st]
         if (_isSelected && _isExpanded) {
             [self collaspeMyTableViewWithIndex:selectedIP];
             _isExpanded = NO;
-            [_userTV deselectRowAtIndexPath:indexPath animated:YES];
         }
         //selected and data loaded and not expanded
         else if (_isSelected && !_isExpanded) //&& indexPath.row == 0)
         {
             //expand
+            _isExpanded = YES;
             [self expandMyTableViewWithIndex:selectedIP];//crashing here
-             _isExpanded = YES;
-            [_userTV deselectRowAtIndexPath:indexPath animated:YES];
+            
         }
     }
     
-    
-//    [_userTV deselectRowAtIndexPath:indexPath animated:YES];
+    [_userTV deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 //This method addds the objects to the dataSource not the cellForRow
@@ -462,22 +424,31 @@
     
     //Note indexPath is the selected row and section
     NSMutableArray *indexArray = [[NSMutableArray alloc]init];
-
+    //Now get each _userArray out of the _eachUserArray for the apropriate section /selected section
+    NSArray *userValues = [_eachUserArray objectAtIndex:indexPath.section];//get selected section
+    
     //check that its not open
     if([[_dataSource objectAtIndex:selectedIP.section]count] == 1) {
-        //was  i < 3 which worked
-        for (int i = 0; i < 3; i++) { //[_userArray count] shoulb be +1 count 4
+        
+        for (int i = 0; i < [userValues count]; i++) { //3
             NSIndexPath *index = [NSIndexPath indexPathForRow: i+1 inSection:selectedIP.section];//offset by 1
             [indexArray addObject:index];
-//             [[_dataSource objectAtIndex:selectedIP.section]addObject:_user];//Add selected section to datasource subObj level
-            //what my data structure is
-            [[_dataSource objectAtIndex:selectedIP.section]addObject:[_userArray objectAtIndex:i]];//tried indexPath.row]
-            DLog(@"_userArray: %@", _userArray);//im losing the 1st item from userDict?
-        }
+            //Add the _userArray to the _dataSource collection
+            [[_dataSource objectAtIndex:selectedIP.section]addObject:[userValues objectAtIndex:i]];//_userArray
+            
+        }//close loop
         
-         [_userTV insertRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationBottom];
+        DLog(@"_dataSource ********: %@", _dataSource);
+        UITableViewCell *cell = [self.userTV cellForRowAtIndexPath:indexPath];
+        iv = cell.imageView;
+        [UIView animateWithDuration:0.3 animations:^{
+            // Rotate the arrow
+            iv.transform = CGAffineTransformMakeRotation(M_PI_2);//rotate down
+        }];
         
+        [_userTV insertRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationBottom];
     }
+    
 }
 
 - (void)collaspeMyTableViewWithIndex:(NSIndexPath *)indexPath {
@@ -488,9 +459,9 @@
     // Already expanded, close it up! //check that its not open
     NSInteger numRows = [self.userTV numberOfRowsInSection:selectedIP.section];
     
-//        [UIView animateWithDuration:0.3 animations:^{
-//            iv.transform = CGAffineTransformMakeRotation(0);
-//        }];
+        [UIView animateWithDuration:0.3 animations:^{
+            iv.transform = CGAffineTransformMakeRotation(0);
+        }];
         
     for (int i = 1; i < numRows; i++)
     {
@@ -513,40 +484,36 @@
     //assign to _user
     _user = user;
     
-    //Add user to _userArray
-//    [_userArray addObject:user];
-//    NSMutableArray *array = [NSMutableArray array];
-//    
-//    [array addObject:[user userName]];
-//    [array addObject:[user userEMail]];
-//    [array addObject:[user userStaffID]];
-//    [_userArray addObject:array];
+    //Init the _userArray with the user fields -> array with values/objects
+    //Make it local
+    NSMutableArray *localUserArray = [NSMutableArray array];
+    [localUserArray addObject:[user userName]];
+    [localUserArray addObject:[user userEMail]];
+    [localUserArray addObject:[user userStaffID]];
+//    [localUserArray addObject:[user userInitials]];//add this initials and isAdmin if required
+     [_eachUserArray addObject:localUserArray];
+     DLog(@"_eachUserArray__: %@ with Count: %i ", _eachUserArray, [_eachUserArray count]);
     
-    //Ordered
-    [_userArray addObject:[user userName]];
-    [_userArray addObject:[user userEMail]];
-    [_userArray addObject:[user userStaffID]];
-    [_userArray addObject:[user userInitials]];//added this element
-    //isAdmin
+    
+    //gobal adding to other entries ie count 6 2nd time through
+//    [_userArray addObject:[user userName]];
+//    [_userArray addObject:[user userEMail]];
+//    [_userArray addObject:[user userStaffID]];
 
-    DLog(@"_userArray____: %@", _userArray);
+    //Add to another array so its not overwritten on each returned user object
+//    [_eachUserArray addObject:_userArray];//will be for each section
+//    DLog(@"_userArray__: %@ with Count: %i ", _userArray, [_userArray count]);
     
-    
-//    userDict = @{@"Name" : [_user userName], @"Email" : [_user userEMail], @"Staff ID" : [_user userStaffID], @"Initials" : [_user userInitials]};//count 3 -> now 4as added initials
-//    
-//    DLog(@"userDict new: %@", userDict);
-
+   
     
     //Construct an array to populate the headers with initials
     NSMutableArray *initArray = [NSMutableArray array];
     [initArray addObject:[user userInitials]];//extract the new user initials
     [_dataSource addObject:initArray];
-    DLog(@"_dataSource with initArray: %@", _dataSource);//should be initized
+    DLog(@"_dataSource with initArray: %@", _dataSource);//should be initized correct
     
     
-    //Add to the dataSource array
-//    [_dataSource addObject:user];
-    
+//    NSDictionary *userDict = @{@"Name" : [_user userName], @"Email" : [_user userEMail], @"Staff ID" : [_user userStaffID], @"Initials" : [_user userInitials]};//count 3 -> now 4as added initials
 }
 
 //may not need this delegate method

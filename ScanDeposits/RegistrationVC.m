@@ -362,7 +362,6 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:myIdentifier];
     UITextField *nameTF;
     UILabel *userLbl;
-    UILabel *prePopLbl;
     
     //ist time through doesnt exist
     if (cell == nil) {
@@ -397,24 +396,11 @@
         
         [cell.contentView addSubview:userLbl];
         
-        //construct prePop label// May not need append a string @aib.ie to end of string
-        prePopLbl = [[UILabel alloc]initWithFrame:CGRectMake(230, cell.bounds.size.height/4, 60, 25)];
-        prePopLbl.tag = EMAIL_PREPOP;
-        prePopLbl.textAlignment = NSTextAlignmentRight;
-        prePopLbl.font = [UIFont fontWithName:@"Arial-BoldMT" size:15];
-        prePopLbl.textColor = [UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0];//darkGray
-        prePopLbl.shadowColor = [UIColor grayColor];
-        prePopLbl.shadowOffset = CGSizeMake(1.0, 1.0);
-        prePopLbl.backgroundColor = [UIColor clearColor];
-        [prePopLbl setUserInteractionEnabled:NO];
-        [prePopLbl setText:AIB];//"@aib.ie"
-
     }
     else
     {
         //retreive the properties
         nameTF = (UITextField *)[cell.contentView viewWithTag:NAME_TF];
-//        prePopLbl = (UILabel *)[cell.contentView viewWithTag:EMAIL_PREPOP];
         userLbl = (UILabel *)[cell.contentView viewWithTag:USER_LBL];
         
     }
@@ -434,8 +420,7 @@
     {
         [userLbl setText:@"Email"];//temp will be dynamic
         [nameTF setText:[NSString stringWithFormat:@"david.h.roberts"]];//hard code here
-        //show label with email perfix
-        [cell.contentView addSubview:prePopLbl];
+        
         //set keyboard type
         [nameTF setKeyboardType:UIKeyboardTypeEmailAddress];
         [nameTF setReturnKeyType:UIReturnKeyNext];

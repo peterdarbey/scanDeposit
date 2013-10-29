@@ -138,7 +138,8 @@
                 
                 //Add the user to the _adminArray
                 [_adminArray addObject:user];
-                
+                //reloadData
+                [_registerTV reloadData];
             }
             
         }//close inner if

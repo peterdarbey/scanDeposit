@@ -81,8 +81,16 @@
         if (![textField.text isEqualToString:@""] && [textField.text length] > 3) {
             [textField resignFirstResponder];//resign 1st
             //assign text to user ivar
-            _name = textField.text;
-            DLog(@"Name: %@", _name);
+             self.name = textField.text;//Mmm
+             DLog(@"Name: %@", _name);
+            
+            if (self.name) {
+                
+                //create Initails from userName field
+                [self createInitialsFromText:textField.text];
+                
+            }//close if
+            
             //next TextField
             nextTF = [self returnNextTextField:textField];
             [nextTF becomeFirstResponder];
@@ -100,8 +108,10 @@
         if (![textField.text isEqualToString:@""] && [textField.text length] > 3) {
             //resign previous responder status
             [textField resignFirstResponder];
+            
             //create email with the address apended to it
             textField.text = [self addEMailToString:textField.text];
+            
             //next TextField become ist responder
             nextTF = [self returnNextTextField:textField];
             [nextTF becomeFirstResponder];
@@ -119,6 +129,13 @@
             [textField resignFirstResponder];
             //assign text to user ivar
             _staffID = textField.text;
+            if (_name && _eMail && _staffID) {
+                
+                //create user model set NO as default for isAdmin and pass back to the UserVC
+                User *user = [[User alloc]initWithName:_name eMail:_eMail
+                                               staffID:_staffID Initials:_initials isAdmin:YES];
+                
+            }
             
         }//close inner if
         else
@@ -127,6 +144,52 @@
         }
     }
 
+    
+}
+
+
+- (void)createInitialsFromText:(NSString *)text {
+    
+    NSMutableArray *lettersArray = [NSMutableArray array];
+    //separates the strings into separate elements in an array
+    NSArray *initialsArray = [text componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    DLog(@"initialsArray: %@", initialsArray);//correct
+    //iterate over collection
+    for (int i = 0; i < [initialsArray count]; i++ ) {
+        //each word in array
+        NSString *word = [initialsArray objectAtIndex:i];
+        //extract 1st letter only
+        if ([word length] > 0) {
+            NSString *firstLetter = [word substringToIndex:1];//works
+            [lettersArray addObject:firstLetter];
+        }
+        else
+        {
+            DLog(@"Less than 1 char -> space");
+        }
+        
+    }//close for loop
+    
+    if ([lettersArray count] == 1) {
+        NSString *appendedInitials = [lettersArray objectAtIndex:0];
+        self.initials = appendedInitials;
+        DLog(@"<< 1 >> self.initials: %@", self.initials);//DH
+    }
+    
+    if ([lettersArray count] == 2) {
+        NSString *initials = [lettersArray objectAtIndex:0];
+        NSString *appendedInitials = [initials stringByAppendingString:[lettersArray objectAtIndex:1]];
+        self.initials = appendedInitials;
+        DLog(@"<< 2 >> self.initials: %@", self.initials);//DH
+    }
+    else if ([lettersArray count] >2)
+    {
+        NSString *initials = [lettersArray objectAtIndex:0];
+        NSString *appendedInitials = [initials stringByAppendingString:[lettersArray objectAtIndex:1]];//crash
+        appendedInitials = [appendedInitials stringByAppendingString:[lettersArray objectAtIndex:2]];
+        self.initials = appendedInitials;
+        DLog(@"<< 3 >> self.initials: %@", self.initials);//DHR
+    }
     
 }
 
@@ -162,6 +225,10 @@
 {
     [super viewDidLoad];
 	
+        stringArray = [NSMutableArray array];
+    
+    //ToDo init admins array with the associated admins if exist from file
+    
     
      [_registerTV setBackgroundColor:[UIColor clearColor]];
      [_registerTV setBackgroundView:[[UIImageView alloc]initWithImage:
@@ -191,6 +258,7 @@
     DLog(@"Done Pressed");
     [self.navigationController dismissViewControllerAnimated:YES completion:^{
         //ToDo add saving functionality here
+        //Save the admins to file here
     }];
 }
 - (void)addPressed:(UIButton *)sender {

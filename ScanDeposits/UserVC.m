@@ -131,8 +131,7 @@
     
     _eachUserArray = [NSMutableArray array];
     
-//    UIBarButtonItem *doneBtn = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(donePressed:)];
-//    [self.navigationController.navigationItem setRightBarButtonItem:doneBtn];
+    //Load the _dataSource from file if it exists
     
     
     
@@ -148,10 +147,7 @@
 - (void)donePressed:(UIButton *)sender {
     
     DLog(@"Done Pressed");
-//    [self.navigationController popViewControllerAnimated:YES];
-//    [self.navigationController dismissViewControllerAnimated:YES completion:^{
-//        //ToDo add saving functionality here
-//    }];
+    //On done save the _dataSource array to Documents folder
     
 //    [self.navigationController popToRootViewControllerAnimated:YES];//Pushes to previous navController as I instaniated another one
     [self.navigationController popViewControllerAnimated:YES];

@@ -66,6 +66,51 @@
     return nextTF;
 }
 
+- (void)createInitialsFromText:(NSString *)text {
+    
+    NSMutableArray *lettersArray = [NSMutableArray array];
+    //separates the strings into separate elements in an array
+    NSArray *initialsArray = [text componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    DLog(@"initialsArray: %@", initialsArray);//correct
+    //iterate over collection
+    for (int i = 0; i < [initialsArray count]; i++ ) {
+        //each word in array
+        NSString *word = [initialsArray objectAtIndex:i];
+        //extract 1st letter only
+        if ([word length] > 0) {
+            NSString *firstLetter = [word substringToIndex:1];//works
+            [lettersArray addObject:firstLetter];
+        }
+        else
+        {
+            DLog(@"Less than 1 char -> space");
+        }
+        
+    }//close for loop
+    
+    if ([lettersArray count] == 1) {
+        NSString *appendedInitials = [lettersArray objectAtIndex:0];
+        self.initials = appendedInitials;
+        DLog(@"<< 1 >> self.initials: %@", self.initials);//DH
+    }
+    
+    if ([lettersArray count] == 2) {
+        NSString *initials = [lettersArray objectAtIndex:0];
+        NSString *appendedInitials = [initials stringByAppendingString:[lettersArray objectAtIndex:1]];
+        self.initials = appendedInitials;
+        DLog(@"<< 2 >> self.initials: %@", self.initials);//DH
+    }
+    else if ([lettersArray count] >2)
+    {
+        NSString *initials = [lettersArray objectAtIndex:0];
+        NSString *appendedInitials = [initials stringByAppendingString:[lettersArray objectAtIndex:1]];//crash
+        appendedInitials = [appendedInitials stringByAppendingString:[lettersArray objectAtIndex:2]];
+        self.initials = appendedInitials;
+        DLog(@"<< 3 >> self.initials: %@", self.initials);//DHR
+    }
+    
+}
+    
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     //for conditional
     UITableViewCell *cell = (UITableViewCell *)textField.superview.superview;
@@ -82,50 +127,11 @@
             //assign text to user ivar
             self.name = textField.text;//Mmm
             if (self.name) { //Watch for doble spaces
-                NSMutableArray *lettersArray = [NSMutableArray array];
-                //separates the strings into separate elements in an array
-                NSArray *initialsArray = [textField.text componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-                DLog(@"initialsArray: %@", initialsArray);//correct
-                //iterate over collection
-                for (int i = 0; i < [initialsArray count]; i++ ) {
-                    //each word in array
-                    NSString *word = [initialsArray objectAtIndex:i];
-                    //extract 1st letter only
-                    if ([word length] > 0) {
-                        NSString *firstLetter = [word substringToIndex:1];//works
-                        [lettersArray addObject:firstLetter];
-                    }
-                    else
-                    {
-                        DLog(@"Less than 1 char -> space");
-                    }
-                    
-                }//close for loop
                 
-                if ([lettersArray count] == 1) {
-                    NSString *appendedInitials = [lettersArray objectAtIndex:0];
-                    self.initials = appendedInitials;
-                    DLog(@"<< 1 >> self.initials: %@", self.initials);//DH
-                }
-                
-                if ([lettersArray count] == 2) {
-                    NSString *initials = [lettersArray objectAtIndex:0];
-                    NSString *appendedInitials = [initials stringByAppendingString:[lettersArray objectAtIndex:1]];
-                    self.initials = appendedInitials;
-                    DLog(@"<< 2 >> self.initials: %@", self.initials);//DH
-                }
-                else if ([lettersArray count] >2)
-                {
-                    NSString *initials = [lettersArray objectAtIndex:0];
-                    NSString *appendedInitials = [initials stringByAppendingString:[lettersArray objectAtIndex:1]];//crash
-                    appendedInitials = [appendedInitials stringByAppendingString:[lettersArray objectAtIndex:2]];
-                    self.initials = appendedInitials;
-                    DLog(@"<< 3 >> self.initials: %@", self.initials);//DHR
-                }
+                //create Initials from userName field
+                [self createInitialsFromText:textField.text];
                 
             }//close if
-            //should use shouldReplaceCharactersInRange method
-            
             
             DLog(@"NameString: %@", _name);
             //next TextField

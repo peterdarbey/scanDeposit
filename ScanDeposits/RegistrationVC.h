@@ -21,6 +21,7 @@
 @interface RegistrationVC : UIViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
 {
     NSIndexPath *selectedIP;
+    NSMutableArray *stringArray;
 }
 
 @property (strong, nonatomic) IBOutlet UITableView *registerTV;

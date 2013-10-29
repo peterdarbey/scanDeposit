@@ -497,11 +497,13 @@
         
     }
     
+    
     //create the array of label values for fields
     NSArray *array = @[@"Name", @"Email", @"Staff ID", @"Admin Password"];
     //always remains constant
     [userLbl setText:[NSString stringWithFormat:@"%@", [array objectAtIndex:indexPath.row]]];
     
+    //there is only 1 user
     if ([_adminArray count] > 1) { //maybe >=1
         //pop tblView with the admin details
 
@@ -509,10 +511,13 @@
 //        NSMutableArray *array = [_adminArray objectAtIndex:indexPath.section];
         
 //        [userLbl setText:[NSString stringWithFormat:@"%@", [array objectAtIndex:indexPath.row]]];
-        [nameTF setText:[NSString stringWithFormat:@"%@", [[_adminArray objectAtIndex:indexPath.section]objectAtIndex:indexPath.row]]];
+        [nameTF setText:[NSString stringWithFormat:@"%@", [[_adminArray objectAtIndex:indexPath.section]objectAtIndex:indexPath.row]]];//was indexPath.section
         DLog(@"_adminArray in cellForRowAtIndex: %@", _adminArray);
         
-    }
+    }//there are 2 user so use indexPath.section
+//    else if ([_adminArray count] == 2) {
+//        [nameTF setText:[NSString stringWithFormat:@"%@", [[_adminArray objectAtIndex:indexPath.section]objectAtIndex:indexPath.row]]];
+//    }
     else
     {
         //use the stored plist of values
@@ -523,8 +528,7 @@
     }
     
     if (indexPath.row == 0) { //indexPath.section && //actually section doesnt matter
-//        [userLbl setText:@"Name"];
-//        [nameTF setText:[NSString stringWithFormat:@"David Roberts"]];//temp will be dynamic
+        
         [nameTF setPlaceholder:[NSString stringWithFormat:@"Enter Name"]];//temp will be dynamic
         //set keyboard type
         [nameTF setKeyboardType:UIKeyboardTypeDefault];
@@ -536,8 +540,6 @@
     }
     else if (indexPath.row == 1)
     {
-//        [userLbl setText:@"Email"];//temp will be dynamic
-//        [nameTF setText:[NSString stringWithFormat:@"david.h.roberts"]];//hard code here
         [nameTF setPlaceholder:[NSString stringWithFormat:@"Enter Email"]];
         //set keyboard type
         [nameTF setKeyboardType:UIKeyboardTypeEmailAddress];
@@ -549,8 +551,6 @@
     }
     else if (indexPath.row == 2)
     {
-//        [userLbl setText:@"Staff ID"];//temp will be dynamic
-//        [nameTF setText:[NSString stringWithFormat:@"Adminstrator"]];//hard code here
         [nameTF setPlaceholder:[NSString stringWithFormat:@"Staff ID"]];
         //set keyboard type
         [nameTF setKeyboardType:UIKeyboardTypeNumbersAndPunctuation];

@@ -202,7 +202,7 @@
         
         //create user model set NO as default for isAdmin and pass back to the UserVC
         User *user = [[User alloc]initWithName:_popupTV.name eMail:_popupTV.eMail
-                                       staffID:_popupTV.staffID Initials:_popupTV.initials isAdmin:NO withPassword:nil];
+                                       staffID:_popupTV.staffID Initials:_popupTV.initials isAdmin:NO withPassword:@"Not Authorized"];//was nil -> fixed
         
         //NOTE never Admin when this method is called from the PopupTV class
         DLog(@"User>>>>>: %@", user);

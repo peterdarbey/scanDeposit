@@ -46,7 +46,7 @@ static BOOL __isAdmin;
     }
     else //not admin so set to nil
     {
-        _password = nil;
+        _password = @"Not Authorized";
     }
     _internalDict = dict;
     

@@ -169,7 +169,8 @@
     
     [helpTV setBackgroundColor:[UIColor clearColor]];
     [helpTV setFont:[UIFont systemFontOfSize:18]];
-    [helpTV setTextColor:[UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0]];//blue
+//    [helpTV setTextColor:[UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0]];//blue
+    [helpTV setTextColor:[UIColor whiteColor]];
     [helpTV setEditable:NO];
     [helpTV setUserInteractionEnabled:NO];
     [helpTV setTextAlignment:NSTextAlignmentCenter];

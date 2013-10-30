@@ -187,9 +187,24 @@
 //    
 //    else 
 //    {
-//        return nil;
+//        UIView *topView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, _registerTV.frame.size.width, 25)];
+//        [topView setBackgroundColor:[UIColor clearColor]];
+//
+//        //construct a UILabel for the Admin section
+//        UILabel *adminLbl = [[UILabel alloc]initWithFrame:CGRectMake(20, 0, 180, 25)];
+//        [adminLbl setText:@"Administrator 2"];
+//
+//        [adminLbl setFont:[UIFont fontWithName:@"Arial-BoldMT" size:17]];
+//        [adminLbl setTextColor:[UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0]];//darkGray
+//        [adminLbl setTextAlignment:NSTextAlignmentLeft];
+//        [adminLbl setBackgroundColor:[UIColor clearColor]];
+//        adminLbl.shadowColor = [UIColor whiteColor];
+//        adminLbl.shadowOffset = CGSizeMake(0.0, 1.0);
+//        [topView addSubview:adminLbl];
+//
+//        return topView;        
 //    }
-//    
+//
 //}
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {

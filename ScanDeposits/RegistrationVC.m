@@ -134,21 +134,12 @@
                 //assign to adminPassword
                 _adminPassword = [_staffID stringByAppendingString:_initials];
                 //create user model set YES as its the Administrator settings
-                //only allow to admin users
-                if ([_adminArray count] <= 2) {//shoul be greater than doesnt work cause array is below fix with capacity
-                
-                    User *user = [[User alloc]initWithName:_name eMail:_eMail
-                                                   staffID:_staffID Initials:_initials
-                                                   isAdmin:YES withPassword:_adminPassword];                    
-                    //Create a local array
-                    NSMutableArray *localUserArray = [NSMutableArray array];
-                    [localUserArray addObject:[user userName]];
-                    [localUserArray addObject:[user userEMail]];
-                    [localUserArray addObject:[user userStaffID]];
-                    [localUserArray addObject:[user userPassword]];
-                   //Add to the overAll collection
-                    [_adminArray addObject:localUserArray];
-                    DLog(@"_adminArray__: %@ with Count: %i ", _adminArray, [_adminArray count]);
+                DLog(@"AdminArray count>>>>>>>>>: %i", [_adminArray count]);
+                //only enter if 2 or less admin/users
+                if ([_adminArray count] < 2) {//on second iteration still less than 2
+                    
+                    //create user, add required fields to local array and add to _adminArray
+                    [self createUserFactory];//fixed
                     
                 }//close if
                 
@@ -163,9 +154,24 @@
         }
     }
 
+}
+//factory method
+- (void)createUserFactory {
+    
+    User *user = [[User alloc]initWithName:_name eMail:_eMail
+                                   staffID:_staffID Initials:_initials
+                                   isAdmin:YES withPassword:_adminPassword];
+    //Create a local array
+    NSMutableArray *localUserArray = [NSMutableArray array];
+    [localUserArray addObject:[user userName]];
+    [localUserArray addObject:[user userEMail]];
+    [localUserArray addObject:[user userStaffID]];
+    [localUserArray addObject:[user userPassword]];
+    //Add to the overAll collection
+    [_adminArray addObject:localUserArray];
+    DLog(@"_adminArray__: %@ with Count: %i ", _adminArray, [_adminArray count]);
     
 }
-
 
 - (void)createInitialsFromText:(NSString *)text {
     
@@ -192,14 +198,14 @@
     if ([lettersArray count] == 1) {
         NSString *appendedInitials = [lettersArray objectAtIndex:0];
         self.initials = appendedInitials;
-        DLog(@"<< 1 >> self.initials: %@", self.initials);//DH
+//        DLog(@"<< 1 >> self.initials: %@", self.initials);//DH
     }
     
     if ([lettersArray count] == 2) {
         NSString *initials = [lettersArray objectAtIndex:0];
         NSString *appendedInitials = [initials stringByAppendingString:[lettersArray objectAtIndex:1]];
         self.initials = appendedInitials;
-        DLog(@"<< 2 >> self.initials: %@", self.initials);//DH
+//        DLog(@"<< 2 >> self.initials: %@", self.initials);//DH
     }
     else if ([lettersArray count] >2)
     {
@@ -207,7 +213,7 @@
         NSString *appendedInitials = [initials stringByAppendingString:[lettersArray objectAtIndex:1]];//crash
         appendedInitials = [appendedInitials stringByAppendingString:[lettersArray objectAtIndex:2]];
         self.initials = appendedInitials;
-        DLog(@"<< 3 >> self.initials: %@", self.initials);//DHR
+//        DLog(@"<< 3 >> self.initials: %@", self.initials);//DHR
     }
     
 }
@@ -215,7 +221,7 @@
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     
     if([string isEqualToString:@"@"]) {
-        DLog(@"STRING: %@", string);
+//        DLog(@"STRING: %@", string);
         [textField resignFirstResponder];
         return NO;//works
     }
@@ -230,12 +236,11 @@
     if (text) {
         
         NSArray *eMailArray = (NSArray *)[text componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"@"]];
-        DLog(@"eMailArray: %@", eMailArray);
+
         //if eMailArray is initilaized retrieve the first component at index:0
         if (eMailArray) {
             NSString *emailString = [eMailArray objectAtIndex:0];
             _eMail = [emailString stringByAppendingString:AIB];
-            DLog(@"_eMail********: %@", _eMail);
         }
         
     }//close if
@@ -249,7 +254,7 @@
 {
     [super viewDidLoad];
 	
-        stringArray = [NSMutableArray array];
+    stringArray = [NSMutableArray array];
     
     //ToDo init admins array with the associated admins if exist from file
     _adminArray = [NSMutableArray arrayWithCapacity:2];
@@ -262,11 +267,7 @@
     [_registerTV setDataSource:self];
     
     UIBarButtonItem *doneBtn = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(donePressed:)];
-    [self.navigationItem setRightBarButtonItem:doneBtn];//Mmm worked
-    
-//    [self.navigationController.navigationItem setRightBarButtonItem:doneBtn];
-    
-    
+    [self.navigationItem setRightBarButtonItem:doneBtn];
     
 
 }
@@ -279,7 +280,6 @@
 
 - (void)donePressed:(UIButton *)sender {
     
-    DLog(@"Done Pressed");
     [self.navigationController dismissViewControllerAnimated:YES completion:^{
         //ToDo add saving functionality here
         //Save the admins to file here
@@ -287,7 +287,7 @@
 }
 - (void)addPressed:(UIButton *)sender {
     //ToDo implement NSUserDefaults
-    DLog(@"addPressed");
+    
     
     //Push to new User/Reg VC
     UserVC *userVC = [self.storyboard instantiateViewControllerWithIdentifier:@"UserVC"];
@@ -297,23 +297,25 @@
     [self.navigationController.navigationBar setBarStyle:UIBarStyleBlackTranslucent];
     
 }
+
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     
     if (section == 0) {// && ADMIN) {
         //+44 for navigation bar
-        UIView *topView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, _registerTV.frame.size.width, 84)];//130
+        UIView *topView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, _registerTV.frame.size.width, 143)];//128
         [topView setBackgroundColor:[UIColor clearColor]];
         
         //construct an innerView for the admin section
-        UIView *innerView = [[UIView alloc]initWithFrame:CGRectMake(10, 77, _registerTV.frame.size.width -20, 80)];
+        UIView *innerView = [[UIView alloc]initWithFrame:CGRectMake(10, 64, _registerTV.frame.size.width -20, 44)];
         [innerView setBackgroundColor:[UIColor colorWithRed:200.0/255.0 green:200.0/255.0 blue:200.0/255.0 alpha:1.0]];//dark white;
         innerView.layer.cornerRadius = 5.0;
         
         //construct a UILabel for the Admin section
-        UILabel *adminLbl = [[UILabel alloc]initWithFrame:CGRectMake(20, 51.5, 180, 25)];
-        [adminLbl setText:@"Administrator Details"];
-        [adminLbl setFont:[UIFont fontWithName:@"Helvetica" size:17]];
-//        [adminLbl setFont:[UIFont systemFontOfSize:17]];
+        UILabel *adminLbl = [[UILabel alloc]initWithFrame:CGRectMake(20, 118, 180, 25)];
+        [adminLbl setText:@"Administrator 1"];
+//        [adminLbl setFont:[UIFont fontWithName:@"Helvetica" size:17]];
+        [adminLbl setFont:[UIFont fontWithName:@"Arial-BoldMT" size:17]];
+        [adminLbl setTextAlignment:NSTextAlignmentLeft];
         [adminLbl setTextColor:[UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0]];//darkGray
         [adminLbl setBackgroundColor:[UIColor clearColor]];
         adminLbl.shadowColor = [UIColor whiteColor];
@@ -321,38 +323,8 @@
         [topView addSubview:adminLbl];
         
         
-        //construct a UILabel for text
-        UILabel *branchNSCLbl = [[UILabel alloc]initWithFrame:CGRectMake(10, 10, 120, 25)];
-        [branchNSCLbl setBackgroundColor:[UIColor clearColor]];
-        [branchNSCLbl setFont:[UIFont systemFontOfSize:17]];
-        branchNSCLbl.textAlignment = NSTextAlignmentLeft;
-        branchNSCLbl.textColor = [UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0];//darkGray
-        branchNSCLbl.shadowColor = [UIColor whiteColor];
-        branchNSCLbl.shadowOffset = CGSizeMake(1.0, 1.0);
-        [branchNSCLbl setText:[NSString stringWithFormat:@"Branch NSC"]];
-        
-        [branchNSCLbl setUserInteractionEnabled:NO];
-        //add to view
-        [innerView addSubview:branchNSCLbl];
-        
-        
-        //Construct another label for amount
-        UILabel *offCounterLbl = [[UILabel alloc]initWithFrame:CGRectMake(10, 45, 120, 25)];
-        offCounterLbl.textAlignment = NSTextAlignmentLeft;
-        [offCounterLbl setFont:[UIFont systemFontOfSize:17]];
-        offCounterLbl.textColor = [UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0];//darkGray
-        offCounterLbl.shadowColor = [UIColor whiteColor];
-        offCounterLbl.shadowOffset = CGSizeMake(1.0, 1.0);//better
-        offCounterLbl.backgroundColor = [UIColor clearColor];
-        [offCounterLbl setUserInteractionEnabled:NO];
-        //retrieve the total bag amount from the class method here
-        [offCounterLbl setText:[NSString stringWithFormat:@"Off-Counter"]];
-        //add to innerView
-        [innerView addSubview:offCounterLbl];
-        
-        
         //construct a UITextField for branch NSC
-        UITextField *branchNSCTF = [[UITextField alloc]initWithFrame:CGRectMake(120, 10, 180, 25)];
+        UITextField *branchNSCTF = [[UITextField alloc]initWithFrame:CGRectMake(120, 10, 170, 25)];
         [branchNSCTF setBackgroundColor:[UIColor clearColor]];
         [branchNSCTF setDelegate:self];
         [branchNSCTF setFont:[UIFont systemFontOfSize:15]];
@@ -363,25 +335,22 @@
         [branchNSCTF setText:[NSString stringWithFormat:@"Branch Value"]];//pop dynamically
         //set TextField delegate
         [branchNSCTF setDelegate:self];
-        
         //add to view
         [innerView addSubview:branchNSCTF];
-        
-        //construct a 2nd TextField
-        UITextField *offCounterTF = [[UITextField alloc]initWithFrame:CGRectMake(120, 45, 180, 25)];
-        [offCounterTF setBackgroundColor:[UIColor clearColor]];
-        [offCounterTF setDelegate:self];
-        [offCounterTF setFont:[UIFont systemFontOfSize:15]];
-        offCounterTF.textAlignment = NSTextAlignmentLeft;
-        offCounterTF.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-        offCounterTF.textColor = [UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0];//blue
-        [offCounterTF setUserInteractionEnabled:NO];
-        [offCounterTF setText:[NSString stringWithFormat:@"Counter Value"]];//pop dynamically
-        //set textField delegate
-        [offCounterTF setDelegate:self];
+
+        //construct a UILabel for text
+        UILabel *branchNSCLbl = [[UILabel alloc]initWithFrame:CGRectMake(10, 10, 115, 25)];
+        [branchNSCLbl setBackgroundColor:[UIColor clearColor]];
+        [branchNSCLbl setFont:[UIFont systemFontOfSize:17]];
+        branchNSCLbl.textAlignment = NSTextAlignmentLeft;
+        branchNSCLbl.textColor = [UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0];//darkGray
+        branchNSCLbl.shadowColor = [UIColor whiteColor];
+        branchNSCLbl.shadowOffset = CGSizeMake(1.0, 1.0);
+        [branchNSCLbl setText:[NSString stringWithFormat:@"Branch NSC"]];
+        [branchNSCLbl setUserInteractionEnabled:NO];
         //add to view
-        [innerView addSubview:offCounterTF];
-        
+        [innerView addSubview:branchNSCLbl];
+                
         //add to UIView hierarchy
         [topView addSubview:innerView];
         
@@ -391,7 +360,23 @@
     
     else
     {
-        return nil;
+        
+        UIView *topView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, _registerTV.frame.size.width, 25)];
+        [topView setBackgroundColor:[UIColor clearColor]];
+        
+        //construct a UILabel for the Admin section
+        UILabel *adminLbl = [[UILabel alloc]initWithFrame:CGRectMake(20, 0, 180, 25)];
+        [adminLbl setText:@"Administrator 2"];
+        
+        [adminLbl setFont:[UIFont fontWithName:@"Arial-BoldMT" size:17]];
+        [adminLbl setTextColor:[UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0]];//darkGray
+        [adminLbl setTextAlignment:NSTextAlignmentLeft];
+        [adminLbl setBackgroundColor:[UIColor clearColor]];
+        adminLbl.shadowColor = [UIColor whiteColor];
+        adminLbl.shadowOffset = CGSizeMake(0.0, 1.0);
+        [topView addSubview:adminLbl];
+
+        return topView;
     }
     
 }
@@ -399,12 +384,11 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     
     if (section == 0) {
-//        return 130;//+44
-        return 180;//180 //84
+        return 143;//+ height for string title -> 128 + 25
     }
     else
     {
-        return 20;//10
+        return 25;
     }
     
 }

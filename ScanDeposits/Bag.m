@@ -139,6 +139,24 @@
 //    }//close if
 
     
+    
+    
+//    //construct a 2nd TextField
+//    UITextField *offCounterTF = [[UITextField alloc]initWithFrame:CGRectMake(120, 45, 180, 25)];
+//    [offCounterTF setBackgroundColor:[UIColor clearColor]];
+//    [offCounterTF setDelegate:self];
+//    [offCounterTF setFont:[UIFont systemFontOfSize:15]];
+//    offCounterTF.textAlignment = NSTextAlignmentLeft;
+//    offCounterTF.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+//    offCounterTF.textColor = [UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0];//blue
+//    [offCounterTF setUserInteractionEnabled:NO];
+//    [offCounterTF setText:[NSString stringWithFormat:@"Counter Value"]];//pop dynamically
+//    //set textField delegate
+//    [offCounterTF setDelegate:self];
+//    //add to view
+//    [innerView addSubview:offCounterTF];
+
+    
 }
 
 @end

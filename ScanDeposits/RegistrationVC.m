@@ -504,8 +504,7 @@
     [userLbl setText:[NSString stringWithFormat:@"%@", [array objectAtIndex:indexPath.row]]];
     
     //there is only 1 user
-    if ([_adminArray count] > 1) { //maybe >=1
-        //pop tblView with the admin details
+    if ([_adminArray count] > 1) {
 
         //retrieve the admin at the specified index
 //        NSMutableArray *array = [_adminArray objectAtIndex:indexPath.section];
@@ -514,20 +513,9 @@
         [nameTF setText:[NSString stringWithFormat:@"%@", [[_adminArray objectAtIndex:indexPath.section]objectAtIndex:indexPath.row]]];//was indexPath.section
         DLog(@"_adminArray in cellForRowAtIndex: %@", _adminArray);
         
-    }//there are 2 user so use indexPath.section
-//    else if ([_adminArray count] == 2) {
-//        [nameTF setText:[NSString stringWithFormat:@"%@", [[_adminArray objectAtIndex:indexPath.section]objectAtIndex:indexPath.row]]];
-//    }
-    else
-    {
-        //use the stored plist of values
-        //populate here also
-//        [userLbl setText:[NSString stringWithFormat:@"%@", [array objectAtIndex:indexPath.row]]];
-        
-         [nameTF setPlaceholder:[NSString stringWithFormat:@"Auto generated password"]];
     }
-    
-    if (indexPath.row == 0) { //indexPath.section && //actually section doesnt matter
+    //setup of keyboard prefs
+    if (indexPath.row == 0) {
         
         [nameTF setPlaceholder:[NSString stringWithFormat:@"Enter Name"]];//temp will be dynamic
         //set keyboard type
@@ -562,11 +550,14 @@
     }
     else // Password field
     {
-//        [userLbl setText:@"Admin password"];
         //first time wont exist
-        if (_adminPassword && [_adminArray count] > 1) {
+        if (_adminPassword && [_adminArray count] == 1) {
+            [nameTF setText:[NSString stringWithFormat:@"%@", [[_adminArray objectAtIndex:0]objectAtIndex:indexPath.row]]];
+            DLog(@"AdminArray count is 1 and auto generated password set");
+        }
+        else if (_adminPassword && [_adminArray count] > 1) {
 //            [nameTF setText:[NSString stringWithFormat:@"%@", passwordString]];
-            [nameTF setText:[NSString stringWithFormat:@"%@", [[_adminArray objectAtIndex:indexPath.section]objectAtIndex:indexPath.row]]];//change to indexPath: 0 perhaps
+            [nameTF setText:[NSString stringWithFormat:@"%@", [[_adminArray objectAtIndex:indexPath.section]objectAtIndex:indexPath.row]]];
             DLog(@"_adminArray: %@", _adminArray);
         }
         else

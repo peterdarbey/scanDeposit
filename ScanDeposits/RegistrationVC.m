@@ -15,6 +15,7 @@
 @interface RegistrationVC ()
 {
     UIBarButtonItem *doneBtn;
+    CGSize kbSize;
 }
 
 @property (strong, nonatomic) NSString *name;
@@ -34,6 +35,13 @@
         // Custom initialization
     }
     return self;
+}
+
+//Unregister for notifications
+- (void)viewDidDisappear:(BOOL)animated{
+    
+    [notificationCenter removeObserver:self];
+    [super viewDidDisappear:YES];
 }
 
 - (void)viewDidLoad
@@ -56,7 +64,42 @@
     [self.navigationItem setRightBarButtonItem:doneBtn];
     //disable on load
     [doneBtn setEnabled:NO];
+    //Add a notification for the keyboard
+    notificationCenter = [NSNotificationCenter defaultCenter];
+    [notificationCenter addObserver:self
+                           selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:Nil];
     
+    [notificationCenter addObserver:self
+                           selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:Nil];
+
+    
+}
+
+- (void)keyboardWillShow:(NSNotification *)notification {
+    
+    if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
+        DLog(@"KeyBoardWillAppear");
+        //keyboard frame
+        kbSize = [[[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
+        NSTimeInterval duration = [[[notification userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+        
+        [UIView animateWithDuration:duration animations:^{
+        //only resize tableView when its in transition
+//        _registerTV.frame = CGRectMake(0, 0, 320, _registerTV.frame.size.height - kbSize.height);//keyboard frame
+            
+        }];
+
+    }
+}
+
+- (void)keyboardWillHide:(NSNotification *)notification
+{
+    NSTimeInterval duration = [[[notification userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    
+    [UIView animateWithDuration:duration animations:^{
+        //only resize tableView when its in transition
+//        _registerTV.frame = CGRectMake(0, 0, 320, _registerTV.frame.size.height + kbSize.height);//keyboard frame
+    }];
 }
 
 -(void)buttonStyle:(UIButton *)button WithImgName:(NSString *)imgName imgSelectedName:(NSString *)selectedName withTitle:(NSString *)title
@@ -90,18 +133,49 @@
     return nextTF;
 }
 
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
+    
+    //retrieve the cell from the textField
+    UITableViewCell *cell = (UITableViewCell *)textField.superview.superview;
+
+    
+    //retrieve the section of the cell for conditional
+    NSIndexPath *indexPath = [_registerTV indexPathForCell:cell];
+    DLog(@"IndexPath: %@", indexPath);//[0, 0]
+    
+    //only if in section 1 as the other rows are visible
+    if (indexPath.section == 1) {
+    
+        // resize the UITableView to accomadate the keyboard
+        _registerTV.frame = CGRectMake(0, 0, 320, _registerTV.frame.size.height - kbSize.height);//keyboard frame
+        
+        // Scroll to the current text field
+        [_registerTV scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:1] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+        
+    }
+    
+}
+
+- (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
+    
+    //retrieve the cell from the textField
+    UITableViewCell *cell = (UITableViewCell *)textField.superview.superview;
+    //retrieve the section of the cell for conditional
+    NSIndexPath *indexPath = [_registerTV indexPathForCell:cell];
+    
+    if (indexPath.section == 1) {
+        
+        // resize the UITableView back to the original size
+        _registerTV.frame = CGRectMake(0, 0, 320, _registerTV.frame.size.height + kbSize.height);
+    }
+        return YES;
+}
+
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     //for conditional -> retrieve the cell and use its index
     UITableViewCell *cell = (UITableViewCell *)textField.superview.superview;
     NSIndexPath *indexPath = [_registerTV indexPathForCell:cell];
     
-    //retrieve the index of the section
-    NSIndexPath *index = [NSIndexPath indexPathForRow:0 inSection:1];
-    //if the textField frame belongs to section 1 enable scroll functionality
-    if ([_registerTV indexPathForCell:cell] == index) {
-        [_registerTV scrollRectToVisible:cell.frame animated:YES];
-        DLog(@"Cells are equal so scroll to cell frame");
-    }
     
     
     UITextField *nextTF;

@@ -22,6 +22,7 @@
 {
     NSIndexPath *selectedIP;
     NSMutableArray *stringArray;
+    NSNotificationCenter *notificationCenter;
 }
 
 @property (strong, nonatomic) IBOutlet UITableView *registerTV;

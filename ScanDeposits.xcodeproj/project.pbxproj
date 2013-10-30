@@ -72,6 +72,8 @@
 		BF3703551816D5860027AE4F /* UserPopup.m in Sources */ = {isa = PBXBuildFile; fileRef = BF3703541816D5860027AE4F /* UserPopup.m */; };
 		BF37035A1816E1880027AE4F /* PopupTV.m in Sources */ = {isa = PBXBuildFile; fileRef = BF3703591816E1880027AE4F /* PopupTV.m */; };
 		BF37035F1817C6480027AE4F /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = BF37035E1817C6480027AE4F /* User.m */; };
+		BF92211B18214DC80084DCA0 /* aib_logo_original_cut.png in Resources */ = {isa = PBXBuildFile; fileRef = BF92211A18214DC80084DCA0 /* aib_logo_original_cut.png */; };
+		BF92211D18214E290084DCA0 /* logo_80_121.png in Resources */ = {isa = PBXBuildFile; fileRef = BF92211C18214E290084DCA0 /* logo_80_121.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -168,6 +170,8 @@
 		BF3703591816E1880027AE4F /* PopupTV.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopupTV.m; sourceTree = "<group>"; };
 		BF37035D1817C6480027AE4F /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
 		BF37035E1817C6480027AE4F /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
+		BF92211A18214DC80084DCA0 /* aib_logo_original_cut.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = aib_logo_original_cut.png; sourceTree = "<group>"; };
+		BF92211C18214E290084DCA0 /* logo_80_121.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo_80_121.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -340,6 +344,8 @@
 		BF2C4FC91806FE7900A87C18 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				BF92211A18214DC80084DCA0 /* aib_logo_original_cut.png */,
+				BF92211C18214E290084DCA0 /* logo_80_121.png */,
 				BF37033C180EAEF10027AE4F /* Default-568h.png */,
 				BF37033D180EAEF10027AE4F /* Default-568h@2x.png */,
 				BF37033E180EAEF10027AE4F /* Default.png */,
@@ -461,6 +467,8 @@
 				BF2C4F681805C08B00A87C18 /* Images.xcassets in Resources */,
 				BF370347180EAEF10027AE4F /* Icon@2x.png in Resources */,
 				BF2C4FAE1805C23300A87C18 /* flashlight-turn-on-icon.png in Resources */,
+				BF92211D18214E290084DCA0 /* logo_80_121.png in Resources */,
+				BF92211B18214DC80084DCA0 /* aib_logo_original_cut.png in Resources */,
 				BF2C4F601805C08B00A87C18 /* Main_iPhone.storyboard in Resources */,
 				BF2C4F571805C08B00A87C18 /* InfoPlist.strings in Resources */,
 				BF370342180EAEF10027AE4F /* Default-568h.png in Resources */,

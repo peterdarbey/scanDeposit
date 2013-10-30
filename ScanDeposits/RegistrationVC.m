@@ -460,7 +460,7 @@
         
        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:myIdentifier];
         
-        nameTF = [[UITextField alloc]initWithFrame:CGRectMake(90, cell.bounds.size.height/4, 200, 25)];
+        nameTF = [[UITextField alloc]initWithFrame:CGRectMake(100, cell.bounds.size.height/4, 190, 25)];
         [nameTF setBackgroundColor:[UIColor clearColor]];
         nameTF.tag = NAME_TF;
         nameTF.textAlignment = NSTextAlignmentLeft;
@@ -476,7 +476,7 @@
         [cell.contentView addSubview:nameTF];
         
         //Construct Label
-        userLbl = [[UILabel alloc]initWithFrame:CGRectMake(10, cell.bounds.size.height/4, 70 , 25)];
+        userLbl = [[UILabel alloc]initWithFrame:CGRectMake(10, cell.bounds.size.height/4, 80 , 25)];
         userLbl.tag = USER_LBL;
         userLbl.textAlignment = NSTextAlignmentLeft;
         userLbl.font = [UIFont fontWithName:@"Arial-BoldMT" size:15];
@@ -499,21 +499,30 @@
     
     
     //create the array of label values for fields
-    NSArray *array = @[@"Name", @"Email", @"Staff ID", @"Admin Password"];
+    NSArray *array = @[@"Name", @"Email", @"Staff ID", @"Password"];
     //always remains constant
     [userLbl setText:[NSString stringWithFormat:@"%@", [array objectAtIndex:indexPath.row]]];
     
+    
     //there is only 1 user
-    if ([_adminArray count] > 1) {
-
-        //retrieve the admin at the specified index
-//        NSMutableArray *array = [_adminArray objectAtIndex:indexPath.section];
+    if (_adminPassword && [_adminArray count] == 1) {
+        //Only 1 user so set just the first section
+        if (indexPath.section == 0) {
+            [nameTF setText:[NSString stringWithFormat:@"%@", [[_adminArray objectAtIndex:0]objectAtIndex:indexPath.row]]];//section 0 pop section 0
+        }
         
-//        [userLbl setText:[NSString stringWithFormat:@"%@", [array objectAtIndex:indexPath.row]]];
-        [nameTF setText:[NSString stringWithFormat:@"%@", [[_adminArray objectAtIndex:indexPath.section]objectAtIndex:indexPath.row]]];//was indexPath.section
-        DLog(@"_adminArray in cellForRowAtIndex: %@", _adminArray);
+    }//else if adminPassword set and 2 admins created
+    else if (_adminPassword && [_adminArray count] > 1) {
         
+        [nameTF setText:[NSString stringWithFormat:@"%@", [[_adminArray objectAtIndex:indexPath.section]objectAtIndex:indexPath.row]]];
     }
+    else //first time _adminPassword wont exist
+    {
+        [nameTF setPlaceholder:[NSString stringWithFormat:@"Auto Generated"]];
+    }
+
+    
+    
     //setup of keyboard prefs
     if (indexPath.row == 0) {
         
@@ -550,21 +559,8 @@
     }
     else // Password field
     {
-        //first time wont exist
-        if (_adminPassword && [_adminArray count] == 1) {
-            [nameTF setText:[NSString stringWithFormat:@"%@", [[_adminArray objectAtIndex:0]objectAtIndex:indexPath.row]]];
-            DLog(@"AdminArray count is 1 and auto generated password set");
-        }
-        else if (_adminPassword && [_adminArray count] > 1) {
-//            [nameTF setText:[NSString stringWithFormat:@"%@", passwordString]];
-            [nameTF setText:[NSString stringWithFormat:@"%@", [[_adminArray objectAtIndex:indexPath.section]objectAtIndex:indexPath.row]]];
-            DLog(@"_adminArray: %@", _adminArray);
-        }
-        else
-        {
-            [nameTF setPlaceholder:[NSString stringWithFormat:@"Auto generated password"]];
-        }
-        
+        DLog(@"row do nothing");
+        [nameTF setUserInteractionEnabled:NO];
     }
     
         return cell;
@@ -575,7 +571,7 @@
     
     //if _userArray has more than 1 user use its count
     if ([_adminArray count] > 1) {
-        return [_adminArray count];//always 2 anyhow
+        return [_adminArray count];//always 2
     }
     else //default to 2
     {
@@ -588,9 +584,9 @@
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     //user details will be the count
     if ([_adminArray count] > 1) {
-        return 4; //[[_adminArray objectAtIndex:indexPath.section]count];//which will be 4
+        return [[_adminArray objectAtIndex:section]count];//always 4
     }
-    else //default to 4
+    else
     {
         return 4;
     }

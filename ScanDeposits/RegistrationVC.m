@@ -14,7 +14,7 @@
 
 @interface RegistrationVC ()
 {
-    
+    UIBarButtonItem *doneBtn;
 }
 
 @property (strong, nonatomic) NSString *name;
@@ -34,6 +34,29 @@
         // Custom initialization
     }
     return self;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+	
+    stringArray = [NSMutableArray array];
+    
+    //ToDo init admins array with the associated admins if exist from file
+    _adminArray = [NSMutableArray arrayWithCapacity:2];
+    
+    [_registerTV setBackgroundColor:[UIColor clearColor]];
+    [_registerTV setBackgroundView:[[UIImageView alloc]initWithImage:
+                                    [UIImage imageNamed:@"Default-568h.png"]]];
+    //set delegate to self
+    [_registerTV setDelegate:self];
+    [_registerTV setDataSource:self];
+    
+    doneBtn = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(donePressed:)];
+    [self.navigationItem setRightBarButtonItem:doneBtn];
+    //disable on load
+    [doneBtn setEnabled:NO];
+    
 }
 
 -(void)buttonStyle:(UIButton *)button WithImgName:(NSString *)imgName imgSelectedName:(NSString *)selectedName withTitle:(NSString *)title
@@ -68,9 +91,18 @@
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
-    //for conditional
+    //for conditional -> retrieve the cell and use its index
     UITableViewCell *cell = (UITableViewCell *)textField.superview.superview;
     NSIndexPath *indexPath = [_registerTV indexPathForCell:cell];
+    
+    //retrieve the index of the section
+    NSIndexPath *index = [NSIndexPath indexPathForRow:0 inSection:1];
+    //if the textField frame belongs to section 1 enable scroll functionality
+    if ([_registerTV indexPathForCell:cell] == index) {
+        [_registerTV scrollRectToVisible:cell.frame animated:YES];
+        DLog(@"Cells are equal so scroll to cell frame");
+    }
+    
     
     UITextField *nextTF;
     
@@ -123,7 +155,8 @@
         
     }
     else //Staff ID then generate Adminstrator password
-    {   //pass code 6 digits
+    {
+        
         if (![textField.text isEqualToString:@""] && [textField.text length] >= 6) {
             //resign previous responder status
             [textField resignFirstResponder];
@@ -250,27 +283,6 @@
     return eMailPrefix;
     
 }
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-	
-    stringArray = [NSMutableArray array];
-    
-    //ToDo init admins array with the associated admins if exist from file
-    _adminArray = [NSMutableArray arrayWithCapacity:2];
-    
-     [_registerTV setBackgroundColor:[UIColor clearColor]];
-     [_registerTV setBackgroundView:[[UIImageView alloc]initWithImage:
-                                     [UIImage imageNamed:@"Default-568h.png"]]];
-    //set delegate to self
-    [_registerTV setDelegate:self];
-    [_registerTV setDataSource:self];
-    
-    UIBarButtonItem *doneBtn = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(donePressed:)];
-    [self.navigationItem setRightBarButtonItem:doneBtn];
-    
-
-}
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
@@ -324,7 +336,7 @@
         
         
         //construct a UITextField for branch NSC
-        UITextField *branchNSCTF = [[UITextField alloc]initWithFrame:CGRectMake(120, 10, 170, 25)];
+        UITextField *branchNSCTF = [[UITextField alloc]initWithFrame:CGRectMake(105, 10, 185, 25)];
         [branchNSCTF setBackgroundColor:[UIColor clearColor]];
         [branchNSCTF setDelegate:self];
         [branchNSCTF setFont:[UIFont systemFontOfSize:15]];
@@ -341,10 +353,10 @@
         //construct a UILabel for text
         UILabel *branchNSCLbl = [[UILabel alloc]initWithFrame:CGRectMake(10, 10, 115, 25)];
         [branchNSCLbl setBackgroundColor:[UIColor clearColor]];
-        [branchNSCLbl setFont:[UIFont systemFontOfSize:17]];
+        [branchNSCLbl setFont:[UIFont fontWithName:@"Arial-BoldMT" size:15]];
         branchNSCLbl.textAlignment = NSTextAlignmentLeft;
         branchNSCLbl.textColor = [UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0];//darkGray
-        branchNSCLbl.shadowColor = [UIColor whiteColor];
+        branchNSCLbl.shadowColor = [UIColor grayColor];
         branchNSCLbl.shadowOffset = CGSizeMake(1.0, 1.0);
         [branchNSCLbl setText:[NSString stringWithFormat:@"Branch NSC"]];
         [branchNSCLbl setUserInteractionEnabled:NO];
@@ -444,7 +456,7 @@
         
        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:myIdentifier];
         
-        nameTF = [[UITextField alloc]initWithFrame:CGRectMake(100, cell.bounds.size.height/4, 190, 25)];
+        nameTF = [[UITextField alloc]initWithFrame:CGRectMake(105, cell.bounds.size.height/4, 185, 25)];
         [nameTF setBackgroundColor:[UIColor clearColor]];
         nameTF.tag = NAME_TF;
         nameTF.textAlignment = NSTextAlignmentLeft;
@@ -460,7 +472,7 @@
         [cell.contentView addSubview:nameTF];
         
         //Construct Label
-        userLbl = [[UILabel alloc]initWithFrame:CGRectMake(10, cell.bounds.size.height/4, 80 , 25)];
+        userLbl = [[UILabel alloc]initWithFrame:CGRectMake(10, cell.bounds.size.height/4, 85 , 25)];
         userLbl.tag = USER_LBL;
         userLbl.textAlignment = NSTextAlignmentLeft;
         userLbl.font = [UIFont fontWithName:@"Arial-BoldMT" size:15];
@@ -493,12 +505,18 @@
         //Only 1 user so set just the first section
         if (indexPath.section == 0) {
             [nameTF setText:[NSString stringWithFormat:@"%@", [[_adminArray objectAtIndex:0]objectAtIndex:indexPath.row]]];//section 0 pop section 0
+            //set here
+            [doneBtn setEnabled:YES];
         }
         
     }//else if adminPassword set and 2 admins created
     else if (_adminPassword && [_adminArray count] > 1) {
         
         [nameTF setText:[NSString stringWithFormat:@"%@", [[_adminArray objectAtIndex:indexPath.section]objectAtIndex:indexPath.row]]];
+        //disable textFields then
+        [nameTF setUserInteractionEnabled:NO];//Test -> seems right //[_regTV isEditing: NO];
+        //ToDo add editing behaviour also
+        
     }
     else //first time _adminPassword wont exist
     {
@@ -579,6 +597,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     selectedIP = indexPath;
+    
     
     [_registerTV deselectRowAtIndexPath:indexPath animated:YES];
 }

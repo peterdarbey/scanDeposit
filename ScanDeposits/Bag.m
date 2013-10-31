@@ -227,6 +227,33 @@
         
 //    }
 
+    
+    //CellForRowAtIndex in UserVC
+//    if ([_dataSource count] >= 1 && _user) {
+//        
+//        //if selected add extra items to array in expand method
+//        if (_isSelected && _isExpanded) { //add !_isEXpanded
+//            
+//            //Construct keys for iteration
+//            NSArray *userKeys = @[@"Initials", @"Name", @"Email", @"Staff ID"];
+//            
+//            //_dataSource has the appropreiate _userArray containing the 3 fields of each user
+//            [userNameTF setText:[NSString stringWithFormat:@"%@", [[_dataSource objectAtIndex:indexPath.section]    objectAtIndex:indexPath.row]]];
+//            [userNameLbl setText:[NSString stringWithFormat:@"%@", [userKeys objectAtIndex:indexPath.row]]];
+//            DLog(@"_dataSource structure: %@", _dataSource);
+//        }//close if
+//        
+//        else //not expanded so just show 1 entry -> the initials
+//        {
+//            //set UITextField Initials
+//            [userNameTF setText:[NSString stringWithFormat:@"%@", [[_dataSource objectAtIndex:indexPath.section]objectAtIndex:indexPath.row]]];//yes
+//            //set UILabel name
+//            [userNameLbl setText:@"Initials"];
+//        }
+//        
+//    }//close if
+    
+    
 
     
 }

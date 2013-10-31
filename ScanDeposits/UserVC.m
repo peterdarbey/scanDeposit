@@ -174,23 +174,10 @@
     
     //ToDo On done save the _dataSource array to Documents folder
     
-   
-    
-    //Test
-//    NSArray *writeArray = @[@"Write to file", @"Write to file", @"Write to file", @"Write to file"];//worked
-//    NSMutableArray *mutArray = [NSMutableArray array];
-//    [mutArray addObject:writeArray];
-//    [mutArray writeToFile:fullPath atomically:YES];//works
-    
     //create our data persistence model
 //    PersistenceManager *persistManager = [[PersistenceManager alloc]init];
 //    NSMutableArray *array = [_dataSource objectAtIndex:0];
 //    [persistManager writeToCollection:array withPath:fullPath];
-    
-//    NSArray *writeArray = @[@"Write to file", @"Write to file", @"Write to file", @"Write to file"];//worked
-    
-    
-    DLog(@"_dataSource write too file: %@", _dataSource);
     
 //    [self.navigationController popToRootViewControllerAnimated:YES];//Pushes to previous navController as I instaniated another one
     [self.navigationController popViewControllerAnimated:YES];
@@ -382,10 +369,10 @@
     }
     
     
-    if ([_dataSource count] >= 1 && _user) {
+    if (([_dataSource count] >= 1 && _user) || ([_dataSource count] >= 1 && _fileExists)) {// was just([_dataSource count] >= 1 && _user) {
         
         //if selected add extra items to array in expand method
-        if (_isSelected && _isExpanded) { //add !_isEXpanded
+        if (_isSelected && _isExpanded) {
             
             //Construct keys for iteration
             NSArray *userKeys = @[@"Initials", @"Name", @"Email", @"Staff ID"];
@@ -396,13 +383,41 @@
             DLog(@"_dataSource structure: %@", _dataSource);
         }//close if
         
-        else //not expanded so just show 1 entry -> the initials
+        else //not expanded and not selected so just show 1 entry -> the initials
         {
-            //set UITextField Initials
-            [userNameTF setText:[NSString stringWithFormat:@"%@", [[_dataSource objectAtIndex:indexPath.section]objectAtIndex:indexPath.row]]];//yes
-            //set UILabel name
-            [userNameLbl setText:@"Initials"];
-        }
+            //Added this -> if file exists display its data
+            if (_fileExists) {
+                DLog(@"Enter fileExists if in else");
+                [userNameTF setText:[NSString stringWithFormat:@"%@", [[_dataSource objectAtIndex:indexPath.section]objectAtIndex:0]]];//try indexPath.row
+                //set UILabel name
+                [userNameLbl setText:@"Initials"];
+            }
+            else
+            {
+                //set UITextField Initials
+                [userNameTF setText:[NSString stringWithFormat:@"%@", [[_dataSource objectAtIndex:indexPath.section]objectAtIndex:indexPath.row]]];//yes
+                //set UILabel name
+                [userNameLbl setText:@"Initials"];
+                //maybe save to file here also
+            }
+            
+        }//close else
+        
+        //Where to save? - NEW CODE
+//        //NOTE only write to file if its not already written to file?
+//        if (_fileExists) { //Only enter here if this is user is not saved to file already
+//            
+//            //Now write the object At selected index to the file
+//            [[_dataSource objectAtIndex:indexPath.section] writeToFile:fullPath atomically:YES];//test try
+////            [_dataSource writeToFile:fullPath atomically:YES];//Test
+//        }
+//        else
+//        {
+//            //Now write to file -> overwriting though written here when confirm is pressed
+//            [_dataSource writeToFile:fullPath atomically:YES];
+//            _fileExists = YES;
+//        }
+
         
     }//close if
     
@@ -498,24 +513,23 @@
     
     if (_fileExists) {
     
-        //retrieve from file first
+        //retrieve from file first Note values/entries already in the collection dont add again
         userValues = [_dataSource objectAtIndex:indexPath.section];//get selected section
-        DLog(@"userValues in fileExists: %@", userValues);
+        DLog(@"userValues in fileExists: %@", userValues);//currently only 20 ->2nd object?
         
-        
+        [_userTV reloadData];//test -> works but not right no anim
     }
     else //Doesnt exist means returnUserModel called
     {
         
         //Now get each _userArray out of the _eachUserArray for the apropriate section /selected section
         userValues = [_eachUserArray objectAtIndex:indexPath.section];//get selected section
-
     }
     
     //Note indexPath is the selected row and section
     NSMutableArray *indexArray = [[NSMutableArray alloc]init];
     
-    //check that its not open
+    //check that its not open -> Note if fileExists its not entering here as it fails count == 1
     if([[_dataSource objectAtIndex:selectedIP.section]count] == 1) {
         
         for (int i = 0; i < [userValues count]; i++) { //3
@@ -523,12 +537,21 @@
             [indexArray addObject:index];
             //Add the _userArray to the _dataSource collection
             [[_dataSource objectAtIndex:selectedIP.section]addObject:[userValues objectAtIndex:i]];//_userArray
+            DLog(@"iterating still with index: %i", index.row);
             
         }//close loop
         
-        //NOTE only write to file if its not already written to file?
+        UITableViewCell *cell = [self.userTV cellForRowAtIndexPath:indexPath];
+        iv = cell.imageView;
+        [UIView animateWithDuration:0.3 animations:^{
+            // Rotate the arrow
+            iv.transform = CGAffineTransformMakeRotation(M_PI_2);//rotate down
+        }];
+        
+        
+//NOTE only write to file if its not already written to file?
         if (_fileExists) {
-            
+
             //Now write the object At selected index to the file
             [[_dataSource objectAtIndex:indexPath.section] writeToFile:fullPath atomically:YES];//test try objectAtIndex
         }
@@ -538,15 +561,9 @@
             [_dataSource writeToFile:fullPath atomically:YES];
         }
         
-        UITableViewCell *cell = [self.userTV cellForRowAtIndexPath:indexPath];
-        iv = cell.imageView;
-        [UIView animateWithDuration:0.3 animations:^{
-            // Rotate the arrow
-            iv.transform = CGAffineTransformMakeRotation(M_PI_2);//rotate down
-        }];
-        
         [_userTV insertRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationBottom];
-    }
+        
+    }//close if
     
 }
 
@@ -561,7 +578,8 @@
         [UIView animateWithDuration:0.3 animations:^{
             iv.transform = CGAffineTransformMakeRotation(0);
         }];
-        
+        //May need if here to stop removing from file if exists dont writew to file here as will lose entries
+        //also watch that when it calkls cellForRow again it doesnt overwrite withput the add user details?
     for (int i = 1; i < numRows; i++)
     {
         NSIndexPath *index = [NSIndexPath indexPathForRow:i inSection:selectedIP.section];//selected index
@@ -572,7 +590,6 @@
     [_userTV deleteRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationBottom];
         
     }//close if check
-    
     
 }
 

@@ -502,6 +502,7 @@
         userValues = [_dataSource objectAtIndex:indexPath.section];//get selected section
         DLog(@"userValues in fileExists: %@", userValues);
         
+        
     }
     else //Doesnt exist means returnUserModel called
     {
@@ -525,9 +526,17 @@
             
         }//close loop
         
-        //Now write to file
-        [_dataSource writeToFile:fullPath atomically:YES];//test
-        
+        //NOTE only write to file if its not already written to file?
+        if (_fileExists) {
+            
+            //Now write the object At selected index to the file
+            [[_dataSource objectAtIndex:indexPath.section] writeToFile:fullPath atomically:YES];//test try objectAtIndex
+        }
+        else
+        {
+            //Now write to file
+            [_dataSource writeToFile:fullPath atomically:YES];
+        }
         
         UITableViewCell *cell = [self.userTV cellForRowAtIndexPath:indexPath];
         iv = cell.imageView;

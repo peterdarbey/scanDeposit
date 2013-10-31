@@ -36,6 +36,7 @@
 
 @property BOOL isSelected;
 @property BOOL isExpanded;
+@property BOOL fileExists;
 
 
 @end

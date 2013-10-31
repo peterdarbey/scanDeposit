@@ -66,6 +66,40 @@
     return nextTF;
 }
 
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    
+    if([string isEqualToString:@"@"]) {
+        //        DLog(@"STRING: %@", string);
+        [textField resignFirstResponder];
+        return NO;//works
+    }
+    
+    return YES;
+    
+}
+
+//creates a string with @aib.ie appended to the end
+- (NSString *)addEMailToString:(NSString *)text {
+    
+    if (text) {
+        
+        NSArray *eMailArray = (NSArray *)[text componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"@"]];
+        
+        //if eMailArray is initilaized retrieve the first component at index:0
+        if (eMailArray) {
+            NSString *emailString = [eMailArray objectAtIndex:0];
+            _eMail = [emailString stringByAppendingString:AIB];
+        }
+        
+    }//close if
+    
+    NSString *eMailPrefix = _eMail;
+    
+    return eMailPrefix;
+    
+}
+
 - (void)createInitialsFromText:(NSString *)text {
     
     NSMutableArray *lettersArray = [NSMutableArray array];
@@ -150,8 +184,11 @@
         if (![textField.text isEqualToString:@""] && [textField.text length] > 1) {
             //resign previous responder status
             [textField resignFirstResponder];
-            self.eMail = textField.text;
-            DLog(@"eMailString: %@", _eMail);
+            
+            //create email with the address apended to it
+            textField.text = [self addEMailToString:textField.text];
+            //Note method assigns to the _email property
+            DLog(@"_eMail: %@", _eMail);
             //next textFiueld
             nextTF = [self returnNextTextField:textField];
             [nextTF becomeFirstResponder];

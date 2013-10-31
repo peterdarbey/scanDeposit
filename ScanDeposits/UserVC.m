@@ -9,10 +9,12 @@
 #import "UserVC.h"
 #import "User.h"
 
+#import "PersistenceManager.h"
 
 @interface UserVC ()
 {
-    
+    NSFileManager *fileManager;
+    NSString *fullPath;
 }
 
 @end
@@ -127,11 +129,34 @@
     //inititize all userCollections
     _userArray = [NSMutableArray array];//Empty always at least 1 user to use app just stop user deleting last 1 or 2 entries
     
-    _dataSource = [NSMutableArray array];
+//    _dataSource = [NSMutableArray array];
     
     _eachUserArray = [NSMutableArray array];
     
-    //Load the _dataSource from file if it exists
+    //No on launch
+    _fileExists = NO;
+    
+    //retrieve the singleton for writing locally
+    fileManager = [NSFileManager defaultManager];
+    
+    fullPath = [PersistenceManager getFilePath];
+    DLog(@"<< fullPath >>: %@", fullPath);//Documents/usersCollection.plist
+    
+    //if file exists at path init with data
+    if ([fileManager fileExistsAtPath:fullPath]) {
+         //Load the _dataSource from file if it exists
+        _dataSource = [NSMutableArray arrayWithContentsOfFile:fullPath];
+        _fileExists = YES;
+        DLog(@"_dataSource retrieved from stored plist: %@", _dataSource); //plist:works now
+    }
+    else //doesnt exist so copy from NSBundle to the destination path
+    {
+        //create the filePath for writing too file
+        NSString *sourcePath = [[NSBundle mainBundle]pathForResource:@"usersCollection" ofType:@"plist"];
+        [fileManager copyItemAtPath:sourcePath toPath:fullPath error:nil];
+        _dataSource = [NSMutableArray array];
+    }
+
     
     
     
@@ -142,12 +167,30 @@
     
     //set conditional for reloadData
 //    [_userTV reloadData];
+
 }
 
 - (void)donePressed:(UIButton *)sender {
     
-    DLog(@"Done Pressed");
-    //On done save the _dataSource array to Documents folder
+    //ToDo On done save the _dataSource array to Documents folder
+    
+   
+    
+    //Test
+//    NSArray *writeArray = @[@"Write to file", @"Write to file", @"Write to file", @"Write to file"];//worked
+//    NSMutableArray *mutArray = [NSMutableArray array];
+//    [mutArray addObject:writeArray];
+//    [mutArray writeToFile:fullPath atomically:YES];//works
+    
+    //create our data persistence model
+//    PersistenceManager *persistManager = [[PersistenceManager alloc]init];
+//    NSMutableArray *array = [_dataSource objectAtIndex:0];
+//    [persistManager writeToCollection:array withPath:fullPath];
+    
+//    NSArray *writeArray = @[@"Write to file", @"Write to file", @"Write to file", @"Write to file"];//worked
+    
+    
+    DLog(@"_dataSource write too file: %@", _dataSource);
     
 //    [self.navigationController popToRootViewControllerAnimated:YES];//Pushes to previous navController as I instaniated another one
     [self.navigationController popViewControllerAnimated:YES];
@@ -155,7 +198,7 @@
 }
 
 - (void)addUserPressed:(UIButton *)sender {
-    DLog(@"Add Another pressed");
+  
     //ToDO bring up a xib view
     UserPopup *userPopup = [UserPopup loadFromNibNamed:@"UserPopup"];
     //Add delegate if required -> its the UserPopup delegate set to self this UserVC class
@@ -350,7 +393,7 @@
             //_dataSource has the appropreiate _userArray containing the 3 fields of each user
             [userNameTF setText:[NSString stringWithFormat:@"%@", [[_dataSource objectAtIndex:indexPath.section]    objectAtIndex:indexPath.row]]];
             [userNameLbl setText:[NSString stringWithFormat:@"%@", [userKeys objectAtIndex:indexPath.row]]];
-            
+            DLog(@"_dataSource structure: %@", _dataSource);
         }//close if
         
         else //not expanded so just show 1 entry -> the initials
@@ -449,10 +492,27 @@
 //This method addds the objects to the dataSource not the cellForRow
 - (void)expandMyTableViewWithIndex:(NSIndexPath *)indexPath {
     
+    //******** Note ********
+    //Need a conditional test to check the array as this array has not been created via the returnUserModel call
+    NSArray *userValues;
+    
+    if (_fileExists) {
+    
+        //retrieve from file first
+        userValues = [_dataSource objectAtIndex:indexPath.section];//get selected section
+        DLog(@"userValues in fileExists: %@", userValues);
+        
+    }
+    else //Doesnt exist means returnUserModel called
+    {
+        
+        //Now get each _userArray out of the _eachUserArray for the apropriate section /selected section
+        userValues = [_eachUserArray objectAtIndex:indexPath.section];//get selected section
+
+    }
+    
     //Note indexPath is the selected row and section
     NSMutableArray *indexArray = [[NSMutableArray alloc]init];
-    //Now get each _userArray out of the _eachUserArray for the apropriate section /selected section
-    NSArray *userValues = [_eachUserArray objectAtIndex:indexPath.section];//get selected section
     
     //check that its not open
     if([[_dataSource objectAtIndex:selectedIP.section]count] == 1) {
@@ -465,7 +525,10 @@
             
         }//close loop
         
-        DLog(@"_dataSource ********: %@", _dataSource);
+        //Now write to file
+        [_dataSource writeToFile:fullPath atomically:YES];//test
+        
+        
         UITableViewCell *cell = [self.userTV cellForRowAtIndexPath:indexPath];
         iv = cell.imageView;
         [UIView animateWithDuration:0.3 animations:^{
@@ -514,9 +577,9 @@
     //Init the _userArray with the user fields -> array with values/objects
     //Make it local
     NSMutableArray *localUserArray = [NSMutableArray array];
-    [localUserArray addObject:[user userName]];
-    [localUserArray addObject:[user userEMail]];
-    [localUserArray addObject:[user userStaffID]];
+    [localUserArray addObject:(NSString *)[user userName]];
+    [localUserArray addObject:(NSString *)[user userEMail]];
+    [localUserArray addObject:(NSString *)[user userStaffID]];
 //    [localUserArray addObject:[user userInitials]];//add this initials and isAdmin if required
      [_eachUserArray addObject:localUserArray];
      DLog(@"_eachUserArray__: %@ with Count: %i ", _eachUserArray, [_eachUserArray count]);
@@ -524,12 +587,10 @@
     
     //Construct an array to populate the headers with initials
     NSMutableArray *initArray = [NSMutableArray array];
-    [initArray addObject:[user userInitials]];//extract the new user initials
+    [initArray addObject:(NSString *)[user userInitials]];//extract the new user initials
     [_dataSource addObject:initArray];
     DLog(@"_dataSource with initArray: %@", _dataSource);//should be initized correct
     
-    
-//    NSDictionary *userDict = @{@"Name" : [_user userName], @"Email" : [_user userEMail], @"Staff ID" : [_user userStaffID], @"Initials" : [_user userInitials]};//count 3 -> now 4as added initials
 }
 
 //may not need this delegate method

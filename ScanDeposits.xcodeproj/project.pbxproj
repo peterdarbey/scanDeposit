@@ -74,6 +74,8 @@
 		BF37035F1817C6480027AE4F /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = BF37035E1817C6480027AE4F /* User.m */; };
 		BF92211B18214DC80084DCA0 /* aib_logo_original_cut.png in Resources */ = {isa = PBXBuildFile; fileRef = BF92211A18214DC80084DCA0 /* aib_logo_original_cut.png */; };
 		BF92211D18214E290084DCA0 /* logo_80_121.png in Resources */ = {isa = PBXBuildFile; fileRef = BF92211C18214E290084DCA0 /* logo_80_121.png */; };
+		BF922120182279340084DCA0 /* PersistenceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BF92211F182279340084DCA0 /* PersistenceManager.m */; };
+		BF92212318227AEC0084DCA0 /* usersCollection.plist in Resources */ = {isa = PBXBuildFile; fileRef = BF92212218227AEC0084DCA0 /* usersCollection.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -172,6 +174,9 @@
 		BF37035E1817C6480027AE4F /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		BF92211A18214DC80084DCA0 /* aib_logo_original_cut.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = aib_logo_original_cut.png; sourceTree = "<group>"; };
 		BF92211C18214E290084DCA0 /* logo_80_121.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo_80_121.png; sourceTree = "<group>"; };
+		BF92211E182279340084DCA0 /* PersistenceManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersistenceManager.h; sourceTree = "<group>"; };
+		BF92211F182279340084DCA0 /* PersistenceManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersistenceManager.m; sourceTree = "<group>"; };
+		BF92212218227AEC0084DCA0 /* usersCollection.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = usersCollection.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -249,6 +254,7 @@
 				BF2C4F871805C23300A87C18 /* ScanditSDK */,
 				BF2C4FC91806FE7900A87C18 /* Assets */,
 				BF2C4FC51806DF5C00A87C18 /* Model Objects */,
+				BF92212118227AAE0084DCA0 /* Stored_Data */,
 				BF2C4F5B1805C08B00A87C18 /* AppDelegate.h */,
 				BF2C4F5C1805C08B00A87C18 /* AppDelegate.m */,
 				BF2C4F841805C0E000A87C18 /* HomeVC.h */,
@@ -337,6 +343,8 @@
 				BF2C4FC31806C96400A87C18 /* Barcode.m */,
 				BF37035D1817C6480027AE4F /* User.h */,
 				BF37035E1817C6480027AE4F /* User.m */,
+				BF92211E182279340084DCA0 /* PersistenceManager.h */,
+				BF92211F182279340084DCA0 /* PersistenceManager.m */,
 			);
 			name = "Model Objects";
 			sourceTree = "<group>";
@@ -374,6 +382,14 @@
 				BF3703591816E1880027AE4F /* PopupTV.m */,
 			);
 			name = PopupViews;
+			sourceTree = "<group>";
+		};
+		BF92212118227AAE0084DCA0 /* Stored_Data */ = {
+			isa = PBXGroup;
+			children = (
+				BF92212218227AEC0084DCA0 /* usersCollection.plist */,
+			);
+			name = Stored_Data;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -466,6 +482,7 @@
 				BF2C4FAF1805C23300A87C18 /* flashlight-turn-on-icon@2x.png in Resources */,
 				BF2C4F681805C08B00A87C18 /* Images.xcassets in Resources */,
 				BF370347180EAEF10027AE4F /* Icon@2x.png in Resources */,
+				BF92212318227AEC0084DCA0 /* usersCollection.plist in Resources */,
 				BF2C4FAE1805C23300A87C18 /* flashlight-turn-on-icon.png in Resources */,
 				BF92211D18214E290084DCA0 /* logo_80_121.png in Resources */,
 				BF92211B18214DC80084DCA0 /* aib_logo_original_cut.png in Resources */,
@@ -516,6 +533,7 @@
 				BF2C4FA71805C23300A87C18 /* empty.cpp in Sources */,
 				BF370350181674820027AE4F /* UserVC.m in Sources */,
 				BF2C4FC41806C96400A87C18 /* Barcode.m in Sources */,
+				BF922120182279340084DCA0 /* PersistenceManager.m in Sources */,
 				BF3703551816D5860027AE4F /* UserPopup.m in Sources */,
 				BF37035A1816E1880027AE4F /* PopupTV.m in Sources */,
 				BF370335180D4DE40027AE4F /* DepositsVC.m in Sources */,

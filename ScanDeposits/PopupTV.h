@@ -13,6 +13,7 @@
 
 #define USER_NAME_TF 100
 #define USER_NAME_LBL 200
+#define AIB @"@aib.ie"
 
 @interface PopUpTV : UITableView  <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
 {

@@ -15,7 +15,8 @@
 @interface RegistrationVC ()
 {
     UIBarButtonItem *doneBtn;
-    CGSize kbSize;
+    CGSize keyboardSize;
+    double duration;
 }
 
 @property (strong, nonatomic) NSString *name;
@@ -77,64 +78,21 @@
 
 - (void)keyboardWillShow:(NSNotification *)notification {
     
-    if ([notification.name isEqualToString:UIKeyboardWillShowNotification]) {
-        DLog(@"KeyBoardWillAppear");
-        //keyboard frame
-        kbSize = [[[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
-        NSTimeInterval duration = [[[notification userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
-        
-//        CGRect areaRect = _registerTV.frame;
-        
-        [UIView animateWithDuration:duration animations:^{
-        //only resize tableView when its in transition
-        _registerTV.frame = CGRectMake(0, 0, 320, _registerTV.frame.size.height - kbSize.height);//keyboard frame
-//            CGRect rect = _registerTV.frame;
-            
-            UITableViewCell *cell = (UITableViewCell *)[_registerTV cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-            
-            UITableViewCell *hiddenCell = (UITableViewCell *)[_registerTV cellForRowAtIndexPath:[NSIndexPath indexPathForRow:3 inSection:1]];
-            
-            CGRect areaRect = _registerTV.frame;//(0, 0, 320, 332) -keyboard
-
-    DLog(@"cell.frame.origin.x: %f andY %f andX %f andY %f", cell.frame.origin.x, cell.frame.origin.y, cell.frame.size.width, cell.frame.size.height);//(0, 489, 320, 45)
-            //wont
-            if (!CGRectContainsPoint(areaRect, cell.frame.origin)) {
-                
-                //if this cells location is not inside the tblView when keyboard appears scroll
-                if (!CGRectContainsPoint(areaRect, cell.frame.origin)) {
-                    //                [_registerTV scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:1] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-                    CGPoint scrollPoint = CGPointMake(0, cell.frame.origin.y - areaRect.size.height);//areaRect.size.height
-                    
-                    [_registerTV setContentOffset:scrollPoint animated:YES];
-                    
-                }
-            }
-            else if (!CGRectContainsPoint(areaRect, hiddenCell.frame.origin))
-            {
-                if (!CGRectContainsPoint(areaRect, hiddenCell.frame.origin)) {
-                    //                [_registerTV scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:1] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-                    CGPoint scrollPoint = CGPointMake(0, cell.frame.origin.y - areaRect.size.height);//areaRect.size.height
-                    
-                    [_registerTV setContentOffset:scrollPoint animated:YES];
-                    
-                }
-            }
-            
-            
-        }];
-
-    }
+   
+    //keyboard size
+     keyboardSize = [[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
     
-//    CGSize keyboardSize = [[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-//    UITableViewCell *cell = (UITableViewCell*)[_registerTV cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:1]];
+//    UITableViewCell *cell = (UITableViewCell*)[_registerTV cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1]];
+    
 //    UITextField *textField = (UITextField *)[cell.contentView viewWithTag:NAME_TF];
 //    CGRect textFieldRect = [textField convertRect:textField.frame toView:self.view];
+    
 //    if (textFieldRect.origin.y + textFieldRect.size.height >= [UIScreen mainScreen].bounds.size.height - keyboardSize.height) {
-//        NSDictionary *info = [notification userInfo];
-//        NSNumber *number = [info objectForKey:UIKeyboardAnimationDurationUserInfoKey];
-//        double duration = [number doubleValue];
+        NSDictionary *info = [notification userInfo];
+        NSNumber *number = [info objectForKey:UIKeyboardAnimationDurationUserInfoKey];
+         duration = [number doubleValue];
 //        [UIView animateWithDuration:duration animations:^{
-//            _registerTV.contentInset =  UIEdgeInsetsMake(0, 0, keyboardSize.height, 0);
+//            _registerTV.contentInset =  UIEdgeInsetsMake(0, 0, keyboardSize.height, 0);//keyboardSize.height
 //        }];
 //        NSIndexPath *pathOfTheCell = [_registerTV indexPathForCell:cell];
 //        [_registerTV scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:pathOfTheCell.row inSection:0] atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
@@ -147,11 +105,13 @@
 - (void)keyboardWillHide:(NSNotification *)notification
 {
     DLog(@"KeyBoardWillHide");
-    NSTimeInterval duration = [[[notification userInfo] objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     
     [UIView animateWithDuration:duration animations:^{
         //only resize tableView when its in transition
-        _registerTV.frame = CGRectMake(0, 0, 320, _registerTV.frame.size.height + kbSize.height);//keyboard frame
+//        _registerTV.frame = CGRectMake(0, 0, 320, _registerTV.frame.size.height + keyboardSize.height);//keyboard frame
+//        _registerTV.contentInset =  UIEdgeInsetsMake(0, 0, 100, 0);
+        //reduce the size of the keyboard
+    DLog(@"_regTV.frame: %f andHeight: %f", _registerTV.frame.size.width, _registerTV.frame.size.height);
     }];
 }
 
@@ -186,28 +146,28 @@
     return nextTF;
 }
 
-//- (void)textFieldDidBeginEditing:(UITextField *)textField {
-//    
-//    //retrieve the cell from the textField
-//    UITableViewCell *cell = (UITableViewCell *)textField.superview.superview;
-//
-//    
-//    //retrieve the section of the cell for conditional
-//    NSIndexPath *indexPath = [_registerTV indexPathForCell:cell];
-//    DLog(@"IndexPath: %@", indexPath);//[0, 0]
-//    
-//    //only if in section 1 as the other rows are visible
-//    if (indexPath.section == 1) {
-//    
-//        // resize the UITableView to accomadate the keyboard
-//        _registerTV.frame = CGRectMake(0, 0, 320, _registerTV.frame.size.height - kbSize.height);//keyboard frame
-//        
-//        // Scroll to the current text field
-//        [_registerTV scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:1] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-//        
-//    }
-//    
-//}
+//keyboard functionality
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
+    
+    //retrieve the cell from the textField
+    UITableViewCell *cell = (UITableViewCell *)textField.superview.superview;
+    //retrieve the section of the cell for conditional
+    NSIndexPath *indexPath = [_registerTV indexPathForCell:cell];
+    
+    //if the editing textField is in section 1 which is hidden by keyboard enter and scroll
+    if (indexPath.section == 1) {
+    
+            [UIView animateWithDuration:duration animations:^{
+                //reduce the size of the keyboard
+                _registerTV.frame = CGRectMake(0, 0, 320, _registerTV.frame.size.height - keyboardSize.height);
+            
+                _registerTV.contentInset =  UIEdgeInsetsMake(0, 0, 100, 0);//was keyboardSize.height
+                }];
+            NSIndexPath *pathOfTheCell = [_registerTV indexPathForCell:cell];
+            [_registerTV scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:pathOfTheCell.row inSection:1] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
+    }
+    
+}
 
 //- (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
 //    
@@ -215,12 +175,19 @@
 //    UITableViewCell *cell = (UITableViewCell *)textField.superview.superview;
 //    //retrieve the section of the cell for conditional
 //    NSIndexPath *indexPath = [_registerTV indexPathForCell:cell];
-//    
+//    //if section one only
 //    if (indexPath.section == 1) {
 //        
 //        // resize the UITableView back to the original size
-//        _registerTV.frame = CGRectMake(0, 0, 320, _registerTV.frame.size.height + kbSize.height);
-//        return NO;//this is why
+//        _registerTV.frame = CGRectMake(0, 0, 320, _registerTV.frame.size.height + keyboardSize.height);
+//        _registerTV.contentInset =  UIEdgeInsetsMake(0, 0, 0, 0);
+//        if (indexPath.row == 2) {
+//            return YES;
+//        }
+//        else
+//        {
+//            return NO;//problem
+//        }
 //    }
 //        return YES;
 //}
@@ -314,6 +281,15 @@
             [textField becomeFirstResponder];
         }
     }
+    
+    
+    if (indexPath.section == 1 && indexPath.row == 2) {
+        
+        // resize the UITableView back to the original size
+        _registerTV.frame = CGRectMake(0, 0, 320, _registerTV.frame.size.height + keyboardSize.height);
+        _registerTV.contentInset =  UIEdgeInsetsMake(0, 0, 0, 0);
+    }
+
 
 }
 //factory method

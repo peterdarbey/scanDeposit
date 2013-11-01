@@ -34,6 +34,8 @@
 
 @property (strong, nonatomic) NSMutableArray *eachUserArray;
 
+@property (strong, nonatomic) NSMutableArray *storedArray;
+
 @property BOOL isSelected;
 @property BOOL isExpanded;
 @property BOOL fileExists;

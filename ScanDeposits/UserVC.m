@@ -131,6 +131,9 @@
     
 //    _dataSource = [NSMutableArray array];
     
+    //try
+    _storedArray = [NSMutableArray array];
+    
     _eachUserArray = [NSMutableArray array];
     
     //No on launch
@@ -145,7 +148,7 @@
     if ([fileManager fileExistsAtPath:fullPath]) {
          //Load the _dataSource from file if it exists
         _dataSource = [NSMutableArray arrayWithContentsOfFile:fullPath];
-//        _fileExists = YES;
+        //        _fileExists = YES;
         DLog(@"_dataSource retrieved from stored plist: %@", _dataSource); //plist:works now
     }
     else //doesnt exist so copy from NSBundle to the destination path
@@ -166,8 +169,25 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
     
-    //set conditional for reloadData
-//    [_userTV reloadData];
+
+//    //if file exists at path init with data
+//    if ([fileManager fileExistsAtPath:fullPath]) {
+//        //Load the _dataSource from file if it exists
+//        _dataSource = [NSMutableArray arrayWithContentsOfFile:fullPath];
+//        //        _fileExists = YES;
+//        DLog(@"_dataSource retrieved from stored plist: %@", _dataSource); //plist:works now
+//    }
+//    else //doesnt exist so copy from NSBundle to the destination path
+//    {
+//        //construct the filePath and copy to the Documents folder for writing too file
+//        NSString *sourcePath = [[NSBundle mainBundle]pathForResource:@"usersCollection" ofType:@"plist"];
+//        [fileManager copyItemAtPath:sourcePath toPath:fullPath error:nil];
+//        _dataSource = [NSMutableArray array];
+//        //        _fileExists = YES;
+//    }
+//    
+//    _fileExists = YES; //move here
+
 
 }
 
@@ -363,7 +383,7 @@
     
     
     if (([_dataSource count] >= 1 && _user) || ([_dataSource count] >= 1 && _fileExists)) {// was just([_dataSource count] >= 1 && _user) {
-        
+    
         //if selected add extra items to array in expand method
         if (_isSelected && _isExpanded) {
             
@@ -381,6 +401,12 @@
             //Added this -> if file exists display its data
             if (_fileExists) {
                 DLog(@"Enter fileExists if in else");
+                //test new approach
+                
+//                NSMutableArray *array =  [NSMutableArray arrayWithContentsOfFile:fullPath];
+//                NSMutableArray *sectionArray = [array objectAtIndex:indexPath.section];
+
+                
                 
                 [userNameTF setText:[NSString stringWithFormat:@"%@", [[_dataSource objectAtIndex:indexPath.section]objectAtIndex:indexPath.row]]];//try indexPath.row// was 0 -> crashing
                 //set UILabel name
@@ -449,7 +475,7 @@
     
     else
     {
-        return 0; //no data yet so return 0;
+            return 0; //no data yet so return 0;
     }
     
 }
@@ -490,9 +516,10 @@
     NSArray *userValues;
     
     if (_fileExists) {
-    
+        DLog(@"Crash");
         //retrieve from file first Note values/entries already in the collection dont add again
-        userValues = [_eachUserArray objectAtIndex:indexPath.section];//get selected section
+        
+        userValues = [_eachUserArray objectAtIndex:indexPath.section];//was _eachUserArray
         DLog(@"userValues in fileExists*****: %@", userValues);//currently only 20 ->2nd object?
     }
     else //Doesnt exist means returnUserModel called
@@ -579,19 +606,16 @@
     //Construct an array to populate the headers with initials
     NSMutableArray *initArray = [NSMutableArray array];
     [initArray addObject:(NSString *)[user userInitials]];//extract the new user initials
-    [_dataSource addObject:initArray];//TEST
-    
+    [_dataSource addObject:initArray];
     DLog(@"_dataSource with initArray: %@", _dataSource);//should be initized correct
 
     
     //Init the _userArray with the user fields -> array with values/objects
     //Make it local
     NSMutableArray *localUserArray = [NSMutableArray array];
-    [localUserArray addObject:(NSString *)[user userInitials]];//test the first entry ->should be correct
-    
-    [localUserArray addObject:(NSString *)[user userName]];
-    [localUserArray addObject:(NSString *)[user userEMail]];
-    [localUserArray addObject:(NSString *)[user userStaffID]];
+    [localUserArray addObject:[user userName]];
+    [localUserArray addObject:[user userEMail]];
+    [localUserArray addObject:[user userStaffID]];
 //    [localUserArray addObject:[user userInitials]];//add this initials and isAdmin if required
      [_eachUserArray addObject:localUserArray];
      DLog(@"_eachUserArray__: %@ with Count: %i ", _eachUserArray, [_eachUserArray count]);
@@ -600,9 +624,18 @@
     //NOTE only write to file if its not already written to file?
     if (_fileExists) {
         //Now write to file
-        [_eachUserArray writeToFile:fullPath atomically:YES];
+        //New construct for saving only
+        NSMutableArray *writableArray = [NSMutableArray array];
+        [writableArray addObject:[user userInitials]];
+        [writableArray addObject:[user userName]];
+         [writableArray addObject:[user userEMail]];
+         [writableArray addObject:[user userStaffID]];
+        //Add to the stored array
+        [_storedArray addObject:writableArray];
+        //write here
+        [_storedArray writeToFile:fullPath atomically:YES];
         //        _fileExists = YES;//exists already
-        DLog(@"Writing _eachUserArray to file: %@", _eachUserArray);
+        DLog(@"Writing _storedArray to file: %@", _storedArray);
     }
     
     

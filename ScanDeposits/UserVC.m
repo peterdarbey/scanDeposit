@@ -386,7 +386,8 @@
                 NSMutableArray *array =  [NSMutableArray arrayWithContentsOfFile:fullPath];//correct data
                 DLog(@"<< array stored contains >>: %@", array);//correct data
                 DLog(@"indexPath.section is: %i", indexPath.section);//wrong section
-                NSMutableArray *sectionArray = [array objectAtIndex:indexPath.section];
+//                NSMutableArray *sectionArray = [array objectAtIndex:indexPath.section];
+                NSMutableArray *sectionArray = [array lastObject];
                 DLog(@"sectionArray: %@", sectionArray);//index:0 instead of index:1? is the issue
                 tempArray = [NSMutableArray array];
                 for (int i = 0; i < [sectionArray count]-1; i++) {

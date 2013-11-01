@@ -383,19 +383,22 @@
                 DLog(@"Enter fileExists if in else");
                 //test new approach
                 
-                NSMutableArray *array =  [NSMutableArray arrayWithContentsOfFile:fullPath];//correct data
-                DLog(@"<< array stored contains >>: %@", array);//correct data
-                DLog(@"indexPath.section is: %i", indexPath.section);//wrong section
+//                NSMutableArray *array =  [NSMutableArray arrayWithContentsOfFile:fullPath];//correct data
+//                DLog(@"<< array stored contains >>: %@", array);//correct data
+//                DLog(@"indexPath.section is: %i", indexPath.section);//actually correct ?
 //                NSMutableArray *sectionArray = [array objectAtIndex:indexPath.section];
-                NSMutableArray *sectionArray = [array lastObject];
-                DLog(@"sectionArray: %@", sectionArray);//index:0 instead of index:1? is the issue
-                tempArray = [NSMutableArray array];
-                for (int i = 0; i < [sectionArray count]-1; i++) {
-                    [tempArray addObject:[sectionArray objectAtIndex:i +1]];
-                }
-                DLog(@"tempArray: %@", tempArray);
-                //Add as to not overwrite
-                [containerArray addObject:tempArray];
+////                NSMutableArray *sectionArray = [array lastObject];//works but not good practice
+//                DLog(@"sectionArray: %@", sectionArray);//index:0 instead of index:1? is the issue
+//                tempArray = [NSMutableArray array];
+//                for (int i = 0; i < [sectionArray count]-1; i++) {
+//                    [tempArray addObject:[sectionArray objectAtIndex:i +1]];
+//                }
+//                DLog(@"tempArray: %@", tempArray);
+//                
+//                //ContainerArray is used for adding to the _dataSource so that it expands with 3 entries
+//                //Add as to not overwrite -> adding again when I press user settings ?
+//                [containerArray addObject:tempArray];//adding entry 1 twice ?//HIDE
+//                DLog(@"containerArray: %@ and count: %i", containerArray, [containerArray count]);
                 
                 [userNameTF setText:[NSString stringWithFormat:@"%@", [[_dataSource objectAtIndex:indexPath.section]objectAtIndex:indexPath.row]]];//was :0 
                 //set UILabel name
@@ -507,10 +510,29 @@
     if (_fileExists) {
        
         //retrieve from file first Note values/entries already in the collection dont add again
+        //Moved from else if _fileExists in cellForRowAtIndexPath:
+        NSMutableArray *array =  [NSMutableArray arrayWithContentsOfFile:fullPath];//correct data
+        DLog(@"<< array stored contains >>: %@", array);//correct data
+        DLog(@"indexPath.section is: %i", indexPath.section);//actually correct ?
+        NSMutableArray *sectionArray = [array objectAtIndex:indexPath.section];
+        //                NSMutableArray *sectionArray = [array lastObject];//works but not good practice
+        DLog(@"sectionArray: %@", sectionArray);//index:0 instead of index:1? is the issue
+        tempArray = [NSMutableArray array];
+        for (int i = 0; i < [sectionArray count]-1; i++) {
+            [tempArray addObject:[sectionArray objectAtIndex:i +1]];
+        }
+        DLog(@"tempArray: %@", tempArray);
         
-//        NSMutableArray *array = [containerArray objectAtIndex:indexPath.section];
-        userValues = [containerArray objectAtIndex:indexPath.section];//was _eachUserArray
-        DLog(@"userValues in fileExists*****: %@", userValues);//currently only 20 ->2nd object?
+        //ContainerArray is used for adding to the _dataSource so that it expands with 3 entries
+        //Add as to not overwrite -> adding again when I press user settings ?
+        [containerArray addObject:tempArray];//adding entry 1 twice ?//HIDE
+        DLog(@"containerArray: %@ and count: %i", containerArray, [containerArray count]);
+        
+        
+        
+        userValues = [containerArray objectAtIndex:indexPath.section];
+        DLog(@"In expandMyTblView method containerArray: %@ andCount: %i", containerArray, [containerArray count]);
+        DLog(@"userValues in fileExists*****: %@", userValues);//wrong section object ?
         
          NSMutableArray *indexArray = [[NSMutableArray alloc]init];
         
@@ -521,6 +543,7 @@
                 NSIndexPath *index = [NSIndexPath indexPathForRow:i inSection:selectedIP.section];//selected index
                 [indexArray addObject:index];
                 [[_dataSource objectAtIndex:selectedIP.section]removeLastObject];
+                DLog(@"_dataSource contains in loop: %@", _dataSource);
             }
             
         }//close if check
@@ -545,7 +568,7 @@
             [indexArray addObject:index];
             //Add the _userArray to the _dataSource collection
             [[_dataSource objectAtIndex:selectedIP.section]addObject:[userValues objectAtIndex:i]];//_userArray
-            DLog(@"iterating still with index: %i", index.row);
+             DLog(@"_dataSource contains in expand loop (count == 1) : %@", _dataSource);
             
         }//close loop
         
@@ -580,6 +603,7 @@
         NSIndexPath *index = [NSIndexPath indexPathForRow:i inSection:selectedIP.section];//selected index
         [indexArray addObject:index];
         [[_dataSource objectAtIndex:selectedIP.section]removeLastObject];
+         DLog(@"_dataSource contains in collapse loop: %@", _dataSource);
     }
     
     [_userTV deleteRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationBottom];

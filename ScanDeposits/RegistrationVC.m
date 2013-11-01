@@ -665,7 +665,6 @@
     }
     else // Password field
     {
-        DLog(@"row do nothing");
         [nameTF setUserInteractionEnabled:NO];
     }
     

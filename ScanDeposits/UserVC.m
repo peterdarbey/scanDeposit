@@ -129,10 +129,8 @@
     //inititize all userCollections
     _userArray = [NSMutableArray array];//Empty always at least 1 user to use app just stop user deleting last 1 or 2 entries
     
-//    _dataSource = [NSMutableArray array];
-    
     //Store
-    _storedArray = [NSMutableArray arrayWithCapacity:10];//array
+    _storedArray = [NSMutableArray array];
     
     _eachUserArray = [NSMutableArray array];
     
@@ -385,10 +383,11 @@
                 DLog(@"Enter fileExists if in else");
                 //test new approach
                 
-                NSMutableArray *array =  [NSMutableArray arrayWithContentsOfFile:fullPath];//now correct
-                DLog(@"<< array stored contains >>: %@", array);
-                NSMutableArray *sectionArray = [array objectAtIndex:indexPath.section];//crash fixed
-                DLog(@"sectionArray: %@", sectionArray);
+                NSMutableArray *array =  [NSMutableArray arrayWithContentsOfFile:fullPath];//correct data
+                DLog(@"<< array stored contains >>: %@", array);//correct data
+                DLog(@"indexPath.section is: %i", indexPath.section);//wrong section
+                NSMutableArray *sectionArray = [array objectAtIndex:indexPath.section];
+                DLog(@"sectionArray: %@", sectionArray);//index:0 instead of index:1? is the issue
                 tempArray = [NSMutableArray array];
                 for (int i = 0; i < [sectionArray count]-1; i++) {
                     [tempArray addObject:[sectionArray objectAtIndex:i +1]];

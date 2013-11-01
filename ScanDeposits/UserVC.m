@@ -145,7 +145,7 @@
     if ([fileManager fileExistsAtPath:fullPath]) {
          //Load the _dataSource from file if it exists
         _dataSource = [NSMutableArray arrayWithContentsOfFile:fullPath];
-        _fileExists = YES;
+//        _fileExists = YES;
         DLog(@"_dataSource retrieved from stored plist: %@", _dataSource); //plist:works now
     }
     else //doesnt exist so copy from NSBundle to the destination path
@@ -154,8 +154,10 @@
         NSString *sourcePath = [[NSBundle mainBundle]pathForResource:@"usersCollection" ofType:@"plist"];
         [fileManager copyItemAtPath:sourcePath toPath:fullPath error:nil];
         _dataSource = [NSMutableArray array];
+//        _fileExists = YES;
     }
-
+    
+    _fileExists = YES; //move here
     
     
     
@@ -170,13 +172,6 @@
 }
 
 - (void)donePressed:(UIButton *)sender {
-    
-    //ToDo On done save the _dataSource array to Documents folder
-    
-    //create our data persistence model
-//    PersistenceManager *persistManager = [[PersistenceManager alloc]init];
-//    NSMutableArray *array = [_dataSource objectAtIndex:0];
-//    [persistManager writeToCollection:array withPath:fullPath];
     
 //    [self.navigationController popToRootViewControllerAnimated:YES];//Pushes to previous navController as I instaniated another one
     [self.navigationController popViewControllerAnimated:YES];
@@ -386,7 +381,8 @@
             //Added this -> if file exists display its data
             if (_fileExists) {
                 DLog(@"Enter fileExists if in else");
-                [userNameTF setText:[NSString stringWithFormat:@"%@", [[_dataSource objectAtIndex:indexPath.section]objectAtIndex:0]]];//try indexPath.row
+                
+                [userNameTF setText:[NSString stringWithFormat:@"%@", [[_dataSource objectAtIndex:indexPath.section]objectAtIndex:indexPath.row]]];//try indexPath.row// was 0 -> crashing
                 //set UILabel name
                 [userNameLbl setText:@"Initials"];
             }
@@ -496,14 +492,12 @@
     if (_fileExists) {
     
         //retrieve from file first Note values/entries already in the collection dont add again
-        userValues = [_dataSource objectAtIndex:indexPath.section];//get selected section
-        DLog(@"userValues in fileExists: %@", userValues);//currently only 20 ->2nd object?
-        
-        [_userTV reloadData];//test -> works but not right no anim
+        userValues = [_eachUserArray objectAtIndex:indexPath.section];//get selected section
+        DLog(@"userValues in fileExists*****: %@", userValues);//currently only 20 ->2nd object?
     }
     else //Doesnt exist means returnUserModel called
     {
-        
+        //uniform treat the same
         //Now get each _userArray out of the _eachUserArray for the apropriate section /selected section
         userValues = [_eachUserArray objectAtIndex:indexPath.section];//get selected section
     }
@@ -514,8 +508,8 @@
     //check that its not open -> Note if fileExists its not entering here as it fails count == 1
     if([[_dataSource objectAtIndex:selectedIP.section]count] == 1) {
         
-        for (int i = 0; i < [userValues count]; i++) { //3
-            NSIndexPath *index = [NSIndexPath indexPathForRow: i+1 inSection:selectedIP.section];//offset by 1
+        for (int i = 0; i < [userValues count]; i++) { //3 //new test try i again instead i+1
+            NSIndexPath *index = [NSIndexPath indexPathForRow:i+1 inSection:selectedIP.section];//offset by 1
             [indexArray addObject:index];
             //Add the _userArray to the _dataSource collection
             [[_dataSource objectAtIndex:selectedIP.section]addObject:[userValues objectAtIndex:i]];//_userArray
@@ -585,7 +579,8 @@
     //Construct an array to populate the headers with initials
     NSMutableArray *initArray = [NSMutableArray array];
     [initArray addObject:(NSString *)[user userInitials]];//extract the new user initials
-    [_dataSource addObject:initArray];
+    [_dataSource addObject:initArray];//TEST
+    
     DLog(@"_dataSource with initArray: %@", _dataSource);//should be initized correct
 
     
@@ -602,10 +597,14 @@
      DLog(@"_eachUserArray__: %@ with Count: %i ", _eachUserArray, [_eachUserArray count]);
    
     
-        //NOTE only write to file if its not already written to file?
+    //NOTE only write to file if its not already written to file?
+    if (_fileExists) {
         //Now write to file
         [_eachUserArray writeToFile:fullPath atomically:YES];
+        //        _fileExists = YES;//exists already
         DLog(@"Writing _eachUserArray to file: %@", _eachUserArray);
+    }
+    
     
 }
 

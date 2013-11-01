@@ -131,10 +131,12 @@
     
 //    _dataSource = [NSMutableArray array];
     
-    //try
-    _storedArray = [NSMutableArray array];
+    //Store
+    _storedArray = [NSMutableArray arrayWithCapacity:10];//array
     
     _eachUserArray = [NSMutableArray array];
+    
+    containerArray = [NSMutableArray array];
     
     //No on launch
     _fileExists = NO;
@@ -168,26 +170,6 @@
 //not called
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
-    
-
-//    //if file exists at path init with data
-//    if ([fileManager fileExistsAtPath:fullPath]) {
-//        //Load the _dataSource from file if it exists
-//        _dataSource = [NSMutableArray arrayWithContentsOfFile:fullPath];
-//        //        _fileExists = YES;
-//        DLog(@"_dataSource retrieved from stored plist: %@", _dataSource); //plist:works now
-//    }
-//    else //doesnt exist so copy from NSBundle to the destination path
-//    {
-//        //construct the filePath and copy to the Documents folder for writing too file
-//        NSString *sourcePath = [[NSBundle mainBundle]pathForResource:@"usersCollection" ofType:@"plist"];
-//        [fileManager copyItemAtPath:sourcePath toPath:fullPath error:nil];
-//        _dataSource = [NSMutableArray array];
-//        //        _fileExists = YES;
-//    }
-//    
-//    _fileExists = YES; //move here
-
 
 }
 
@@ -403,12 +385,19 @@
                 DLog(@"Enter fileExists if in else");
                 //test new approach
                 
-//                NSMutableArray *array =  [NSMutableArray arrayWithContentsOfFile:fullPath];
-//                NSMutableArray *sectionArray = [array objectAtIndex:indexPath.section];
-
+                NSMutableArray *array =  [NSMutableArray arrayWithContentsOfFile:fullPath];//now correct
+                DLog(@"<< array stored contains >>: %@", array);
+                NSMutableArray *sectionArray = [array objectAtIndex:indexPath.section];//crash fixed
+                DLog(@"sectionArray: %@", sectionArray);
+                tempArray = [NSMutableArray array];
+                for (int i = 0; i < [sectionArray count]-1; i++) {
+                    [tempArray addObject:[sectionArray objectAtIndex:i +1]];
+                }
+                DLog(@"tempArray: %@", tempArray);
+                //Add as to not overwrite
+                [containerArray addObject:tempArray];
                 
-                
-                [userNameTF setText:[NSString stringWithFormat:@"%@", [[_dataSource objectAtIndex:indexPath.section]objectAtIndex:indexPath.row]]];//try indexPath.row// was 0 -> crashing
+                [userNameTF setText:[NSString stringWithFormat:@"%@", [[_dataSource objectAtIndex:indexPath.section]objectAtIndex:indexPath.row]]];//was :0 
                 //set UILabel name
                 [userNameLbl setText:@"Initials"];
             }
@@ -516,11 +505,27 @@
     NSArray *userValues;
     
     if (_fileExists) {
-        DLog(@"Crash");
+       
         //retrieve from file first Note values/entries already in the collection dont add again
         
-        userValues = [_eachUserArray objectAtIndex:indexPath.section];//was _eachUserArray
+//        NSMutableArray *array = [containerArray objectAtIndex:indexPath.section];
+        userValues = [containerArray objectAtIndex:indexPath.section];//was _eachUserArray
         DLog(@"userValues in fileExists*****: %@", userValues);//currently only 20 ->2nd object?
+        
+         NSMutableArray *indexArray = [[NSMutableArray alloc]init];
+        
+        if([[_dataSource objectAtIndex:selectedIP.section]count] > 1) {
+            
+            for (int i = 1; i < 4; i++)
+            {
+                NSIndexPath *index = [NSIndexPath indexPathForRow:i inSection:selectedIP.section];//selected index
+                [indexArray addObject:index];
+                [[_dataSource objectAtIndex:selectedIP.section]removeLastObject];
+            }
+            
+        }//close if check
+        
+        
     }
     else //Doesnt exist means returnUserModel called
     {
@@ -550,19 +555,6 @@
             // Rotate the arrow
             iv.transform = CGAffineTransformMakeRotation(M_PI_2);//rotate down
         }];
-        
-        
-////NOTE only write to file if its not already written to file?
-//        if (_fileExists) {
-//
-//            //Now write the object At selected index to the file
-//            [[_dataSource objectAtIndex:indexPath.section] writeToFile:fullPath atomically:YES];//test try objectAtIndex
-//        }
-//        else
-//        {
-//            //Now write to file
-//            [_dataSource writeToFile:fullPath atomically:YES];
-//        }
         
         [_userTV insertRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationBottom];
         
@@ -616,9 +608,9 @@
     [localUserArray addObject:[user userName]];
     [localUserArray addObject:[user userEMail]];
     [localUserArray addObject:[user userStaffID]];
-//    [localUserArray addObject:[user userInitials]];//add this initials and isAdmin if required
-     [_eachUserArray addObject:localUserArray];
-     DLog(@"_eachUserArray__: %@ with Count: %i ", _eachUserArray, [_eachUserArray count]);
+    //Add to the array
+    [_eachUserArray addObject:localUserArray];
+//     DLog(@"_eachUserArray__: %@ with Count: %i ", _eachUserArray, [_eachUserArray count]);
    
     
     //NOTE only write to file if its not already written to file?
@@ -630,13 +622,15 @@
         [writableArray addObject:[user userName]];
          [writableArray addObject:[user userEMail]];
          [writableArray addObject:[user userStaffID]];
-        //Add to the stored array
-        [_storedArray addObject:writableArray];
+        //Add to the existing stored array
+        NSMutableArray *loadArray = [NSMutableArray arrayWithContentsOfFile:fullPath];//correct
+        DLog(@"loadArray in returnUserModel: %@", loadArray);
+        [loadArray addObject:writableArray];
         //write here
-        [_storedArray writeToFile:fullPath atomically:YES];
-        //        _fileExists = YES;//exists already
-        DLog(@"Writing _storedArray to file: %@", _storedArray);
-    }
+        [loadArray writeToFile:fullPath atomically:YES];
+        DLog(@"Writing loadArray to file: %@", loadArray);
+        
+    }//close if
     
     
 }

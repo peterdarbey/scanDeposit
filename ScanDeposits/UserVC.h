@@ -22,7 +22,8 @@
     
     UIImageView *iv;
     
-//    NSDictionary *userDict;
+    NSMutableArray *tempArray;
+    NSMutableArray *containerArray;
     
 }
 

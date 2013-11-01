@@ -72,7 +72,7 @@
     if (indexPath.row == 0) {
         //if TF is not empty resign/assign
         if (![textField.text isEqualToString:@""] && [textField.text length] > 1) {
-            DLog(@"Name textField");
+    
             [textField resignFirstResponder];//resign 1st
             //assign text to user ivar
             
@@ -139,8 +139,7 @@
     //retrieve the singleton for writing locally
     fileManager = [NSFileManager defaultManager];
     
-    fullPath = [PersistenceManager getFilePath];
-    DLog(@"<< fullPath >>: %@", fullPath);//Documents/usersCollection.plist
+    fullPath = [PersistenceManager getFilePath];//Documents/usersCollection.plist
     
     //if file exists at path init with data
     if ([fileManager fileExistsAtPath:fullPath]) {
@@ -151,7 +150,7 @@
     }
     else //doesnt exist so copy from NSBundle to the destination path
     {
-        //create the filePath for writing too file
+        //construct the filePath and copy to the Documents folder for writing too file
         NSString *sourcePath = [[NSBundle mainBundle]pathForResource:@"usersCollection" ofType:@"plist"];
         [fileManager copyItemAtPath:sourcePath toPath:fullPath error:nil];
         _dataSource = [NSMutableArray array];
@@ -313,7 +312,6 @@
         return [s1 compare:s2];
     }];
     
-    DLog(@"replaceKeys: %@", replaceKeys);
     return replaceKeys;
     
 }
@@ -402,22 +400,6 @@
             }
             
         }//close else
-        
-        //Where to save? - NEW CODE
-//        //NOTE only write to file if its not already written to file?
-//        if (_fileExists) { //Only enter here if this is user is not saved to file already
-//            
-//            //Now write the object At selected index to the file
-//            [[_dataSource objectAtIndex:indexPath.section] writeToFile:fullPath atomically:YES];//test try
-////            [_dataSource writeToFile:fullPath atomically:YES];//Test
-//        }
-//        else
-//        {
-//            //Now write to file -> overwriting though written here when confirm is pressed
-//            [_dataSource writeToFile:fullPath atomically:YES];
-//            _fileExists = YES;
-//        }
-
         
     }//close if
     
@@ -549,17 +531,17 @@
         }];
         
         
-//NOTE only write to file if its not already written to file?
-        if (_fileExists) {
-
-            //Now write the object At selected index to the file
-            [[_dataSource objectAtIndex:indexPath.section] writeToFile:fullPath atomically:YES];//test try objectAtIndex
-        }
-        else
-        {
-            //Now write to file
-            [_dataSource writeToFile:fullPath atomically:YES];
-        }
+////NOTE only write to file if its not already written to file?
+//        if (_fileExists) {
+//
+//            //Now write the object At selected index to the file
+//            [[_dataSource objectAtIndex:indexPath.section] writeToFile:fullPath atomically:YES];//test try objectAtIndex
+//        }
+//        else
+//        {
+//            //Now write to file
+//            [_dataSource writeToFile:fullPath atomically:YES];
+//        }
         
         [_userTV insertRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationBottom];
         
@@ -600,9 +582,18 @@
     //assign to _user
     _user = user;
     
+    //Construct an array to populate the headers with initials
+    NSMutableArray *initArray = [NSMutableArray array];
+    [initArray addObject:(NSString *)[user userInitials]];//extract the new user initials
+    [_dataSource addObject:initArray];
+    DLog(@"_dataSource with initArray: %@", _dataSource);//should be initized correct
+
+    
     //Init the _userArray with the user fields -> array with values/objects
     //Make it local
     NSMutableArray *localUserArray = [NSMutableArray array];
+    [localUserArray addObject:(NSString *)[user userInitials]];//test the first entry ->should be correct
+    
     [localUserArray addObject:(NSString *)[user userName]];
     [localUserArray addObject:(NSString *)[user userEMail]];
     [localUserArray addObject:(NSString *)[user userStaffID]];
@@ -611,11 +602,10 @@
      DLog(@"_eachUserArray__: %@ with Count: %i ", _eachUserArray, [_eachUserArray count]);
    
     
-    //Construct an array to populate the headers with initials
-    NSMutableArray *initArray = [NSMutableArray array];
-    [initArray addObject:(NSString *)[user userInitials]];//extract the new user initials
-    [_dataSource addObject:initArray];
-    DLog(@"_dataSource with initArray: %@", _dataSource);//should be initized correct
+        //NOTE only write to file if its not already written to file?
+        //Now write to file
+        [_eachUserArray writeToFile:fullPath atomically:YES];
+        DLog(@"Writing _eachUserArray to file: %@", _eachUserArray);
     
 }
 

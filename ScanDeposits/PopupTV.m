@@ -75,6 +75,18 @@
         return NO;//works
     }
     
+    //ToDo -> alphaNumeric
+//    NSString *newString = [textField.text stringByReplacingCharactersInRange:range withString:string];
+//    NSCharacterSet *alphaSet = [NSCharacterSet alphanumericCharacterSet];
+//    BOOL isAlphaNumeric = [[newString stringByTrimmingCharactersInSet:alphaSet] isEqualToString:@""];
+//    
+//    NSInteger limit = textField.tag == 0 ? 20 :15;
+//    
+//    if ([newString length] > limit || !isAlphaNumeric) {
+//        return NO;
+//    }
+
+    
     return YES;
     
 }

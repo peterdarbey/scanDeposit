@@ -127,8 +127,6 @@
     [_userTV setBackgroundView:[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"Default-568h.png"]]];
     
     //inititize all userCollections
-    _userArray = [NSMutableArray array];//Empty always at least 1 user to use app just stop user deleting last 1 or 2 entries
-    
     //for display only
     _displayArray = [NSMutableArray array];
     
@@ -141,34 +139,29 @@
     fullPath = [PersistenceManager getFilePath];//Documents/usersCollection.plist
     
     //if file exists at path init with data
-    if ([fileManager fileExistsAtPath:fullPath]) {
-         //Load the _dataSource from file if it exists
-//        _dataSource = [NSMutableArray arrayWithContentsOfFile:fullPath];
-    }
-    else //doesnt exist so copy from NSBundle to the destination path
-    {
+    if (![fileManager fileExistsAtPath:fullPath]) {
         //construct the filePath and copy to the Documents folder for writing too file
         NSString *sourcePath = [[NSBundle mainBundle]pathForResource:@"usersCollection" ofType:@"plist"];
         [fileManager copyItemAtPath:sourcePath toPath:fullPath error:nil];
-//        _dataSource = [NSMutableArray array];
 
     }
     
     _fileExists = YES;
+    
     //we have a path
     if (_fileExists) {
-        //Add to the existing stored array
+        //load data from file
         _storedArray = [NSMutableArray arrayWithContentsOfFile:fullPath];//correct
         DLog(@"_storedArray loaded from file: %@", _storedArray);//correct
         
-        //if _displayArray has no entries for section headers
+        //if _storedArray has data and _displayArray has no entries for section headers (returnUserModel not called yet) pop from loaded file
         if (_storedArray && [_displayArray count] < 1) {
             
             //Construct an array to populate the headers with initials
             for (int i = 0; i < [_storedArray count]; i++) {
                  NSMutableArray *initArray = [NSMutableArray array];
                 [initArray addObject:[[_storedArray objectAtIndex:i]objectAtIndex:0]];//extract the new user initials //indexPath.row
-                [_displayArray insertObject:initArray atIndex:i];//try
+                [_displayArray insertObject:initArray atIndex:i];
                 DLog(@"initArray: %@ with index is: %i", initArray, i);
             }
             
@@ -183,7 +176,107 @@
 
     }
     
+    editBtn = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editPressed:)];
+    
+    [self.navigationItem setRightBarButtonItem:editBtn animated:YES];
+    
 }
+
+- (void)editPressed:(UIButton *)sender {
+    DLog(@"Edit pressed");
+    if (!_isExpanded) {
+        //set the editing to YES
+        [_userTV setEditing:YES animated:YES];
+
+     UIBarButtonItem *doneBtn = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneEditingPressed:)];
+    
+    [self.navigationItem setRightBarButtonItem:doneBtn animated:YES];
+        
+    }//close if
+    
+    //    //set the editing to YES
+    //    [_userTV setEditing:YES animated:YES];
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        //ToDo remove objects at indexPath
+        DLog(@"In editingStyle Delete mode with _displayArray before deletion: %@", _displayArray);
+        //remove and write to file
+        if ([_userTV numberOfRowsInSection:indexPath.section] == 1) {
+            
+            DLog(@"_displayArray before deleting: %@", _displayArray);
+            [_displayArray removeObjectAtIndex:indexPath.section];//remove whole object
+            DLog(@"_displayArray after deleting: %@", _displayArray);
+            
+            //need to copy the edited _displayArray data into the _storedArray before saving
+            DLog(@"_storedArray before deletion: %@", _storedArray);
+            [_storedArray removeObjectAtIndex:indexPath.section];
+             DLog(@"_storedArray after deletion: %@", _storedArray);//worked but now so realtime
+            [_storedArray writeToFile:fullPath atomically:YES];
+            //reload data into _storedArray from file
+            _storedArray = [NSMutableArray arrayWithContentsOfFile:fullPath];//test
+            [_userTV reloadData];//works but not a smooth anim
+
+        }//close if
+        
+
+        
+//        DLog(@"_displayArray before deleting: %@", _displayArray);
+//          DLog(@"_storedArray before deletion: %@", _storedArray);
+//        
+//        NSMutableArray *indexArray = [NSMutableArray array];
+//        //expanded
+//        if ([_userTV numberOfRowsInSection:indexPath.section] > 1) {
+//            DLog(@"indexPath passed in: %@", indexPath);
+//        for (int i = 0; i < [[_displayArray objectAtIndex:indexPath.section]count]; i++)//4 objs in total
+//        {
+//            NSIndexPath *index = [NSIndexPath indexPathForRow:i inSection:indexPath.section];//selected index
+//            [indexArray addObject:index];
+//            [[_displayArray objectAtIndex:indexPath.section]removeObjectAtIndex:i];//remove whole object
+//            [[_storedArray objectAtIndex:indexPath.section]removeObjectAtIndex:i];//indexPath.row
+//            DLog(@"_displayArray in loop: %@", _displayArray);
+//        }
+//        
+//        [_userTV deleteRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationFade];
+//
+//        }//close
+//        
+//        //if not expanded //i < [_userTV numberOfRowsInSection:indexPath.section];
+//        else if ([_userTV numberOfRowsInSection:indexPath.section] == 1)
+//        {
+////            for (int i = 0; i < [_userTV numberOfRowsInSection:indexPath.section]; i++)//4 objs in total
+//            
+//                [[_displayArray objectAtIndex:indexPath.section]removeObjectAtIndex:indexPath.row];//remove whole object
+//                [_displayArray removeObjectAtIndex:indexPath.section];
+//                [_storedArray removeObjectAtIndex:indexPath.section];//remove stored object also
+//                DLog(@"_displayArray in loop: %@", _displayArray);
+//                DLog(@"_storedArray in loop: %@", _storedArray);
+//            
+//            [_userTV deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+//        }
+//        
+//        [_storedArray writeToFile:fullPath atomically:YES];
+//        //reload data into _storedArray from file
+//        _storedArray = [NSMutableArray arrayWithContentsOfFile:fullPath];//test
+//        
+//        DLog(@"_displayArray after deleting: %@", _displayArray);
+//         DLog(@"_storedArray after deletion: %@", _storedArray);//worked but now so realtime
+        
+    }//close editingStyle if
+    
+}
+
+- (void)doneEditingPressed:(UIButton *)sender {
+    DLog(@"Done pressed");
+    //set the editing to YES
+    [_userTV setEditing:NO animated:YES];
+    
+    //set barButton back to edit
+    [self.navigationItem setRightBarButtonItem:editBtn animated:YES];
+    
+}
+
 
 //not called
 - (void)viewWillAppear:(BOOL)animated {
@@ -485,23 +578,30 @@
     //tapped
     _isSelected = YES;
     
+   
+    
     //check we have a tblView 1st before expanding or collasping
-    if ([_displayArray count] >= 1) {//was _dataSource
+    if ([_displayArray count] >= 1) {
+        
+        //retrieve the selected cell
+        UITableViewCell *cell = (UITableViewCell *)[_userTV cellForRowAtIndexPath:indexPath];
+        //retreive its index
+        NSIndexPath *index = [_userTV indexPathForCell:cell];
+        DLog(@"index: %@", index);
         
         //call expand here but also check for expansion 1st]
         if (_isSelected && _isExpanded) {
             [self collaspeMyTableViewWithIndex:selectedIP];
-            _isExpanded = NO;
+//            _isExpanded = NO;
         }
-        //selected and data loaded and not expanded
-        else if (_isSelected && !_isExpanded) //&& indexPath.row == 0)
+        //selected and data loaded and not expanded && selection index is the same as the cells index
+        else if (_isSelected && !_isExpanded) //&& indexPath.row == index.row)
         {
-            //expand
-            _isExpanded = YES;
+            
             [self expandMyTableViewWithIndex:selectedIP];//crashing here
             
         }
-    }
+    }//close if
     
     [_userTV deselectRowAtIndexPath:indexPath animated:YES];
 }
@@ -515,21 +615,19 @@
        
         //retrieve from stored file first Note values/entries already in the collection dont add again
         DLog(@"_storedArray contains in expandMyTableView: %@", _storedArray);//correct
-        DLog(@"indexPath.section is: %i", indexPath.section);//correct ->0
         
         //retrieve the selected section out of the stored collection
         NSMutableArray *sectionArray = [_storedArray objectAtIndex:indexPath.section];
         DLog(@"<<<< sectionArray >>>>: %@", sectionArray);//correct
         tempArray = [NSMutableArray array];
         
-        //construct to pass 3 entries to display
+        //construct to pass 3 entries to display and offset by 1 as we have initials already
         for (int i = 0; i < [sectionArray count]-1; i++) {
             [tempArray addObject:[sectionArray objectAtIndex:i +1]];
         }
         
     }//close if
   
-        //new approach
         NSMutableArray *indexArray = [[NSMutableArray alloc]init];
     
     if ([[_displayArray objectAtIndex:indexPath.section]count] == 1) {
@@ -545,6 +643,7 @@
         [_userTV insertRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationBottom];
     }//close if
     
+    _isExpanded = YES;
 }
 
 - (void)collaspeMyTableViewWithIndex:(NSIndexPath *)indexPath {
@@ -559,7 +658,7 @@
             iv.transform = CGAffineTransformMakeRotation(0);
         }];
         //May need if here to stop removing from file if exists dont writew to file here as will lose entries
-        //also watch that when it calkls cellForRow again it doesnt overwrite withput the add user details?
+        //also watch that when it calls cellForRow again it doesnt overwrite withput the add user details?
     for (int i = 1; i < numRows; i++)
     {
         NSIndexPath *index = [NSIndexPath indexPathForRow:i inSection:selectedIP.section];//selected index
@@ -571,6 +670,7 @@
         
     }//close if check
     
+    _isExpanded = NO;
 }
 
 #pragma custom delegate method from UserPopup

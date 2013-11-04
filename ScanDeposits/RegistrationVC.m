@@ -407,7 +407,7 @@
     
     //Push to new User/Reg VC
     UserVC *userVC = [self.storyboard instantiateViewControllerWithIdentifier:@"UserVC"];
-    [userVC setTitle:NSLocalizedString(@"User Registration", @"User Registration Process Screen")];
+    [userVC setTitle:NSLocalizedString(@"User Settings", @"User Settings Process Screen")];
 
     [self.navigationController pushViewController:userVC animated:YES];
     [self.navigationController.navigationBar setBarStyle:UIBarStyleBlackTranslucent];

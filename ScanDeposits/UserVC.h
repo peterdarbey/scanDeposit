@@ -25,10 +25,11 @@
     NSMutableArray *tempArray;
     NSMutableArray *loadArray;
     
+    UIBarButtonItem *editBtn;
+    
 }
 
 @property (strong, nonatomic) IBOutlet UITableView *userTV;
-@property (strong, nonatomic) NSMutableArray *userArray;
 @property (strong, nonatomic) NSString *nameString, *emailString, *staffIDString;
 @property (strong, nonatomic) NSMutableArray *dataSource;
 @property (strong, nonatomic) User *user;

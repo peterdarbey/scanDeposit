@@ -76,6 +76,7 @@
 		BF92211D18214E290084DCA0 /* logo_80_121.png in Resources */ = {isa = PBXBuildFile; fileRef = BF92211C18214E290084DCA0 /* logo_80_121.png */; };
 		BF922120182279340084DCA0 /* PersistenceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BF92211F182279340084DCA0 /* PersistenceManager.m */; };
 		BF92212318227AEC0084DCA0 /* usersCollection.plist in Resources */ = {isa = PBXBuildFile; fileRef = BF92212218227AEC0084DCA0 /* usersCollection.plist */; };
+		BF92212518280EB20084DCA0 /* adminsCollection.plist in Resources */ = {isa = PBXBuildFile; fileRef = BF92212418280EB20084DCA0 /* adminsCollection.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -177,6 +178,7 @@
 		BF92211E182279340084DCA0 /* PersistenceManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersistenceManager.h; sourceTree = "<group>"; };
 		BF92211F182279340084DCA0 /* PersistenceManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersistenceManager.m; sourceTree = "<group>"; };
 		BF92212218227AEC0084DCA0 /* usersCollection.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = usersCollection.plist; sourceTree = "<group>"; };
+		BF92212418280EB20084DCA0 /* adminsCollection.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = adminsCollection.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -388,6 +390,7 @@
 			isa = PBXGroup;
 			children = (
 				BF92212218227AEC0084DCA0 /* usersCollection.plist */,
+				BF92212418280EB20084DCA0 /* adminsCollection.plist */,
 			);
 			name = Stored_Data;
 			sourceTree = "<group>";
@@ -480,6 +483,7 @@
 				BF2C4FCF1806FEB100A87C18 /* blueButton@2x.png in Resources */,
 				BF2C4F631805C08B00A87C18 /* Main_iPad.storyboard in Resources */,
 				BF2C4FAF1805C23300A87C18 /* flashlight-turn-on-icon@2x.png in Resources */,
+				BF92212518280EB20084DCA0 /* adminsCollection.plist in Resources */,
 				BF2C4F681805C08B00A87C18 /* Images.xcassets in Resources */,
 				BF370347180EAEF10027AE4F /* Icon@2x.png in Resources */,
 				BF92212318227AEC0084DCA0 /* usersCollection.plist in Resources */,

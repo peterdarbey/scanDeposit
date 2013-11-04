@@ -17,6 +17,9 @@
     UIBarButtonItem *doneBtn;
     CGSize keyboardSize;
     double duration;
+    
+    NSFileManager *fileManager;
+    NSString *filePath;
 }
 
 @property (strong, nonatomic) NSString *name;
@@ -74,7 +77,45 @@
 //                           selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:Nil];
 
     
+    //retrieve the singleton for writing locally
+    fileManager = [NSFileManager defaultManager];
+    
+    filePath = [self getFilePath];//Documents/adminsCollection.plist
+    
+    //if file exists at path init with data
+    if (![fileManager fileExistsAtPath:filePath]) {
+        //construct the filePath and copy to the Documents folder for writing too file
+        NSString *sourcePath = [[NSBundle mainBundle]pathForResource:@"adminsCollection" ofType:@"plist"];
+        [fileManager copyItemAtPath:sourcePath toPath:filePath error:nil];
+        
+    }
+    
+    _fileExists = YES;
+    
+    
+    if (_fileExists) {
+        //load data from file
+        _adminArray = [NSMutableArray arrayWithContentsOfFile:filePath];//correct adminsCollection
+        DLog(@"_adminArray loaded from file: %@", _adminArray);//correct
+        
+        if (_adminArray) {
+            DLog(@"if data here display");
+        }
+    }
+    
 }
+
+
+- (NSString *)getFilePath
+{
+    NSString *documentsDirectoryPath = [NSSearchPathForDirectoriesInDomains( NSDocumentDirectory,
+                                                                            NSUserDomainMask, YES ) objectAtIndex:0];
+    
+    NSString *fullPath = [documentsDirectoryPath stringByAppendingPathComponent:@"adminsCollection.plist"];
+    
+    return fullPath;
+}
+
 
 //- (void)keyboardWillShow:(NSNotification *)notification {
 //    
@@ -232,7 +273,7 @@
     //Email
     else if (indexPath.row == 1) {
         //if TF is not empty resign/assign
-        if (![textField.text isEqualToString:@""] && [textField.text length] > 3) {
+        if (![textField.text isEqualToString:@""] && [textField.text length] > 4) {
             //resign previous responder status
             [textField resignFirstResponder];
             
@@ -300,6 +341,7 @@
                                    isAdmin:YES withPassword:_adminPassword];
     //Create a local array
     NSMutableArray *localUserArray = [NSMutableArray array];
+//    [localUserArray addObject:[user userInitials]];//dont need here
     [localUserArray addObject:[user userName]];
     [localUserArray addObject:[user userEMail]];
     [localUserArray addObject:[user userStaffID]];
@@ -307,6 +349,9 @@
     //Add to the overAll collection
     [_adminArray addObject:localUserArray];
     DLog(@"_adminArray__: %@ with Count: %i ", _adminArray, [_adminArray count]);
+    //write to file
+    [_adminArray writeToFile:filePath atomically:YES];
+    _isWritten = YES;
     
 }
 
@@ -603,12 +648,15 @@
     //always remains constant
     [userLbl setText:[NSString stringWithFormat:@"%@", [array objectAtIndex:indexPath.row]]];
     
+    DLog(@"_adminArray is: %@ and count: %i", _adminArray, [_adminArray count]);
     
     //there is only 1 user
-    if (_adminPassword && [_adminArray count] == 1) {
+//    if (_adminPassword && [_adminArray count] == 1) {
+    if ([_adminArray count] == 1) {
         //Only 1 user so set just the first section
         if (indexPath.section == 0) {
-            [nameTF setText:[NSString stringWithFormat:@"%@", [[_adminArray objectAtIndex:0]objectAtIndex:indexPath.row]]];//section 0 pop section 0
+            [nameTF setText:[NSString stringWithFormat:@"%@", [[_adminArray objectAtIndex:indexPath.section]objectAtIndex:indexPath.row]]];//section 0 pop section 0
+            [nameTF setUserInteractionEnabled:NO];//add BOOL for editing mode
             //set here
             [doneBtn setEnabled:YES];
         }

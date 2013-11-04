@@ -23,12 +23,15 @@
     NSIndexPath *selectedIP;
     NSMutableArray *stringArray;
     NSNotificationCenter *notificationCenter;
+
 }
 
 @property (strong, nonatomic) IBOutlet UITableView *registerTV;
 
 @property (strong,nonatomic) NSMutableArray *adminArray;
 
+@property BOOL fileExists;
 
+@property BOOL isWritten;
 
 @end

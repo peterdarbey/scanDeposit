@@ -23,7 +23,7 @@
     UIImageView *iv;
     
     NSMutableArray *tempArray;
-    NSMutableArray *containerArray;
+//    NSMutableArray *containerArray;//tesdt as local
     
 }
 

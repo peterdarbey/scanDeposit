@@ -134,7 +134,7 @@
     
     _eachUserArray = [NSMutableArray array];
     
-    containerArray = [NSMutableArray array];
+//    containerArray = [NSMutableArray array];
     
     //No on launch
     _fileExists = NO;
@@ -509,6 +509,8 @@
     
     if (_fileExists) {
        
+        NSMutableArray *containerArray = [NSMutableArray array];
+        
         //retrieve from file first Note values/entries already in the collection dont add again
         //Moved from else if _fileExists in cellForRowAtIndexPath:
         NSMutableArray *array =  [NSMutableArray arrayWithContentsOfFile:fullPath];//correct data
@@ -518,19 +520,19 @@
         //                NSMutableArray *sectionArray = [array lastObject];//works but not good practice
         DLog(@"sectionArray: %@", sectionArray);//index:0 instead of index:1? is the issue
         tempArray = [NSMutableArray array];
-        for (int i = 0; i < [sectionArray count]-1; i++) {
+        
+        
+        
+        for (int i = 0; i < [sectionArray count]-1; i++) {//sectionArray
             [tempArray addObject:[sectionArray objectAtIndex:i +1]];
         }
         DLog(@"tempArray: %@", tempArray);
-        
-        //ContainerArray is used for adding to the _dataSource so that it expands with 3 entries
-        //Add as to not overwrite -> adding again when I press user settings ?
         [containerArray addObject:tempArray];//adding entry 1 twice ?//HIDE
         DLog(@"containerArray: %@ and count: %i", containerArray, [containerArray count]);
         
         
         
-        userValues = [containerArray objectAtIndex:indexPath.section];
+        userValues = [containerArray objectAtIndex:indexPath.section];//crash only 1 obj thats y as its local
         DLog(@"In expandMyTblView method containerArray: %@ andCount: %i", containerArray, [containerArray count]);
         DLog(@"userValues in fileExists*****: %@", userValues);//wrong section object ?
         

@@ -437,6 +437,116 @@
 
     
     
+    //CORRECT CELLFORROWATINDEXPATH in USERVC
+    
+//    - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+//        
+//        static NSString *myIdentifier = @"userCell";
+//        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:myIdentifier];
+//        //properties
+//        UITextField *userNameTF;
+//        UILabel *userNameLbl;
+//        
+//        
+//        if (cell == nil) {
+//            
+//            cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:myIdentifier];
+//            
+//            userNameTF = [[UITextField alloc]initWithFrame:CGRectMake(90, cell.bounds.size.height/4, 200, 25)];
+//            [userNameTF setBackgroundColor:[UIColor clearColor]];
+//            userNameTF.tag = USER_NAME_TF;
+//            userNameTF.textAlignment = NSTextAlignmentLeft;
+//            userNameTF.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;//thats the 1
+//            [userNameTF setFont:[UIFont systemFontOfSize:15.0]];
+//            userNameTF.textColor = [UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0];//blue
+//            //ToDo add a BOOL for editable or not
+//            //        [userNameTF setUserInteractionEnabled:YES];
+//            
+//            [userNameTF setUserInteractionEnabled:NO];
+//            [userNameTF setEnablesReturnKeyAutomatically:YES];
+//            //set textField delegate
+//            [userNameTF setDelegate:self];
+//            //Add TF to cell
+//            [cell.contentView addSubview:userNameTF];
+//            
+//            userNameLbl = [[UILabel alloc]initWithFrame:CGRectMake(10, cell.bounds.size.height/4, 70 , 25)];
+//            userNameLbl.tag = USER_NAME_LBL;
+//            userNameLbl.textAlignment = NSTextAlignmentLeft;
+//            userNameLbl.font = [UIFont fontWithName:@"Arial-BoldMT" size:17];
+//            userNameLbl.textColor = [UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0];//darkGray
+//            userNameLbl.shadowColor = [UIColor grayColor];
+//            userNameLbl.shadowOffset = CGSizeMake(1.0, 1.0);
+//            userNameLbl.backgroundColor = [UIColor clearColor];
+//            [userNameLbl setUserInteractionEnabled:NO];
+//            
+//            [cell.contentView addSubview:userNameLbl];
+//            
+//        }//close if
+//        
+//        else
+//        {   //retrieve the properties
+//            userNameTF = (UITextField *)[cell.contentView viewWithTag:USER_NAME_TF];
+//            userNameLbl = (UILabel *)[cell.contentView viewWithTag:USER_NAME_LBL];
+//        }
+//        
+//        if (([_displayArray count] >= 1 && _user) || ([_displayArray count] >= 1 && _fileExists)) {// was just([_dataSource count] >= 1 && _user) {
+//            
+//            //Construct keys for iteration
+//            NSArray *userKeys = @[@"Initials", @"Name", @"Email", @"Staff ID"];
+//            
+//            //if selected add extra items to array in expand method
+//            if (_isSelected && _isExpanded) {
+//                
+//                //_dataSource has the appropreiate _userArray containing the 3 fields of each user
+//                [userNameTF setText:[NSString stringWithFormat:@"%@", [[_displayArray objectAtIndex:indexPath.section]    objectAtIndex:indexPath.row]]];
+//                [userNameLbl setText:[NSString stringWithFormat:@"%@", [userKeys objectAtIndex:indexPath.row]]];
+//                
+//            }//close if
+//            
+//            else //not expanded and not selected so just show 1 entry -> the initials
+//            {
+//                //Added this -> if file exists display its data
+//                //            if (_fileExists && _isWritten) {
+//                //                DLog(@"Enter fileExists if in else");
+//                //test new approach
+//                [userNameTF setText:[NSString stringWithFormat:@"%@", [[_displayArray objectAtIndex:indexPath.section]objectAtIndex:indexPath.row]]];//0
+//                //set UILabel name, should be uniform
+//                [userNameLbl setText:[NSString stringWithFormat:@"%@", [userKeys objectAtIndex:indexPath.row]]];
+//                //            }
+//                //            else
+//                //            {
+//                //                //set UITextField Initials
+//                //                [userNameTF setText:[NSString stringWithFormat:@"%@", [[_displayArray objectAtIndex:indexPath.section]objectAtIndex:indexPath.row]]];//yes
+//                //                //set UILabel name
+//                ////                [userNameLbl setText:@"Initials"];//was this -> so far so good
+//                //                [userNameLbl setText:[NSString stringWithFormat:@"%@", [userKeys objectAtIndex:indexPath.row]]];
+//                //                //maybe save to file here also
+//                //            }
+//                
+//            }//close else
+//            
+//        }//close if
+//        
+//        if ([_displayArray count] >= 1) {//was _dataSource
+//            
+//            if (indexPath.row == 0) {
+//                cell.backgroundColor = [UIColor colorWithRed:210.0/255.0 green:210.0/255.0 blue:210.0/255.0 alpha:1.0];//light white
+//                cell.imageView.image = [UIImage imageNamed:@"rightArrow.png"];//add resource
+//                
+//            }
+//            else
+//            {
+//                cell.backgroundColor = [UIColor whiteColor];
+//                cell.imageView.image = nil;
+//            }
+//        }//close if
+//        
+//        return cell;
+//        
+//    }
+
+    
+    
 }
 
 @end

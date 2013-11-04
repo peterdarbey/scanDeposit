@@ -143,19 +143,19 @@
     //if file exists at path init with data
     if ([fileManager fileExistsAtPath:fullPath]) {
          //Load the _dataSource from file if it exists
-        _dataSource = [NSMutableArray arrayWithContentsOfFile:fullPath];
+//        _dataSource = [NSMutableArray arrayWithContentsOfFile:fullPath];
     }
     else //doesnt exist so copy from NSBundle to the destination path
     {
         //construct the filePath and copy to the Documents folder for writing too file
         NSString *sourcePath = [[NSBundle mainBundle]pathForResource:@"usersCollection" ofType:@"plist"];
         [fileManager copyItemAtPath:sourcePath toPath:fullPath error:nil];
-        _dataSource = [NSMutableArray array];
+//        _dataSource = [NSMutableArray array];
 
     }
     
-    _fileExists = YES; //move here
-    
+    _fileExists = YES;
+    //we have a path
     if (_fileExists) {
         //Add to the existing stored array
         _storedArray = [NSMutableArray arrayWithContentsOfFile:fullPath];//correct
@@ -310,7 +310,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
     
     if (section== [_userTV numberOfSections] -1) {
-        return 130.0;//90
+        return 130.0;
     }
     else
     {
@@ -382,40 +382,31 @@
         userNameLbl = (UILabel *)[cell.contentView viewWithTag:USER_NAME_LBL];
     }
     
-    if (([_displayArray count] >= 1 && _user) || ([_displayArray count] >= 1 && _fileExists)) {// was just([_dataSource count] >= 1 && _user) {
+    //if we have data from user model(returnUsermodel called returning a user) or data loaded from file to display
+    if (([_displayArray count] >= 1 && _user) || ([_displayArray count] >= 1 && _fileExists)) {
     
         //Construct keys for iteration
         NSArray *userKeys = @[@"Initials", @"Name", @"Email", @"Staff ID"];
         
-        //if selected add extra items to array in expand method
+        //if selected add extra entries to array in expand method
         if (_isSelected && _isExpanded) {
             
             //_dataSource has the appropreiate _userArray containing the 3 fields of each user
             [userNameTF setText:[NSString stringWithFormat:@"%@", [[_displayArray objectAtIndex:indexPath.section]    objectAtIndex:indexPath.row]]];
             [userNameLbl setText:[NSString stringWithFormat:@"%@", [userKeys objectAtIndex:indexPath.row]]];
             
-        }//close if
+        }//close if -> NOTE: dont need else here as the numOf rows and sections take care of count etc..
         
-        else //not expanded and not selected so just show 1 entry -> the initials
+        //not expanded and not selected so just show 1 entry -> the initials -> NOTE: these should probably be treated uniform also
+        else
         {
             //Added this -> if file exists display its data
 //            if (_fileExists && _isWritten) {
-//                DLog(@"Enter fileExists if in else");
-                //test new approach
                 [userNameTF setText:[NSString stringWithFormat:@"%@", [[_displayArray objectAtIndex:indexPath.section]objectAtIndex:indexPath.row]]];//0
                 //set UILabel name, should be uniform
                 [userNameLbl setText:[NSString stringWithFormat:@"%@", [userKeys objectAtIndex:indexPath.row]]];
+//              [userNameLbl setText:@"Initials"];//was in an else within this else
 //            }
-//            else
-//            {
-//                //set UITextField Initials
-//                [userNameTF setText:[NSString stringWithFormat:@"%@", [[_displayArray objectAtIndex:indexPath.section]objectAtIndex:indexPath.row]]];//yes
-//                //set UILabel name
-////                [userNameLbl setText:@"Initials"];//was this -> so far so good
-//                [userNameLbl setText:[NSString stringWithFormat:@"%@", [userKeys objectAtIndex:indexPath.row]]];
-//                //maybe save to file here also
-//            }
-            
         }//close else
         
     }//close if
@@ -423,6 +414,16 @@
         if ([_displayArray count] >= 1) {//was _dataSource
             
             if (indexPath.row == 0) {
+                
+                //retrieve the properties
+//                userNameTF = (UITextField *)[cell.contentView viewWithTag:USER_NAME_TF];
+//                userNameLbl = (UILabel *)[cell.contentView viewWithTag:USER_NAME_LBL];
+//                //if row 0 move frame to accomadate the arrow
+//                [userNameTF setFrame:CGRectMake(190, cell.bounds.size.height/4, 100, 25)];
+//                [userNameTF setBackgroundColor:[UIColor greenColor]];//test
+//                [userNameLbl setFrame:CGRectMake(110, cell.bounds.size.height/4, 70 , 25)];
+//                [userNameLbl setBackgroundColor:[UIColor orangeColor]];//test
+                
                 cell.backgroundColor = [UIColor colorWithRed:210.0/255.0 green:210.0/255.0 blue:210.0/255.0 alpha:1.0];//light white
                 cell.imageView.image = [UIImage imageNamed:@"rightArrow.png"];//add resource
                 

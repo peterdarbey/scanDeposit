@@ -129,12 +129,8 @@
     //inititize all userCollections
     _userArray = [NSMutableArray array];//Empty always at least 1 user to use app just stop user deleting last 1 or 2 entries
     
-    //Store
-    _storedArray = [NSMutableArray array];
-    
-    _eachUserArray = [NSMutableArray array];
-    
-//    containerArray = [NSMutableArray array];
+    //for display only
+    _displayArray = [NSMutableArray array];
     
     //No on launch
     _fileExists = NO;
@@ -148,8 +144,6 @@
     if ([fileManager fileExistsAtPath:fullPath]) {
          //Load the _dataSource from file if it exists
         _dataSource = [NSMutableArray arrayWithContentsOfFile:fullPath];
-        //        _fileExists = YES;
-        DLog(@"_dataSource retrieved from stored plist: %@", _dataSource); //plist:works now
     }
     else //doesnt exist so copy from NSBundle to the destination path
     {
@@ -157,14 +151,40 @@
         NSString *sourcePath = [[NSBundle mainBundle]pathForResource:@"usersCollection" ofType:@"plist"];
         [fileManager copyItemAtPath:sourcePath toPath:fullPath error:nil];
         _dataSource = [NSMutableArray array];
-//        _fileExists = YES;
+
     }
     
     _fileExists = YES; //move here
     
-    
+    if (_fileExists) {
+        //Add to the existing stored array
+        _storedArray = [NSMutableArray arrayWithContentsOfFile:fullPath];//correct
+        DLog(@"_storedArray loaded from file: %@", _storedArray);//correct
+        
+        //if _displayArray has no entries for section headers
+        if (_storedArray && [_displayArray count] < 1) {
+            
+            //Construct an array to populate the headers with initials
+            for (int i = 0; i < [_storedArray count]; i++) {
+                 NSMutableArray *initArray = [NSMutableArray array];
+                [initArray addObject:[[_storedArray objectAtIndex:i]objectAtIndex:0]];//extract the new user initials //indexPath.row
+                [_displayArray insertObject:initArray atIndex:i];//try
+                DLog(@"initArray: %@ with index is: %i", initArray, i);
+            }
+            
+            DLog(@"_display with initArray: %@", _displayArray);//correct
+        }//close inner if
+
+    }//close outer if
+    else
+    {
+        //Add to the existing stored array
+        _storedArray = [NSMutableArray array];//correct
+
+    }
     
 }
+
 //not called
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
@@ -320,6 +340,7 @@
     UITextField *userNameTF;
     UILabel *userNameLbl;
     
+    
     if (cell == nil) {
         
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:myIdentifier];
@@ -361,63 +382,45 @@
         userNameLbl = (UILabel *)[cell.contentView viewWithTag:USER_NAME_LBL];
     }
     
+    if (([_displayArray count] >= 1 && _user) || ([_displayArray count] >= 1 && _fileExists)) {// was just([_dataSource count] >= 1 && _user) {
     
-    if (([_dataSource count] >= 1 && _user) || ([_dataSource count] >= 1 && _fileExists)) {// was just([_dataSource count] >= 1 && _user) {
-    
+        //Construct keys for iteration
+        NSArray *userKeys = @[@"Initials", @"Name", @"Email", @"Staff ID"];
+        
         //if selected add extra items to array in expand method
         if (_isSelected && _isExpanded) {
             
-            //Construct keys for iteration
-            NSArray *userKeys = @[@"Initials", @"Name", @"Email", @"Staff ID"];
-            
             //_dataSource has the appropreiate _userArray containing the 3 fields of each user
-            [userNameTF setText:[NSString stringWithFormat:@"%@", [[_dataSource objectAtIndex:indexPath.section]    objectAtIndex:indexPath.row]]];
+            [userNameTF setText:[NSString stringWithFormat:@"%@", [[_displayArray objectAtIndex:indexPath.section]    objectAtIndex:indexPath.row]]];
             [userNameLbl setText:[NSString stringWithFormat:@"%@", [userKeys objectAtIndex:indexPath.row]]];
-            DLog(@"_dataSource structure: %@", _dataSource);
+            
         }//close if
         
         else //not expanded and not selected so just show 1 entry -> the initials
         {
             //Added this -> if file exists display its data
-            if (_fileExists) {
-                DLog(@"Enter fileExists if in else");
+//            if (_fileExists && _isWritten) {
+//                DLog(@"Enter fileExists if in else");
                 //test new approach
-                
-//                NSMutableArray *array =  [NSMutableArray arrayWithContentsOfFile:fullPath];//correct data
-//                DLog(@"<< array stored contains >>: %@", array);//correct data
-//                DLog(@"indexPath.section is: %i", indexPath.section);//actually correct ?
-//                NSMutableArray *sectionArray = [array objectAtIndex:indexPath.section];
-////                NSMutableArray *sectionArray = [array lastObject];//works but not good practice
-//                DLog(@"sectionArray: %@", sectionArray);//index:0 instead of index:1? is the issue
-//                tempArray = [NSMutableArray array];
-//                for (int i = 0; i < [sectionArray count]-1; i++) {
-//                    [tempArray addObject:[sectionArray objectAtIndex:i +1]];
-//                }
-//                DLog(@"tempArray: %@", tempArray);
-//                
-//                //ContainerArray is used for adding to the _dataSource so that it expands with 3 entries
-//                //Add as to not overwrite -> adding again when I press user settings ?
-//                [containerArray addObject:tempArray];//adding entry 1 twice ?//HIDE
-//                DLog(@"containerArray: %@ and count: %i", containerArray, [containerArray count]);
-                
-                [userNameTF setText:[NSString stringWithFormat:@"%@", [[_dataSource objectAtIndex:indexPath.section]objectAtIndex:indexPath.row]]];//was :0 
-                //set UILabel name
-                [userNameLbl setText:@"Initials"];
-            }
-            else
-            {
-                //set UITextField Initials
-                [userNameTF setText:[NSString stringWithFormat:@"%@", [[_dataSource objectAtIndex:indexPath.section]objectAtIndex:indexPath.row]]];//yes
-                //set UILabel name
-                [userNameLbl setText:@"Initials"];
-                //maybe save to file here also
-            }
+                [userNameTF setText:[NSString stringWithFormat:@"%@", [[_displayArray objectAtIndex:indexPath.section]objectAtIndex:indexPath.row]]];//0
+                //set UILabel name, should be uniform
+                [userNameLbl setText:[NSString stringWithFormat:@"%@", [userKeys objectAtIndex:indexPath.row]]];
+//            }
+//            else
+//            {
+//                //set UITextField Initials
+//                [userNameTF setText:[NSString stringWithFormat:@"%@", [[_displayArray objectAtIndex:indexPath.section]objectAtIndex:indexPath.row]]];//yes
+//                //set UILabel name
+////                [userNameLbl setText:@"Initials"];//was this -> so far so good
+//                [userNameLbl setText:[NSString stringWithFormat:@"%@", [userKeys objectAtIndex:indexPath.row]]];
+//                //maybe save to file here also
+//            }
             
         }//close else
         
     }//close if
     
-        if ([_dataSource count] >= 1) {
+        if ([_displayArray count] >= 1) {//was _dataSource
             
             if (indexPath.row == 0) {
                 cell.backgroundColor = [UIColor colorWithRed:210.0/255.0 green:210.0/255.0 blue:210.0/255.0 alpha:1.0];//light white
@@ -438,9 +441,9 @@
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     
     //if we have something to display then display
-    if ([_dataSource count] >= 1) {
+    if ([_displayArray count] >= 1) { //was _dataSource
         
-        return [_dataSource count];
+        return [_displayArray count];//think thats it
         
     }//close if
     else
@@ -453,10 +456,12 @@
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
     //if we have data
-    if ([_dataSource count] >= 1) {
+    DLog(@"_displayed ? %@", _displayArray);//empty
+    
+    if ([_displayArray count] >= 1) {//was _dataSource
         //then check if its expanded or not
         if (_isSelected) {
-            return [[_dataSource objectAtIndex:section]count];//hardcoded 3
+            return [[_displayArray objectAtIndex:section]count];//hardcoded 3
         }
         else //not expanded
         {
@@ -480,7 +485,7 @@
     _isSelected = YES;
     
     //check we have a tblView 1st before expanding or collasping
-    if ([_dataSource count] >= 1) {
+    if ([_displayArray count] >= 1) {//was _dataSource
         
         //call expand here but also check for expansion 1st]
         if (_isSelected && _isExpanded) {
@@ -503,86 +508,40 @@
 //This method addds the objects to the dataSource not the cellForRow
 - (void)expandMyTableViewWithIndex:(NSIndexPath *)indexPath {
     
-    //******** Note ********
-    //Need a conditional test to check the array as this array has not been created via the returnUserModel call
-    NSArray *userValues;
-    
-    if (_fileExists) {
+    //Need a conditional test to check the collection as it has not been created via the returnUserModel call
+
+    if (_fileExists && _storedArray) {
        
-        NSMutableArray *containerArray = [NSMutableArray array];
+        //retrieve from stored file first Note values/entries already in the collection dont add again
+        DLog(@"_storedArray contains in expandMyTableView: %@", _storedArray);//correct
+        DLog(@"indexPath.section is: %i", indexPath.section);//correct ->0
         
-        //retrieve from file first Note values/entries already in the collection dont add again
-        //Moved from else if _fileExists in cellForRowAtIndexPath:
-        NSMutableArray *array =  [NSMutableArray arrayWithContentsOfFile:fullPath];//correct data
-        DLog(@"<< array stored contains >>: %@", array);//correct data
-        DLog(@"indexPath.section is: %i", indexPath.section);//actually correct ?
-        NSMutableArray *sectionArray = [array objectAtIndex:indexPath.section];
-        //                NSMutableArray *sectionArray = [array lastObject];//works but not good practice
-        DLog(@"sectionArray: %@", sectionArray);//index:0 instead of index:1? is the issue
+        //retrieve the selected section out of the stored collection
+        NSMutableArray *sectionArray = [_storedArray objectAtIndex:indexPath.section];
+        DLog(@"<<<< sectionArray >>>>: %@", sectionArray);//correct
         tempArray = [NSMutableArray array];
         
-        
-        
-        for (int i = 0; i < [sectionArray count]-1; i++) {//sectionArray
+        //construct to pass 3 entries to display
+        for (int i = 0; i < [sectionArray count]-1; i++) {
             [tempArray addObject:[sectionArray objectAtIndex:i +1]];
         }
-        DLog(@"tempArray: %@", tempArray);
-        [containerArray addObject:tempArray];//adding entry 1 twice ?//HIDE
-        DLog(@"containerArray: %@ and count: %i", containerArray, [containerArray count]);
         
-        
-        
-        userValues = [containerArray objectAtIndex:indexPath.section];//crash only 1 obj thats y as its local
-        DLog(@"In expandMyTblView method containerArray: %@ andCount: %i", containerArray, [containerArray count]);
-        DLog(@"userValues in fileExists*****: %@", userValues);//wrong section object ?
-        
-         NSMutableArray *indexArray = [[NSMutableArray alloc]init];
-        
-        if([[_dataSource objectAtIndex:selectedIP.section]count] > 1) {
-            
-            for (int i = 1; i < 4; i++)
-            {
-                NSIndexPath *index = [NSIndexPath indexPathForRow:i inSection:selectedIP.section];//selected index
-                [indexArray addObject:index];
-                [[_dataSource objectAtIndex:selectedIP.section]removeLastObject];
-                DLog(@"_dataSource contains in loop: %@", _dataSource);
-            }
-            
-        }//close if check
-        
-        
-    }
-    else //Doesnt exist means returnUserModel called
-    {
-        //uniform treat the same
-        //Now get each _userArray out of the _eachUserArray for the apropriate section /selected section
-        userValues = [_eachUserArray objectAtIndex:indexPath.section];//get selected section
-    }
+    }//close if
+  
+        //new approach
+        NSMutableArray *indexArray = [[NSMutableArray alloc]init];
     
-    //Note indexPath is the selected row and section
-    NSMutableArray *indexArray = [[NSMutableArray alloc]init];
-    
-    //check that its not open -> Note if fileExists its not entering here as it fails count == 1
-    if([[_dataSource objectAtIndex:selectedIP.section]count] == 1) {
+    if ([[_displayArray objectAtIndex:indexPath.section]count] == 1) {
         
-        for (int i = 0; i < [userValues count]; i++) { //3 //new test try i again instead i+1
-            NSIndexPath *index = [NSIndexPath indexPathForRow:i+1 inSection:selectedIP.section];//offset by 1
+        for (int i = 0; i < [tempArray count]; i++) {
+            NSIndexPath *index = [NSIndexPath indexPathForRow:i+1 inSection:indexPath.section];//offset by 1
             [indexArray addObject:index];
-            //Add the _userArray to the _dataSource collection
-            [[_dataSource objectAtIndex:selectedIP.section]addObject:[userValues objectAtIndex:i]];//_userArray
-             DLog(@"_dataSource contains in expand loop (count == 1) : %@", _dataSource);
-            
-        }//close loop
-        
-        UITableViewCell *cell = [self.userTV cellForRowAtIndexPath:indexPath];
-        iv = cell.imageView;
-        [UIView animateWithDuration:0.3 animations:^{
-            // Rotate the arrow
-            iv.transform = CGAffineTransformMakeRotation(M_PI_2);//rotate down
-        }];
+            //Add just 3 entries to displayArray
+            [[_displayArray objectAtIndex:indexPath.section]addObject:[tempArray objectAtIndex:i]];
+        }
+         DLog(@"new _displayArray: %@", _displayArray);//correct
         
         [_userTV insertRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationBottom];
-        
     }//close if
     
 }
@@ -591,7 +550,7 @@
     
     NSMutableArray *indexArray = [NSMutableArray array];
     
-    if([[_dataSource objectAtIndex:selectedIP.section]count] > 1) {
+    if([[_displayArray objectAtIndex:selectedIP.section]count] > 1) {
     // Already expanded, close it up! //check that its not open
     NSInteger numRows = [self.userTV numberOfRowsInSection:selectedIP.section];
     
@@ -604,8 +563,7 @@
     {
         NSIndexPath *index = [NSIndexPath indexPathForRow:i inSection:selectedIP.section];//selected index
         [indexArray addObject:index];
-        [[_dataSource objectAtIndex:selectedIP.section]removeLastObject];
-         DLog(@"_dataSource contains in collapse loop: %@", _dataSource);
+        [[_displayArray objectAtIndex:selectedIP.section]removeLastObject];
     }
     
     [_userTV deleteRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationBottom];
@@ -621,40 +579,38 @@
     //assign to _user
     _user = user;
     
-    //Construct an array to populate the headers with initials
+//    //Construct an array to populate the headers with initials
     NSMutableArray *initArray = [NSMutableArray array];
     [initArray addObject:(NSString *)[user userInitials]];//extract the new user initials
-    [_dataSource addObject:initArray];
-    DLog(@"_dataSource with initArray: %@", _dataSource);//should be initized correct
+    [_displayArray addObject:initArray];
+    DLog(@"_display with initArray: %@", _displayArray);//should be initized correct
 
-    
-    //Init the _userArray with the user fields -> array with values/objects
-    //Make it local
-    NSMutableArray *localUserArray = [NSMutableArray array];
-    [localUserArray addObject:[user userName]];
-    [localUserArray addObject:[user userEMail]];
-    [localUserArray addObject:[user userStaffID]];
-    //Add to the array
-    [_eachUserArray addObject:localUserArray];
-//     DLog(@"_eachUserArray__: %@ with Count: %i ", _eachUserArray, [_eachUserArray count]);
-   
     
     //NOTE only write to file if its not already written to file?
     if (_fileExists) {
-        //Now write to file
         //New construct for saving only
         NSMutableArray *writableArray = [NSMutableArray array];
         [writableArray addObject:[user userInitials]];
         [writableArray addObject:[user userName]];
          [writableArray addObject:[user userEMail]];
          [writableArray addObject:[user userStaffID]];
-        //Add to the existing stored array
-        NSMutableArray *loadArray = [NSMutableArray arrayWithContentsOfFile:fullPath];//correct
-        DLog(@"loadArray in returnUserModel: %@", loadArray);
-        [loadArray addObject:writableArray];
+       
+    
+        //Before adding/writing to file check that there is no data already stored
+        if (_storedArray) {
+//            //Add to the existing stored array
+            
+            //Add new user to _storedArray
+            [_storedArray addObject:writableArray];
+            DLog(@"IF: _storedArray in returnUserModel: %@", _storedArray);
+        }
+        
         //write here
-        [loadArray writeToFile:fullPath atomically:YES];
-        DLog(@"Writing loadArray to file: %@", loadArray);
+        [_storedArray writeToFile:fullPath atomically:YES];
+        _isWritten = YES;
+        DLog(@"Writing _storedArray to file: %@", _storedArray);
+        //refresh data
+        [_userTV reloadData];
         
     }//close if
     

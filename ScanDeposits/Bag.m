@@ -256,6 +256,187 @@
     
 
     
+    
+//    - (void)returnUserModel:(User *)user {
+//        
+//        //assign to _user
+//        _user = user;
+//        
+//        //Construct an array to populate the headers with initials
+//        NSMutableArray *initArray = [NSMutableArray array];
+//        [initArray addObject:(NSString *)[user userInitials]];//extract the new user initials
+//        [_dataSource addObject:initArray];
+//        DLog(@"_dataSource with initArray: %@", _dataSource);//should be initized correct
+//        
+//        
+//        //Init the _userArray with the user fields -> array with values/objects
+//        //Make it local
+//        NSMutableArray *localUserArray = [NSMutableArray array];
+//        [localUserArray addObject:[user userName]];
+//        [localUserArray addObject:[user userEMail]];
+//        [localUserArray addObject:[user userStaffID]];
+//        //Add to the array
+//        [_eachUserArray addObject:localUserArray];
+//        //     DLog(@"_eachUserArray__: %@ with Count: %i ", _eachUserArray, [_eachUserArray count]);
+//        
+//        
+//        //NOTE only write to file if its not already written to file?
+//        if (_fileExists) {
+//            //Now write to file
+//            //New construct for saving only
+//            NSMutableArray *writableArray = [NSMutableArray array];
+//            [writableArray addObject:[user userInitials]];
+//            [writableArray addObject:[user userName]];
+//            [writableArray addObject:[user userEMail]];
+//            [writableArray addObject:[user userStaffID]];
+//            //Add to the existing stored array
+//            NSMutableArray *loadArray = [NSMutableArray arrayWithContentsOfFile:fullPath];//correct
+//            DLog(@"loadArray in returnUserModel: %@", loadArray);
+//            [loadArray addObject:writableArray];
+//            //write here
+//            [loadArray writeToFile:fullPath atomically:YES];
+//            DLog(@"Writing loadArray to file: %@", loadArray);
+//            
+//        }//close if
+//        
+//        
+//    }
+    
+    
+    
+//    - (void)expandMyTableViewWithIndex:(NSIndexPath *)indexPath {
+//        
+//        //******** Note ********
+//        //Need a conditional test to check the array as this array has not been created via the returnUserModel call
+//        NSArray *userValues;
+//        
+//        if (_fileExists) {
+//            
+//            NSMutableArray *containerArray = [NSMutableArray array];
+//            
+//            //retrieve from file first Note values/entries already in the collection dont add again
+//            //Moved from else if _fileExists in cellForRowAtIndexPath:
+//            NSMutableArray *array =  [NSMutableArray arrayWithContentsOfFile:fullPath];//correct data
+//            DLog(@"<< array stored contains >>: %@", array);//correct data
+//            DLog(@"indexPath.section is: %i", indexPath.section);//actually correct ?
+//            NSMutableArray *sectionArray = [array objectAtIndex:indexPath.section];
+//            //                NSMutableArray *sectionArray = [array lastObject];//works but not good practice
+//            DLog(@"sectionArray: %@", sectionArray);//index:0 instead of index:1? is the issue
+//            tempArray = [NSMutableArray array];
+//            
+//            //        for (int j = 0; j < [array count]; j++) {
+//            //
+//            //            NSMutableArray *sectArray = [array objectAtIndex:j];
+//            //            for (int i = 0; i < [sectArray count]-1; i++) {//sectionArray
+//            //                [tempArray addObject:[sectArray objectAtIndex:i +1]];
+//            //            }
+//            //            DLog(@"tempArray: %@", tempArray);
+//            //
+//            //            [containerArray addObject:tempArray];//adding entry 1 twice ?//HIDE
+//            //        }
+//            //ContainerArray is used for adding to the _dataSource so that it expands with 3 entries
+//            //Add as to not overwrite -> adding again when I press user settings ?
+//            //dont add here make local -> but needs to add twice
+//            //need to ensure enters twice
+//            
+//            
+//            for (int i = 0; i < [sectionArray count]-1; i++) {//sectionArray
+//                [tempArray addObject:[sectionArray objectAtIndex:i +1]];
+//            }
+//            DLog(@"tempArray: %@", tempArray);
+//            [containerArray addObject:tempArray];//adding entry 1 twice ?//HIDE
+//            DLog(@"containerArray: %@ and count: %i", containerArray, [containerArray count]);
+//            
+//            
+//            
+//            userValues = [containerArray objectAtIndex:indexPath.section];//crash only 1 obj thats y as its local
+//            DLog(@"In expandMyTblView method containerArray: %@ andCount: %i", containerArray, [containerArray count]);
+//            DLog(@"userValues in fileExists*****: %@", userValues);//wrong section object ?
+//            
+//            NSMutableArray *indexArray = [[NSMutableArray alloc]init];
+//            
+//            if([[_dataSource objectAtIndex:selectedIP.section]count] > 1) {
+//                
+//                for (int i = 1; i < 4; i++)
+//                {
+//                    NSIndexPath *index = [NSIndexPath indexPathForRow:i inSection:selectedIP.section];//selected index
+//                    [indexArray addObject:index];
+//                    [[_dataSource objectAtIndex:selectedIP.section]removeLastObject];
+//                    DLog(@"_dataSource contains in loop: %@", _dataSource);
+//                }
+//                
+//            }//close if check
+//            
+//            
+//        }
+//        else //Doesnt exist means returnUserModel called
+//        {
+//            //uniform treat the same
+//            //Now get each _userArray out of the _eachUserArray for the apropriate section /selected section
+//            userValues = [_eachUserArray objectAtIndex:indexPath.section];//get selected section
+//        }
+//        
+//        //Note indexPath is the selected row and section
+//        NSMutableArray *indexArray = [[NSMutableArray alloc]init];
+//        
+//        //check that its not open -> Note if fileExists its not entering here as it fails count == 1
+//        if([[_dataSource objectAtIndex:selectedIP.section]count] == 1) {
+//            
+//            for (int i = 0; i < [userValues count]; i++) { //3 //new test try i again instead i+1
+//                NSIndexPath *index = [NSIndexPath indexPathForRow:i+1 inSection:selectedIP.section];//offset by 1
+//                [indexArray addObject:index];
+//                //Add the _userArray to the _dataSource collection
+//                [[_dataSource objectAtIndex:selectedIP.section]addObject:[userValues objectAtIndex:i]];//_userArray
+//                DLog(@"_dataSource contains in expand loop (count == 1) : %@", _dataSource);
+//                
+//            }//close loop
+//            
+//            UITableViewCell *cell = [self.userTV cellForRowAtIndexPath:indexPath];
+//            iv = cell.imageView;
+//            [UIView animateWithDuration:0.3 animations:^{
+//                // Rotate the arrow
+//                iv.transform = CGAffineTransformMakeRotation(M_PI_2);//rotate down
+//            }];
+//            
+//            [_userTV insertRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationBottom];
+//            
+//        }//close if
+//        
+//    }
+
+    
+    
+    
+    
+    
+    //    //Note indexPath is the selected row and section
+    //    NSMutableArray *indexArray = [[NSMutableArray alloc]init];
+    //
+    //    //check that its not open -> Note if fileExists its not entering here as it fails count == 1
+    //    if([[_dataSource objectAtIndex:selectedIP.section]count] == 1) {
+    //
+    //        for (int i = 0; i < [userValues count]; i++) { //3 //new test try i again instead i+1
+    //            NSIndexPath *index = [NSIndexPath indexPathForRow:i+1 inSection:selectedIP.section];//offset by 1
+    //            [indexArray addObject:index];
+    //            //Add the _userArray to the _dataSource collection
+    //            [[_dataSource objectAtIndex:selectedIP.section]addObject:[userValues objectAtIndex:i]];//_userArray
+    //             DLog(@"_dataSource contains in expand loop (count == 1) : %@", _dataSource);
+    //
+    //        }//close loop
+    //
+    //        UITableViewCell *cell = [self.userTV cellForRowAtIndexPath:indexPath];
+    //        iv = cell.imageView;
+    //        [UIView animateWithDuration:0.3 animations:^{
+    //            // Rotate the arrow
+    //            iv.transform = CGAffineTransformMakeRotation(M_PI_2);//rotate down
+    //        }];
+    //
+    //        [_userTV insertRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationBottom];
+    //        
+    //    }//close if
+
+    
+    
 }
 
 @end

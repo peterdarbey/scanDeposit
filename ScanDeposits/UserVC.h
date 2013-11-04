@@ -23,7 +23,7 @@
     UIImageView *iv;
     
     NSMutableArray *tempArray;
-//    NSMutableArray *containerArray;//tesdt as local
+    NSMutableArray *loadArray;
     
 }
 
@@ -33,13 +33,15 @@
 @property (strong, nonatomic) NSMutableArray *dataSource;
 @property (strong, nonatomic) User *user;
 
-@property (strong, nonatomic) NSMutableArray *eachUserArray;
 
 @property (strong, nonatomic) NSMutableArray *storedArray;
+@property (strong, nonatomic) NSMutableArray *displayArray;
 
 @property BOOL isSelected;
 @property BOOL isExpanded;
 @property BOOL fileExists;
+
+@property BOOL isWritten;
 
 
 @end

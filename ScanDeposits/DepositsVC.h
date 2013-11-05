@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MessageUI/MessageUI.h>
+#import <MessageUI/MFMailComposeViewController.h>
 
 #define BAG_AMOUNT_TF 200
 #define BAG_AMOUNT 250
@@ -16,10 +18,11 @@
 
 #import "AppDelegate.h"
 
-@interface DepositsVC : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@interface DepositsVC : UIViewController <UITableViewDataSource, UITableViewDelegate,MFMailComposeViewControllerDelegate>
 {
     NSIndexPath *selectedIndexPath;
     AppDelegate *appDelegate;
+    UIButton *proceedBtn;
 }
 
 @property (strong, nonatomic) IBOutlet UITableView *depositsTV;

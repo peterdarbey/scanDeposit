@@ -64,14 +64,91 @@
     
     //Refresh data when required
 //    [_depositsTV reloadData];
+    
+    //if we can email enable the proceed button
+    if([MFMailComposeViewController canSendMail]) {
+        
+        [proceedBtn setEnabled:YES];
+    }
+    
 }
+- (NSString *)getFilePath
+{
+    NSString *documentsDirectoryPath = [NSSearchPathForDirectoriesInDomains( NSDocumentDirectory,
+                                                                            NSUserDomainMask, YES ) objectAtIndex:0];
+    
+    NSString *fullPath = [documentsDirectoryPath stringByAppendingPathComponent:@"usersCollection.plist"];
+    
+    return fullPath;
+}
+
+
+//email button
 - (void)proceedPressed:(UIButton *)sender {
     
     DLog(@"Proceed pressed");
+    
+    
+//    NSArray *arrayPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES);
+//    NSString *docDir = [arrayPaths objectAtIndex:0];
+//    NSString *Path = [docDir stringByAppendingString:@"/CSVFile.csv"];
+//    NSData *csvData = [NSData dataWithContentsOfFile:Path];
+
+    
+//    NSError *errorMessage;
     //ToDo package data up to fire off to webservice
-//    SubmitVC *submitVC = [self.storyboard instantiateViewControllerWithIdentifier:@"SubmitVC"];
-//    [submitVC setTitle:NSLocalizedString(@"Submission Process", @"Submission Process Screen")];
-//    [self.navigationController pushViewController:submitVC animated:YES];
+    NSArray *emailRecipArray = @[@"peterdarbey@gmail.com"];//, @"david.h.roberts@aib.ie", @"gavin.e.bennett@aib.ie"];
+   
+    
+    
+//    NSString *filePath = [self getFilePath];
+//    NSData *stringData = [filePath dataUsingEncoding:NSUTF8StringEncoding];// https://github.com/jetseven/skpsmtpmessage rather than using MFMailController
+    
+        NSMutableDictionary *appData = [[NSMutableDictionary alloc]init];
+        NSData *attachData = [NSPropertyListSerialization dataFromPropertyList:appData format:NSPropertyListXMLFormat_v1_0 errorDescription:nil];
+    
+        //sent inline with subject body
+        NSMutableArray *testArray = [NSMutableArray arrayWithContentsOfFile:[self getFilePath]];
+    
+        //construct the mailVC and set its necessary parameters
+        MFMailComposeViewController *mailController = [[MFMailComposeViewController alloc]init];
+        
+        [mailController setTitle:@"Please find the attached documents."];
+        [mailController setSubject:NSLocalizedString(@"Deposits", @"Deposits")];
+        [mailController setCcRecipients:emailRecipArray];
+        [mailController setToRecipients:emailRecipArray];
+        [mailController setMailComposeDelegate:self];
+        [mailController setMessageBody:[NSString stringWithFormat:@"Please find the attached documents: %@", testArray] isHTML:NO];
+    
+        [mailController addAttachmentData:attachData mimeType:@"text/xml" fileName:@"app data"];
+    
+//        [mailController addAttachmentData:csvData
+//                                 mimeType:@"text/csv" //@"application/pdf" or text/plain or @"mime"
+//                                 fileName:@"usersCollection.plist"];//@"CSVFile.csv" -> works as plist fileName
+    
+   
+        
+        [self presentViewController:mailController animated:YES completion:nil];
+   
+}
+
+#pragma mark - MFMailCompose delegate callbacks
+- (void)mailComposeController:(MFMailComposeViewController*)mailController didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error
+{
+    if (result) {
+        //ToDo popup with message saying email sent successfully
+//        [self becomeFirstResponder];
+        [self dismissViewControllerAnimated:YES completion:^{
+            //ToDo add code here
+        }];
+    }
+    else if (error) {
+        //ToDo error sending email
+        
+        [self dismissViewControllerAnimated:YES completion:^{
+            //ToDo add code here
+        }];
+    }
     
 }
 
@@ -100,7 +177,7 @@
         innerView.layer.cornerRadius = 5.0;
         
         //construct a button to proceed
-        UIButton *proceedBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        proceedBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [proceedBtn setFrame:CGRectMake(10, aView.frame.size.height -60, 300, 44)];
         [proceedBtn setUserInteractionEnabled:YES];
         [proceedBtn addTarget:self action:@selector(proceedPressed:) forControlEvents:UIControlEventTouchUpInside];

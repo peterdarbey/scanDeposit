@@ -67,7 +67,9 @@
     doneBtn = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(donePressed:)];
     [self.navigationItem setRightBarButtonItem:doneBtn];
     //disable on load
-    [doneBtn setEnabled:NO];
+//    [doneBtn setEnabled:NO];
+        [doneBtn setEnabled:YES];//for now
+    
     //Add a notification for the keyboard
 //    notificationCenter = [NSNotificationCenter defaultCenter];
 //    [notificationCenter addObserver:self

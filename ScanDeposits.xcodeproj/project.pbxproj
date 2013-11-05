@@ -77,6 +77,8 @@
 		BF922120182279340084DCA0 /* PersistenceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BF92211F182279340084DCA0 /* PersistenceManager.m */; };
 		BF92212318227AEC0084DCA0 /* usersCollection.plist in Resources */ = {isa = PBXBuildFile; fileRef = BF92212218227AEC0084DCA0 /* usersCollection.plist */; };
 		BF92212518280EB20084DCA0 /* adminsCollection.plist in Resources */ = {isa = PBXBuildFile; fileRef = BF92212418280EB20084DCA0 /* adminsCollection.plist */; };
+		BF9B6D4618290EB700BC0E13 /* ComposeEmailVC.m in Sources */ = {isa = PBXBuildFile; fileRef = BF9B6D4518290EB700BC0E13 /* ComposeEmailVC.m */; };
+		BF9B6D4818290F8300BC0E13 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF9B6D4718290F8300BC0E13 /* MessageUI.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -179,6 +181,9 @@
 		BF92211F182279340084DCA0 /* PersistenceManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersistenceManager.m; sourceTree = "<group>"; };
 		BF92212218227AEC0084DCA0 /* usersCollection.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = usersCollection.plist; sourceTree = "<group>"; };
 		BF92212418280EB20084DCA0 /* adminsCollection.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = adminsCollection.plist; sourceTree = "<group>"; };
+		BF9B6D4418290EB700BC0E13 /* ComposeEmailVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComposeEmailVC.h; sourceTree = "<group>"; };
+		BF9B6D4518290EB700BC0E13 /* ComposeEmailVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComposeEmailVC.m; sourceTree = "<group>"; };
+		BF9B6D4718290F8300BC0E13 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -186,6 +191,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BF9B6D4818290F8300BC0E13 /* MessageUI.framework in Frameworks */,
 				BF2C4FC11806B16B00A87C18 /* AVFoundation.framework in Frameworks */,
 				BF2C4FBF1806B14800A87C18 /* libz.dylib in Frameworks */,
 				BF2C4FBD1806B13D00A87C18 /* libiconv.dylib in Frameworks */,
@@ -235,6 +241,7 @@
 		BF2C4F4B1805C08B00A87C18 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BF9B6D4718290F8300BC0E13 /* MessageUI.framework */,
 				BF2C4FC01806B16B00A87C18 /* AVFoundation.framework */,
 				BF2C4FBE1806B14800A87C18 /* libz.dylib */,
 				BF2C4FBC1806B13D00A87C18 /* libiconv.dylib */,
@@ -267,6 +274,8 @@
 				BF37034C181539160027AE4F /* RegistrationVC.m */,
 				BF37034E181674820027AE4F /* UserVC.h */,
 				BF37034F181674820027AE4F /* UserVC.m */,
+				BF9B6D4418290EB700BC0E13 /* ComposeEmailVC.h */,
+				BF9B6D4518290EB700BC0E13 /* ComposeEmailVC.m */,
 				BF2C4F5E1805C08B00A87C18 /* Main_iPhone.storyboard */,
 				BF2C4F611805C08B00A87C18 /* Main_iPad.storyboard */,
 				BF370332180D303A0027AE4F /* PopupViews */,
@@ -547,6 +556,7 @@
 				BF370327180822A90027AE4F /* AlertView.m in Sources */,
 				BF370338180D5C5D0027AE4F /* Deposit.m in Sources */,
 				BF2C4F591805C08B00A87C18 /* main.m in Sources */,
+				BF9B6D4618290EB700BC0E13 /* ComposeEmailVC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

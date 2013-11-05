@@ -11,6 +11,8 @@
 #import "UserPopup.h"
 @class User;
 
+@class ComposeEmailVC;
+
 
 #define USER_NAME_TF 100
 #define USER_NAME_LBL 200

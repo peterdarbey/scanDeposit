@@ -105,6 +105,20 @@
             </objects>
             <point key="canvasLocation" x="1099" y="857"/>
         </scene>
+        <!--Compose EmailVC-->
+        <scene sceneID="TqV-KS-Vro">
+            <objects>
+                <viewController storyboardIdentifier="ComposeEmailVC" id="6VG-T8-JIh" customClass="ComposeEmailVC" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5g7-NM-MnO">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="vPP-Q6-rqN" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1573" y="859"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="bg7-Ow-aN0">
             <objects>

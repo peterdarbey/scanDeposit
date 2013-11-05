@@ -160,7 +160,7 @@
             //Construct an array to populate the headers with initials
             for (int i = 0; i < [_storedArray count]; i++) {
                  NSMutableArray *initArray = [NSMutableArray array];
-                [initArray addObject:[[_storedArray objectAtIndex:i]objectAtIndex:0]];//extract the new user initials //indexPath.row
+                [initArray addObject:[[_storedArray objectAtIndex:i]objectAtIndex:0]];//extract the new user initials
                 [_displayArray insertObject:initArray atIndex:i];
                 DLog(@"initArray: %@ with index is: %i", initArray, i);
             }
@@ -200,77 +200,51 @@
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        //ToDo remove objects at indexPath
-        DLog(@"In editingStyle Delete mode with _displayArray before deletion: %@", _displayArray);
-        //remove and write to file
-        if ([_userTV numberOfRowsInSection:indexPath.section] == 1) {
-            
-            DLog(@"_displayArray before deleting: %@", _displayArray);
-            [_displayArray removeObjectAtIndex:indexPath.section];//remove whole object
-            DLog(@"_displayArray after deleting: %@", _displayArray);
-            
-            //need to copy the edited _displayArray data into the _storedArray before saving
-            DLog(@"_storedArray before deletion: %@", _storedArray);
+        
+        //remove and write to file -> works but using reloadData instead of deleteRowsAtIndex with anim
+//        if ([_userTV numberOfRowsInSection:indexPath.section] == 1) {
+              //remove entire entry
+//            [_displayArray removeObjectAtIndex:indexPath.section];
+        
+              //remove data from storedArray also
+//            [_storedArray removeObjectAtIndex:indexPath.section];
+//            [_storedArray writeToFile:fullPath atomically:YES];
+        
+              //reload data into _storedArray from file
+//            _storedArray = [NSMutableArray arrayWithContentsOfFile:fullPath];
+//            [_userTV reloadData];//works no smooth anim though
+//        }//close if
+        
+        DLog(@"_storedArray before deletion>>: %@", _storedArray);
+        
+        //works correctly with smooth animation
+        if ([_userTV numberOfRowsInSection:indexPath.section] == 1)
+        {
+            [_displayArray objectAtIndex:indexPath.section];//removeObjectAtIndex:indexPath.row];//perfect
+            //remove the data from our counterpart storedArray object
             [_storedArray removeObjectAtIndex:indexPath.section];
-             DLog(@"_storedArray after deletion: %@", _storedArray);//worked but now so realtime
-            [_storedArray writeToFile:fullPath atomically:YES];
-            //reload data into _storedArray from file
-            _storedArray = [NSMutableArray arrayWithContentsOfFile:fullPath];//test
-            [_userTV reloadData];//works but not a smooth anim
-
-        }//close if
-        
-
-        
-//        DLog(@"_displayArray before deleting: %@", _displayArray);
-//          DLog(@"_storedArray before deletion: %@", _storedArray);
-//        
-//        NSMutableArray *indexArray = [NSMutableArray array];
-//        //expanded
-//        if ([_userTV numberOfRowsInSection:indexPath.section] > 1) {
-//            DLog(@"indexPath passed in: %@", indexPath);
-//        for (int i = 0; i < [[_displayArray objectAtIndex:indexPath.section]count]; i++)//4 objs in total
-//        {
-//            NSIndexPath *index = [NSIndexPath indexPathForRow:i inSection:indexPath.section];//selected index
-//            [indexArray addObject:index];
-//            [[_displayArray objectAtIndex:indexPath.section]removeObjectAtIndex:i];//remove whole object
-//            [[_storedArray objectAtIndex:indexPath.section]removeObjectAtIndex:i];//indexPath.row
-//            DLog(@"_displayArray in loop: %@", _displayArray);
-//        }
-//        
-//        [_userTV deleteRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationFade];
-//
-//        }//close
-//        
-//        //if not expanded //i < [_userTV numberOfRowsInSection:indexPath.section];
-//        else if ([_userTV numberOfRowsInSection:indexPath.section] == 1)
-//        {
-////            for (int i = 0; i < [_userTV numberOfRowsInSection:indexPath.section]; i++)//4 objs in total
-//            
-//                [[_displayArray objectAtIndex:indexPath.section]removeObjectAtIndex:indexPath.row];//remove whole object
-//                [_displayArray removeObjectAtIndex:indexPath.section];
-//                [_storedArray removeObjectAtIndex:indexPath.section];//remove stored object also
-//                DLog(@"_displayArray in loop: %@", _displayArray);
-//                DLog(@"_storedArray in loop: %@", _storedArray);
-//            
-//            [_userTV deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-//        }
-//        
-//        [_storedArray writeToFile:fullPath atomically:YES];
-//        //reload data into _storedArray from file
-//        _storedArray = [NSMutableArray arrayWithContentsOfFile:fullPath];//test
-//        
-//        DLog(@"_displayArray after deleting: %@", _displayArray);
-//         DLog(@"_storedArray after deletion: %@", _storedArray);//worked but now so realtime
+            
+            [_userTV deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        }
+        //write to file
+        [_storedArray writeToFile:fullPath atomically:YES];
+        //reload data into _storedArray from file
+        _storedArray = [NSMutableArray arrayWithContentsOfFile:fullPath];
+         DLog(@"_storedArray after deletion>>: %@", _storedArray);
         
     }//close editingStyle if
     
+    //refresh now to remove the section title
+//    [_userTV reloadData];
 }
 
 - (void)doneEditingPressed:(UIButton *)sender {
     DLog(@"Done pressed");
     //set the editing to YES
     [_userTV setEditing:NO animated:YES];
+    
+    //refresh now to remove the section title
+//    [_userTV reloadData];
     
     //set barButton back to edit
     [self.navigationItem setRightBarButtonItem:editBtn animated:YES];
@@ -540,9 +514,15 @@
         return [_displayArray count];//think thats it
         
     }//close if
+    //else if no data yet
+    else if ([_displayArray count] < 1) {
+        
+        return 1;//Show the button on launch
+    }
     else
     {
-        return 1;//Show the button on launch
+//        return 1;//Show the button on launch
+        return [_displayArray count];//test
     }
     
 }
@@ -552,14 +532,16 @@
     //if we have data
     DLog(@"_displayed ? %@", _displayArray);//empty
     
-    if ([_displayArray count] >= 1) {//was _dataSource
+    if ([_displayArray count] >= 1) {
         //then check if its expanded or not
         if (_isSelected) {
             return [[_displayArray objectAtIndex:section]count];//hardcoded 3
         }
         else //not expanded
         {
-            return 1;//if not expanded just 1 row
+//            return 1;//if not expanded just 1 row
+            DLog(@"count here crash: %i", [[_displayArray objectAtIndex:section]count]);
+            return [[_displayArray objectAtIndex:section]count];//crash here
         }
         
     }//close if

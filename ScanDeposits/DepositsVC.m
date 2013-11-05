@@ -82,7 +82,33 @@
     return fullPath;
 }
 
-
+- (NSString *)convertMyCollection {
+    
+//     NSMutableArray *parsedArray = [NSMutableArray array];
+    NSString *__block parsedString = [[NSMutableString alloc]init];
+    NSMutableString *__block emptyString = [NSMutableString string];
+    
+    //sent inline with subject body
+    NSMutableArray *userArray = [NSMutableArray arrayWithContentsOfFile:[self getFilePath]];
+    [userArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        //ToDo add comma separated pairs to collection
+        obj = [[userArray objectAtIndex:idx]objectAtIndex:idx];
+        NSString *testString = [[NSString alloc]init];
+        NSString *stringObj = (NSString *) [NSString stringWithFormat:@"%@,", obj];//@"\"%@\","
+        DLog(@"stringObj: %@", stringObj);
+//        [parsedArray addObject:stringObj];
+//        parsedString = [testString stringByAppendingString:stringObj];
+        for (int i = 0; i < idx; i++) {
+            parsedString = [testString stringByAppendingString:[[userArray objectAtIndex:i]objectAtIndex:i]];
+        }
+        
+        DLog(@"parsedString in block: %@", parsedString);
+    }];
+    
+    DLog(@"parsedString: %@", parsedString);
+   
+    return parsedString;
+}
 //email button
 - (void)proceedPressed:(UIButton *)sender {
     
@@ -97,7 +123,8 @@
     
 //    NSError *errorMessage;
     //ToDo package data up to fire off to webservice
-    NSArray *emailRecipArray = @[@"peterdarbey@gmail.com"];//, @"david.h.roberts@aib.ie", @"gavin.e.bennett@aib.ie"];
+//    //Create our recipients -> Note this will come from file later
+        NSArray *emailRecipArray = @[@"peterdarbey@gmail.com", @"fintan.killoran@gmail.com", @"fintan.a.killoran@aib.ie"];//, @"david.h.roberts@aib.ie", @"gavin.e.bennett@aib.ie"];
    
     
     
@@ -108,7 +135,23 @@
         NSData *attachData = [NSPropertyListSerialization dataFromPropertyList:appData format:NSPropertyListXMLFormat_v1_0 errorDescription:nil];
     
         //sent inline with subject body
-        NSMutableArray *testArray = [NSMutableArray arrayWithContentsOfFile:[self getFilePath]];
+        NSMutableArray *userArray = [NSMutableArray arrayWithContentsOfFile:[self getFilePath]];
+    
+        //Create our recipients -> Note this will come from file later
+        NSMutableArray *emailRecipientsArray = [NSMutableArray array];
+        //iterate through collection to retrieve the recipients
+        for (int i = 0; i < [userArray count]; i++) {
+            NSString *recipient = [[userArray objectAtIndex:i]objectAtIndex:2];
+            [emailRecipientsArray addObject:recipient];
+        }
+    
+        DLog(@"emailRecipientsArray: %@", emailRecipientsArray);//works but need to receive myself as no aib.ie acc
+    
+        NSString *newUserString = [self convertMyCollection];
+        DLog(@"<< newUserString >>: %@", newUserString);
+        //test
+        NSData *dataString = [newUserString dataUsingEncoding:NSUTF8StringEncoding];
+    
     
         //construct the mailVC and set its necessary parameters
         MFMailComposeViewController *mailController = [[MFMailComposeViewController alloc]init];
@@ -116,11 +159,13 @@
         [mailController setTitle:@"Please find the attached documents."];
         [mailController setSubject:NSLocalizedString(@"Deposits", @"Deposits")];
         [mailController setCcRecipients:emailRecipArray];
-        [mailController setToRecipients:emailRecipArray];
+        [mailController setToRecipients:emailRecipArray];//to me for now
         [mailController setMailComposeDelegate:self];
-        [mailController setMessageBody:[NSString stringWithFormat:@"Please find the attached documents: %@", testArray] isHTML:NO];
+        [mailController setMessageBody:[NSString stringWithFormat:@"Please find the attached documents: %@", userArray] isHTML:NO];
+        [mailController addAttachmentData:dataString mimeType:@"text/csv" fileName:@"test.csv"];
     
-        [mailController addAttachmentData:attachData mimeType:@"text/xml" fileName:@"app data"];
+//        [mailController addAttachmentData:attachData mimeType:@"text/xml" fileName:@"app data"];
+        //[mailController addAttachmentData:attachData mimeType:@"text/csv" fileName:@"app data"];
     
 //        [mailController addAttachmentData:csvData
 //                                 mimeType:@"text/csv" //@"application/pdf" or text/plain or @"mime"
@@ -140,6 +185,8 @@
 //        [self becomeFirstResponder];
         [self dismissViewControllerAnimated:YES completion:^{
             //ToDo add code here
+            [self.navigationController popToRootViewControllerAnimated:YES];//returning to HomeVC
+            //ToDo reset app and clear data -> clear some data on device except usersCollection.plist
         }];
     }
     else if (error) {

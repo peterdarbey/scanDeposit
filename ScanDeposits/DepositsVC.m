@@ -84,35 +84,34 @@
 
 - (NSString *)convertMyCollection {
     
-//     NSMutableArray *parsedArray = [NSMutableArray array];
+     NSMutableArray * __block parsedArray = [NSMutableArray array];
     NSString *__block parsedString = [[NSMutableString alloc]init];
-    NSMutableString *__block emptyString = [NSMutableString string];
+    
     
     //sent inline with subject body
     NSMutableArray *userArray = [NSMutableArray arrayWithContentsOfFile:[self getFilePath]];
     [userArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         //ToDo add comma separated pairs to collection
         obj = [[userArray objectAtIndex:idx]objectAtIndex:idx];
-        NSString *testString = [[NSString alloc]init];
         NSString *stringObj = (NSString *) [NSString stringWithFormat:@"%@,", obj];//@"\"%@\","
         DLog(@"stringObj: %@", stringObj);
-//        [parsedArray addObject:stringObj];
+        
 //        parsedString = [testString stringByAppendingString:stringObj];
+//        [parsedArray addObject:parsedString];
+        [parsedArray addObject:stringObj];
         for (int i = 0; i < idx; i++) {
-            parsedString = [testString stringByAppendingString:[[userArray objectAtIndex:i]objectAtIndex:i]];
+            parsedString = [parsedString stringByAppendingString:[parsedArray objectAtIndex:i]];
+            DLog(@"parsedString in block: %@", parsedString);
         }
         
-        DLog(@"parsedString in block: %@", parsedString);
     }];
     
-    DLog(@"parsedString: %@", parsedString);
+    DLog(@"parsedString: %@", parsedString);//not right yet
    
     return parsedString;
 }
 //email button
 - (void)proceedPressed:(UIButton *)sender {
-    
-    DLog(@"Proceed pressed");
     
     
 //    NSArray *arrayPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES);
@@ -121,18 +120,20 @@
 //    NSData *csvData = [NSData dataWithContentsOfFile:Path];
 
     
-//    NSError *errorMessage;
+
     //ToDo package data up to fire off to webservice
 //    //Create our recipients -> Note this will come from file later
-        NSArray *emailRecipArray = @[@"peterdarbey@gmail.com", @"fintan.killoran@gmail.com", @"fintan.a.killoran@aib.ie"];//, @"david.h.roberts@aib.ie", @"gavin.e.bennett@aib.ie"];
+        NSArray *emailRecipArray = @[@"peterdarbey@gmail.com", @"fintan.a.killoran@aib.ie"];//, @"david.h.roberts@aib.ie", @"gavin.e.bennett@aib.ie"];
+    
+    
+        NSString *disclaimerString = @"IMPORTANT - IF THE ABOVE CONFIRMATION IS IN ANY WAY INACCURATE, YOU SHOULD IMMEDIATELY ADVISE YOUR BRANCH MANAGER / HRQMO. OTHERWISE, YOU ARE CONFIRMING THAT YOU WERE A CONTROL USER AS DESCRIBED ABOVE AND THAT THE CONTENTS OF THIS CONFIRMING MAIL ARE ACCURATE.";
    
     
     
-//    NSString *filePath = [self getFilePath];
-//    NSData *stringData = [filePath dataUsingEncoding:NSUTF8StringEncoding];// https://github.com/jetseven/skpsmtpmessage rather than using MFMailController
+        // https://github.com/jetseven/skpsmtpmessage rather than using MFMailController
     
-        NSMutableDictionary *appData = [[NSMutableDictionary alloc]init];
-        NSData *attachData = [NSPropertyListSerialization dataFromPropertyList:appData format:NSPropertyListXMLFormat_v1_0 errorDescription:nil];
+//        NSMutableDictionary *appData = [[NSMutableDictionary alloc]init];
+//        NSData *attachData = [NSPropertyListSerialization dataFromPropertyList:appData format:NSPropertyListXMLFormat_v1_0 errorDescription:nil];
     
         //sent inline with subject body
         NSMutableArray *userArray = [NSMutableArray arrayWithContentsOfFile:[self getFilePath]];
@@ -147,9 +148,10 @@
     
         DLog(@"emailRecipientsArray: %@", emailRecipientsArray);//works but need to receive myself as no aib.ie acc
     
+        NSArray *contentArray = @[@"<number of bags>", @"<value of bags>"];
+    
         NSString *newUserString = [self convertMyCollection];
-        DLog(@"<< newUserString >>: %@", newUserString);
-        //test
+        //serialize and convert to data for webservice
         NSData *dataString = [newUserString dataUsingEncoding:NSUTF8StringEncoding];
     
     
@@ -157,22 +159,24 @@
         MFMailComposeViewController *mailController = [[MFMailComposeViewController alloc]init];
         
         [mailController setTitle:@"Please find the attached documents."];
-        [mailController setSubject:NSLocalizedString(@"Deposits", @"Deposits")];
+        [mailController setSubject:NSLocalizedString(@"Device Manager Report + Date/time ->Process", @"Device Manager Report")];
         [mailController setCcRecipients:emailRecipArray];
         [mailController setToRecipients:emailRecipArray];//to me for now
         [mailController setMailComposeDelegate:self];
-        [mailController setMessageBody:[NSString stringWithFormat:@"Please find the attached documents: %@", userArray] isHTML:NO];
-        [mailController addAttachmentData:dataString mimeType:@"text/csv" fileName:@"test.csv"];
+//        [mailController setMessageBody:[NSString stringWithFormat:@"Please find the attached documents: \n%@", userArray] isHTML:NO];
     
-//        [mailController addAttachmentData:attachData mimeType:@"text/xml" fileName:@"app data"];
-        //[mailController addAttachmentData:attachData mimeType:@"text/csv" fileName:@"app data"];
+        //ToDo alot of parsing
+        NSString *userName1 = [[userArray objectAtIndex:0]objectAtIndex:1];//hardCoded will need data from barcode too i.e. -> Process, SafeID and Date/Time
+         NSString *userName2 = [[userArray objectAtIndex:1]objectAtIndex:1];//hardCoded
+        //Inline with draft
+        [mailController setMessageBody:[NSString stringWithFormat:@"This mail is your copy of the record that you\n (<Control User 1: %@>) and (<Control User 2: %@>) together opened and record the following contents of the <process> taken from <Safe ID> on <date><time>.\n\nContent Summary\n%@", userName1, userName2, contentArray] isHTML:NO];//add disclaimer at end also
+    
+        [mailController addAttachmentData:dataString mimeType:@"text/csv" fileName:@"testData.csv"];//text/xml for plist content
     
 //        [mailController addAttachmentData:csvData
 //                                 mimeType:@"text/csv" //@"application/pdf" or text/plain or @"mime"
 //                                 fileName:@"usersCollection.plist"];//@"CSVFile.csv" -> works as plist fileName
     
-   
-        
         [self presentViewController:mailController animated:YES completion:nil];
    
 }
@@ -185,6 +189,8 @@
 //        [self becomeFirstResponder];
         [self dismissViewControllerAnimated:YES completion:^{
             //ToDo add code here
+             UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"Email sent" message:@"Email successfully sent to recipients" delegate:nil cancelButtonTitle:nil otherButtonTitles:nil, nil];
+            [alertView show];
             [self.navigationController popToRootViewControllerAnimated:YES];//returning to HomeVC
             //ToDo reset app and clear data -> clear some data on device except usersCollection.plist
         }];
@@ -194,6 +200,7 @@
         
         [self dismissViewControllerAnimated:YES completion:^{
             //ToDo add code here
+//            UIAlertView *alertView = [UIAlertView alloc]initWithTitle:@"Email sent" message:@"" delegate:nil cancelButtonTitle:nil otherButtonTitles:nil, nil];
         }];
     }
     

@@ -215,14 +215,16 @@
 //            [_userTV reloadData];//works no smooth anim though
 //        }//close if
         
+        
         DLog(@"_storedArray before deletion>>: %@", _storedArray);
         
         //works correctly with smooth animation
         if ([_userTV numberOfRowsInSection:indexPath.section] == 1)
         {
-            [_displayArray objectAtIndex:indexPath.section];//removeObjectAtIndex:indexPath.row];//perfect
+            [[_displayArray objectAtIndex:indexPath.section]removeObjectAtIndex:indexPath.row];//perfect
+            DLog(@"_displayArray after deletion>>: %@", _displayArray);
             //remove the data from our counterpart storedArray object
-            [_storedArray removeObjectAtIndex:indexPath.section];
+            [_storedArray removeObjectAtIndex:indexPath.section];//except remove whole entry
             
             [_userTV deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
         }
@@ -230,7 +232,18 @@
         [_storedArray writeToFile:fullPath atomically:YES];
         //reload data into _storedArray from file
         _storedArray = [NSMutableArray arrayWithContentsOfFile:fullPath];
-         DLog(@"_storedArray after deletion>>: %@", _storedArray);
+         DLog(@"_storedArray after deletion>>: %@", _storedArray);//correct count _displayArray wrong count
+        
+        //radical change
+//        [_displayArray removeAllObjects];
+//        DLog(@"Test _displayArray: %@", _displayArray);
+//        //Construct an array to populate the headers with initials
+//        for (int i = 0; i < [_storedArray count]; i++) {
+//            NSMutableArray *initArray = [NSMutableArray array];
+//            [initArray addObject:[[_storedArray objectAtIndex:i]objectAtIndex:0]];//extract the new user initials
+//            [_displayArray insertObject:initArray atIndex:i];
+//        }
+//        [_userTV reloadData];//works
         
     }//close editingStyle if
     
@@ -509,9 +522,11 @@
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     
     //if we have something to display then display
-    if ([_displayArray count] >= 1) { //was _dataSource
+    if ([_displayArray count] >= 1) {
         
-        return [_displayArray count];//think thats it
+        DLog(@"_displayedArray: %@", _displayArray);
+        return [_displayArray count];//thinks that there is 6 but only 5now after delete
+//        return [_storedArray count];//hack but didnt work
         
     }//close if
     //else if no data yet
@@ -521,8 +536,8 @@
     }
     else
     {
-//        return 1;//Show the button on launch
-        return [_displayArray count];//test
+
+        return [_displayArray count];//Show the button on launch returns 1
     }
     
 }
@@ -530,7 +545,7 @@
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
     //if we have data
-    DLog(@"_displayed ? %@", _displayArray);//empty
+    DLog(@"_displayed ? %@", _displayArray);
     
     if ([_displayArray count] >= 1) {
         //then check if its expanded or not
@@ -539,9 +554,9 @@
         }
         else //not expanded
         {
-//            return 1;//if not expanded just 1 row
-            DLog(@"count here crash: %i", [[_displayArray objectAtIndex:section]count]);
-            return [[_displayArray objectAtIndex:section]count];//crash here
+            //if not expanded just 1 row
+//            DLog(@"_displayArray: %@ with count here crash: %i", _displayArray, [[_displayArray objectAtIndex:section]count]);//count 1 correct
+            return [[_displayArray objectAtIndex:section]count];//crash here cause reading 1 which we want
         }
         
     }//close if

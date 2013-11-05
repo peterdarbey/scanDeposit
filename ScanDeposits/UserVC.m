@@ -234,21 +234,18 @@
         _storedArray = [NSMutableArray arrayWithContentsOfFile:fullPath];
          DLog(@"_storedArray after deletion>>: %@", _storedArray);//correct count _displayArray wrong count
         
-        //radical change
-//        [_displayArray removeAllObjects];
-//        DLog(@"Test _displayArray: %@", _displayArray);
-//        //Construct an array to populate the headers with initials
-//        for (int i = 0; i < [_storedArray count]; i++) {
-//            NSMutableArray *initArray = [NSMutableArray array];
-//            [initArray addObject:[[_storedArray objectAtIndex:i]objectAtIndex:0]];//extract the new user initials
-//            [_displayArray insertObject:initArray atIndex:i];
-//        }
-//        [_userTV reloadData];//works
+        /**** Removing the all data from _display and reloading from _storedArray ****/
+        [_displayArray removeAllObjects];
+        //Construct an array to populate the headers with initials
+        for (int i = 0; i < [_storedArray count]; i++) {
+            NSMutableArray *initArray = [NSMutableArray array];
+            [initArray addObject:[[_storedArray objectAtIndex:i]objectAtIndex:0]];//extract the new user initials
+            [_displayArray insertObject:initArray atIndex:i];
+        }
+        [_userTV reloadData];//leave this block of code here as is for now
         
     }//close editingStyle if
     
-    //refresh now to remove the section title
-//    [_userTV reloadData];
 }
 
 - (void)doneEditingPressed:(UIButton *)sender {

@@ -544,6 +544,56 @@
 //        return cell;
 //        
 //    }
+    
+    
+//    if (editingStyle == UITableViewCellEditingStyleDelete) {
+//        
+//        //remove and write to file -> works but using reloadData instead of deleteRowsAtIndex with anim
+//        //        if ([_userTV numberOfRowsInSection:indexPath.section] == 1) {
+//        //remove entire entry
+//        //            [_displayArray removeObjectAtIndex:indexPath.section];
+//        
+//        //remove data from storedArray also
+//        //            [_storedArray removeObjectAtIndex:indexPath.section];
+//        //            [_storedArray writeToFile:fullPath atomically:YES];
+//        
+//        //reload data into _storedArray from file
+//        //            _storedArray = [NSMutableArray arrayWithContentsOfFile:fullPath];
+//        //            [_userTV reloadData];//works no smooth anim though
+//        //        }//close if
+//        
+//        
+//        DLog(@"_storedArray before deletion>>: %@", _storedArray);
+//        
+//        //works correctly with smooth animation
+//        if ([_userTV numberOfRowsInSection:indexPath.section] == 1)
+//        {
+//            [[_displayArray objectAtIndex:indexPath.section]removeObjectAtIndex:indexPath.row];//perfect
+//            DLog(@"_displayArray after deletion>>: %@", _displayArray);
+//            //remove the data from our counterpart storedArray object
+//            [_storedArray removeObjectAtIndex:indexPath.section];//except remove whole entry
+//            
+//            [_userTV deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+//        }
+//        //write to file
+//        [_storedArray writeToFile:fullPath atomically:YES];
+//        //reload data into _storedArray from file
+//        _storedArray = [NSMutableArray arrayWithContentsOfFile:fullPath];
+//        DLog(@"_storedArray after deletion>>: %@", _storedArray);//correct count _displayArray wrong count
+//        
+//        //radical change
+//        //        [_displayArray removeAllObjects];
+//        //        DLog(@"Test _displayArray: %@", _displayArray);
+//        //        //Construct an array to populate the headers with initials
+//        //        for (int i = 0; i < [_storedArray count]; i++) {
+//        //            NSMutableArray *initArray = [NSMutableArray array];
+//        //            [initArray addObject:[[_storedArray objectAtIndex:i]objectAtIndex:0]];//extract the new user initials
+//        //            [_displayArray insertObject:initArray atIndex:i];
+//        //        }
+//        //        [_userTV reloadData];//works
+//        
+//    }//close editingStyle if
+
 
     
     

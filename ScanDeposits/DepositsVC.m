@@ -84,31 +84,35 @@
 
 - (NSString *)convertMyCollection {
     
-     NSMutableArray * __block parsedArray = [NSMutableArray array];
+//     NSMutableArray * __block parsedArray = [NSMutableArray array];
+    
     NSString *__block parsedString = [[NSMutableString alloc]init];
+    NSString *__block newString = [[NSMutableString alloc]init];
     
     
-    //sent inline with subject body
+    //sent inline with subject body -> need to get this working
     NSMutableArray *userArray = [NSMutableArray arrayWithContentsOfFile:[self getFilePath]];
+    //ToDo add comma separated pairs to collection
     [userArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        //ToDo add comma separated pairs to collection
-        obj = [[userArray objectAtIndex:idx]objectAtIndex:idx];
-        NSString *stringObj = (NSString *) [NSString stringWithFormat:@"%@,", obj];//@"\"%@\","
-        DLog(@"stringObj: %@", stringObj);
         
-//        parsedString = [testString stringByAppendingString:stringObj];
-//        [parsedArray addObject:parsedString];
-        [parsedArray addObject:stringObj];
-        for (int i = 0; i < idx; i++) {
-            parsedString = [parsedString stringByAppendingString:[parsedArray objectAtIndex:i]];
-            DLog(@"parsedString in block: %@", parsedString);
+        for (NSArray *array in userArray) {
+            for (int i = 0; i < [array count]; i++) {
+                //retrieve each element
+                obj = [array objectAtIndex:i];
+                //cast and format
+                NSString *stringObj = (NSString *) [NSString stringWithFormat:@"%@,", obj];//@"\"%@\","
+                //add to collection
+                parsedString = [parsedString stringByAppendingString:stringObj];
+               newString = [parsedString stringByAppendingString:stringObj];
+            }
         }
         
+        DLog(@"newString: %@", newString);
     }];
     
-    DLog(@"parsedString: %@", parsedString);//not right yet
+         DLog(@"parsedString >>>>>: %@", parsedString);
    
-    return parsedString;
+    return newString; //newString
 }
 //email button
 - (void)proceedPressed:(UIButton *)sender {
@@ -123,7 +127,7 @@
 
     //ToDo package data up to fire off to webservice
 //    //Create our recipients -> Note this will come from file later
-        NSArray *emailRecipArray = @[@"peterdarbey@gmail.com", @"fintan.a.killoran@aib.ie"];//, @"david.h.roberts@aib.ie", @"gavin.e.bennett@aib.ie"];
+    NSArray *emailRecipArray = @[@"peterdarbey@gmail.com", @"david.h.roberts@aib.ie", @"gavin.e.bennett@aib.ie"]; //@"fintan.a.killoran@aib.ie"];
     
     
         NSString *disclaimerString = @"IMPORTANT - IF THE ABOVE CONFIRMATION IS IN ANY WAY INACCURATE, YOU SHOULD IMMEDIATELY ADVISE YOUR BRANCH MANAGER / HRQMO. OTHERWISE, YOU ARE CONFIRMING THAT YOU WERE A CONTROL USER AS DESCRIBED ABOVE AND THAT THE CONTENTS OF THIS CONFIRMING MAIL ARE ACCURATE.";
@@ -165,11 +169,11 @@
         [mailController setMailComposeDelegate:self];
 //        [mailController setMessageBody:[NSString stringWithFormat:@"Please find the attached documents: \n%@", userArray] isHTML:NO];
     
-        //ToDo alot of parsing
+        //ToDo alot of parsing -> Temp code ***
         NSString *userName1 = [[userArray objectAtIndex:0]objectAtIndex:1];//hardCoded will need data from barcode too i.e. -> Process, SafeID and Date/Time
          NSString *userName2 = [[userArray objectAtIndex:1]objectAtIndex:1];//hardCoded
         //Inline with draft
-        [mailController setMessageBody:[NSString stringWithFormat:@"This mail is your copy of the record that you\n (<Control User 1: %@>) and (<Control User 2: %@>) together opened and record the following contents of the <process> taken from <Safe ID> on <date><time>.\n\nContent Summary\n%@", userName1, userName2, contentArray] isHTML:NO];//add disclaimer at end also
+        [mailController setMessageBody:[NSString stringWithFormat:@"This mail is your copy of the record that you\n (<Control User 1: %@>) and (<Control User 2: %@>) together opened and record the following contents of the <process> taken from <Safe ID> on <date><time>.\n\nContent Summary\n%@\n\n\n\n%@", userName1, userName2, contentArray, disclaimerString] isHTML:NO];//add disclaimer at end also
     
         [mailController addAttachmentData:dataString mimeType:@"text/csv" fileName:@"testData.csv"];//text/xml for plist content
     
@@ -189,8 +193,8 @@
 //        [self becomeFirstResponder];
         [self dismissViewControllerAnimated:YES completion:^{
             //ToDo add code here
-             UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"Email sent" message:@"Email successfully sent to recipients" delegate:nil cancelButtonTitle:nil otherButtonTitles:nil, nil];
-            [alertView show];
+             UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"Email sent" message:@"Email successfully sent to recipients" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            [alertView show];//change for xib later
             [self.navigationController popToRootViewControllerAnimated:YES];//returning to HomeVC
             //ToDo reset app and clear data -> clear some data on device except usersCollection.plist
         }];

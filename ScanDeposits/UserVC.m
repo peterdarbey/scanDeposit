@@ -330,7 +330,7 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     
-    NSString *titleName = [NSString stringWithFormat:@"User Details"];
+    NSString *titleName = [NSString stringWithFormat:@"Control User: %i", section];
     return titleName;
     
 }

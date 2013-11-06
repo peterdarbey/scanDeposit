@@ -55,7 +55,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6tJ-dV-h1t" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1089" y="123"/>
+            <point key="canvasLocation" x="1035" y="123"/>
         </scene>
         <!--RegistrationVC-->
         <scene sceneID="yCg-bw-ABr">
@@ -79,7 +79,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nfV-Lw-YJy" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="698" y="857"/>
+            <point key="canvasLocation" x="990" y="857"/>
         </scene>
         <!--UserVC-->
         <scene sceneID="Ck5-sa-Aw3">
@@ -103,21 +103,32 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ayf-RV-kol" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1099" y="857"/>
+            <point key="canvasLocation" x="1453" y="857"/>
         </scene>
-        <!--Compose EmailVC-->
-        <scene sceneID="TqV-KS-Vro">
+        <!--Log InVC-->
+        <scene sceneID="Zxo-dI-S91">
             <objects>
-                <viewController storyboardIdentifier="ComposeEmailVC" id="6VG-T8-JIh" customClass="ComposeEmailVC" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="5g7-NM-MnO">
+                <viewController storyboardIdentifier="LogInVC" id="lrM-9c-kN2" customClass="LogInVC" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="1ix-Xh-A8Z">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="nX6-hG-0Jz">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <color key="sectionIndexTrackingBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </tableView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
+                    <connections>
+                        <outlet property="loginTV" destination="nX6-hG-0Jz" id="rJ9-nx-4PF"/>
+                    </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="vPP-Q6-rqN" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Mav-PP-xlg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1573" y="859"/>
+            <point key="canvasLocation" x="531" y="857"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="bg7-Ow-aN0">

@@ -14,6 +14,7 @@
 #import "RegistrationVC.h"
 
 #import "UserVC.h"
+#import "LogInVC.h"
 
 
 @interface HomeVC ()
@@ -121,7 +122,11 @@
     [super viewDidLoad];
     //check for ADMIN
     //temp set to YES
-    _isAdmin = YES;
+    _isAdmin = YES;//HARDCODED for the moment
+    
+    //For now
+    _isAdmin = NO;
+    
     if (_isAdmin) {
         DLog(@"User is ADMIN");
         RegistrationVC *registerVC = [self.storyboard instantiateViewControllerWithIdentifier:@"RegistrationVC"];
@@ -134,6 +139,23 @@
             [registerVC setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
             [registerVC setTitle:NSLocalizedString(@"Admin Settings", @"Adminstrator Settings")];
         }];
+        
+    }
+    //temp condition
+    else if (!_isAdmin) {
+        
+        LogInVC *loginVC = [self.storyboard instantiateViewControllerWithIdentifier:@"LogInVC"];
+        
+        UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:loginVC];
+        
+        [self presentViewController:navController animated:NO completion:^{
+            //ToDo add some functionality here
+            [loginVC setModalPresentationStyle:UIModalPresentationFullScreen];
+            [loginVC setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
+             [loginVC setTitle:NSLocalizedString(@"Log In", @"Log In")];
+        }];
+        
+        
         
     }
     
@@ -280,7 +302,7 @@
 //    for (id object in barcodeArray) {
 //        [barcodeDict setValue:object forKey:@"Branch NSC"];
 //    }
-   
+   //wrong i think
     for (int i = 0; i < [barcodeArray count]; i++) {
         [barcodeDict setValue:[barcodeArray objectAtIndex:i] forKey:@"Branch NSC"];
         [barcodeDict setValue:[barcodeArray objectAtIndex:i] forKey:@"Process"];

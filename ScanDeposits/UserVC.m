@@ -671,6 +671,17 @@
     _isExpanded = NO;
 }
 
+- (NSString *)getFilePathForName:(NSString *)name {
+    
+    NSString *documentsDirectoryPath = [NSSearchPathForDirectoriesInDomains( NSDocumentDirectory,
+                                                                            NSUserDomainMask, YES ) objectAtIndex:0];
+    
+    NSString *fullFilePath = [documentsDirectoryPath stringByAppendingPathComponent:name];//@"users.plist"
+    
+    return fullFilePath;
+}
+
+
 #pragma custom delegate method from UserPopup
 //happens as a result of confirnBtn pressed in xib 
 - (void)returnUserModel:(User *)user {
@@ -678,17 +689,26 @@
     //assign to _user
     _user = user;
     
-    
     //Write to file
 //    NSDictionary *usersDict = @{user.userStaffID : user};
     //ToDo implement this with write to file in a array try a NSDictionary instead of NSArray
     NSDictionary *userDict = [user userDict];
     DLog(@"userDict: %@", userDict);
-    [_usersDict addEntriesFromDictionary:userDict];//add
+//    [_usersDict addEntriesFromDictionary:userDict];//add
+    [_usersArray addObject:userDict];//going with a NSArray
+    
+    //check file exists at path if not copy to destination path
+    if (![fileManager fileExistsAtPath:[self getFilePathForName:@"users.plist"]]) {
+        //construct the filePath and copy to the Documents folder for writing too file
+        NSString *sourcePath = [[NSBundle mainBundle]pathForResource:@"users" ofType:@"plist"];
+        [fileManager copyItemAtPath:sourcePath toPath:fullPath error:nil];
+    }
+
     //then write to file
-    [_usersDict writeToFile:@"" atomically:YES];
+    [_usersArray writeToFile:[self getFilePathForName:@"users.plist"] atomically:YES];//users.plist
     //for conditional
     _usersWritten = YES;
+    
     
     //read from new plist for Modal new class on log in
     //NSDictionary *userDict = [NSDictionary dictionaryWithContentsOfFile:@"users.plist"];

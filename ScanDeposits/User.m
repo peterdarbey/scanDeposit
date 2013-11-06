@@ -23,6 +23,9 @@
 //@property BOOL adminstrator;
 
 @property (strong, nonatomic) NSDictionary *internalDict;
+@property (strong, nonatomic) NSDictionary *userDict;
+//Admin dict also
+@property (strong, nonatomic) NSDictionary *adminDict;
 
 @end
 
@@ -41,13 +44,26 @@ static BOOL __isAdmin;
     _initials = dict[@"Initials"];//test
     __isAdmin = [dict[@"Adminstrator"] boolValue];//assign to static variable, NO as default unless admin
     //if admin they have a password so assign to ivar/property
-    if (__isAdmin) {
+    if (__isAdmin && dict) {
         _password = dict[@"Password"];
+        _adminDict = @{_password : dict};
+        DLog(@"<< _adminDict >>: %@", _adminDict);//admin is password
     }
-    else //not admin so set to nil
-    {
+//    else //not admin so set to nil
+//    {
+//        _password = @"Not Authorized";
+//    }
+    
+    //if not administrator construct with staffID
+    if (!__isAdmin && dict) {
+        
         _password = @"Not Authorized";
+        
+        //internally constructs a dict for identifing the user
+        _userDict = @{_staffID : dict};//could be self/user
+        DLog(@"<< _userDict >>: %@", _userDict);
     }
+    
     _internalDict = dict;
     
 }
@@ -61,9 +77,6 @@ static BOOL __isAdmin;
         NSDictionary *dict = @{@"Name" : name, @"Email" : eMail,
                                @"Staff ID" : staffId, @"Initials" : initials, @"Adminstrator" : [NSNumber numberWithBool:isAdmin], @"Password" : password};//@(NO)};test <- //@YES
         
-//        __isAdmin = isAdmin;//could be smarter
-        
-        DLog(@"init dict has: %@", dict);
         
         [self commonInit:dict];
         
@@ -75,6 +88,17 @@ static BOOL __isAdmin;
 + (BOOL)isAdminUser {
     
     return __isAdmin;
+}
+
+- (NSDictionary *)adminDict {
+    
+    return _adminDict;
+}
+
+
+- (NSDictionary *)userDict {
+    
+    return _userDict;
 }
 
 - (NSString *)userName {

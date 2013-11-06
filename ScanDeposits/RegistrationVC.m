@@ -107,7 +107,7 @@
     
 }
 
-
+//add NSString parameter to customize the return plist
 - (NSString *)getFilePath
 {
     NSString *documentsDirectoryPath = [NSSearchPathForDirectoriesInDomains( NSDocumentDirectory,
@@ -310,7 +310,7 @@
                 if ([_adminArray count] < 2) {//on second iteration still less than 2
                     
                     //create user, add required fields to local array and add to _adminArray
-                    [self createUserFactory];//fixed
+                    [self createUserFactory];//fixed //adminFactory
                     
                 }//close if
                 
@@ -341,6 +341,11 @@
     User *user = [[User alloc]initWithName:_name eMail:_eMail
                                    staffID:_staffID Initials:_initials
                                    isAdmin:YES withPassword:_adminPassword];
+    
+    //ToDo implement this later -> with write to file and add to an array
+    NSDictionary *adminsDict = [user adminDict];//administrator with password
+    DLog(@"adminsDict: %@", adminsDict);
+    
     //Create a local array
     NSMutableArray *localUserArray = [NSMutableArray array];
 //    [localUserArray addObject:[user userInitials]];//dont need here

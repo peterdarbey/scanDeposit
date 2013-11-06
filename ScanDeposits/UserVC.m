@@ -176,6 +176,10 @@
 
     }
     
+    //initialize usersDict or load from file if exist
+    _usersDict = [NSMutableDictionary dictionary];//ToDo -> construct plist
+    
+    
     editBtn = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editPressed:)];
     
     [self.navigationItem setRightBarButtonItem:editBtn animated:YES];
@@ -674,6 +678,23 @@
     //assign to _user
     _user = user;
     
+    
+    //Write to file
+//    NSDictionary *usersDict = @{user.userStaffID : user};
+    //ToDo implement this with write to file in a array try a NSDictionary instead of NSArray
+    NSDictionary *userDict = [user userDict];
+    DLog(@"userDict: %@", userDict);
+    [_usersDict addEntriesFromDictionary:userDict];//add
+    //then write to file
+    [_usersDict writeToFile:@"" atomically:YES];
+    //for conditional
+    _usersWritten = YES;
+    
+    //read from new plist for Modal new class on log in
+    //NSDictionary *userDict = [NSDictionary dictionaryWithContentsOfFile:@"users.plist"];
+    
+   
+    
 //    //Construct an array to populate the headers with initials
     NSMutableArray *initArray = [NSMutableArray array];
     [initArray addObject:(NSString *)[user userInitials]];//extract the new user initials
@@ -693,11 +714,8 @@
     
         //Before adding/writing to file check that there is no data already stored
         if (_storedArray) {
-//            //Add to the existing stored array
-            
             //Add new user to _storedArray
             [_storedArray addObject:writableArray];
-            DLog(@"IF: _storedArray in returnUserModel: %@", _storedArray);
         }
         
         //write here

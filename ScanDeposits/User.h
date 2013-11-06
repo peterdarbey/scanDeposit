@@ -19,6 +19,9 @@
 
 + (BOOL)isAdminUser;
 
+- (NSDictionary *)adminDict;
+- (NSDictionary *)userDict;
+
 - (NSString *)userName;
 - (NSString *)userEMail;
 - (NSString *)userStaffID;

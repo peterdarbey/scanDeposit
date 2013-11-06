@@ -36,6 +36,9 @@
 @property (strong, nonatomic) NSMutableArray *dataSource;
 @property (strong, nonatomic) User *user;
 
+//new collection for validation
+@property (strong, nonatomic) NSMutableDictionary *usersDict;
+@property BOOL usersWritten;
 
 @property (strong, nonatomic) NSMutableArray *storedArray;
 @property (strong, nonatomic) NSMutableArray *displayArray;
@@ -45,6 +48,7 @@
 @property BOOL fileExists;
 
 @property BOOL isWritten;
+
 
 
 @end

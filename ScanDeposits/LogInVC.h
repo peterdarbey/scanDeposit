@@ -15,8 +15,11 @@
 {
     
     UIBarButtonItem *doneBtn;
+    NSFileManager *fileManager;
 }
 
 @property (strong, nonatomic) IBOutlet UITableView *loginTV;
+
+@property (strong, nonatomic) NSMutableArray *users;
 
 @end

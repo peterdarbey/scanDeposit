@@ -38,6 +38,17 @@
     
 }
 
+- (NSString *)getFilePathForName:(NSString *)name {
+    
+    NSString *documentsDirectoryPath = [NSSearchPathForDirectoriesInDomains( NSDocumentDirectory,
+                                                                            NSUserDomainMask, YES ) objectAtIndex:0];
+    
+    NSString *fullFilePath = [documentsDirectoryPath stringByAppendingPathComponent:name];//@"users.plist"
+    
+    return fullFilePath;
+}
+
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -61,6 +72,17 @@
 //    [self.view addSubview:imgView];//for the moment
     [_loginTV setBackgroundView:imgView];
     
+    fileManager = [NSFileManager defaultManager];
+    
+    if (![fileManager fileExistsAtPath:[self getFilePathForName:@"users.plist"]]) {
+        //ToDo load array from file
+        _users = [NSMutableArray arrayWithContentsOfFile:[self getFilePathForName:@"users.plist"]];
+        if (_users) {
+            
+            //check it exists
+        }
+        
+    }
     
 }
 

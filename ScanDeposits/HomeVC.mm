@@ -125,7 +125,7 @@
     _isAdmin = YES;//HARDCODED for the moment
     
     //For now
-    _isAdmin = NO;
+//    _isAdmin = NO;
     
     if (_isAdmin) {
         DLog(@"User is ADMIN");

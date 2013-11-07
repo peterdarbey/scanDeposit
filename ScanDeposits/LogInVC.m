@@ -140,7 +140,7 @@
                         //custom delegate method call
                         if ([self.delegate respondsToSelector:@selector(dismissLoginVC: isAdmin:)]) {
                             //dismissLoginVC
-                            [self.delegate performSelector:@selector(dismissLoginVC: isAdmin:) withObject:_packagedUsers withObject:@(NO)];
+                            [self.delegate performSelector:@selector(dismissLoginVC: isAdmin:) withObject:_packagedUsers withObject:@(NO)];//?
                             DLog(@"New delegate protocol implemented");
                         }
                     }];
@@ -157,14 +157,14 @@
     return YES;
     
 }
-//custom method
+//custom method -> different section is why?
 - (UITextField *)returnNextTextField:(UITextField *)textField {
     //retrieve the cell that contains the textField
     UITableViewCell *cell = (UITableViewCell *)textField.superview.superview;
     NSIndexPath *indexPath = [_loginTV indexPathForCell:cell];
     
     //increment the indexPath.row to retrieve the next cell which contains the next textField
-    cell = (UITableViewCell *)[_loginTV cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row +1 inSection:indexPath.section]];
+    cell = (UITableViewCell *)[_loginTV cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section +1]];
     //the next TextField
     UITextField *nextTF = (UITextField *)[cell.contentView viewWithTag:TEXTFIELD_TAG];//100
     return nextTF;
@@ -236,6 +236,7 @@
         }
         
     }//USER 1
+    
     else if (indexPath.section == 1) {
         DLog(@"Control User:1 section");
         if (![textField.text isEqualToString:@""] && [textField.text length] > 3) {
@@ -251,26 +252,6 @@
             nextTF = [self returnNextTextField:textField];
             [nextTF becomeFirstResponder];
             
-//                //iterate through _users collection to check for a valid user
-//                for (NSDictionary *dict in _users) {
-//                    NSDictionary *aUser = dict[textField.text];
-//                    //if a reg user exists for the textField entry perform some operation
-//                    if ([aUser[@"Staff ID"] isEqualToString:textField.text]) { // -> User => StaffID
-//                        //aUser is the specified user via Login textField add to collection
-//                        [_packagedUsers setObject:aUser forKey:@(1)];//number now associated with a user
-//                        DLog(@"_packagedUsers: %@", _packagedUsers);
-//                        _userOneValid = YES;
-//                    }//close if
-//                    
-//                }//close for
-//            
-//            //if valid user
-//            if (_userOneValid) {
-//                //get next TextField
-//                nextTF = [self returnNextTextField:textField];
-//                [nextTF becomeFirstResponder];
-//            }
-            
         }//close if
         else
         {
@@ -278,7 +259,8 @@
             //if blank display an error message
         }
         
-    }
+    }//close else if
+    
     else//USER 2
     {
         DLog(@"Control User:2 section");
@@ -293,44 +275,6 @@
             //last textField so resign TextField as its also valid
             [textField resignFirstResponder];
             
-                //iterate through _users collection to check for a valid user
-//                for (NSDictionary *dict in _users) {
-//                    NSDictionary *aUser = dict[textField.text];
-//                    if ([aUser[@"Staff ID"] isEqualToString:textField.text]) {
-//                        //add to packagedUsers collection
-//                        [_packagedUsers setObject:aUser forKey:@(2)];//now NSNumbers
-//                        DLog(@"_packagedUsers: %@", _packagedUsers);
-//                        _userTwoValid = YES;
-//                    }//close if
-//                    
-//                }//close for
-//            
-//            //if valid user
-//            if (_userTwoValid) {
-//                
-//                //set spinner
-//                [loginBtn setEnabled:YES];
-//                [loginSpinner setHidden:YES];
-//                [loginSpinner setAlpha:0.0];
-//                
-//                //last textField so resign TextField as its also valid
-//                [textField resignFirstResponder];
-//
-//                if ([_packagedUsers count] == 2) {//set to 2
-//                    //we have two reg logged in users so set a BOOL and dismiss modal
-//                    
-//                    [self dismissViewControllerAnimated:YES completion:^{
-//                        //custom delegate method call
-//                        if ([self.delegate respondsToSelector:@selector(dismissLoginVC: isAdmin:)]) {
-//                            //dismissLoginVC
-//                            [self.delegate performSelector:@selector(dismissLoginVC: isAdmin:) withObject:_packagedUsers withObject:@(NO)];
-//                            DLog(@"New delegate protocol implemented");
-//                        }
-//                    }];
-//                    
-//                }//close if
-//            }
-            
         }//close if
         else
         {
@@ -338,7 +282,7 @@
             //if blank display an error message
         }
         
-    }
+    }//close else
     
 }
 
@@ -618,7 +562,18 @@
         [cellTF setPlaceholder:@"Enter your Staff ID"];
     }
     
-    //ToDo retrieve the data contents for this tblView
+    //ToDo setup keyBoard
+    [cellTF setKeyboardType:UIKeyboardTypeNumbersAndPunctuation];
+    [cellTF setReturnKeyType:UIReturnKeyDone];
+    [cellTF enablesReturnKeyAutomatically];
+    [cellTF setClearsOnBeginEditing:YES];
+    [cellTF setAutocapitalizationType:UITextAutocapitalizationTypeNone];
+    [cellTF setAutocorrectionType:UITextAutocorrectionTypeNo];
+    
+    if (indexPath.section == 1) {
+        [cellTF setReturnKeyType:UIReturnKeyNext];
+    }
+    
     
     
     

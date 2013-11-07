@@ -596,6 +596,179 @@
 
 
     
+//    - (void)textFieldDidEndEditing:(UITextField *)textField {
+//        //retrieve the cell for which the textField was entered
+//        UITableViewCell *cell = (UITableViewCell *)[textField.superview superview];
+//        NSIndexPath *indexPath = [_loginTV indexPathForCell:cell];
+//        UITextField *nextTF;
+//        
+//        //ADMIN ONLY
+//        if (indexPath.section == 0) {
+//            DLog(@"Administrator section");
+//            //set spinner
+//            //[loginBtn setEnabled:NO];
+//            if (![textField.text isEqualToString:@""] && [textField.text length] > 3) {
+//                
+//                //assign to _password
+//                _password = textField.text;
+//                
+//                //set spinner
+//                [loginBtn setEnabled:YES];//should be YES
+//                //            [loginSpinner setHidden:NO];
+//                //            [loginSpinner setAlpha:1.0];
+//                
+//                _adminValid = YES;
+//                
+//                [textField resignFirstResponder];
+//                
+//                
+//                //            //iterate through _users collection to check for a valid user
+//                //            for (NSDictionary *dict in _admins) {
+//                //                NSDictionary *aAdmin = dict[textField.text];
+//                //                if ([aAdmin[@"Password"] isEqualToString:textField.text]) {
+//                //                    //add to packagedUsers collection
+//                //                    [_packagedAdmins setObject:aAdmin forKey:@(1)];//now NSNumbers
+//                //                    DLog(@"_packagedAdmins: %@", _packagedAdmins);
+//                //                    _adminValid = YES;//aAdmin[@"Passsword"];
+//                //                }//close if
+//                //
+//                //            }//close for
+//                //
+//                //            //if valid administrator
+//                //            if (_adminValid) {
+//                //
+//                //                //set spinner
+//                //                [loginBtn setEnabled:YES];
+//                //                [loginSpinner setHidden:YES];
+//                //                [loginSpinner setAlpha:0.0];
+//                //
+//                //                //ToDo create admin package
+//                //                [self dismissViewControllerAnimated:YES completion:^{
+//                //                    [textField resignFirstResponder];
+//                //                    //different custom delegate method call
+//                //                    if ([self.delegate respondsToSelector:@selector(dismissLoginVC: isAdmin:)]) {
+//                //                        //dismissLoginVC
+//                //                        [self.delegate performSelector:@selector(dismissLoginVC: isAdmin:) withObject:_packagedAdmins withObject:@(YES)];
+//                //                        DLog(@"New delgate protocol implemented");
+//                //                    }
+//                //                }];
+//                //            }//close if
+//                
+//            }//close if
+//            else
+//            {
+//                [textField becomeFirstResponder];
+//                //if blank display an error message
+//            }
+//            
+//        }//USER 1
+//        else if (indexPath.section == 1) {
+//            DLog(@"Control User:1 section");
+//            if (![textField.text isEqualToString:@""] && [textField.text length] > 3) {
+//                
+//                //assign to _password
+//                _userOne = textField.text;
+//                
+//                //set spinner
+//                [loginBtn setEnabled:YES];
+//                _userOneValid = YES;
+//                
+//                //get next TextField
+//                nextTF = [self returnNextTextField:textField];
+//                [nextTF becomeFirstResponder];
+//                
+//                //                //iterate through _users collection to check for a valid user
+//                //                for (NSDictionary *dict in _users) {
+//                //                    NSDictionary *aUser = dict[textField.text];
+//                //                    //if a reg user exists for the textField entry perform some operation
+//                //                    if ([aUser[@"Staff ID"] isEqualToString:textField.text]) { // -> User => StaffID
+//                //                        //aUser is the specified user via Login textField add to collection
+//                //                        [_packagedUsers setObject:aUser forKey:@(1)];//number now associated with a user
+//                //                        DLog(@"_packagedUsers: %@", _packagedUsers);
+//                //                        _userOneValid = YES;
+//                //                    }//close if
+//                //
+//                //                }//close for
+//                //
+//                //            //if valid user
+//                //            if (_userOneValid) {
+//                //                //get next TextField
+//                //                nextTF = [self returnNextTextField:textField];
+//                //                [nextTF becomeFirstResponder];
+//                //            }
+//                
+//            }//close if
+//            else
+//            {
+//                [textField becomeFirstResponder];
+//                //if blank display an error message
+//            }
+//            
+//        }
+//        else//USER 2
+//        {
+//            DLog(@"Control User:2 section");
+//            if (![textField.text isEqualToString:@""] && [textField.text length] > 3) {
+//                
+//                //assign to _password
+//                _userTwo = textField.text;
+//                
+//                //set spinner
+//                [loginBtn setEnabled:YES];
+//                _userTwoValid = YES;
+//                //last textField so resign TextField as its also valid
+//                [textField resignFirstResponder];
+//                
+//                //iterate through _users collection to check for a valid user
+//                //                for (NSDictionary *dict in _users) {
+//                //                    NSDictionary *aUser = dict[textField.text];
+//                //                    if ([aUser[@"Staff ID"] isEqualToString:textField.text]) {
+//                //                        //add to packagedUsers collection
+//                //                        [_packagedUsers setObject:aUser forKey:@(2)];//now NSNumbers
+//                //                        DLog(@"_packagedUsers: %@", _packagedUsers);
+//                //                        _userTwoValid = YES;
+//                //                    }//close if
+//                //
+//                //                }//close for
+//                //
+//                //            //if valid user
+//                //            if (_userTwoValid) {
+//                //                
+//                //                //set spinner
+//                //                [loginBtn setEnabled:YES];
+//                //                [loginSpinner setHidden:YES];
+//                //                [loginSpinner setAlpha:0.0];
+//                //                
+//                //                //last textField so resign TextField as its also valid
+//                //                [textField resignFirstResponder];
+//                //
+//                //                if ([_packagedUsers count] == 2) {//set to 2
+//                //                    //we have two reg logged in users so set a BOOL and dismiss modal
+//                //                    
+//                //                    [self dismissViewControllerAnimated:YES completion:^{
+//                //                        //custom delegate method call
+//                //                        if ([self.delegate respondsToSelector:@selector(dismissLoginVC: isAdmin:)]) {
+//                //                            //dismissLoginVC
+//                //                            [self.delegate performSelector:@selector(dismissLoginVC: isAdmin:) withObject:_packagedUsers withObject:@(NO)];
+//                //                            DLog(@"New delegate protocol implemented");
+//                //                        }
+//                //                    }];
+//                //                    
+//                //                }//close if
+//                //            }
+//                
+//            }//close if
+//            else
+//            {
+//                [textField becomeFirstResponder];
+//                //if blank display an error message
+//            }
+//            
+//        }
+//        
+//    }
+
+    
     
 }
 

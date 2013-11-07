@@ -31,7 +31,7 @@
 - (void)dismissLoginVC:(NSMutableDictionary *)users isAdmin:(BOOL)admin {
     
     //NOTE: Logout button required?
-    if (admin) {
+    if (admin) {//went in here why?
         DLog(@"is ADMIN: %@", users);//is dictionary
         
         _isAdmin = admin;//have to check the consitencey though of UInavigationController etc..
@@ -76,7 +76,7 @@
         //now pass the deposits data to DepositsVC to pop its tblView
         DepositsVC *depositsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"DepositsVC"];
         depositsVC.title = NSLocalizedString(@"Deposits", @"Deposits View");
-        depositsVC.depositsCollection = _depositsArray;
+        depositsVC.depositsCollection = _depositsArray;//bag data
         //package off logged in users/admins data
         if (_validUsersDict) {
             depositsVC.usersDict = _validUsersDict;

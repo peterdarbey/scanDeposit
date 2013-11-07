@@ -12,6 +12,10 @@
 
 @interface LogInVC ()
 
+@property (strong, nonatomic) NSString *password;
+@property (strong, nonatomic) NSString *userOne;
+@property (strong, nonatomic) NSString *userTwo;
+
 @end
 
 @implementation LogInVC
@@ -36,9 +40,115 @@
 
 - (void)loginPressed:(UIButton *)sender {
     
-    //enable if the users creds yield YES
-    [doneBtn setEnabled:YES];
+    //set spinner
+    [loginBtn setEnabled:NO];
+    [loginSpinner setHidden:NO];
+    [loginSpinner setAlpha:1.0];
     
+    //if valid administrator
+    if (_adminValid) {
+        
+        if ([_users count] > 0) {
+        
+            //iterate through _users collection to check for a valid user
+            for (NSDictionary *dict in _admins) {
+                NSDictionary *aAdmin = dict[_password];//think thats right
+                if ([aAdmin[@"Password"] isEqualToString:_password]) {
+                    //add to packagedUsers collection
+                    [_packagedAdmins setObject:aAdmin forKey:@(1)];//now NSNumbers
+                    DLog(@"_packagedAdmins: %@", _packagedAdmins);
+                    _adminValid = YES;//aAdmin[@"Passsword"];
+                }//close if
+                
+            }//close for
+        
+        }//close if
+
+            //ToDo create admin package
+            [self dismissViewControllerAnimated:YES completion:^{
+                
+                //set spinner
+                [loginBtn setEnabled:YES];
+                [loginSpinner setHidden:YES];
+                [loginSpinner setAlpha:0.0];
+                //different custom delegate method call
+                if ([self.delegate respondsToSelector:@selector(dismissLoginVC: isAdmin:)]) {
+                    //dismissLoginVC
+                    [self.delegate performSelector:@selector(dismissLoginVC: isAdmin:) withObject:_packagedAdmins withObject:@(YES)];//@(YES) -> works
+                    DLog(@"New delgate protocol implemented");
+                }
+            }];
+        
+        
+    }//close outer if
+    
+    //if user 1 is valid then add to collection
+    if (_userOneValid) {
+        DLog(@"_userOne is: %@", _userOne);//currently nil?
+        //iterate through _users collection to check for a valid user
+        if ([_users count] > 0) {
+        
+            for (NSDictionary *dict in _users) {
+                NSDictionary *aUser = dict[_userOne];
+                //if a reg user exists for the textField entry perform some operation
+                if ([aUser[@"Staff ID"] isEqualToString:_userOne]) { // -> User => StaffID CORRECT
+                    //aUser is the specified user via Login textField add to collection
+                    [_packagedUsers setObject:aUser forKey:@(1)];//number now associated with a user
+                    DLog(@"_packagedUsers: %@", _packagedUsers);
+                    _userOneValid = YES;
+                }//close if
+                
+            }//close for
+        
+        }//close if
+        
+    }//close if
+    
+        //if valid user
+        if (_userOneValid && _userTwoValid) {
+            
+            //set spinner
+            [loginBtn setEnabled:NO];
+            [loginSpinner setHidden:NO];
+            [loginSpinner setAlpha:1.0];
+            DLog(@"_userTwo is: %@", _userTwo);//currently nil?
+            if ([_users count] > 0) {
+                
+                //iterate through _users collection to check for a valid user
+                for (NSDictionary *dict in _users) {
+                    NSDictionary *aUser = dict[_userTwo];
+                    if ([aUser[@"Staff ID"] isEqualToString:_userTwo]) {
+                        //add to packagedUsers collection
+                        [_packagedUsers setObject:aUser forKey:@(2)];//now NSNumbers -> correct
+                        DLog(@"_packagedUsers: %@", _packagedUsers);
+                        _userTwoValid = YES;
+                    }//close if
+                    
+                }//close for
+                
+            }//close if
+                if ([_packagedUsers count] == 2) {//set to 2
+                    //we have two reg logged in users so set a BOOL and dismiss modal
+                    
+                    [self dismissViewControllerAnimated:YES completion:^{
+                        
+                        //set spinner
+                        [loginBtn setEnabled:YES];
+                        [loginSpinner setHidden:YES];
+                        [loginSpinner setAlpha:0.0];
+                        
+                        //custom delegate method call
+                        if ([self.delegate respondsToSelector:@selector(dismissLoginVC: isAdmin:)]) {
+                            //dismissLoginVC
+                            [self.delegate performSelector:@selector(dismissLoginVC: isAdmin:) withObject:_packagedUsers withObject:@(NO)];
+                            DLog(@"New delegate protocol implemented");
+                        }
+                    }];
+                    
+                }//close if
+
+        }//close valid user one and two
+
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
@@ -71,45 +181,52 @@
         DLog(@"Administrator section");
         //set spinner
         //[loginBtn setEnabled:NO];
-        if (![textField.text isEqualToString:@""] && [textField.text length] > 1) {
+        if (![textField.text isEqualToString:@""] && [textField.text length] > 3) {
+            
+            //assign to _password
+            _password = textField.text;
             
             //set spinner
-            [loginBtn setEnabled:NO];
-            [loginSpinner setHidden:NO];
-            [loginSpinner setAlpha:1.0];
+            [loginBtn setEnabled:YES];//should be YES
+//            [loginSpinner setHidden:NO];
+//            [loginSpinner setAlpha:1.0];
+            
+            _adminValid = YES;
+            
+            [textField resignFirstResponder];
             
             
-            //iterate through _users collection to check for a valid user
-            for (NSDictionary *dict in _admins) {
-                NSDictionary *aAdmin = dict[textField.text];
-                if ([aAdmin[@"Password"] isEqualToString:textField.text]) {
-                    //add to packagedUsers collection
-                    [_packagedAdmins setObject:aAdmin forKey:@(1)];//now NSNumbers
-                    DLog(@"_packagedAdmins: %@", _packagedAdmins);
-                    _adminValid = YES;//aAdmin[@"Passsword"];
-                }//close if
-                
-            }//close for
-            
-            //if valid administrator
-            if (_adminValid) {
-                
-                //set spinner
-                [loginBtn setEnabled:YES];
-                [loginSpinner setHidden:YES];
-                [loginSpinner setAlpha:0.0];
-                
-                //ToDo create admin package
-                [self dismissViewControllerAnimated:YES completion:^{
-                    [textField resignFirstResponder];
-                    //different custom delegate method call
-                    if ([self.delegate respondsToSelector:@selector(dismissLoginVC: isAdmin:)]) {
-                        //dismissLoginVC
-                        [self.delegate performSelector:@selector(dismissLoginVC: isAdmin:) withObject:_packagedAdmins withObject:@(YES)];
-                        DLog(@"New delgate protocol implemented");
-                    }
-                }];
-            }//close if
+//            //iterate through _users collection to check for a valid user
+//            for (NSDictionary *dict in _admins) {
+//                NSDictionary *aAdmin = dict[textField.text];
+//                if ([aAdmin[@"Password"] isEqualToString:textField.text]) {
+//                    //add to packagedUsers collection
+//                    [_packagedAdmins setObject:aAdmin forKey:@(1)];//now NSNumbers
+//                    DLog(@"_packagedAdmins: %@", _packagedAdmins);
+//                    _adminValid = YES;//aAdmin[@"Passsword"];
+//                }//close if
+//                
+//            }//close for
+//            
+//            //if valid administrator
+//            if (_adminValid) {
+//                
+//                //set spinner
+//                [loginBtn setEnabled:YES];
+//                [loginSpinner setHidden:YES];
+//                [loginSpinner setAlpha:0.0];
+//                
+//                //ToDo create admin package
+//                [self dismissViewControllerAnimated:YES completion:^{
+//                    [textField resignFirstResponder];
+//                    //different custom delegate method call
+//                    if ([self.delegate respondsToSelector:@selector(dismissLoginVC: isAdmin:)]) {
+//                        //dismissLoginVC
+//                        [self.delegate performSelector:@selector(dismissLoginVC: isAdmin:) withObject:_packagedAdmins withObject:@(YES)];
+//                        DLog(@"New delgate protocol implemented");
+//                    }
+//                }];
+//            }//close if
             
         }//close if
         else
@@ -121,30 +238,38 @@
     }//USER 1
     else if (indexPath.section == 1) {
         DLog(@"Control User:1 section");
-        if (![textField.text isEqualToString:@""] && [textField.text length] > 1) {
+        if (![textField.text isEqualToString:@""] && [textField.text length] > 3) {
+            
+            //assign to _password
+            _userOne = textField.text;
             
             //set spinner
-            [loginBtn setEnabled:NO];
+            [loginBtn setEnabled:YES];
+            _userOneValid = YES;
             
-                //iterate through _users collection to check for a valid user
-                for (NSDictionary *dict in _users) {
-                    NSDictionary *aUser = dict[textField.text];
-                    //if a reg user exists for the textField entry perform some operation
-                    if ([aUser[@"Staff ID"] isEqualToString:textField.text]) { // -> User => StaffID
-                        //aUser is the specified user via Login textField add to collection
-                        [_packagedUsers setObject:aUser forKey:@(1)];//number now associated with a user
-                        DLog(@"_packagedUsers: %@", _packagedUsers);
-                        _userOneValid = YES;
-                    }//close if
-                    
-                }//close for
+            //get next TextField
+            nextTF = [self returnNextTextField:textField];
+            [nextTF becomeFirstResponder];
             
-            //if valid user
-            if (_userOneValid) {
-                //get next TextField
-                nextTF = [self returnNextTextField:textField];
-                [nextTF becomeFirstResponder];
-            }
+//                //iterate through _users collection to check for a valid user
+//                for (NSDictionary *dict in _users) {
+//                    NSDictionary *aUser = dict[textField.text];
+//                    //if a reg user exists for the textField entry perform some operation
+//                    if ([aUser[@"Staff ID"] isEqualToString:textField.text]) { // -> User => StaffID
+//                        //aUser is the specified user via Login textField add to collection
+//                        [_packagedUsers setObject:aUser forKey:@(1)];//number now associated with a user
+//                        DLog(@"_packagedUsers: %@", _packagedUsers);
+//                        _userOneValid = YES;
+//                    }//close if
+//                    
+//                }//close for
+//            
+//            //if valid user
+//            if (_userOneValid) {
+//                //get next TextField
+//                nextTF = [self returnNextTextField:textField];
+//                [nextTF becomeFirstResponder];
+//            }
             
         }//close if
         else
@@ -157,50 +282,54 @@
     else//USER 2
     {
         DLog(@"Control User:2 section");
-        if (![textField.text isEqualToString:@""] && [textField.text length] > 1) {
+        if (![textField.text isEqualToString:@""] && [textField.text length] > 3) {
+            
+            //assign to _password
+            _userTwo = textField.text;
             
             //set spinner
-            [loginBtn setEnabled:NO];
-            [loginSpinner setHidden:NO];
-            [loginSpinner setAlpha:1.0];
+            [loginBtn setEnabled:YES];
+            _userTwoValid = YES;
+            //last textField so resign TextField as its also valid
+            [textField resignFirstResponder];
             
                 //iterate through _users collection to check for a valid user
-                for (NSDictionary *dict in _users) {
-                    NSDictionary *aUser = dict[textField.text];
-                    if ([aUser[@"Staff ID"] isEqualToString:textField.text]) {
-                        //add to packagedUsers collection
-                        [_packagedUsers setObject:aUser forKey:@(2)];//now NSNumbers
-                        DLog(@"_packagedUsers: %@", _packagedUsers);
-                        _userTwoValid = YES;
-                    }//close if
-                    
-                }//close for
-            
-            //if valid user
-            if (_userTwoValid) {
-                
-                //set spinner
-                [loginBtn setEnabled:YES];
-                [loginSpinner setHidden:YES];
-                [loginSpinner setAlpha:0.0];
-                
-                //last textField so resign TextField as its also valid
-                [textField resignFirstResponder];
-
-                if ([_packagedUsers count] == 2) {//set to 2
-                    //we have two reg logged in users so set a BOOL and dismiss modal
-                    
-                    [self dismissViewControllerAnimated:YES completion:^{
-                        //custom delegate method call
-                        if ([self.delegate respondsToSelector:@selector(dismissLoginVC: isAdmin:)]) {
-                            //dismissLoginVC
-                            [self.delegate performSelector:@selector(dismissLoginVC: isAdmin:) withObject:_packagedUsers withObject:@(NO)];
-                            DLog(@"New delegate protocol implemented");
-                        }
-                    }];
-                    
-                }//close if
-            }
+//                for (NSDictionary *dict in _users) {
+//                    NSDictionary *aUser = dict[textField.text];
+//                    if ([aUser[@"Staff ID"] isEqualToString:textField.text]) {
+//                        //add to packagedUsers collection
+//                        [_packagedUsers setObject:aUser forKey:@(2)];//now NSNumbers
+//                        DLog(@"_packagedUsers: %@", _packagedUsers);
+//                        _userTwoValid = YES;
+//                    }//close if
+//                    
+//                }//close for
+//            
+//            //if valid user
+//            if (_userTwoValid) {
+//                
+//                //set spinner
+//                [loginBtn setEnabled:YES];
+//                [loginSpinner setHidden:YES];
+//                [loginSpinner setAlpha:0.0];
+//                
+//                //last textField so resign TextField as its also valid
+//                [textField resignFirstResponder];
+//
+//                if ([_packagedUsers count] == 2) {//set to 2
+//                    //we have two reg logged in users so set a BOOL and dismiss modal
+//                    
+//                    [self dismissViewControllerAnimated:YES completion:^{
+//                        //custom delegate method call
+//                        if ([self.delegate respondsToSelector:@selector(dismissLoginVC: isAdmin:)]) {
+//                            //dismissLoginVC
+//                            [self.delegate performSelector:@selector(dismissLoginVC: isAdmin:) withObject:_packagedUsers withObject:@(NO)];
+//                            DLog(@"New delegate protocol implemented");
+//                        }
+//                    }];
+//                    
+//                }//close if
+//            }
             
         }//close if
         else
@@ -256,11 +385,10 @@
     }//close if
     
     //check it exists and load if not then cant use app
-    if (_users) {
         //ToDo load array from file
         _users = [NSMutableArray arrayWithContentsOfFile:[self getFilePathForName:@"users.plist"]];
-    }
-    DLog(@"_users: %@", _users);//currently (null)?
+
+    DLog(@"_users: %@", _users);//correct
     
     
     if (![fileManager fileExistsAtPath:[self getFilePathForName:@"admins.plist"]]) {
@@ -269,11 +397,11 @@
         [fileManager copyItemAtPath:sourcePath toPath:[self getFilePathForName:@"admins.plist"] error:nil];
     }//close if
 
-    if (_admins) {
+//    if (_admins) {
         //load array from file
         _admins = [NSMutableArray arrayWithContentsOfFile:[self getFilePathForName:@"admins.plist"]];
-    }
-    DLog(@"_admins: %@", _admins);//
+//    }
+    DLog(@"_admins: %@", _admins);//correct -> empty at the moment as still under construction
     
     
     //create packagedUsersDict
@@ -313,7 +441,7 @@
     
 }
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    
+    //if 1st section
     if (section == 0) {
         
         UIView *aView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, _loginTV.frame.size.width, 100)];
@@ -338,17 +466,17 @@
     } //middle section
     else if (section == 1) {
         
-        UIView *aView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, _loginTV.frame.size.width, 100)];
+        UIView *aView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, _loginTV.frame.size.width, 50)];
         [aView setBackgroundColor:[UIColor clearColor]];
         //
-        UILabel *adminLbl = [[UILabel alloc]initWithFrame:CGRectMake(10, 59.5, 165, 25)];
+        UILabel *adminLbl = [[UILabel alloc]initWithFrame:CGRectMake(10, 12.5, 165, 25)];
         //
         adminLbl.textAlignment = NSTextAlignmentLeft;
         adminLbl.font = [UIFont fontWithName:@"Arial-BoldMT" size:17];
-//        adminLbl.textColor = [UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0];//darkGray
+        adminLbl.textColor = [UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0];//darkGray
         adminLbl.shadowColor = [UIColor grayColor];
         adminLbl.shadowOffset = CGSizeMake(1.0, 1.0);
-        adminLbl.backgroundColor = [UIColor orangeColor];
+        adminLbl.backgroundColor = [UIColor clearColor];
         [adminLbl setUserInteractionEnabled:NO];
         [adminLbl setText:@"Control Users Only"];
         
@@ -372,9 +500,9 @@
         return 5;
     }
     //middle section
-    else if (section != 0) {
+    else if (section == 1) {
         
-        return 10;//for now
+        return 50;//for now
     }
     else //1st section
     {

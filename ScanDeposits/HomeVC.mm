@@ -20,6 +20,8 @@
 {
     ScanditSDKBarcodePicker *picker;
 }
+@property (strong, nonatomic) NSMutableDictionary *validUsersDict;
+@property (strong, nonatomic) NSMutableDictionary *validAdminsDict;
 
 @end
 
@@ -28,17 +30,23 @@
 #pragma mark - Custom delegate method for LoginVC
 - (void)dismissLoginVC:(NSMutableDictionary *)users isAdmin:(BOOL)admin {
     
-    //is this 1 or 2?
+    //NOTE: Logout button required?
     if (admin) {
-        DLog(@"is ADMIN: %@", users);
+        DLog(@"is ADMIN: %@", users);//is dictionary
+        
         _isAdmin = admin;//have to check the consitencey though of UInavigationController etc..
-        //collect data
+       
+        //will need for packaging off to email with other data
+        _validAdminsDict = users;//pass to deposits
     }
     else
     {
-        DLog(@"is USERS: %@", users);
+        DLog(@"is USERS: %@", users);//is dictionary
         _isAdmin = admin;//let it set
-        //collect data 
+        _isUser = YES;
+        
+        //will need for packaging off to email with other data
+        _validUsersDict = users;//pass to deposits
     }
     
 }
@@ -61,7 +69,6 @@
 
 - (void)finishedScansPressed:(UIButton *)sender {
    
-    DLog(@"Dismiss picker with DONE button");
     [picker dismissViewControllerAnimated:YES completion:^{
         //stop picker scanning
         [picker stopScanning];
@@ -70,6 +77,17 @@
         DepositsVC *depositsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"DepositsVC"];
         depositsVC.title = NSLocalizedString(@"Deposits", @"Deposits View");
         depositsVC.depositsCollection = _depositsArray;
+        //package off logged in users/admins data
+        if (_validUsersDict) {
+            depositsVC.usersDict = _validUsersDict;
+            DLog(@"_validUsersDict: %@", _validUsersDict);//one should have value
+        }
+        else if (_validAdminsDict)
+        {
+            depositsVC.adminsDict = _validAdminsDict;
+            DLog(@"_validAdminsDict: %@", _validAdminsDict);//one should have value
+        }
+        
         [self.navigationController pushViewController:depositsVC animated:YES];
         DLog(@"Push to viewController delegate method called");
         
@@ -139,50 +157,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    //check for ADMIN
-    //temp set to YES
-    _isAdmin = YES;//HARDCODED for the moment
-    
-    //For now
-//    _isAdmin = NO;
-    
-    if (_isAdmin) {
-        DLog(@"User is ADMIN");
-        RegistrationVC *registerVC = [self.storyboard instantiateViewControllerWithIdentifier:@"RegistrationVC"];
-        UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:registerVC];
-        [navController.navigationBar setBarStyle:UIBarStyleBlackTranslucent];
-        
-        //changed to NO and unbalanced calls stopped
-        [self presentViewController:navController animated:NO completion:^{
-            [registerVC setModalPresentationStyle:UIModalPresentationFullScreen];
-            [registerVC setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
-            [registerVC setTitle:NSLocalizedString(@"Admin Settings", @"Adminstrator Settings")];
-        }];
-        
-    }
-    //temp condition
-    else if (!_isAdmin) {
-        
-        LogInVC *loginVC = [self.storyboard instantiateViewControllerWithIdentifier:@"LogInVC"];
-        
-        UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:loginVC];
-        
-        [self presentViewController:navController animated:NO completion:^{
-            //ToDo add some functionality here
-            [loginVC setModalPresentationStyle:UIModalPresentationFullScreen];
-            [loginVC setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
-             [loginVC setTitle:NSLocalizedString(@"Log In", @"Log In")];
-            //set the HomeVC as the delegate for the LoginVC dismissLoginVCWithValidation
-            [loginVC setDelegate:self];
-        }];
-        
-        
-        
-    }
-    else
-    {
-        //is user -> scanning screen
-    }
     
     
     _barcodeArray = [NSMutableArray array];
@@ -226,6 +200,51 @@
     
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    
+    
+    //removed hardcoded values for admin and user
+    
+    //if Administrator (filled in password so admin) go to RegistrationVC / Administrator Settings
+    if (_isAdmin) {
+        DLog(@"User is ADMIN");
+        RegistrationVC *registerVC = [self.storyboard instantiateViewControllerWithIdentifier:@"RegistrationVC"];
+        UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:registerVC];
+        [navController.navigationBar setBarStyle:UIBarStyleBlackTranslucent];
+        
+        //changed to NO and unbalanced calls stopped
+        [self presentViewController:navController animated:NO completion:^{
+            [registerVC setModalPresentationStyle:UIModalPresentationFullScreen];
+            [registerVC setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
+            [registerVC setTitle:NSLocalizedString(@"Admin Settings", @"Adminstrator Settings")];
+        }];
+        
+    }
+    //not administrator or a reg user
+    else if (!_isAdmin && !_isUser) {
+        
+        LogInVC *loginVC = [self.storyboard instantiateViewControllerWithIdentifier:@"LogInVC"];
+        
+        UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:loginVC];
+        
+        [self presentViewController:navController animated:NO completion:^{
+            //ToDo add some functionality here
+            [loginVC setModalPresentationStyle:UIModalPresentationFullScreen];
+            [loginVC setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
+            [loginVC setTitle:NSLocalizedString(@"Log In", @"Log In")];
+            //set the HomeVC as the delegate for the LoginVC dismissLoginVCWithValidation
+            [loginVC setDelegate:self];
+        }];
+        
+        
+    }
+    else
+    {
+        DLog(@"is user scan away");//temp remove condition later
+    }
+
+    
+}
 //Unregister for notifications
 - (void)viewDidDisappear:(BOOL)animated{
     

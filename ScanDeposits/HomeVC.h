@@ -40,4 +40,6 @@
 @property (strong, nonatomic) NSMutableArray *barcodeArray;
 @property (strong, nonatomic) NSMutableArray *depositsArray;
 @property BOOL isAdmin;
+@property BOOL isUser;
+
 @end

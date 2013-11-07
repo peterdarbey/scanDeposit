@@ -29,6 +29,9 @@
 @property (strong, nonatomic) NSMutableArray *depositsCollection;
 @property int bagCount;
 @property double totalDepositAmount;
+
+@property (strong, nonatomic) NSMutableDictionary *usersDict;
+@property (strong, nonatomic) NSMutableDictionary *adminsDict;
 //@property int depositCount;
 
 @end

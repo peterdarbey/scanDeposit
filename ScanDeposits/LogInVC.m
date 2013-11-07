@@ -605,7 +605,7 @@
         cellTF = (UITextField *)[cell.contentView viewWithTag:TEXTFIELD_TAG];
         cellLabel = (UILabel *)[cell.contentView viewWithTag:LABEL_TAG];
     }
-    NSArray *labelsArray = @[@"Password", @"User 1 Staff ID", @"User 2 Staff ID"];
+    NSArray *labelsArray = @[@"Password", @"Staff ID", @"Staff ID"];
     
     //populate the cells textField and Label with data here
     [cellLabel setText:[NSString stringWithFormat:@"%@", [labelsArray objectAtIndex:indexPath.section]]];

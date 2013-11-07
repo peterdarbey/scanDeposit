@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+@class User;
+
+
 #define TEXTFIELD_TAG 100
 #define LABEL_TAG 200
 
@@ -16,10 +19,14 @@
     
     UIBarButtonItem *doneBtn;
     NSFileManager *fileManager;
+    NSIndexPath *selectedIndex;
 }
 
 @property (strong, nonatomic) IBOutlet UITableView *loginTV;
 
 @property (strong, nonatomic) NSMutableArray *users;
+
+@property (strong, nonatomic) NSMutableArray *packagedUsers;
+//@property (strong, nonatomic) User *user;
 
 @end

@@ -39,7 +39,6 @@
 //new collection for validation
 @property (strong, nonatomic) NSMutableDictionary *usersDict;
 @property (strong, nonatomic) NSMutableArray *usersArray;
-@property BOOL usersWritten;
 
 @property (strong, nonatomic) NSMutableArray *storedArray;
 @property (strong, nonatomic) NSMutableArray *displayArray;

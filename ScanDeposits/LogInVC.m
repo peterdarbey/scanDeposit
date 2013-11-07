@@ -8,7 +8,13 @@
 
 #import "LogInVC.h"
 
+#import "User.h"
+
 @interface LogInVC ()
+
+@property (strong, nonatomic)NSString *adminPassword;
+@property (strong, nonatomic)NSString *user1StaffID;
+@property (strong, nonatomic)NSString *user2StaffID;
 
 @end
 
@@ -35,6 +41,49 @@
     
     //enable if the users creds yield YES
     [doneBtn setEnabled:YES];
+    
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    
+    [textField resignFirstResponder];
+    return YES;
+    
+}
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+    //retrieve the cell for which the textField was entered
+    UITableViewCell *cell = (UITableViewCell *)[textField.superview superview];
+    NSIndexPath *indexPath = [_loginTV indexPathForCell:cell];
+    
+    
+    if (indexPath.section == 0) {
+        DLog(@"Administrator section");
+        _adminPassword = textField.text;
+        
+    }
+    else if (indexPath.section == 1) {
+        
+        DLog(@"Control User:1 section");
+        _user1StaffID = textField.text;
+    }
+    else
+    {
+        DLog(@"Control User:2 section");
+        _user2StaffID = textField.text;
+    }
+    
+    //ADMIN ONLY
+    if (_adminPassword.length > 1) {
+        //ToDo iterate through _users collection to check for a valid user
+        
+        for (NSDictionary *dict in _users) {
+            NSDictionary *aUser = dict[textField.text];//if admin -> password
+            //aUser is the specified user via Login textField
+            [_packagedUsers addObject:aUser];//NOTE: should have a number associated with a specified user?
+            DLog(@"_packagedUsers: %@", _packagedUsers);
+        }
+    }
+    
     
 }
 
@@ -75,14 +124,21 @@
     fileManager = [NSFileManager defaultManager];
     
     if (![fileManager fileExistsAtPath:[self getFilePathForName:@"users.plist"]]) {
+        
+        NSString *sourcePath = [[NSBundle mainBundle]pathForResource:@"users" ofType:@".plist"];
+        [fileManager copyItemAtPath:sourcePath toPath:[self getFilePathForName:@"users.plist"] error:nil];
+    }//close if
+    
+    //check it exists and load if not then cant use app
+    if (_users) {
         //ToDo load array from file
         _users = [NSMutableArray arrayWithContentsOfFile:[self getFilePathForName:@"users.plist"]];
-        if (_users) {
-            
-            //check it exists
-        }
-        
     }
+    
+    DLog(@"_users: %@", _users);//currently (null)?
+    
+    //create packagedUsersArray
+    _packagedUsers = [NSMutableArray array];
     
 }
 
@@ -103,18 +159,69 @@
     }
     
 }
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    
+    if (section == 0) {
+        
+        UIView *aView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, _loginTV.frame.size.width, 100)];
+        [aView setBackgroundColor:[UIColor clearColor]];
+        
+        UILabel *adminLbl = [[UILabel alloc]initWithFrame:CGRectMake(10, 59.5, 165, 25)];
+       
+        adminLbl.textAlignment = NSTextAlignmentLeft;
+        adminLbl.font = [UIFont fontWithName:@"Arial-BoldMT" size:17];
+        adminLbl.textColor = [UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0];//darkGray
+        
+        adminLbl.shadowColor = [UIColor grayColor];
+        adminLbl.shadowOffset = CGSizeMake(1.0, 1.0);
+        adminLbl.backgroundColor = [UIColor clearColor];
+        [adminLbl setUserInteractionEnabled:NO];
+        [adminLbl setText:@"Administrator Only"];
+        
+        [aView addSubview:adminLbl];
+        
+        return aView;
+        
+    } //middle section
+    else if (section == 1) {
+        
+        UIView *aView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, _loginTV.frame.size.width, 100)];
+        [aView setBackgroundColor:[UIColor clearColor]];
+        //
+        UILabel *adminLbl = [[UILabel alloc]initWithFrame:CGRectMake(10, 59.5, 165, 25)];
+        //
+        adminLbl.textAlignment = NSTextAlignmentLeft;
+        adminLbl.font = [UIFont fontWithName:@"Arial-BoldMT" size:17];
+//        adminLbl.textColor = [UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0];//darkGray
+        adminLbl.shadowColor = [UIColor grayColor];
+        adminLbl.shadowOffset = CGSizeMake(1.0, 1.0);
+        adminLbl.backgroundColor = [UIColor orangeColor];
+        [adminLbl setUserInteractionEnabled:NO];
+        [adminLbl setText:@"Control Users Only"];
+        
+        [aView addSubview:adminLbl];
+        
+        return aView;
+
+    }
+    else //last section
+    {
+        return nil;
+    }
+
+}
 
 - (float)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     
     //if the last section
     if (section == [_loginTV numberOfSections] -1) {
         
-        return 20;
+        return 5;
     }
     //middle section
     else if (section != 0) {
         
-        return 5;//for now
+        return 10;//for now
     }
     else //1st section
     {
@@ -217,13 +324,34 @@
         cellTF = (UITextField *)[cell.contentView viewWithTag:TEXTFIELD_TAG];
         cellLabel = (UILabel *)[cell.contentView viewWithTag:LABEL_TAG];
     }
+    NSArray *labelsArray = @[@"Password", @"User 1 Staff ID", @"User 2 Staff ID"];
     
     //populate the cells textField and Label with data here
-    [cellTF setPlaceholder:@"Enter your ID"];
-    cellLabel.text = @"Password";
+    [cellLabel setText:[NSString stringWithFormat:@"%@", [labelsArray objectAtIndex:indexPath.section]]];
+    
+    if (indexPath.section == 0) {
+        [cellTF setPlaceholder:@"Enter your password"];
+    }
+    else
+    {
+        [cellTF setPlaceholder:@"Enter your Staff ID"];
+    }
+    
+    //ToDo retrieve the data contents for this tblView
+    
+    
     
     
     return cell;
+    
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    selectedIndex = indexPath;
+    
+    
+    [_loginTV deselectRowAtIndexPath:indexPath animated:YES];
     
 }
 

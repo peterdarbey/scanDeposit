@@ -15,6 +15,7 @@
 {
     NSFileManager *fileManager;
     NSString *fullPath;
+    NSString *usersPath;
 }
 
 @end
@@ -136,7 +137,9 @@
     //retrieve the singleton for writing locally
     fileManager = [NSFileManager defaultManager];
     
-    fullPath = [PersistenceManager getFilePath];//Documents/usersCollection.plist
+//    fullPath = [PersistenceManager getFilePath];//Documents/usersCollection.plist
+    //retrieve usersCollection
+    fullPath = [self getFilePathForName:@"usersCollection.plist"];//Documents/usersCollection.plist
     
     //if file exists at path init with data
     if (![fileManager fileExistsAtPath:fullPath]) {
@@ -178,7 +181,25 @@
     
     //initialize usersDict or load from file if exist
     _usersDict = [NSMutableDictionary dictionary];//ToDo -> construct plist
+    //retrieve users collection
+    usersPath = [self getFilePathForName:@"users.plist"];
     
+    //_usersDict functionality
+    //check file exists at path if not copy to destination path
+    if (![fileManager fileExistsAtPath:usersPath]) {
+        //construct the filePath and copy to the Documents folder for writing too file
+        NSString *sourcePath = [[NSBundle mainBundle]pathForResource:@"users" ofType:@"plist"];
+        [fileManager copyItemAtPath:sourcePath toPath:[self getFilePathForName:@"users.plist"] error:nil];
+    }
+    
+    //load _users from file
+    _usersArray = [NSMutableArray arrayWithContentsOfFile:usersPath];
+    
+    //if its empty create one for returnUserModel
+    if ([_usersArray count] < 1) {
+        _usersArray = [NSMutableArray array];//test
+    }
+    DLog(@"_usersArray: %@", _usersArray);//possible viewwillAppear
     
     editBtn = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editPressed:)];
     
@@ -688,27 +709,18 @@
     
     //assign to _user
     _user = user;
+
+    //implement write to file in a array try a NSDictionary instead of NSArray
+    NSDictionary *userDict = [user userDict];//was @{user.userStaffID : user};
+    DLog(@"-- userDict --: %@", userDict);
+    [_usersArray addObject:userDict];//-> NSArray
     
-    //Write to file
-//    NSDictionary *usersDict = @{user.userStaffID : user};
-    //ToDo implement this with write to file in a array try a NSDictionary instead of NSArray
-    NSDictionary *userDict = [user userDict];
-    DLog(@"userDict: %@", userDict);
-//    [_usersDict addEntriesFromDictionary:userDict];//add
-    [_usersArray addObject:userDict];//going with a NSArray
-    
-    //check file exists at path if not copy to destination path
-    if (![fileManager fileExistsAtPath:[self getFilePathForName:@"users.plist"]]) {
-        //construct the filePath and copy to the Documents folder for writing too file
-        NSString *sourcePath = [[NSBundle mainBundle]pathForResource:@"users" ofType:@"plist"];
-        [fileManager copyItemAtPath:sourcePath toPath:fullPath error:nil];
-    }
 
     //then write to file
     [_usersArray writeToFile:[self getFilePathForName:@"users.plist"] atomically:YES];//users.plist
     //for conditional
-    _usersWritten = YES;
-    
+//    _usersWritten = YES;
+    DLog(@"**** new _usersArray **** %@", _usersArray);
     
     //read from new plist for Modal new class on log in
     //NSDictionary *userDict = [NSDictionary dictionaryWithContentsOfFile:@"users.plist"];

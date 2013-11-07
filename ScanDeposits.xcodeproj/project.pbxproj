@@ -80,6 +80,7 @@
 		BF9B6D4818290F8300BC0E13 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF9B6D4718290F8300BC0E13 /* MessageUI.framework */; };
 		BF9B6D9E182AA03A00BC0E13 /* users.plist in Resources */ = {isa = PBXBuildFile; fileRef = BF9B6D9D182AA03A00BC0E13 /* users.plist */; };
 		BF9B6DA1182AA34600BC0E13 /* LogInVC.m in Sources */ = {isa = PBXBuildFile; fileRef = BF9B6DA0182AA34600BC0E13 /* LogInVC.m */; };
+		BF9B6DA3182BE58700BC0E13 /* admins.plist in Resources */ = {isa = PBXBuildFile; fileRef = BF9B6DA2182BE58700BC0E13 /* admins.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -186,6 +187,7 @@
 		BF9B6D9D182AA03A00BC0E13 /* users.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = users.plist; sourceTree = "<group>"; };
 		BF9B6D9F182AA34600BC0E13 /* LogInVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogInVC.h; sourceTree = "<group>"; };
 		BF9B6DA0182AA34600BC0E13 /* LogInVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogInVC.m; sourceTree = "<group>"; };
+		BF9B6DA2182BE58700BC0E13 /* admins.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = admins.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -401,6 +403,7 @@
 			isa = PBXGroup;
 			children = (
 				BF9B6D9D182AA03A00BC0E13 /* users.plist */,
+				BF9B6DA2182BE58700BC0E13 /* admins.plist */,
 				BF92212218227AEC0084DCA0 /* usersCollection.plist */,
 				BF92212418280EB20084DCA0 /* adminsCollection.plist */,
 			);
@@ -518,6 +521,7 @@
 				BF2C4FAA1805C23300A87C18 /* flashlight-turn-off-icon.png in Resources */,
 				BF2C4FAD1805C23300A87C18 /* flashlight-turn-on-icon-pressed@2x.png in Resources */,
 				BF370329180844990027AE4F /* bg_gradient.png in Resources */,
+				BF9B6DA3182BE58700BC0E13 /* admins.plist in Resources */,
 				BF9B6D9E182AA03A00BC0E13 /* users.plist in Resources */,
 				BF2C4FCE1806FEB100A87C18 /* blueButton.png in Resources */,
 				BF2C4FAC1805C23300A87C18 /* flashlight-turn-on-icon-pressed.png in Resources */,

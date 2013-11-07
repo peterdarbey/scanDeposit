@@ -14,7 +14,7 @@
 
 @protocol DismissLoginWithValidationDelegate <NSObject>
 
-- (void)dismissLoginVC:(NSMutableDictionary *)users;
+- (void)dismissLoginVC:(NSMutableDictionary *)users isAdmin:(BOOL)admin;
 
 @end
 
@@ -31,13 +31,18 @@
 }
 
 @property (strong, nonatomic) IBOutlet UITableView *loginTV;
-
+//control user
 @property (strong, nonatomic) NSMutableArray *users;
-
-//@property (strong, nonatomic) NSMutableArray *packagedUsers;//make dictionary
-@property (strong, nonatomic) NSMutableDictionary *packagedUsers;//make dictionary
-//@property (strong, nonatomic) User *user;
+@property (strong, nonatomic) NSMutableDictionary *packagedUsers;//was NSArray
+//administrator
+@property (strong, nonatomic) NSMutableArray *admins;
+@property (strong, nonatomic) NSMutableDictionary *packagedAdmins;
 
 @property (weak, nonatomic) id <DismissLoginWithValidationDelegate> delegate;
+
+@property BOOL adminValid;
+@property BOOL userOneValid;
+@property BOOL userTwoValid;
+
 
 @end

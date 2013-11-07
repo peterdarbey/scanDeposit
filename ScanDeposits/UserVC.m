@@ -179,8 +179,8 @@
 
     }
     
-    //initialize usersDict or load from file if exist
-    _usersDict = [NSMutableDictionary dictionary];//ToDo -> construct plist
+    //USERS -> initialize usersDict or load from file if exist
+    _usersDict = [NSMutableDictionary dictionary];
     //retrieve users collection
     usersPath = [self getFilePathForName:@"users.plist"];
     

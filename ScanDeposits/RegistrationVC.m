@@ -20,6 +20,7 @@
     
     NSFileManager *fileManager;
     NSString *filePath;
+    NSString *adminsPath;
 }
 
 @property (strong, nonatomic) NSString *name;
@@ -82,7 +83,7 @@
     //retrieve the singleton for writing locally
     fileManager = [NSFileManager defaultManager];
     
-    filePath = [self getFilePath];//Documents/adminsCollection.plist
+    filePath = [self getFilePathForName:@"adminsCollection.plist"];//Documents/adminsCollection.plist
     
     //if file exists at path init with data
     if (![fileManager fileExistsAtPath:filePath]) {
@@ -105,18 +106,43 @@
         }
     }
     
+    
+    //ADMIN -> initialize adminsDict or load from file if exist
+    _adminsDict = [NSMutableDictionary dictionary];
+    //retrieve users collection
+    adminsPath = [self getFilePathForName:@"admins.plist"];
+    
+    //_usersDict functionality
+    //check file exists at path if not copy to destination path
+    if (![fileManager fileExistsAtPath:adminsPath]) {
+        //construct the filePath and copy to the Documents folder for writing too file
+        NSString *sourcePath = [[NSBundle mainBundle]pathForResource:@"admins" ofType:@"plist"];
+        [fileManager copyItemAtPath:sourcePath toPath:[self getFilePathForName:@"admins.plist"] error:nil];
+    }
+    
+    //load _users from file
+    _administratorArray = [NSMutableArray arrayWithContentsOfFile:adminsPath];
+    
+    //if its empty create one for returnUserModel
+    if ([_administratorArray count] < 1) {
+        _administratorArray = [NSMutableArray array];
+    }
+    DLog(@"_administratorArray: %@", _administratorArray);//possible viewwillAppear
+    
+    
 }
 
-//add NSString parameter to customize the return plist
-- (NSString *)getFilePath
-{
+- (NSString *)getFilePathForName:(NSString *)name {
+    
     NSString *documentsDirectoryPath = [NSSearchPathForDirectoriesInDomains( NSDocumentDirectory,
                                                                             NSUserDomainMask, YES ) objectAtIndex:0];
     
-    NSString *fullPath = [documentsDirectoryPath stringByAppendingPathComponent:@"adminsCollection.plist"];
+    NSString *fullFilePath = [documentsDirectoryPath stringByAppendingPathComponent:name];//@"admins.plist",@"adminsCollection.plist"
     
-    return fullPath;
+    return fullFilePath;
 }
+
+
 
 
 //- (void)keyboardWillShow:(NSNotification *)notification {

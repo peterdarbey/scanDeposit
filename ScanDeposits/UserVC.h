@@ -38,6 +38,7 @@
 
 //new collection for validation
 @property (strong, nonatomic) NSMutableDictionary *usersDict;
+
 @property (strong, nonatomic) NSMutableArray *usersArray;
 
 @property (strong, nonatomic) NSMutableArray *storedArray;

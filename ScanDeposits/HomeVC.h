@@ -33,6 +33,8 @@
     UIBarButtonItem *barBtnFinished;
 }
 
+@property (strong, nonatomic) NSMutableArray *array;
+
 @property (strong, nonatomic) IBOutlet UITextView *howToUseTV;
 
 @property (strong, nonatomic) NSMutableArray *barcodeArray;

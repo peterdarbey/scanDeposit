@@ -30,6 +30,11 @@
 
 @property (strong,nonatomic) NSMutableArray *adminArray;
 
+@property (strong,nonatomic) NSMutableArray *administratorArray;
+
+//administrator validation
+@property (strong, nonatomic) NSMutableDictionary *adminsDict;
+
 @property BOOL fileExists;
 
 @property BOOL isWritten;

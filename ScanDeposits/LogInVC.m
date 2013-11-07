@@ -12,15 +12,12 @@
 
 @interface LogInVC ()
 
-@property (strong, nonatomic)NSString *adminPassword;
-@property (strong, nonatomic)NSString *user1StaffID;
-@property (strong, nonatomic)NSString *user2StaffID;
-
 @end
 
 @implementation LogInVC
 {
-    
+    UIActivityIndicatorView *loginSpinner;
+    UIButton *loginBtn;
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -50,81 +47,169 @@
     return YES;
     
 }
+//custom method
+- (UITextField *)returnNextTextField:(UITextField *)textField {
+    //retrieve the cell that contains the textField
+    UITableViewCell *cell = (UITableViewCell *)textField.superview.superview;
+    NSIndexPath *indexPath = [_loginTV indexPathForCell:cell];
+    
+    //increment the indexPath.row to retrieve the next cell which contains the next textField
+    cell = (UITableViewCell *)[_loginTV cellForRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row +1 inSection:indexPath.section]];
+    //the next TextField
+    UITextField *nextTF = (UITextField *)[cell.contentView viewWithTag:TEXTFIELD_TAG];//100
+    return nextTF;
+}
+
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     //retrieve the cell for which the textField was entered
     UITableViewCell *cell = (UITableViewCell *)[textField.superview superview];
     NSIndexPath *indexPath = [_loginTV indexPathForCell:cell];
-    
-    
-    if (indexPath.section == 0) {
-        DLog(@"Administrator section");
-        _adminPassword = textField.text;
-        
-    }
-    else if (indexPath.section == 1) {
-        
-        DLog(@"Control User:1 section");
-        _user1StaffID = textField.text;//could add a value here for the user so we know its user 1 etc
-    }
-    else
-    {
-        DLog(@"Control User:2 section");
-        _user2StaffID = textField.text;
-    }
+    UITextField *nextTF;
     
     //ADMIN ONLY
-    if ([textField.text length] > 4) {
-        
-        if (_user1StaffID.length > 4) {// || _user2StaffID.length > 1) {
-            //ToDo iterate through _users collection to check for a valid user
+    if (indexPath.section == 0) {
+        DLog(@"Administrator section");
+        //set spinner
+        //[loginBtn setEnabled:NO];
+        if (![textField.text isEqualToString:@""] && [textField.text length] > 1) {
             
-            for (NSDictionary *dict in _users) {
-                NSDictionary *aUser = dict[textField.text];//if admin -> password
-                //if a reg user exists for the textField entry perform some operation
-                if ([aUser[@"Staff ID"] isEqualToString:textField.text]) {
-                    //aUser is the specified user via Login textField
+            //set spinner
+            [loginBtn setEnabled:NO];
+            [loginSpinner setHidden:NO];
+            [loginSpinner setAlpha:1.0];
+            
+            
+            //iterate through _users collection to check for a valid user
+            for (NSDictionary *dict in _admins) {
+                NSDictionary *aAdmin = dict[textField.text];
+                if ([aAdmin[@"Password"] isEqualToString:textField.text]) {
                     //add to packagedUsers collection
-//                    [_packagedUsers addObject:aUser];//NOTE: should have a number associated with a specified user?
-                    //Better approach
-                    [_packagedUsers setObject:aUser forKey:@"User 1"];
-                    DLog(@"_packagedUsers: %@", _packagedUsers);
+                    [_packagedAdmins setObject:aAdmin forKey:@(1)];//now NSNumbers
+                    DLog(@"_packagedAdmins: %@", _packagedAdmins);
+                    _adminValid = YES;//aAdmin[@"Passsword"];
                 }//close if
                 
             }//close for
             
-        }//close inner if
-        
-        if (_user2StaffID.length > 4) {
+            //if valid administrator
+            if (_adminValid) {
+                
+                //set spinner
+                [loginBtn setEnabled:YES];
+                [loginSpinner setHidden:YES];
+                [loginSpinner setAlpha:0.0];
+                
+                //ToDo create admin package
+                [self dismissViewControllerAnimated:YES completion:^{
+                    [textField resignFirstResponder];
+                    //different custom delegate method call
+                    if ([self.delegate respondsToSelector:@selector(dismissLoginVC: isAdmin:)]) {
+                        //dismissLoginVC
+                        [self.delegate performSelector:@selector(dismissLoginVC: isAdmin:) withObject:_packagedAdmins withObject:@(YES)];
+                        DLog(@"New delgate protocol implemented");
+                    }
+                }];
+            }//close if
             
-            for (NSDictionary *dict in _users) {
-                NSDictionary *aUser = dict[textField.text];
-                if ([aUser[@"Staff ID"] isEqualToString:textField.text]) {
-                   
-                    //add to packagedUsers collection
-                    [_packagedUsers setObject:aUser forKey:@"User 1"];
-                    DLog(@"_packagedUsers: %@", _packagedUsers);
-                }//close if
-                
-            }//close for
-            
-            if ([_packagedUsers count] == 2) {//set to 2 for now
-                //we have two reg logged in users so set a BOOL and dismiss moda
-                
-                //ToDo require a delegate protocol here
-                if ([self.delegate respondsToSelector:@selector(dismissLoginVC:)]) {
-                    //dismissLoginVC
-                    [self.delegate performSelector:@selector(dismissLoginVC:) withObject:_packagedUsers];
-                    DLog(@"New delgate protocol implemented");
-                }
-                
-                
-                
-            }
+        }//close if
+        else
+        {
+            [textField becomeFirstResponder];
+            //if blank display an error message
         }
         
-    }//close if
-    
-    
+    }//USER 1
+    else if (indexPath.section == 1) {
+        DLog(@"Control User:1 section");
+        if (![textField.text isEqualToString:@""] && [textField.text length] > 1) {
+            
+            //set spinner
+            [loginBtn setEnabled:NO];
+            
+                //iterate through _users collection to check for a valid user
+                for (NSDictionary *dict in _users) {
+                    NSDictionary *aUser = dict[textField.text];
+                    //if a reg user exists for the textField entry perform some operation
+                    if ([aUser[@"Staff ID"] isEqualToString:textField.text]) { // -> User => StaffID
+                        //aUser is the specified user via Login textField add to collection
+                        [_packagedUsers setObject:aUser forKey:@(1)];//number now associated with a user
+                        DLog(@"_packagedUsers: %@", _packagedUsers);
+                        _userOneValid = YES;
+                    }//close if
+                    
+                }//close for
+            
+            //if valid user
+            if (_userOneValid) {
+                //get next TextField
+                nextTF = [self returnNextTextField:textField];
+                [nextTF becomeFirstResponder];
+            }
+            
+        }//close if
+        else
+        {
+            [textField becomeFirstResponder];
+            //if blank display an error message
+        }
+        
+    }
+    else//USER 2
+    {
+        DLog(@"Control User:2 section");
+        if (![textField.text isEqualToString:@""] && [textField.text length] > 1) {
+            
+            //set spinner
+            [loginBtn setEnabled:NO];
+            [loginSpinner setHidden:NO];
+            [loginSpinner setAlpha:1.0];
+            
+                //iterate through _users collection to check for a valid user
+                for (NSDictionary *dict in _users) {
+                    NSDictionary *aUser = dict[textField.text];
+                    if ([aUser[@"Staff ID"] isEqualToString:textField.text]) {
+                        //add to packagedUsers collection
+                        [_packagedUsers setObject:aUser forKey:@(2)];//now NSNumbers
+                        DLog(@"_packagedUsers: %@", _packagedUsers);
+                        _userTwoValid = YES;
+                    }//close if
+                    
+                }//close for
+            
+            //if valid user
+            if (_userTwoValid) {
+                
+                //set spinner
+                [loginBtn setEnabled:YES];
+                [loginSpinner setHidden:YES];
+                [loginSpinner setAlpha:0.0];
+                
+                //last textField so resign TextField as its also valid
+                [textField resignFirstResponder];
+
+                if ([_packagedUsers count] == 2) {//set to 2
+                    //we have two reg logged in users so set a BOOL and dismiss modal
+                    
+                    [self dismissViewControllerAnimated:YES completion:^{
+                        //custom delegate method call
+                        if ([self.delegate respondsToSelector:@selector(dismissLoginVC: isAdmin:)]) {
+                            //dismissLoginVC
+                            [self.delegate performSelector:@selector(dismissLoginVC: isAdmin:) withObject:_packagedUsers withObject:@(NO)];
+                            DLog(@"New delegate protocol implemented");
+                        }
+                    }];
+                    
+                }//close if
+            }
+            
+        }//close if
+        else
+        {
+            [textField becomeFirstResponder];
+            //if blank display an error message
+        }
+        
+    }
     
 }
 
@@ -175,12 +260,38 @@
         //ToDo load array from file
         _users = [NSMutableArray arrayWithContentsOfFile:[self getFilePathForName:@"users.plist"]];
     }
-    
     DLog(@"_users: %@", _users);//currently (null)?
     
-    //create packagedUsersArray
-//    _packagedUsers = [NSMutableArray array];
+    
+    if (![fileManager fileExistsAtPath:[self getFilePathForName:@"admins.plist"]]) {
+        
+        NSString *sourcePath = [[NSBundle mainBundle]pathForResource:@"admins" ofType:@".plist"];
+        [fileManager copyItemAtPath:sourcePath toPath:[self getFilePathForName:@"admins.plist"] error:nil];
+    }//close if
+
+    if (_admins) {
+        //load array from file
+        _admins = [NSMutableArray arrayWithContentsOfFile:[self getFilePathForName:@"admins.plist"]];
+    }
+    DLog(@"_admins: %@", _admins);//
+    
+    
+    //create packagedUsersDict
     _packagedUsers = [NSMutableDictionary dictionary];
+    //create a packagedAdminDict
+    _packagedAdmins = [NSMutableDictionary dictionary];
+    
+    //loginSpinner setup
+    loginSpinner = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+    [loginSpinner setHidesWhenStopped:YES];
+    [loginSpinner setHidden:YES];
+    [loginSpinner setFrame:CGRectMake(loginBtn.frame.size.width - 54, 2, 40, 44)];
+    [loginSpinner setAlpha:0.0];
+    //add spinner to view but dont display till busy
+    [loginBtn addSubview:loginSpinner];
+    
+    //set login button to disabled
+    [loginBtn setEnabled:NO];
     
 }
 
@@ -301,7 +412,7 @@
         
         
         //maybe add to the tableView section
-        UIButton *loginBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        loginBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [self buttonStyle:loginBtn WithImgName:@"blueButton.png" imgSelectedName:@"bluebuttonSelected" withTitle:@"Log In"];
         
         loginBtn.titleLabel.font = [UIFont systemFontOfSize:17.0];

@@ -26,8 +26,20 @@
 @implementation HomeVC
 
 #pragma mark - Custom delegate method for LoginVC
-- (void)dismissLoginVC:(NSMutableDictionary *)users {
+- (void)dismissLoginVC:(NSMutableDictionary *)users isAdmin:(BOOL)admin {
     
+    //is this 1 or 2?
+    if (admin) {
+        DLog(@"is ADMIN: %@", users);
+        _isAdmin = admin;//have to check the consitencey though of UInavigationController etc..
+        //collect data
+    }
+    else
+    {
+        DLog(@"is USERS: %@", users);
+        _isAdmin = admin;//let it set
+        //collect data 
+    }
     
 }
 
@@ -166,6 +178,10 @@
         
         
         
+    }
+    else
+    {
+        //is user -> scanning screen
     }
     
     

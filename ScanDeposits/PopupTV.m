@@ -137,14 +137,12 @@
     if ([lettersArray count] == 1) {
         NSString *appendedInitials = [lettersArray objectAtIndex:0];
         self.initials = appendedInitials;
-        DLog(@"<< 1 >> self.initials: %@", self.initials);//DH
     }
     
     if ([lettersArray count] == 2) {
         NSString *initials = [lettersArray objectAtIndex:0];
         NSString *appendedInitials = [initials stringByAppendingString:[lettersArray objectAtIndex:1]];
         self.initials = appendedInitials;
-        DLog(@"<< 2 >> self.initials: %@", self.initials);//DH
     }
     else if ([lettersArray count] >2)
     {
@@ -152,7 +150,6 @@
         NSString *appendedInitials = [initials stringByAppendingString:[lettersArray objectAtIndex:1]];//crash
         appendedInitials = [appendedInitials stringByAppendingString:[lettersArray objectAtIndex:2]];
         self.initials = appendedInitials;
-        DLog(@"<< 3 >> self.initials: %@", self.initials);//DHR
     }
     
 }

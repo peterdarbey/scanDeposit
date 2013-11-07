@@ -10,6 +10,14 @@
 
 @class User;
 
+@class LogInVC;
+
+@protocol DismissLoginWithValidationDelegate <NSObject>
+
+- (void)dismissLoginVC:(NSMutableDictionary *)users;
+
+@end
+
 
 #define TEXTFIELD_TAG 100
 #define LABEL_TAG 200
@@ -26,7 +34,10 @@
 
 @property (strong, nonatomic) NSMutableArray *users;
 
-@property (strong, nonatomic) NSMutableArray *packagedUsers;
+//@property (strong, nonatomic) NSMutableArray *packagedUsers;//make dictionary
+@property (strong, nonatomic) NSMutableDictionary *packagedUsers;//make dictionary
 //@property (strong, nonatomic) User *user;
+
+@property (weak, nonatomic) id <DismissLoginWithValidationDelegate> delegate;
 
 @end

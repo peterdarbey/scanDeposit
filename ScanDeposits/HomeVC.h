@@ -19,12 +19,13 @@
 @class RegistrationVC;
 
 @class UserVC;
-@class LogInVC;
+//@class LogInVC;
+#import "LogInVC.h"
 
 
 #define kScanditSDKAppKey @"4w8vXjD2EeOZw8u2pkkjQH4S+hfplxDDtzKnte2lX4s"
 
-@interface HomeVC : UIViewController <ScanditSDKOverlayControllerDelegate, ResumeScanMode>
+@interface HomeVC : UIViewController <ScanditSDKOverlayControllerDelegate, ResumeScanMode, DismissLoginWithValidationDelegate>
 {
     NSString *dateString;//not very OO
     NSNotificationCenter *notificationCenter;

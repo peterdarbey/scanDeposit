@@ -14,7 +14,6 @@
 #import "RegistrationVC.h"
 
 #import "UserVC.h"
-#import "LogInVC.h"
 
 
 @interface HomeVC ()
@@ -25,6 +24,12 @@
 @end
 
 @implementation HomeVC
+
+#pragma mark - Custom delegate method for LoginVC
+- (void)dismissLoginVC:(NSMutableDictionary *)users {
+    
+    
+}
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -97,6 +102,8 @@
 //    [self dispatchEventOnTouch];
     
     [self.navigationController presentViewController:picker animated:YES completion:nil];
+
+    
     
 }
 
@@ -153,6 +160,8 @@
             [loginVC setModalPresentationStyle:UIModalPresentationFullScreen];
             [loginVC setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
              [loginVC setTitle:NSLocalizedString(@"Log In", @"Log In")];
+            //set the HomeVC as the delegate for the LoginVC dismissLoginVCWithValidation
+            [loginVC setDelegate:self];
         }];
         
         

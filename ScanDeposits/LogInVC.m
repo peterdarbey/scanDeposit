@@ -64,7 +64,7 @@
     else if (indexPath.section == 1) {
         
         DLog(@"Control User:1 section");
-        _user1StaffID = textField.text;
+        _user1StaffID = textField.text;//could add a value here for the user so we know its user 1 etc
     }
     else
     {
@@ -73,16 +73,57 @@
     }
     
     //ADMIN ONLY
-    if (_adminPassword.length > 1) {
-        //ToDo iterate through _users collection to check for a valid user
+    if ([textField.text length] > 4) {
         
-        for (NSDictionary *dict in _users) {
-            NSDictionary *aUser = dict[textField.text];//if admin -> password
-            //aUser is the specified user via Login textField
-            [_packagedUsers addObject:aUser];//NOTE: should have a number associated with a specified user?
-            DLog(@"_packagedUsers: %@", _packagedUsers);
+        if (_user1StaffID.length > 4) {// || _user2StaffID.length > 1) {
+            //ToDo iterate through _users collection to check for a valid user
+            
+            for (NSDictionary *dict in _users) {
+                NSDictionary *aUser = dict[textField.text];//if admin -> password
+                //if a reg user exists for the textField entry perform some operation
+                if ([aUser[@"Staff ID"] isEqualToString:textField.text]) {
+                    //aUser is the specified user via Login textField
+                    //add to packagedUsers collection
+//                    [_packagedUsers addObject:aUser];//NOTE: should have a number associated with a specified user?
+                    //Better approach
+                    [_packagedUsers setObject:aUser forKey:@"User 1"];
+                    DLog(@"_packagedUsers: %@", _packagedUsers);
+                }//close if
+                
+            }//close for
+            
+        }//close inner if
+        
+        if (_user2StaffID.length > 4) {
+            
+            for (NSDictionary *dict in _users) {
+                NSDictionary *aUser = dict[textField.text];
+                if ([aUser[@"Staff ID"] isEqualToString:textField.text]) {
+                   
+                    //add to packagedUsers collection
+                    [_packagedUsers setObject:aUser forKey:@"User 1"];
+                    DLog(@"_packagedUsers: %@", _packagedUsers);
+                }//close if
+                
+            }//close for
+            
+            if ([_packagedUsers count] == 2) {//set to 2 for now
+                //we have two reg logged in users so set a BOOL and dismiss moda
+                
+                //ToDo require a delegate protocol here
+                if ([self.delegate respondsToSelector:@selector(dismissLoginVC:)]) {
+                    //dismissLoginVC
+                    [self.delegate performSelector:@selector(dismissLoginVC:) withObject:_packagedUsers];
+                    DLog(@"New delgate protocol implemented");
+                }
+                
+                
+                
+            }
         }
-    }
+        
+    }//close if
+    
     
     
 }
@@ -138,7 +179,8 @@
     DLog(@"_users: %@", _users);//currently (null)?
     
     //create packagedUsersArray
-    _packagedUsers = [NSMutableArray array];
+//    _packagedUsers = [NSMutableArray array];
+    _packagedUsers = [NSMutableDictionary dictionary];
     
 }
 

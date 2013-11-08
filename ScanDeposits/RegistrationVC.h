@@ -35,6 +35,8 @@
 //administrator validation
 @property (strong, nonatomic) NSMutableDictionary *adminsDict;
 
+@property BOOL allowEdit;
+
 @property BOOL fileExists;
 
 @property BOOL isWritten;

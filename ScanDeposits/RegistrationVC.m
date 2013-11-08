@@ -14,7 +14,7 @@
 
 @interface RegistrationVC ()
 {
-    UIBarButtonItem *doneBtn;
+    UIBarButtonItem *editBtn;
     CGSize keyboardSize;
     
     
@@ -67,10 +67,10 @@
     [_registerTV setDelegate:self];
     [_registerTV setDataSource:self];
     
-    doneBtn = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(donePressed:)];
-    [self.navigationItem setRightBarButtonItem:doneBtn];
+    editBtn = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editPressed:)];
+    [self.navigationItem setRightBarButtonItem:editBtn];
     //disable on load
-    [doneBtn setEnabled:NO];
+    [editBtn setEnabled:YES];
     
     
     //Add a notification for the keyboard
@@ -166,9 +166,7 @@
     aRect.size.height -= keyboardSize.height;
     CGPoint scrollPoint;
     
-    
 
-    
     //textField is assigned
     if (activeTF) { // && _isSelectedTF) {
         
@@ -183,7 +181,7 @@
             
         [UIView animateWithDuration:duration animations:^{
             
-            self.registerTV.transform = CGAffineTransformMakeTranslation(0, - keyboardSize.height);//- keyboardSize.height);//works
+            self.registerTV.transform = CGAffineTransformMakeTranslation(0, - (keyboardSize.height - 50));//works
         }];
            
 //            _isSelectedTF = NO;
@@ -197,11 +195,9 @@
 {
     DLog(@"KeyBoardWillHide");
     
-    NSDictionary *info = [notification userInfo];
-    NSNumber *number = [info objectForKey:UIKeyboardAnimationDurationUserInfoKey];
-    double duration = [number doubleValue];
-    
-    
+//    NSDictionary *info = [notification userInfo];
+//    NSNumber *number = [info objectForKey:UIKeyboardAnimationDurationUserInfoKey];
+//    double duration = [number doubleValue];
     
     
     if (activeTF && _isSelectedTF) {
@@ -218,40 +214,13 @@
         if (!CGRectContainsPoint(aRect, cell.frame.origin) && _isSelectedTF) { //active.frame.origin
             scrollPoint = CGPointMake(0, cell.frame.origin.y - keyboardSize.height);//0 - 216
             
-            [UIView animateWithDuration:duration animations:^{
-                self.registerTV.transform = CGAffineTransformMakeTranslation(0, 0);//- keyboardSize.height);//works
-                
-//                CGPoint scrollPoint = CGPointMake(0, 0);//0 - 216
-//                [_registerTV setContentOffset:scrollPoint animated:YES];
-             }];
-            
-            
+//            [UIView animateWithDuration:duration animations:^{
+//                self.registerTV.transform = CGAffineTransformMakeTranslation(0, 0);//- keyboardSize.height);//works
+//             }];
+        
         }
         
     }//close if
-    
-    
-    
-    //    [UIView animateWithDuration:duration animations:^{
-    //        // shift view back down to original value
-    ////        self.registerTV.transform = CGAffineTransformMakeTranslation(0, 0);//works
-    //    }];
-    
-    
-    //retrieve the cell for the last textField
-    
-    //    UITableViewCell *cell = (UITableViewCell *)[_registerTV cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:1]];
-    //    NSIndexPath *indexPath = [_registerTV indexPathForCell:cell];
-    //
-    //    if (indexPath.section == 1 && indexPath.row == 2) {
-    //        _isSelectedTF = YES;
-    //    }
-    //    else
-    //    {
-    //         _isSelectedTF = NO;//test
-    //    }
-
-    
     
 }
 
@@ -333,7 +302,7 @@
             
             //next TextField
             nextTF = [self returnNextTextField:textField];
-            [nextTF becomeFirstResponder];
+            [nextTF becomeFirstResponder];//[self.view endEditing:yes];
         }//close inner if
         else
         {
@@ -401,6 +370,13 @@
 //        // resize the UITableView back to the original size
 //        _registerTV.frame = CGRectMake(0, 0, 320, _registerTV.frame.size.height + keyboardSize.height);
 //        _registerTV.contentInset =  UIEdgeInsetsMake(0, 0, 0, 0);
+        
+        [UIView animateWithDuration:.3 animations:^{
+            self.registerTV.transform = CGAffineTransformMakeTranslation(0, 0);//- keyboardSize.height);//works
+            
+            //                CGPoint scrollPoint = CGPointMake(0, 0);//0 - 216
+            //                [_registerTV setContentOffset:scrollPoint animated:YES];
+        }];
     }
 
 
@@ -513,15 +489,39 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
     
+//     [_registerTV setEditing:NO animated:NO];//test
+    
+    _allowEdit = NO;
+    
+    //call cellForRow
+    [_registerTV reloadData];
     
 }
 
-- (void)donePressed:(UIButton *)sender {
+- (void)doneEditingPressed:(UIButton *)sender {
+    //set editing to NO
+//    [_registerTV setUserInteractionEnabled:NO];
+    _allowEdit = NO;
     
-    [self.navigationController dismissViewControllerAnimated:YES completion:^{
-        //ToDo add saving functionality here
-        //Save the admins to file here
-    }];
+    //call cellForRow
+    [_registerTV reloadData];
+    
+    //set barButton back to edit
+    [self.navigationItem setRightBarButtonItem:editBtn animated:YES];
+}
+
+- (void)editPressed:(UIButton *)sender {
+    
+    
+    DLog(@"Edit pressed");
+//    [_registerTV setEditing:YES animated:YES];//editing to YES but user Userinteraction instead
+    _allowEdit = YES;
+    
+    UIBarButtonItem *doneBtn = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneEditingPressed:)];
+    
+    [self.navigationItem setRightBarButtonItem:doneBtn animated:YES];
+    
+    
 }
 - (void)addPressed:(UIButton *)sender {
     //ToDo implement NSUserDefaults
@@ -637,7 +637,7 @@
     if (section == [_registerTV numberOfSections] -1)
     {
         
-        UIView *bottomView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, _registerTV.frame.size.width, 90)];
+        UIView *bottomView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, _registerTV.frame.size.width, 120)];//90
         [bottomView setBackgroundColor:[UIColor clearColor]];
         
         //construct a button to save user details in NSUserDefaults
@@ -649,6 +649,18 @@
         
         //add to parent view
         [bottomView addSubview:saveBtn];
+        
+        
+        //construct a button to save user details in NSUserDefaults
+        UIButton *doneBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [doneBtn setFrame:CGRectMake(10, 74, 300, 44)];
+        [doneBtn setUserInteractionEnabled:YES];
+        [doneBtn addTarget:self action:@selector(donePressed:) forControlEvents:UIControlEventTouchUpInside];
+        [self buttonStyle:doneBtn WithImgName:@"blueButton.png" imgSelectedName:@"blueButtonSelected.png" withTitle:@"DONE"];
+        
+        //add to parent view
+        [bottomView addSubview:doneBtn];
+        
         return bottomView;
     }
     else
@@ -658,10 +670,23 @@
     
 }
 
+- (void)donePressed:(UIButton *)sender {
+    
+//    [self.navigationController dismissViewControllerAnimated:YES completion:^{//generating an error
+//        //ToDo add saving functionality here
+//        //Save the admins to file here
+//    }];
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
+        //ToDo add saving functionality here
+        //        //Save the admins to file here
+    
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
     
     if (section== [_registerTV numberOfSections] -1) {
-        return 90.0;
+        return 120.0;
     }
     else
     {
@@ -690,7 +715,8 @@
         nameTF.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         [nameTF setFont:[UIFont systemFontOfSize:15.0]];
         nameTF.textColor = [UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0];//blue
-        [nameTF setUserInteractionEnabled:YES];
+        //change to NO
+        [nameTF setUserInteractionEnabled:YES];//NO
         
         //set textField delegate
         [nameTF setDelegate:self];
@@ -736,7 +762,7 @@
             
 //            [nameTF setUserInteractionEnabled:NO];//add BOOL for editing mode
             //set here
-            [doneBtn setEnabled:YES];
+//            [editBtn setEnabled:YES];
         }
         
     }//else if adminPassword set and 2 admins created
@@ -795,6 +821,13 @@
         [nameTF setUserInteractionEnabled:NO];//correct
     }
     
+    if (_allowEdit && indexPath.row != 3) {
+        [nameTF setUserInteractionEnabled:YES];
+    }
+    else
+    {
+        [nameTF setUserInteractionEnabled:NO];//dont need
+    }
         return cell;
     
 }

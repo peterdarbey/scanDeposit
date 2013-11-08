@@ -204,6 +204,7 @@
     
     
     //removed hardcoded values for admin and user
+    _isAdmin = YES; //YES for now
     
     //if Administrator (filled in password so admin) go to RegistrationVC / Administrator Settings
     if (_isAdmin) {

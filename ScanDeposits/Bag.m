@@ -767,6 +767,13 @@
 //        }
 //        
 //    }
+    
+    
+    //        [UIView animateWithDuration:duration animations:^{
+    ////            _registerTV.contentInset =  UIEdgeInsetsMake(0, 0, keyboardSize.height, 0);//keyboardSize.height
+    //
+    //            [_registerTV setContentOffset:scrollPoint animated:YES];
+    //        }];
 
     
     

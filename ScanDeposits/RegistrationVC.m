@@ -68,16 +68,18 @@
     doneBtn = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(donePressed:)];
     [self.navigationItem setRightBarButtonItem:doneBtn];
     //disable on load
-//    [doneBtn setEnabled:NO];
-        [doneBtn setEnabled:YES];//for now
+    [doneBtn setEnabled:NO];
+    
     
     //Add a notification for the keyboard
-//    notificationCenter = [NSNotificationCenter defaultCenter];
-//    [notificationCenter addObserver:self
-//                           selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:Nil];
-//    
-//    [notificationCenter addObserver:self
-//                           selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:Nil];
+    notificationCenter = [NSNotificationCenter defaultCenter];
+    [notificationCenter addObserver:self
+                           selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:Nil];
+    
+    [notificationCenter addObserver:self
+                           selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:Nil];
+    
+    
 
     
     //retrieve the singleton for writing locally
@@ -145,44 +147,49 @@
 
 
 
-//- (void)keyboardWillShow:(NSNotification *)notification {
-//    
-//   
-//    //keyboard size
-//     keyboardSize = [[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
-//    
-////    UITableViewCell *cell = (UITableViewCell*)[_registerTV cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:1]];
-//    
-////    UITextField *textField = (UITextField *)[cell.contentView viewWithTag:NAME_TF];
-////    CGRect textFieldRect = [textField convertRect:textField.frame toView:self.view];
-//    
-////    if (textFieldRect.origin.y + textFieldRect.size.height >= [UIScreen mainScreen].bounds.size.height - keyboardSize.height) {
-//        NSDictionary *info = [notification userInfo];
-//        NSNumber *number = [info objectForKey:UIKeyboardAnimationDurationUserInfoKey];
-//         duration = [number doubleValue];
-////        [UIView animateWithDuration:duration animations:^{
-////            _registerTV.contentInset =  UIEdgeInsetsMake(0, 0, keyboardSize.height, 0);//keyboardSize.height
-////        }];
-////        NSIndexPath *pathOfTheCell = [_registerTV indexPathForCell:cell];
-////        [_registerTV scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:pathOfTheCell.row inSection:0] atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
-////    }
-//    
-//    
-//    
-//}
+- (void)keyboardWillShow:(NSNotification *)notification {
+    
+   
+    //retrieve the keyboard size.height -> 216
+     keyboardSize = [[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    
+    UITableViewCell *cell = (UITableViewCell *)[_registerTV cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:1]];
+        //retrieve the textField
+        UITextField *textField = (UITextField *)[cell.contentView viewWithTag:NAME_TF];
+    
+    
+    CGRect aRect = _registerTV.frame;//self.view
+    aRect.size.height -= keyboardSize.height;
+    CGPoint scrollPoint;
+    
+    if (!CGRectContainsPoint(aRect, cell.frame.origin) ) {
+//        scrollPoint = CGPointMake(0, cell.frame.origin.y - keyboardSize.height);//0 - 216
+        scrollPoint = CGPointMake(0, 100);//0 - 216
+//        [_registerTV setContentOffset:scrollPoint animated:YES];
+//        DLog(@"cell in textField");
+    }
+    
+    NSDictionary *info = [notification userInfo];
+    NSNumber *number = [info objectForKey:UIKeyboardAnimationDurationUserInfoKey];
+    duration = [number doubleValue];
+    
+    [UIView animateWithDuration:duration animations:^{
+        self.view.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
+//        [_registerTV setContentOffset:scrollPoint animated:YES];
+    }];
+    
+}
 
-//- (void)keyboardWillHide:(NSNotification *)notification
-//{
-//    DLog(@"KeyBoardWillHide");
-//    
-//    [UIView animateWithDuration:duration animations:^{
-//        //only resize tableView when its in transition
-////        _registerTV.frame = CGRectMake(0, 0, 320, _registerTV.frame.size.height + keyboardSize.height);//keyboard frame
-////        _registerTV.contentInset =  UIEdgeInsetsMake(0, 0, 100, 0);
-//        //reduce the size of the keyboard
-//    DLog(@"_regTV.frame: %f andHeight: %f", _registerTV.frame.size.width, _registerTV.frame.size.height);
-//    }];
-//}
+- (void)keyboardWillHide:(NSNotification *)notification
+{
+    DLog(@"KeyBoardWillHide");
+    
+    [UIView animateWithDuration:duration animations:^{
+
+        // shift view back down to original value
+        self.view.transform = CGAffineTransformMakeTranslation(0, 0);
+    }];
+}
 
 -(void)buttonStyle:(UIButton *)button WithImgName:(NSString *)imgName imgSelectedName:(NSString *)selectedName withTitle:(NSString *)title
 {
@@ -215,51 +222,6 @@
     return nextTF;
 }
 
-//keyboard functionality
-//- (void)textFieldDidBeginEditing:(UITextField *)textField {
-//    
-//    //retrieve the cell from the textField
-//    UITableViewCell *cell = (UITableViewCell *)textField.superview.superview;
-//    //retrieve the section of the cell for conditional
-//    NSIndexPath *indexPath = [_registerTV indexPathForCell:cell];
-//    
-//    //if the editing textField is in section 1 which is hidden by keyboard enter and scroll
-//    if (indexPath.section == 1) {
-//    
-//            [UIView animateWithDuration:duration animations:^{
-//                //reduce the size of the keyboard
-//                _registerTV.frame = CGRectMake(0, 0, 320, _registerTV.frame.size.height - keyboardSize.height);
-//            
-//                _registerTV.contentInset =  UIEdgeInsetsMake(0, 0, 100, 0);//was keyboardSize.height
-//                }];
-//            NSIndexPath *pathOfTheCell = [_registerTV indexPathForCell:cell];
-//            [_registerTV scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:pathOfTheCell.row inSection:1] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-//    }
-//    
-//}
-
-//- (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
-//    
-//    //retrieve the cell from the textField
-//    UITableViewCell *cell = (UITableViewCell *)textField.superview.superview;
-//    //retrieve the section of the cell for conditional
-//    NSIndexPath *indexPath = [_registerTV indexPathForCell:cell];
-//    //if section one only
-//    if (indexPath.section == 1) {
-//        
-//        // resize the UITableView back to the original size
-//        _registerTV.frame = CGRectMake(0, 0, 320, _registerTV.frame.size.height + keyboardSize.height);
-//        _registerTV.contentInset =  UIEdgeInsetsMake(0, 0, 0, 0);
-//        if (indexPath.row == 2) {
-//            return YES;
-//        }
-//        else
-//        {
-//            return NO;//problem
-//        }
-//    }
-//        return YES;
-//}
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     //for conditional -> retrieve the cell and use its index

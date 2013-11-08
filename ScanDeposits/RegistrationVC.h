@@ -38,5 +38,6 @@
 @property BOOL fileExists;
 
 @property BOOL isWritten;
+@property BOOL isSelectedTF;
 
 @end

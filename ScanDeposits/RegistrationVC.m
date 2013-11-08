@@ -16,11 +16,13 @@
 {
     UIBarButtonItem *doneBtn;
     CGSize keyboardSize;
-    double duration;
+    
     
     NSFileManager *fileManager;
     NSString *filePath;
     NSString *adminsPath;
+    
+    UITextField *activeTF;
 }
 
 @property (strong, nonatomic) NSString *name;
@@ -153,30 +155,41 @@
     //retrieve the keyboard size.height -> 216
      keyboardSize = [[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
     
-    UITableViewCell *cell = (UITableViewCell *)[_registerTV cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:1]];
-        //retrieve the textField
-        UITextField *textField = (UITextField *)[cell.contentView viewWithTag:NAME_TF];
+    NSDictionary *info = [notification userInfo];
+    NSNumber *number = [info objectForKey:UIKeyboardAnimationDurationUserInfoKey];
+    double duration = [number doubleValue];
     
+   
     
-    CGRect aRect = _registerTV.frame;//self.view
+    //for hit test condition
+    CGRect aRect = self.view.frame;//self.view -> (0, 0,320, 548);
     aRect.size.height -= keyboardSize.height;
     CGPoint scrollPoint;
     
-    if (!CGRectContainsPoint(aRect, cell.frame.origin) ) {
-//        scrollPoint = CGPointMake(0, cell.frame.origin.y - keyboardSize.height);//0 - 216
-        scrollPoint = CGPointMake(0, 100);//0 - 216
-//        [_registerTV setContentOffset:scrollPoint animated:YES];
-//        DLog(@"cell in textField");
-    }
     
-    NSDictionary *info = [notification userInfo];
-    NSNumber *number = [info objectForKey:UIKeyboardAnimationDurationUserInfoKey];
-    duration = [number doubleValue];
+
     
-    [UIView animateWithDuration:duration animations:^{
-        self.view.transform = CGAffineTransformMakeTranslation(0, -keyboardSize.height);
-//        [_registerTV setContentOffset:scrollPoint animated:YES];
-    }];
+    //textField is assigned
+    if (activeTF) { // && _isSelectedTF) {
+        
+        //retrieve the cell for the hidden content
+        UITableViewCell *cell = (UITableViewCell *)[activeTF.superview superview];
+        
+        //if it doesnt contain the activeTF (0, 0, 320, 332) -> (0, 356)
+        if (!CGRectContainsPoint(aRect, cell.frame.origin) && _isSelectedTF) { //activeTF.frame.origin
+            scrollPoint = CGPointMake(0, cell.frame.origin.y - keyboardSize.height);//0 - 216
+            
+            DLog(@"cell.frame.origin X: %f andY: %f", cell.frame.origin.x, cell.frame.origin.y);//(0, 356)
+            
+        [UIView animateWithDuration:duration animations:^{
+            
+            self.registerTV.transform = CGAffineTransformMakeTranslation(0, - keyboardSize.height);//- keyboardSize.height);//works
+        }];
+           
+//            _isSelectedTF = NO;
+        }
+        
+    }//close if
     
 }
 
@@ -184,11 +197,62 @@
 {
     DLog(@"KeyBoardWillHide");
     
-    [UIView animateWithDuration:duration animations:^{
+    NSDictionary *info = [notification userInfo];
+    NSNumber *number = [info objectForKey:UIKeyboardAnimationDurationUserInfoKey];
+    double duration = [number doubleValue];
+    
+    
+    
+    
+    if (activeTF && _isSelectedTF) {
+        
+        //retrieve the cell for the hidden content
+        UITableViewCell *cell = (UITableViewCell *)[activeTF.superview superview];
+        
+        CGRect aRect = self.view.frame;// -> (0, 0,320, 548);
+        aRect.size.height -= keyboardSize.height;
+        CGPoint scrollPoint;
+        
+        
+        //if it doesnt contain the activeTF
+        if (!CGRectContainsPoint(aRect, cell.frame.origin) && _isSelectedTF) { //active.frame.origin
+            scrollPoint = CGPointMake(0, cell.frame.origin.y - keyboardSize.height);//0 - 216
+            
+            [UIView animateWithDuration:duration animations:^{
+                self.registerTV.transform = CGAffineTransformMakeTranslation(0, 0);//- keyboardSize.height);//works
+                
+//                CGPoint scrollPoint = CGPointMake(0, 0);//0 - 216
+//                [_registerTV setContentOffset:scrollPoint animated:YES];
+             }];
+            
+            
+        }
+        
+    }//close if
+    
+    
+    
+    //    [UIView animateWithDuration:duration animations:^{
+    //        // shift view back down to original value
+    ////        self.registerTV.transform = CGAffineTransformMakeTranslation(0, 0);//works
+    //    }];
+    
+    
+    //retrieve the cell for the last textField
+    
+    //    UITableViewCell *cell = (UITableViewCell *)[_registerTV cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:1]];
+    //    NSIndexPath *indexPath = [_registerTV indexPathForCell:cell];
+    //
+    //    if (indexPath.section == 1 && indexPath.row == 2) {
+    //        _isSelectedTF = YES;
+    //    }
+    //    else
+    //    {
+    //         _isSelectedTF = NO;//test
+    //    }
 
-        // shift view back down to original value
-        self.view.transform = CGAffineTransformMakeTranslation(0, 0);
-    }];
+    
+    
 }
 
 -(void)buttonStyle:(UIButton *)button WithImgName:(NSString *)imgName imgSelectedName:(NSString *)selectedName withTitle:(NSString *)title
@@ -222,6 +286,23 @@
     return nextTF;
 }
 
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    UITableViewCell *cell = (UITableViewCell *)[textField.superview superview];
+    NSIndexPath *indexPath = [_registerTV indexPathForCell:cell];
+    
+    //added to a specific cell
+    if (indexPath.section == 1 && indexPath.row == 0) {
+        activeTF = textField;
+        DLog(@"activeTF is: %@", activeTF);
+        _isSelectedTF = YES;
+    }
+    else
+    {
+        _isSelectedTF = NO;
+    }
+    
+}
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     //for conditional -> retrieve the cell and use its index
@@ -237,10 +318,11 @@
     if (indexPath.row == 0) {
         //if TF is not empty resign/assign
         if (![textField.text isEqualToString:@""] && [textField.text length] > 6) {
-            [textField resignFirstResponder];//resign 1st
+            
+//            [textField resignFirstResponder];//resign 1st
+            
             //assign text to user ivar
              self.name = textField.text;
-             DLog(@"Name: %@", _name);
             
             if (self.name) {
                 
@@ -265,7 +347,7 @@
         //if TF is not empty resign/assign
         if (![textField.text isEqualToString:@""] && [textField.text length] > 4) {
             //resign previous responder status
-            [textField resignFirstResponder];
+//            [textField resignFirstResponder];
             
             //create email with the address apended to it
             textField.text = [self addEMailToString:textField.text];
@@ -316,9 +398,9 @@
     
     if (indexPath.section == 1 && indexPath.row == 2) {
         
-        // resize the UITableView back to the original size
-        _registerTV.frame = CGRectMake(0, 0, 320, _registerTV.frame.size.height + keyboardSize.height);
-        _registerTV.contentInset =  UIEdgeInsetsMake(0, 0, 0, 0);
+//        // resize the UITableView back to the original size
+//        _registerTV.frame = CGRectMake(0, 0, 320, _registerTV.frame.size.height + keyboardSize.height);
+//        _registerTV.contentInset =  UIEdgeInsetsMake(0, 0, 0, 0);
     }
 
 
@@ -651,7 +733,8 @@
         //Only 1 user so set just the first section
         if (indexPath.section == 0) {
             [nameTF setText:[NSString stringWithFormat:@"%@", [[_adminArray objectAtIndex:indexPath.section]objectAtIndex:indexPath.row]]];//section 0 pop section 0
-            [nameTF setUserInteractionEnabled:NO];//add BOOL for editing mode
+            
+//            [nameTF setUserInteractionEnabled:NO];//add BOOL for editing mode
             //set here
             [doneBtn setEnabled:YES];
         }
@@ -660,8 +743,9 @@
     else if (_adminPassword && [_adminArray count] > 1) {
         
         [nameTF setText:[NSString stringWithFormat:@"%@", [[_adminArray objectAtIndex:indexPath.section]objectAtIndex:indexPath.row]]];
+        
         //disable textFields then
-        [nameTF setUserInteractionEnabled:NO];//Test -> seems right //[_regTV isEditing: NO];
+//        [nameTF setUserInteractionEnabled:NO];//Test -> seems right //[_regTV isEditing: NO];
         //ToDo add editing behaviour also
         
     }
@@ -708,7 +792,7 @@
     }
     else // Password field
     {
-        [nameTF setUserInteractionEnabled:NO];
+        [nameTF setUserInteractionEnabled:NO];//correct
     }
     
         return cell;

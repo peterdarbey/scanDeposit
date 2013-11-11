@@ -28,14 +28,16 @@
 @implementation HomeVC
 
 #pragma mark - Custom delegate method for LoginVC
-- (void)dismissLoginVC:(NSMutableDictionary *)users isAdmin:(BOOL)admin {
+- (void)dismissLoginVC:(NSMutableDictionary *)users isAdmin:(NSNumber *)admin {
     
-    DLog(@"admin passed by dimissLoginVC method: %d", admin); // -> should be NO ??
+    DLog(@"admin passed by dimissLoginVC method: %d", admin.boolValue);
+    _isAdmin = admin.boolValue;//set by object returned -> NO for users
+    
     //NOTE: Logout button required?
-    if (admin) {//went in here why?
-        DLog(@"is ADMIN: %@", users);//is dictionary -> wrong Not ADMIN ? and causing LoginVC to present again
+    if (_isAdmin) {//because NSNumber wasnt used and dismissVCWithCompletion block
         
-        _isAdmin = admin;//have to check the consitencey though of UInavigationController etc..
+        //if admin not a user
+        _isUser = NO;
        
         //will need for packaging off to email with other data
         _validAdminsDict = users;//pass to deposits
@@ -43,7 +45,6 @@
     else
     {
         DLog(@"is USERS: %@", users);//is dictionary
-        _isAdmin = admin;//let it set
         _isUser = YES;
         
         //will need for packaging off to email with other data
@@ -62,8 +63,7 @@
     return self;
 }
 - (void)cancelScansPressed:(UIButton *)sender {
-    
-    DLog(@"Dismiss picker from new barButtonItem");
+
 //    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
      [self dismissViewControllerAnimated:YES completion:nil];
     
@@ -151,11 +151,6 @@
     
 }
 
-//- (void)finishedPressed:(UIButton *)sender {
-//    
-//    DLog(@"FinishedPressed");
-//}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -187,12 +182,12 @@
     [self.view addSubview:scanBtn];
     
     //How to use the app wording to be revised 
-    UITextView *helpTV = [[UITextView alloc]initWithFrame:CGRectMake(10, 54, self.view.frame.size.width -20, 200)];
+    UITextView *helpTV = [[UITextView alloc]initWithFrame:CGRectMake(10, 160, self.view.frame.size.width -20, 200)];
     [helpTV setText:@"How to use this app\n\nPlease scan the external device (ATM) barcode.\nThen scan the bag barcode and enter the amount for each deposit.\nFinally press proceed to confirm email"];
     
     [helpTV setBackgroundColor:[UIColor clearColor]];
-    [helpTV setFont:[UIFont systemFontOfSize:18]];
-//    [helpTV setTextColor:[UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0]];//blue
+    [helpTV setFont:[UIFont systemFontOfSize:20]];
+//    [helpTV setTextColor:[UIColor colorWithRed:172.0/255.0 green:74.0/255.0 blue:0.0/255.0 alpha:1.0]];//orange
     [helpTV setTextColor:[UIColor whiteColor]];
     [helpTV setEditable:NO];
     [helpTV setUserInteractionEnabled:NO];
@@ -204,13 +199,12 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     
-    
-    //removed hardcoded values for admin and user
+
 //    _isAdmin = YES; //YES for now
-    DLog(@"_isAdmin: %d", _isAdmin);
+    DLog(@"_isAdmin: %d", _isAdmin); //-> still NO
     
     //if Administrator (filled in password so admin) go to RegistrationVC / Administrator Settings
-    if (_isAdmin) {
+    if (_isAdmin) { //&& !_isUser 
         DLog(@"User is ADMIN");
         RegistrationVC *registerVC = [self.storyboard instantiateViewControllerWithIdentifier:@"RegistrationVC"];
         UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:registerVC];
@@ -232,7 +226,7 @@
         
     }
     //not administrator or a reg user
-    else if (!_isAdmin && !_isUser) { //isAdmin = NO and isUser = NO
+    else if (!_isAdmin && !_isUser) { //correct behaviour now
         
         LogInVC *loginVC = [self.storyboard instantiateViewControllerWithIdentifier:@"LogInVC"];
         

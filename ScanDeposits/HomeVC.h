@@ -19,7 +19,7 @@
 @class RegistrationVC;
 
 @class UserVC;
-//@class LogInVC;
+
 #import "LogInVC.h"
 
 

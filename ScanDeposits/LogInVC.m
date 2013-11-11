@@ -68,20 +68,20 @@
         }//close if
 
             //ToDo create admin package
-            [self dismissViewControllerAnimated:YES completion:^{
-                
+//            [self dismissViewControllerAnimated:YES completion:^{
                 //set spinner
                 [loginBtn setEnabled:YES];
                 [loginSpinner setHidden:YES];
                 [loginSpinner setAlpha:0.0];
+        
                 //different custom delegate method call
                 if ([self.delegate respondsToSelector:@selector(dismissLoginVC: isAdmin:)]) {
                     //dismissLoginVC
                     [self.delegate performSelector:@selector(dismissLoginVC: isAdmin:) withObject:_packagedAdmins withObject:@(isAdmin)];// -> works @(YES) but dont hardcode
                     DLog(@"New delgate protocol implemented");
+                    [self dismissViewControllerAnimated:YES completion:nil];//no completion block required
                 }
-            }];
-        
+//            }];
         
     }//close outer if
     
@@ -97,7 +97,7 @@
                 if ([aUser[@"Staff ID"] isEqualToString:_userOne]) { // -> User => StaffID CORRECT
                     //aUser is the specified user via Login textField add to collection
                     [_packagedUsers setObject:aUser forKey:@(1)];//number now associated with a user
-                    DLog(@"_packagedUsers: %@", _packagedUsers);
+                    
                     isAdmin = [aUser[@"Adminstrator"]boolValue];// check this user also 
                 }//close if
                 
@@ -130,27 +130,28 @@
                 }//close for
                 
             }//close if
-                if ([_packagedUsers count] == 2) {//set to 2
-                    //we have two reg logged in users so set a BOOL and dismiss modal
+            if ([_packagedUsers count] == 2) {//set to 2
+                
+                //Its cause LoginVC is been presented again for some reason?
+                //check BOOL for _isAdmin auto calling that condition again??
+                
+                    //set spinner
+                    [loginBtn setEnabled:YES];
+                    [loginSpinner setHidden:YES];
+                    [loginSpinner setAlpha:0.0];
                     
-                    //Its cause LoginVC is been presented again for some reason?
-                    //check BOOL for _isAdmin auto calling that condition again??
-                    [self dismissViewControllerAnimated:NO completion:^{ //was YES
-                    
-                        //set spinner
-                        [loginBtn setEnabled:YES];
-                        [loginSpinner setHidden:YES];
-                        [loginSpinner setAlpha:0.0];
-                        
-                        //custom delegate method call
-                        if ([self.delegate respondsToSelector:@selector(dismissLoginVC: isAdmin:)]) {
-                            //dismissLoginVC
-                            [self.delegate performSelector:@selector(dismissLoginVC: isAdmin:) withObject:_packagedUsers withObject:@(isAdmin)];// dont hardcode NO -> isAdminb set to last value, dont need to worry about admin here
+                    //custom delegate method call
+                    if ([self.delegate respondsToSelector:@selector(dismissLoginVC: isAdmin:)]) {
+                
+                            [self.delegate performSelector:@selector(dismissLoginVC: isAdmin:) withObject:_packagedUsers withObject:@(isAdmin)];//isAdmin set to last value, dont need to worry about admin here
                             DLog(@"Delegate users protocol implemented");
-                        }
-                    }];
-                    
-                }//close if
+                        //now dismiss the LoginVC once the appropriate values are set in HomeVC conditions
+                        [self dismissViewControllerAnimated:YES completion:nil];//no code to execute now - correct
+                    }
+                
+//                    }];
+                
+            }//close if
 
         }//close valid user one and two
 
@@ -520,7 +521,7 @@
         cellTF = (UITextField *)[cell.contentView viewWithTag:TEXTFIELD_TAG];
         cellLabel = (UILabel *)[cell.contentView viewWithTag:LABEL_TAG];
     }
-    NSArray *labelsArray = @[@"Password", @"Staff ID", @"Staff ID"];
+    NSArray *labelsArray = @[@"Password", @"Control User1:", @"Control User2:"];
     
     //populate the cells textField and Label with data here
     [cellLabel setText:[NSString stringWithFormat:@"%@", [labelsArray objectAtIndex:indexPath.section]]];

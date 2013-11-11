@@ -14,7 +14,7 @@
 
 @protocol DismissLoginWithValidationDelegate <NSObject>
 
-- (void)dismissLoginVC:(NSMutableDictionary *)users isAdmin:(BOOL)admin;
+- (void)dismissLoginVC:(NSMutableDictionary *)users isAdmin:(NSNumber *)admin;
 
 @end
 

@@ -332,19 +332,18 @@
             //assign text to user ivar
             _staffID = textField.text;
             
-            if (_name && _eMail && _staffID && _initials) { //should work fine
+            //if these ivars are set then we have enough data to proceed
+            if (_name && _eMail && _staffID && _initials) {
                 //assign to adminPassword
                 _adminPassword = [_staffID stringByAppendingString:_initials];
-                //create user model set YES as its the Administrator settings
-                DLog(@"AdminArray count>>>>>>>>>: %i", [_adminArray count]);
                 
                 //only enter if 2 or less admin/users -> updating this
-                if ([_adminArray count] < 2) {//on second iteration still less than 2
+//                if ([_adminArray count] < 2) {//on second iteration still less than 2
+                
+                //create user model set YES for Administrator, add required fields to local array and add to _adminArray
+                [self createUserFactoryWithIndexPath:indexPath];//fixed //adminFactory
                     
-                    //create user, add required fields to local array and add to _adminArray
-                    [self createUserFactory];//fixed //adminFactory
-                    
-                }//close if
+//                }//close if
                 
                 //set to NO again when kB dismissed
                 [self doneEditingPressed:nil];//even better -> _allowEdit = NO;
@@ -376,40 +375,101 @@
 
 }
 //factory method -> auto sets admin = YES
-- (void)createUserFactory {
+- (void)createUserFactoryWithIndexPath:(NSIndexPath *)indexPath {
     //Auto set here that they are ADMINs because of context they are in i.e. Admins settings
     
     User *user = [[User alloc]initWithName:_name eMail:_eMail
                                    staffID:_staffID Initials:_initials
                                    isAdmin:YES withPassword:_adminPassword];
     
-    if (_allowEdit) {
-        //need to allow overwriting of data for admins here
-        
-    }
     
-    //ToDo implement this later -> with write to file and add to an array
+    //Construct for the LoginVC functionality and add in the conditions below
     NSDictionary *adminsDict = [user adminDict];//administrator with password
     DLog(@"adminsDict: %@", adminsDict);
     
-    [_administratorArray addObject:adminsDict];
-    //write to file here also
-    [_administratorArray writeToFile:adminsPath atomically:YES];
-    DLog(@"_administratorArray: %@", _administratorArray);
     
-    
-    //Create a local array
+    //Create a local specific array and add in conditioins below
     NSMutableArray *localUserArray = [NSMutableArray array];
     [localUserArray addObject:[user userName]];
     [localUserArray addObject:[user userEMail]];
     [localUserArray addObject:[user userStaffID]];
     [localUserArray addObject:[user userPassword]];
-    //Add to the overAll collection
-    [_adminArray addObject:localUserArray];
+    
+    DLog(@"AdminArray count>>>>>>>>>: %i", [_adminArray count]);
+    
+    //in editing mode -> Note: only gets here in editing mode
+    if (_allowEdit) {
+        
+        //if empty we can add to users from index:0
+        if ([_adminArray count] == 0) {
+            //add each object to its particular collection at index 1
+            [_administratorArray addObject:adminsDict];//will auto be index:0 if empty
+//            [_administratorArray insertObject:adminsDict atIndex:indexPath.section];//might crash out of bounds
+            //write to file here also
+            [_administratorArray writeToFile:adminsPath atomically:YES];
+            
+            //Add to the overAll collection
+            [_adminArray addObject:localUserArray];//ordered with only 1entry
+//            [_adminArray insertObject:localUserArray atIndex:indexPath.section];//insert might be the better way
+            //write to file here also
+            [_adminArray writeToFile:filePath atomically:YES];
+            _isWritten = YES;
+            
+        }
+        //need to allow overwriting of data for admins here
+        else if ([_adminArray count] == 1) { //only one admin setup
+            
+            //add each object to its particular collection at index 1
+            [_administratorArray insertObject:adminsDict atIndex:indexPath.section];//might crash out of bounds, ordered with only 1entry -> should be correct?
+            //write to file here also
+            [_administratorArray writeToFile:adminsPath atomically:YES];
+            
+            //Add to the overAll collection
+            [_adminArray insertObject:localUserArray atIndex:indexPath.section];//might crash out of bounds
+            //write to file here also
+            [_adminArray writeToFile:filePath atomically:YES];
+            _isWritten = YES;
+            
+        }
+        else if ([_adminArray count] == 2) {
+            //add each object to its particular collection at index 1
+            [_administratorArray replaceObjectAtIndex:indexPath.section withObject:adminsDict];
+            //write to file here also
+            [_administratorArray writeToFile:adminsPath atomically:YES];
+            
+            //Add to the overAll collection
+            [_adminArray replaceObjectAtIndex:indexPath.section withObject:localUserArray];
+            //write to file here also
+            [_adminArray writeToFile:filePath atomically:YES];
+            _isWritten = YES;
+            
+        }//close else if
+        
+    }//close if
+    
     DLog(@"_adminArray__: %@ with Count: %i ", _adminArray, [_adminArray count]);
-    //write to file
-    [_adminArray writeToFile:filePath atomically:YES];
-    _isWritten = YES;
+    
+    DLog(@"_administratorArray: %@ with Count: %i ", _administratorArray, [_administratorArray count]);
+    
+    
+//    [_administratorArray addObject:adminsDict];
+//    //write to file here also
+//    [_administratorArray writeToFile:adminsPath atomically:YES];
+//    DLog(@"_administratorArray: %@", _administratorArray);
+    
+    
+    //Create a local array
+//    NSMutableArray *localUserArray = [NSMutableArray array];
+//    [localUserArray addObject:[user userName]];
+//    [localUserArray addObject:[user userEMail]];
+//    [localUserArray addObject:[user userStaffID]];
+//    [localUserArray addObject:[user userPassword]];
+    //Add to the overAll collection
+//    [_adminArray addObject:localUserArray];
+//    DLog(@"_adminArray__: %@ with Count: %i ", _adminArray, [_adminArray count]);
+//    //write to file
+//    [_adminArray writeToFile:filePath atomically:YES];
+//    _isWritten = YES;
     
 }
 
@@ -675,12 +735,9 @@
 
 - (void)donePressed:(UIButton *)sender {
     
-//    [self.navigationController dismissViewControllerAnimated:YES completion:^{//generating an error
-//        //ToDo add saving functionality here
-//        //Save the admins to file here
-//    }];
-    
-    [self dismissViewControllerAnimated:YES completion:nil];
+    //unbalanced calls because its dismissing and then pushing back up from viewDIdLoad and cant do that if anim here as its conflicting
+    //so Q is where does admin go from here currently back here
+    [self dismissViewControllerAnimated:NO completion:nil];
         //ToDo add saving functionality here
         //        //Save the admins to file here
     
@@ -764,7 +821,7 @@
         }
         
     }//else if adminPassword set and 2 admins created
-    else if (_adminPassword && [_adminArray count] > 1) {
+    else if ([_adminArray count] > 1) { // && _adminPassword) {
         
         [nameTF setText:[NSString stringWithFormat:@"%@", [[_adminArray objectAtIndex:indexPath.section]objectAtIndex:indexPath.row]]];
     }

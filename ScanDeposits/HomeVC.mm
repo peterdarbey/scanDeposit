@@ -200,9 +200,10 @@
 - (void)viewWillAppear:(BOOL)animated {
     
 
-    _isAdmin = YES; //HARD CODE here for implementation of Administrator functionality
+//    _isAdmin = YES; //HARD CODE here for implementation of Administrator functionality
     DLog(@"_isAdmin: %d", _isAdmin);
     
+    //NOTE: may need to add user to NSUserDefaults 
     //if Administrator (filled in password so admin) go to RegistrationVC / Administrator Settings
     if (_isAdmin) { //&& !_isUser 
         DLog(@"User is ADMIN");
@@ -211,10 +212,11 @@
         [navController.navigationBar setBarStyle:UIBarStyleBlackTranslucent];
         
         //Add delay to presentation of LoginVC until HomeVC has appeared first
-        double delayInSeconds = 0.15;
+        double delayInSeconds = 0.3;
         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
         dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         
+            //NOTE: dont need the dispatch delay for RegistrationVC as admin ???
             //Delay added has resolved the issue with the unbalanced calls to navController
             [self presentViewController:navController animated:YES completion:^{
                 [registerVC setModalPresentationStyle:UIModalPresentationFullScreen];
@@ -233,7 +235,7 @@
         UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:loginVC];
         
         //Add delay to presentation of LoginVC until HomeVC has appeared first
-        double delayInSeconds = 0.15;
+        double delayInSeconds = 0.3;//0.25
         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
         dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
             

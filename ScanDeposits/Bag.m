@@ -811,6 +811,71 @@
 
     
     
+//    - (void)createUserFactory {
+//        //Auto set here that they are ADMINs because of context they are in i.e. Admins settings
+//        
+//        User *user = [[User alloc]initWithName:_name eMail:_eMail
+//                                       staffID:_staffID Initials:_initials
+//                                       isAdmin:YES withPassword:_adminPassword];
+//        
+//        
+//        //ToDo implement this later -> with write to file and add to an array
+//        NSDictionary *adminsDict = [user adminDict];//administrator with password
+//        DLog(@"adminsDict: %@", adminsDict);
+//        
+//        
+//        //Create a local array
+//        NSMutableArray *localUserArray = [NSMutableArray array];
+//        [localUserArray addObject:[user userName]];
+//        [localUserArray addObject:[user userEMail]];
+//        [localUserArray addObject:[user userStaffID]];
+//        [localUserArray addObject:[user userPassword]];
+//        
+//        //in editing mode
+//        if (_allowEdit) {
+//            //need to allow overwriting of data for admins here
+//            if ([_adminArray count] == 1) { //but no admins or only one setup
+//                
+//                //add each object to its particular collection at index 1
+//                [_administratorArray insertObject:adminsDict atIndex:1];
+//                
+//                //Add to the overAll collection
+//                [_adminArray insertObject:localUserArray atIndex:1];
+//            }
+//            
+//        }
+//        //not in editing mode but no admins or only one setup
+//        else if (!_allowEdit && [_adminArray count] < 2) {
+//            
+//            
+//        }
+//        
+//        
+//        
+//        [_administratorArray addObject:adminsDict];
+//        //write to file here also
+//        [_administratorArray writeToFile:adminsPath atomically:YES];
+//        DLog(@"_administratorArray: %@", _administratorArray);
+//        
+//        
+//        //Create a local array
+//        NSMutableArray *localUserArray = [NSMutableArray array];
+//        [localUserArray addObject:[user userName]];
+//        [localUserArray addObject:[user userEMail]];
+//        [localUserArray addObject:[user userStaffID]];
+//        [localUserArray addObject:[user userPassword]];
+//        //Add to the overAll collection
+//        [_adminArray addObject:localUserArray];
+//        DLog(@"_adminArray__: %@ with Count: %i ", _adminArray, [_adminArray count]);
+//        //write to file
+//        [_adminArray writeToFile:filePath atomically:YES];
+//        _isWritten = YES;
+//        
+//    }
+    
+    
+    
+    
 }
 
 @end

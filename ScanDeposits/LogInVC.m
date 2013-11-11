@@ -64,20 +64,31 @@
                 }//close if
                 
             }//close for
-        
-            //ToDo create admin package
+            
+            //if we have an admin allow access to app
+            if ([_packagedAdmins count] > 0) {
+                
+                //ToDo create admin package
                 //set spinner
                 [loginBtn setEnabled:YES];
                 [loginSpinner setHidden:YES];
                 [loginSpinner setAlpha:0.0];
-        
+                
                 //different custom delegate method call
                 if ([self.delegate respondsToSelector:@selector(dismissLoginVC: isAdmin:)]) {
                     //dismissLoginVC
                     [self.delegate performSelector:@selector(dismissLoginVC: isAdmin:) withObject:_packagedAdmins withObject:@(isAdmin)];// -> works @(YES) but dont hardcode
                     DLog(@"New Admin delgate protocol implemented");
-                    [self dismissViewControllerAnimated:YES completion:nil];//no completion block required
+                    [self dismissViewControllerAnimated:NO completion:nil];//was YES no completion block required
                 }//close if
+                
+            }//close if
+            else //display error message
+            {
+                //display pop up
+                UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"Not Authorised" message:@"Invalid password" delegate:nil cancelButtonTitle:@"Cancel" otherButtonTitles:nil, nil];
+                [alertView show];
+            }
             
         }//close if
         
@@ -145,6 +156,12 @@
                     }
                 
                 }//close if
+                else //displaying both at the moment???
+                {
+                    //display pop up
+                    UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"Not Authorised" message:@"Invalid staff ID" delegate:nil cancelButtonTitle:@"Cancel" otherButtonTitles:nil, nil];
+                    [alertView show];
+                }//close else
 
         }//close valid user one and two
 

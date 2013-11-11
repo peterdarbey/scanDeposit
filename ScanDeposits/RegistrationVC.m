@@ -322,7 +322,8 @@
         }
         
     }
-    else //Staff ID then generate Adminstrator password
+    //Staff ID then generate Adminstrator password
+    else if (indexPath.row == 2)
     {
         
         if (![textField.text isEqualToString:@""] && [textField.text length] >= 6) {
@@ -336,7 +337,8 @@
                 _adminPassword = [_staffID stringByAppendingString:_initials];
                 //create user model set YES as its the Administrator settings
                 DLog(@"AdminArray count>>>>>>>>>: %i", [_adminArray count]);
-                //only enter if 2 or less admin/users
+                
+                //only enter if 2 or less admin/users -> updating this
                 if ([_adminArray count] < 2) {//on second iteration still less than 2
                     
                     //create user, add required fields to local array and add to _adminArray
@@ -344,8 +346,9 @@
                     
                 }//close if
                 
-                //reloadData
-                [_registerTV reloadData];
+                //set to NO again when kB dismissed
+                [self doneEditingPressed:nil];//even better -> _allowEdit = NO;
+//                [_registerTV reloadData];//dont need now as doneEditingPressed does that
             }
             
         }//close inner if
@@ -355,10 +358,10 @@
         }
     }//close else
     
-    if (indexPath.row == 3) {
-//        [nameTF ]
-    }
+    else //Password field
+    {
     
+    }
     
     if (indexPath.section == 1 && indexPath.row == 2) {
         
@@ -379,6 +382,11 @@
     User *user = [[User alloc]initWithName:_name eMail:_eMail
                                    staffID:_staffID Initials:_initials
                                    isAdmin:YES withPassword:_adminPassword];
+    
+    if (_allowEdit) {
+        //need to allow overwriting of data for admins here
+        
+    }
     
     //ToDo implement this later -> with write to file and add to an array
     NSDictionary *adminsDict = [user adminDict];//administrator with password
@@ -748,39 +756,28 @@
     
     DLog(@"_adminArray is: %@ and count: %i", _adminArray, [_adminArray count]);
     
-    //there is only 1 user
 //    if (_adminPassword && [_adminArray count] == 1) {
     if ([_adminArray count] == 1) {
         //Only 1 user so set just the first section
         if (indexPath.section == 0) {
             [nameTF setText:[NSString stringWithFormat:@"%@", [[_adminArray objectAtIndex:indexPath.section]objectAtIndex:indexPath.row]]];//section 0 pop section 0
-            
-//            [nameTF setUserInteractionEnabled:NO];//add BOOL for editing mode
-            //set here
-//            [editBtn setEnabled:YES];
         }
         
     }//else if adminPassword set and 2 admins created
     else if (_adminPassword && [_adminArray count] > 1) {
         
         [nameTF setText:[NSString stringWithFormat:@"%@", [[_adminArray objectAtIndex:indexPath.section]objectAtIndex:indexPath.row]]];
-        
-        //disable textFields then
-//        [nameTF setUserInteractionEnabled:NO];//Test -> seems right //[_regTV isEditing: NO];
-        //ToDo add editing behaviour also
-        
     }
     else //first time _adminPassword wont exist
     {
         [nameTF setPlaceholder:[NSString stringWithFormat:@"Auto Generated"]];
     }
+    
 
-    
-    
     //setup of keyboard prefs
     if (indexPath.row == 0) {
         
-        [nameTF setPlaceholder:[NSString stringWithFormat:@"Enter Name"]];//temp will be dynamic
+        [nameTF setPlaceholder:[NSString stringWithFormat:@"Enter Name"]];
         //set keyboard type
         [nameTF setKeyboardType:UIKeyboardTypeDefault];
         [nameTF setReturnKeyType:UIReturnKeyNext];
@@ -814,6 +811,14 @@
     //if not the password field and allows editing is YES
     if (_allowEdit && indexPath.row != 3) {
         [nameTF setUserInteractionEnabled:YES];
+    }
+    else if (!_allowEdit) {
+        
+        //change to NO
+        [nameTF setUserInteractionEnabled:NO];
+        DLog(@"disable userInteraction again");//good works
+        //use allowEdit to overwrite file settings
+        
     }
     
     return cell;
@@ -856,7 +861,6 @@
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 @end

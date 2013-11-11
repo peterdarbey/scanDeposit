@@ -485,7 +485,7 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:myIdentifier];
         
-        cellTF = [[UITextField alloc]initWithFrame:CGRectMake(115, cell.bounds.size.height/4, 175, 25)];
+        cellTF = [[UITextField alloc]initWithFrame:CGRectMake(145, cell.bounds.size.height/4, 145, 25)];
         [cellTF setBackgroundColor:[UIColor clearColor]];
         cellTF.tag = TEXTFIELD_TAG;
         cellTF.textAlignment = NSTextAlignmentLeft;
@@ -501,7 +501,7 @@
         //Add TF to cell
         [cell.contentView addSubview:cellTF];
         
-        cellLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, cell.bounds.size.height/4, 95 , 25)];
+        cellLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, cell.bounds.size.height/4, 120 , 25)];
         cellLabel.tag = LABEL_TAG;
         cellLabel.textAlignment = NSTextAlignmentLeft;
         cellLabel.font = [UIFont fontWithName:@"Arial-BoldMT" size:17];
@@ -521,7 +521,7 @@
         cellTF = (UITextField *)[cell.contentView viewWithTag:TEXTFIELD_TAG];
         cellLabel = (UILabel *)[cell.contentView viewWithTag:LABEL_TAG];
     }
-    NSArray *labelsArray = @[@"Password", @"Control User1:", @"Control User2:"];
+    NSArray *labelsArray = @[@"Password", @"Control User:1", @"Control User:2"];
     
     //populate the cells textField and Label with data here
     [cellLabel setText:[NSString stringWithFormat:@"%@", [labelsArray objectAtIndex:indexPath.section]]];

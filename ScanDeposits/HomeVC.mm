@@ -200,8 +200,8 @@
 - (void)viewWillAppear:(BOOL)animated {
     
 
-//    _isAdmin = YES; //YES for now
-    DLog(@"_isAdmin: %d", _isAdmin); //-> still NO
+    _isAdmin = YES; //HARD CODE here for implementation of Administrator functionality
+    DLog(@"_isAdmin: %d", _isAdmin);
     
     //if Administrator (filled in password so admin) go to RegistrationVC / Administrator Settings
     if (_isAdmin) { //&& !_isUser 
@@ -211,7 +211,7 @@
         [navController.navigationBar setBarStyle:UIBarStyleBlackTranslucent];
         
         //Add delay to presentation of LoginVC until HomeVC has appeared first
-        double delayInSeconds = 0.25;
+        double delayInSeconds = 0.15;
         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
         dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         
@@ -233,7 +233,7 @@
         UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:loginVC];
         
         //Add delay to presentation of LoginVC until HomeVC has appeared first
-        double delayInSeconds = 0.25;
+        double delayInSeconds = 0.15;
         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
         dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
             

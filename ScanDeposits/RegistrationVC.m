@@ -105,8 +105,9 @@
         _adminArray = [NSMutableArray arrayWithContentsOfFile:filePath];//correct adminsCollection
         DLog(@"_adminArray loaded from file: %@", _adminArray);//correct
         
-        if (_adminArray) {
-            DLog(@"if data here display");
+        if ([_adminArray count] < 1) {
+            _adminArray = [NSMutableArray array];
+             DLog(@"if empty create an _adminArray: %@", _adminArray);
         }
     }
     
@@ -141,13 +142,10 @@
     NSString *documentsDirectoryPath = [NSSearchPathForDirectoriesInDomains( NSDocumentDirectory,
                                                                             NSUserDomainMask, YES ) objectAtIndex:0];
     
-    NSString *fullFilePath = [documentsDirectoryPath stringByAppendingPathComponent:name];//@"admins.plist",@"adminsCollection.plist"
+    NSString *fullFilePath = [documentsDirectoryPath stringByAppendingPathComponent:name];//@"admins.plist"
     
     return fullFilePath;
 }
-
-
-
 
 - (void)keyboardWillShow:(NSNotification *)notification {
     
@@ -278,8 +276,6 @@
     UITableViewCell *cell = (UITableViewCell *)textField.superview.superview;
     NSIndexPath *indexPath = [_registerTV indexPathForCell:cell];
     
-    
-    
     UITextField *nextTF;
     
     //textField superview corresponds to
@@ -288,13 +284,10 @@
         //if TF is not empty resign/assign
         if (![textField.text isEqualToString:@""] && [textField.text length] > 6) {
             
-//            [textField resignFirstResponder];//resign 1st
-            
             //assign text to user ivar
              self.name = textField.text;
             
             if (self.name) {
-                
                 //create Initails from userName field
                 [self createInitialsFromText:textField.text];
                 
@@ -315,8 +308,6 @@
     else if (indexPath.row == 1) {
         //if TF is not empty resign/assign
         if (![textField.text isEqualToString:@""] && [textField.text length] > 4) {
-            //resign previous responder status
-//            [textField resignFirstResponder];
             
             //create email with the address apended to it
             textField.text = [self addEMailToString:textField.text];
@@ -362,20 +353,19 @@
         {
             [textField becomeFirstResponder];
         }
+    }//close else
+    
+    if (indexPath.row == 3) {
+//        [nameTF ]
     }
     
     
     if (indexPath.section == 1 && indexPath.row == 2) {
         
-//        // resize the UITableView back to the original size
-//        _registerTV.frame = CGRectMake(0, 0, 320, _registerTV.frame.size.height + keyboardSize.height);
-//        _registerTV.contentInset =  UIEdgeInsetsMake(0, 0, 0, 0);
-        
         //dont hard code time use duration from userInfo dict
         [UIView animateWithDuration:.3 animations:^{
-            self.registerTV.transform = CGAffineTransformMakeTranslation(0, 0);//- keyboardSize.height);//works
+            self.registerTV.transform = CGAffineTransformMakeTranslation(0, 0);//works
             
-           
 //                [_registerTV setContentOffset:scrollPoint animated:YES];
         }];
     }
@@ -394,9 +384,14 @@
     NSDictionary *adminsDict = [user adminDict];//administrator with password
     DLog(@"adminsDict: %@", adminsDict);
     
+    [_administratorArray addObject:adminsDict];
+    //write to file here also
+    [_administratorArray writeToFile:adminsPath atomically:YES];
+    DLog(@"_administratorArray: %@", _administratorArray);
+    
+    
     //Create a local array
     NSMutableArray *localUserArray = [NSMutableArray array];
-//    [localUserArray addObject:[user userInitials]];//dont need here
     [localUserArray addObject:[user userName]];
     [localUserArray addObject:[user userEMail]];
     [localUserArray addObject:[user userStaffID]];
@@ -415,7 +410,7 @@
     NSMutableArray *lettersArray = [NSMutableArray array];
     //separates the strings into separate elements in an array
     NSArray *initialsArray = [text componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    DLog(@"initialsArray: %@", initialsArray);//correct
+   
     //iterate over collection
     for (int i = 0; i < [initialsArray count]; i++ ) {
         //each word in array
@@ -435,14 +430,12 @@
     if ([lettersArray count] == 1) {
         NSString *appendedInitials = [lettersArray objectAtIndex:0];
         self.initials = appendedInitials;
-//        DLog(@"<< 1 >> self.initials: %@", self.initials);//DH
     }
     
     if ([lettersArray count] == 2) {
         NSString *initials = [lettersArray objectAtIndex:0];
         NSString *appendedInitials = [initials stringByAppendingString:[lettersArray objectAtIndex:1]];
         self.initials = appendedInitials;
-//        DLog(@"<< 2 >> self.initials: %@", self.initials);//DH
     }
     else if ([lettersArray count] >2)
     {
@@ -458,9 +451,8 @@
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     
     if([string isEqualToString:@"@"]) {
-//        DLog(@"STRING: %@", string);
-        [textField resignFirstResponder];
-        return NO;//works
+        [textField resignFirstResponder];//ah could be this causing the keyboard to call hideKeyboard notification
+        return NO;
     }
     
     return YES;
@@ -501,8 +493,8 @@
 }
 
 - (void)doneEditingPressed:(UIButton *)sender {
+    
     //set editing to NO
-//    [_registerTV setUserInteractionEnabled:NO];
     _allowEdit = NO;
     
     //call cellForRow
@@ -514,17 +506,18 @@
 
 - (void)editPressed:(UIButton *)sender {
     
-    
     DLog(@"Edit pressed");
-//    [_registerTV setEditing:YES animated:YES];//editing to YES but user Userinteraction instead
     _allowEdit = YES;
     
-    UIBarButtonItem *doneBtn = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneEditingPressed:)];
+    //call cellForRow
+    [_registerTV reloadData];
     
-    [self.navigationItem setRightBarButtonItem:doneBtn animated:YES];
+    UIBarButtonItem *doneEditingBtn = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneEditingPressed:)];
     
+    [self.navigationItem setRightBarButtonItem:doneEditingBtn animated:YES];
     
 }
+
 - (void)addPressed:(UIButton *)sender {
     //ToDo implement NSUserDefaults
     
@@ -718,7 +711,7 @@
         [nameTF setFont:[UIFont systemFontOfSize:15.0]];
         nameTF.textColor = [UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0];//blue
         //change to NO
-        [nameTF setUserInteractionEnabled:YES];//NO
+        [nameTF setUserInteractionEnabled:NO];
         
         //set textField delegate
         [nameTF setDelegate:self];
@@ -818,19 +811,12 @@
         [nameTF setAutocapitalizationType:UITextAutocapitalizationTypeNone];
         [nameTF setAutocorrectionType:UITextAutocorrectionTypeNo];
     }
-    else // Password field
-    {
-        [nameTF setUserInteractionEnabled:NO];//correct
-    }
-    
+    //if not the password field and allows editing is YES
     if (_allowEdit && indexPath.row != 3) {
         [nameTF setUserInteractionEnabled:YES];
     }
-    else
-    {
-        [nameTF setUserInteractionEnabled:NO];//dont need
-    }
-        return cell;
+    
+    return cell;
     
 }
 

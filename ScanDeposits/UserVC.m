@@ -137,7 +137,6 @@
     //retrieve the singleton for writing locally
     fileManager = [NSFileManager defaultManager];
     
-//    fullPath = [PersistenceManager getFilePath];//Documents/usersCollection.plist
     //retrieve usersCollection
     fullPath = [self getFilePathForName:@"usersCollection.plist"];//Documents/usersCollection.plist
     
@@ -165,8 +164,7 @@
                  NSMutableArray *initArray = [NSMutableArray array];
                 [initArray addObject:[[_storedArray objectAtIndex:i]objectAtIndex:0]];//extract the new user initials
                 [_displayArray insertObject:initArray atIndex:i];
-                DLog(@"initArray: %@ with index is: %i", initArray, i);
-            }
+            }//close for
             
             DLog(@"_display with initArray: %@", _displayArray);//correct
         }//close inner if
@@ -197,7 +195,7 @@
     
     //if its empty create one for returnUserModel
     if ([_usersArray count] < 1) {
-        _usersArray = [NSMutableArray array];//test
+        _usersArray = [NSMutableArray array];
     }
     DLog(@"_usersArray: %@", _usersArray);//possible viewwillAppear
     

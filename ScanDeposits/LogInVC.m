@@ -51,13 +51,13 @@
     if (_adminFieldValid) {
         //if 1 admin and 1 user still psuh to Admin settings or is that relevant?
         if ([_admins count] > 0) {
-        
-            //iterate through _users collection to check for a valid user
+            DLog(@"_password is: %@", _password);
+            //iterate through _admins collection to check for a valid admin
             for (NSDictionary *dict in _admins) {
                 NSDictionary *aAdmin = dict[_password];//think thats right
                 if ([aAdmin[@"Password"] isEqualToString:_password]) {
                     //add to packagedUsers collection
-                    [_packagedAdmins setObject:aAdmin forKey:@(1)];//now NSNumbers
+                    [_packagedAdmins setObject:aAdmin forKey:@(1)];
                     DLog(@"_packagedAdmins: %@", _packagedAdmins);
                     isAdmin = [aAdmin[@"Adminstrator"]boolValue];//should be yes dont hardcode YES allow object to control value
                     
@@ -65,10 +65,7 @@
                 
             }//close for
         
-        }//close if
-
             //ToDo create admin package
-//            [self dismissViewControllerAnimated:YES completion:^{
                 //set spinner
                 [loginBtn setEnabled:YES];
                 [loginSpinner setHidden:YES];
@@ -78,16 +75,17 @@
                 if ([self.delegate respondsToSelector:@selector(dismissLoginVC: isAdmin:)]) {
                     //dismissLoginVC
                     [self.delegate performSelector:@selector(dismissLoginVC: isAdmin:) withObject:_packagedAdmins withObject:@(isAdmin)];// -> works @(YES) but dont hardcode
-                    DLog(@"New delgate protocol implemented");
+                    DLog(@"New Admin delgate protocol implemented");
                     [self dismissViewControllerAnimated:YES completion:nil];//no completion block required
-                }
-//            }];
+                }//close if
+            
+        }//close if
         
     }//close outer if
     
     //if user 1 is valid then add to collection
     if (_userOneFieldValid) {
-        DLog(@"_userOne is: %@", _userOne);
+        
         //iterate through _users collection to check for a valid user
         if ([_users count] > 0) {
         
@@ -97,7 +95,6 @@
                 if ([aUser[@"Staff ID"] isEqualToString:_userOne]) { // -> User => StaffID CORRECT
                     //aUser is the specified user via Login textField add to collection
                     [_packagedUsers setObject:aUser forKey:@(1)];//number now associated with a user
-                    
                     isAdmin = [aUser[@"Adminstrator"]boolValue];// check this user also 
                 }//close if
                 
@@ -109,12 +106,11 @@
     
         //if valid user
         if (_userOneFieldValid && _userTwoFieldValid) {
-            
             //set spinner
             [loginBtn setEnabled:NO];
             [loginSpinner setHidden:NO];
             [loginSpinner setAlpha:1.0];
-            DLog(@"_userTwo is: %@", _userTwo);//currently nil?
+        
             if ([_users count] > 0) {
                 
                 //iterate through _users collection to check for a valid user
@@ -130,10 +126,10 @@
                 }//close for
                 
             }//close if
-            if ([_packagedUsers count] == 2) {//set to 2
+                if ([_packagedUsers count] == 2) {//set to 2
                 
-                //Its cause LoginVC is been presented again for some reason?
-                //check BOOL for _isAdmin auto calling that condition again??
+                    //Its cause LoginVC is been presented again for some reason?
+                    //check BOOL for _isAdmin auto calling that condition again??
                 
                     //set spinner
                     [loginBtn setEnabled:YES];
@@ -143,15 +139,12 @@
                     //custom delegate method call
                     if ([self.delegate respondsToSelector:@selector(dismissLoginVC: isAdmin:)]) {
                 
-                            [self.delegate performSelector:@selector(dismissLoginVC: isAdmin:) withObject:_packagedUsers withObject:@(isAdmin)];//isAdmin set to last value, dont need to worry about admin here
-                            DLog(@"Delegate users protocol implemented");
+                        [self.delegate performSelector:@selector(dismissLoginVC: isAdmin:) withObject:_packagedUsers withObject:@(isAdmin)];//isAdmin set to last value, dont need to worry about admin here
                         //now dismiss the LoginVC once the appropriate values are set in HomeVC conditions
                         [self dismissViewControllerAnimated:YES completion:nil];//no code to execute now - correct
                     }
                 
-//                    }];
-                
-            }//close if
+                }//close if
 
         }//close valid user one and two
 
@@ -213,7 +206,7 @@
         DLog(@"Control User:1 section");
         if (![textField.text isEqualToString:@""] && [textField.text length] > 3) {
             
-            //assign to _password
+            //assign to _userOne
             _userOne = textField.text;
             
             //set spinner
@@ -238,7 +231,7 @@
         DLog(@"Control User:2 section");
         if (![textField.text isEqualToString:@""] && [textField.text length] > 3) {
             
-            //assign to _password
+            //assign to _userTwo
             _userTwo = textField.text;
             
             //set spinner
@@ -293,7 +286,7 @@
     [_loginTV setBackgroundView:imgView];
     
     fileManager = [NSFileManager defaultManager];
-    
+    //user settings
     if (![fileManager fileExistsAtPath:[self getFilePathForName:@"users.plist"]]) {
         
         NSString *sourcePath = [[NSBundle mainBundle]pathForResource:@"users" ofType:@".plist"];
@@ -304,21 +297,23 @@
         //ToDo load array from file
         _users = [NSMutableArray arrayWithContentsOfFile:[self getFilePathForName:@"users.plist"]];
 
-    DLog(@"_users: %@", _users);//correct
+//    DLog(@"_users: %@", _users);//correct
     
-    
+    //Administrator setting
     if (![fileManager fileExistsAtPath:[self getFilePathForName:@"admins.plist"]]) {
         
         NSString *sourcePath = [[NSBundle mainBundle]pathForResource:@"admins" ofType:@".plist"];
         [fileManager copyItemAtPath:sourcePath toPath:[self getFilePathForName:@"admins.plist"] error:nil];
     }//close if
 
-//    if (_admins) {
-        //load array from file
+        //load array from file -> NOTE: dont add max is 2 administrators
         _admins = [NSMutableArray arrayWithContentsOfFile:[self getFilePathForName:@"admins.plist"]];
-//    }
-    DLog(@"_admins: %@", _admins);//correct -> empty at the moment as still under construction
     
+    DLog(@"_admins collection: %@", _admins);//correct -> empty at the moment as still under construction
+    if ([_admins count] < 1) {
+        DLog(@"if empty construct an array: %@", _admins);
+        _admins = [NSMutableArray array];
+    }
     
     //create packagedUsersDict
     _packagedUsers = [NSMutableDictionary dictionary];

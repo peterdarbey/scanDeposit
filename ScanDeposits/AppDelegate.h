@@ -12,7 +12,5 @@
 
 @property (strong, nonatomic) UIWindow *window;
 
-//add bagCount here
-@property int totalBagCount;
 
 @end

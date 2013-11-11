@@ -49,10 +49,6 @@ static BOOL __isAdmin;
         _adminDict = @{_password : dict};
         DLog(@"<< _adminDict >>: %@", _adminDict);//admin is password
     }
-//    else //not admin so set to nil
-//    {
-//        _password = @"Not Authorized";
-//    }
     
     //if not administrator construct with staffID
     if (!__isAdmin && dict) {
@@ -75,7 +71,7 @@ static BOOL __isAdmin;
     if (self) {
         //construct a dict
         NSDictionary *dict = @{@"Name" : name, @"Email" : eMail,
-                               @"Staff ID" : staffId, @"Initials" : initials, @"Adminstrator" : [NSNumber numberWithBool:isAdmin], @"Password" : password};//@(NO)};test <- //@YES
+                               @"Staff ID" : staffId, @"Initials" : initials, @"Adminstrator" : @(isAdmin), @"Password" : password};//@(NO)};test <- [NSNumber numberWithBool:isAdmin]
         
         
         [self commonInit:dict];

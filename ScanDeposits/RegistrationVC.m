@@ -371,18 +371,20 @@
 //        _registerTV.frame = CGRectMake(0, 0, 320, _registerTV.frame.size.height + keyboardSize.height);
 //        _registerTV.contentInset =  UIEdgeInsetsMake(0, 0, 0, 0);
         
+        //dont hard code time use duration from userInfo dict
         [UIView animateWithDuration:.3 animations:^{
             self.registerTV.transform = CGAffineTransformMakeTranslation(0, 0);//- keyboardSize.height);//works
             
-            //                CGPoint scrollPoint = CGPointMake(0, 0);//0 - 216
-            //                [_registerTV setContentOffset:scrollPoint animated:YES];
+           
+//                [_registerTV setContentOffset:scrollPoint animated:YES];
         }];
     }
 
 
 }
-//factory method
+//factory method -> auto sets admin = YES
 - (void)createUserFactory {
+    //Auto set here that they are ADMINs because of context they are in i.e. Admins settings
     
     User *user = [[User alloc]initWithName:_name eMail:_eMail
                                    staffID:_staffID Initials:_initials

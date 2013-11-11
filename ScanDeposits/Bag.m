@@ -777,6 +777,40 @@
 
     
     
+    //            //iterate through _users collection to check for a valid user
+    //            for (NSDictionary *dict in _admins) {
+    //                NSDictionary *aAdmin = dict[textField.text];
+    //                if ([aAdmin[@"Password"] isEqualToString:textField.text]) {
+    //                    //add to packagedUsers collection
+    //                    [_packagedAdmins setObject:aAdmin forKey:@(1)];//now NSNumbers
+    //                    DLog(@"_packagedAdmins: %@", _packagedAdmins);
+    //                    _adminValid = YES;//aAdmin[@"Passsword"];
+    //                }//close if
+    //
+    //            }//close for
+    //
+    //            //if valid administrator
+    //            if (_adminValid) {
+    //
+    //                //set spinner
+    //                [loginBtn setEnabled:YES];
+    //                [loginSpinner setHidden:YES];
+    //                [loginSpinner setAlpha:0.0];
+    //
+    //                //ToDo create admin package
+    //                [self dismissViewControllerAnimated:YES completion:^{
+    //                    [textField resignFirstResponder];
+    //                    //different custom delegate method call
+    //                    if ([self.delegate respondsToSelector:@selector(dismissLoginVC: isAdmin:)]) {
+    //                        //dismissLoginVC
+    //                        [self.delegate performSelector:@selector(dismissLoginVC: isAdmin:) withObject:_packagedAdmins withObject:@(YES)];
+    //                        DLog(@"New delgate protocol implemented");
+    //                    }
+    //                }];
+    //            }//close if
+
+    
+    
 }
 
 @end

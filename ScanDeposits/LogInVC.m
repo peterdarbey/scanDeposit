@@ -40,15 +40,17 @@
 
 - (void)loginPressed:(UIButton *)sender {
     
+    BOOL __block isAdmin;// -> flag for HomeVC view presentation
+    
     //set spinner
     [loginBtn setEnabled:NO];
     [loginSpinner setHidden:NO];
     [loginSpinner setAlpha:1.0];
     
     //if valid administrator
-    if (_adminValid) {
-        
-        if ([_users count] > 0) {
+    if (_adminFieldValid) {
+        //if 1 admin and 1 user still psuh to Admin settings or is that relevant?
+        if ([_admins count] > 0) {
         
             //iterate through _users collection to check for a valid user
             for (NSDictionary *dict in _admins) {
@@ -57,7 +59,8 @@
                     //add to packagedUsers collection
                     [_packagedAdmins setObject:aAdmin forKey:@(1)];//now NSNumbers
                     DLog(@"_packagedAdmins: %@", _packagedAdmins);
-                    _adminValid = YES;//aAdmin[@"Passsword"];
+                    isAdmin = [aAdmin[@"Adminstrator"]boolValue];//should be yes dont hardcode YES allow object to control value
+                    
                 }//close if
                 
             }//close for
@@ -74,7 +77,7 @@
                 //different custom delegate method call
                 if ([self.delegate respondsToSelector:@selector(dismissLoginVC: isAdmin:)]) {
                     //dismissLoginVC
-                    [self.delegate performSelector:@selector(dismissLoginVC: isAdmin:) withObject:_packagedAdmins withObject:@(YES)];//@(YES) -> works
+                    [self.delegate performSelector:@selector(dismissLoginVC: isAdmin:) withObject:_packagedAdmins withObject:@(isAdmin)];// -> works @(YES) but dont hardcode
                     DLog(@"New delgate protocol implemented");
                 }
             }];
@@ -83,19 +86,19 @@
     }//close outer if
     
     //if user 1 is valid then add to collection
-    if (_userOneValid) {
-        DLog(@"_userOne is: %@", _userOne);//currently nil?
+    if (_userOneFieldValid) {
+        DLog(@"_userOne is: %@", _userOne);
         //iterate through _users collection to check for a valid user
         if ([_users count] > 0) {
         
             for (NSDictionary *dict in _users) {
                 NSDictionary *aUser = dict[_userOne];
-                //if a reg user exists for the textField entry perform some operation
+                //check user exists and allow entry to app -> also check is admin
                 if ([aUser[@"Staff ID"] isEqualToString:_userOne]) { // -> User => StaffID CORRECT
                     //aUser is the specified user via Login textField add to collection
                     [_packagedUsers setObject:aUser forKey:@(1)];//number now associated with a user
                     DLog(@"_packagedUsers: %@", _packagedUsers);
-                    _userOneValid = YES;
+                    isAdmin = [aUser[@"Adminstrator"]boolValue];// check this user also 
                 }//close if
                 
             }//close for
@@ -105,7 +108,7 @@
     }//close if
     
         //if valid user
-        if (_userOneValid && _userTwoValid) {
+        if (_userOneFieldValid && _userTwoFieldValid) {
             
             //set spinner
             [loginBtn setEnabled:NO];
@@ -116,12 +119,12 @@
                 
                 //iterate through _users collection to check for a valid user
                 for (NSDictionary *dict in _users) {
-                    NSDictionary *aUser = dict[_userTwo];
+                    NSDictionary *aUser = dict[_userTwo];//objectForKey:@"textField.text"]//extract user by staffID
                     if ([aUser[@"Staff ID"] isEqualToString:_userTwo]) {
                         //add to packagedUsers collection
                         [_packagedUsers setObject:aUser forKey:@(2)];//now NSNumbers -> correct
                         DLog(@"_packagedUsers: %@", _packagedUsers);
-                        _userTwoValid = YES;
+                        isAdmin = [aUser[@"Adminstrator"]boolValue];// -> should be NO also to allow admin to use app as user else it would bring to admin settings
                     }//close if
                     
                 }//close for
@@ -130,8 +133,10 @@
                 if ([_packagedUsers count] == 2) {//set to 2
                     //we have two reg logged in users so set a BOOL and dismiss modal
                     
-                    [self dismissViewControllerAnimated:YES completion:^{
-                        
+                    //Its cause LoginVC is been presented again for some reason?
+                    //check BOOL for _isAdmin auto calling that condition again??
+                    [self dismissViewControllerAnimated:NO completion:^{ //was YES
+                    
                         //set spinner
                         [loginBtn setEnabled:YES];
                         [loginSpinner setHidden:YES];
@@ -140,8 +145,8 @@
                         //custom delegate method call
                         if ([self.delegate respondsToSelector:@selector(dismissLoginVC: isAdmin:)]) {
                             //dismissLoginVC
-                            [self.delegate performSelector:@selector(dismissLoginVC: isAdmin:) withObject:_packagedUsers withObject:@(NO)];//?
-                            DLog(@"New delegate protocol implemented");
+                            [self.delegate performSelector:@selector(dismissLoginVC: isAdmin:) withObject:_packagedUsers withObject:@(isAdmin)];// dont hardcode NO -> isAdminb set to last value, dont need to worry about admin here
+                            DLog(@"Delegate users protocol implemented");
                         }
                     }];
                     
@@ -178,11 +183,10 @@
     
     //ADMIN ONLY
     if (indexPath.section == 0) {
-        DLog(@"Administrator section");
-        //set spinner
+        DLog(@"<< Administrator section >>");
+        
         //[loginBtn setEnabled:NO];
         if (![textField.text isEqualToString:@""] && [textField.text length] > 3) {
-            
             //assign to _password
             _password = textField.text;
             
@@ -191,42 +195,9 @@
 //            [loginSpinner setHidden:NO];
 //            [loginSpinner setAlpha:1.0];
             
-            _adminValid = YES;
+            _adminFieldValid = YES;
             
             [textField resignFirstResponder];
-            
-            
-//            //iterate through _users collection to check for a valid user
-//            for (NSDictionary *dict in _admins) {
-//                NSDictionary *aAdmin = dict[textField.text];
-//                if ([aAdmin[@"Password"] isEqualToString:textField.text]) {
-//                    //add to packagedUsers collection
-//                    [_packagedAdmins setObject:aAdmin forKey:@(1)];//now NSNumbers
-//                    DLog(@"_packagedAdmins: %@", _packagedAdmins);
-//                    _adminValid = YES;//aAdmin[@"Passsword"];
-//                }//close if
-//                
-//            }//close for
-//            
-//            //if valid administrator
-//            if (_adminValid) {
-//                
-//                //set spinner
-//                [loginBtn setEnabled:YES];
-//                [loginSpinner setHidden:YES];
-//                [loginSpinner setAlpha:0.0];
-//                
-//                //ToDo create admin package
-//                [self dismissViewControllerAnimated:YES completion:^{
-//                    [textField resignFirstResponder];
-//                    //different custom delegate method call
-//                    if ([self.delegate respondsToSelector:@selector(dismissLoginVC: isAdmin:)]) {
-//                        //dismissLoginVC
-//                        [self.delegate performSelector:@selector(dismissLoginVC: isAdmin:) withObject:_packagedAdmins withObject:@(YES)];
-//                        DLog(@"New delgate protocol implemented");
-//                    }
-//                }];
-//            }//close if
             
         }//close if
         else
@@ -246,7 +217,7 @@
             
             //set spinner
             [loginBtn setEnabled:YES];
-            _userOneValid = YES;
+            _userOneFieldValid = YES;
             
             //get next TextField
             nextTF = [self returnNextTextField:textField];
@@ -271,7 +242,7 @@
             
             //set spinner
             [loginBtn setEnabled:YES];
-            _userTwoValid = YES;
+            _userTwoFieldValid = YES;
             //last textField so resign TextField as its also valid
             [textField resignFirstResponder];
             

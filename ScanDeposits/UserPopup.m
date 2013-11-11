@@ -198,8 +198,9 @@
         DLog(@"Enter create User model conditional");
         //Not right place for User model init
         
-        DLog(@"_popupTV.staffID: %@", _popupTV.staffID);//test this value
-        
+        //NOTE users admin property set to = NO
+        //NOTE: could check user key isAdmin and determine here if admin as user and allow login auto for user
+        //if I did that though they couldnt use app 
         //create user model set NO as default for isAdmin and pass back to the UserVC
         User *user = [[User alloc]initWithName:_popupTV.name eMail:_popupTV.eMail
                                        staffID:_popupTV.staffID Initials:_popupTV.initials isAdmin:NO withPassword:@"Not Authorized"];//was nil -> fixed

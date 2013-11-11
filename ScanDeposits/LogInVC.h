@@ -40,9 +40,9 @@
 
 @property (weak, nonatomic) id <DismissLoginWithValidationDelegate> delegate;
 
-@property BOOL adminValid;
-@property BOOL userOneValid;
-@property BOOL userTwoValid;
+@property BOOL adminFieldValid;
+@property BOOL userOneFieldValid;
+@property BOOL userTwoFieldValid;
 
 
 @end

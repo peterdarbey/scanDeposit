@@ -30,9 +30,10 @@
 #pragma mark - Custom delegate method for LoginVC
 - (void)dismissLoginVC:(NSMutableDictionary *)users isAdmin:(BOOL)admin {
     
+    DLog(@"admin passed by dimissLoginVC method: %d", admin); // -> should be NO ??
     //NOTE: Logout button required?
     if (admin) {//went in here why?
-        DLog(@"is ADMIN: %@", users);//is dictionary
+        DLog(@"is ADMIN: %@", users);//is dictionary -> wrong Not ADMIN ? and causing LoginVC to present again
         
         _isAdmin = admin;//have to check the consitencey though of UInavigationController etc..
        
@@ -63,7 +64,8 @@
 - (void)cancelScansPressed:(UIButton *)sender {
     
     DLog(@"Dismiss picker from new barButtonItem");
-    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+//    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+     [self dismissViewControllerAnimated:YES completion:nil];
     
 }
 
@@ -205,6 +207,7 @@
     
     //removed hardcoded values for admin and user
 //    _isAdmin = YES; //YES for now
+    DLog(@"_isAdmin: %d", _isAdmin);
     
     //if Administrator (filled in password so admin) go to RegistrationVC / Administrator Settings
     if (_isAdmin) {
@@ -213,29 +216,44 @@
         UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:registerVC];
         [navController.navigationBar setBarStyle:UIBarStyleBlackTranslucent];
         
-        //changed to NO and unbalanced calls stopped
-        [self presentViewController:navController animated:NO completion:^{
-            [registerVC setModalPresentationStyle:UIModalPresentationFullScreen];
-            [registerVC setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
-            [registerVC setTitle:NSLocalizedString(@"Admin Settings", @"Adminstrator Settings")];
-        }];
+        //Add delay to presentation of LoginVC until HomeVC has appeared first
+        double delayInSeconds = 0.25;
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        
+            //Delay added has resolved the issue with the unbalanced calls to navController
+            [self presentViewController:navController animated:YES completion:^{
+                [registerVC setModalPresentationStyle:UIModalPresentationFullScreen];
+                [registerVC setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
+                [registerVC setTitle:NSLocalizedString(@"Admin Settings", @"Adminstrator Settings")];
+            }];
+            
+        });//close dispatch block
         
     }
     //not administrator or a reg user
-    else if (!_isAdmin && !_isUser) {
+    else if (!_isAdmin && !_isUser) { //isAdmin = NO and isUser = NO
         
         LogInVC *loginVC = [self.storyboard instantiateViewControllerWithIdentifier:@"LogInVC"];
         
         UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:loginVC];
         
-        [self presentViewController:navController animated:NO completion:^{
-            //ToDo add some functionality here
-            [loginVC setModalPresentationStyle:UIModalPresentationFullScreen];
-            [loginVC setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
-            [loginVC setTitle:NSLocalizedString(@"Log In", @"Log In")];
-            //set the HomeVC as the delegate for the LoginVC dismissLoginVCWithValidation
-            [loginVC setDelegate:self];
-        }];
+        //Add delay to presentation of LoginVC until HomeVC has appeared first
+        double delayInSeconds = 0.25;
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+            
+            //HomeVC been by another NavController when we dismiss the LoginVC? -> solved
+            [self presentViewController:navController animated:YES completion:^{
+                //ToDo add some functionality here
+                [loginVC setModalPresentationStyle:UIModalPresentationFullScreen];
+                [loginVC setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
+                [loginVC setTitle:NSLocalizedString(@"Log In", @"Log In")];
+                //set the HomeVC as the delegate for the LoginVC dismissLoginVCWithValidation
+                [loginVC setDelegate:self];
+            }];
+            
+        });//close dispatch block
         
         
     }
@@ -396,7 +414,7 @@
     
     DLog(@"status dictionary: %@", status);
 //    [picker.overlayController searchBarTextDidEndEditing:picker.overlayController];
-    [self.navigationController dismissViewControllerAnimated:YES completion:^{
+    [self dismissViewControllerAnimated:YES completion:^{
         [picker stopScanning];//why cancel
     }];
 }

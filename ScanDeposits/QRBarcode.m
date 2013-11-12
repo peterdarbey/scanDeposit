@@ -34,7 +34,7 @@
     _safeID = [dict[@"Safe ID"]intValue];//retrieve int value
     _device = dict[@"Device"];
     
-    _internalDict = dict;
+    _internalDict = dict; //5 entries
     
 }
 

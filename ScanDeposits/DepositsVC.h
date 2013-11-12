@@ -32,6 +32,9 @@
 
 @property (strong, nonatomic) NSMutableDictionary *usersDict;
 @property (strong, nonatomic) NSMutableDictionary *adminsDict;
+//QRBarcode model can be added to the DepositVC straight away as its a 1 of scan
+@property (strong, nonatomic) NSMutableArray *QRArray;
+
 //@property int depositCount;
 
 @end

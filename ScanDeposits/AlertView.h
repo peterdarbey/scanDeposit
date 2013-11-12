@@ -32,7 +32,15 @@
 @property BOOL confirmed;//ivar so is NO by default
 
 @property (weak, nonatomic) IBOutlet UIView *zoneBackground;
-@property (weak, nonatomic) IBOutlet UILabel *barcodeString;
+//@property (weak, nonatomic) IBOutlet UILabel *barcodeString;
+
+@property (strong, nonatomic) IBOutlet UILabel *symbologyLbl;
+@property (strong, nonatomic) IBOutlet UILabel *branchLbl;
+
+@property (strong, nonatomic) IBOutlet UILabel *processLbl;
+@property (strong, nonatomic) IBOutlet UILabel *safeIDLbl;
+
+
 @property (weak, nonatomic) IBOutlet UIButton *cancelBtn;
 @property (weak, nonatomic) IBOutlet UIButton *saveBtn;
 @property (strong, nonatomic) IBOutlet UIImageView *imagePlaceHolder;

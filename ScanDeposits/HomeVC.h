@@ -35,6 +35,7 @@
     NSNotificationCenter *notificationCenter;
     UIButton *scanDeviceBtn, *scanBagBtn;
     UIBarButtonItem *barBtnFinished;
+
 }
 
 @property (strong, nonatomic) NSMutableArray *array;

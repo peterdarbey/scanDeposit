@@ -108,6 +108,8 @@
             DepositsVC *depositsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"DepositsVC"];
             depositsVC.title = NSLocalizedString(@"Deposits", @"Deposits View");
             depositsVC.depositsCollection = _depositsArray;//bag data
+            depositsVC.QRArray = _barcodeArray; //may need a condition here before adding check
+            
             //package off logged in users/admins data
             if (_validUsersDict) {
                 depositsVC.usersDict = _validUsersDict;
@@ -476,7 +478,7 @@
     dateString = [self formatMyDateString];
     DLog(@"<< dateString >>: %@", dateString);//current 24 Hr format: 12/11/2013 11:46
     
-    DLog(@"barcodeResult*****: %@", barcodeResult);
+    DLog(@"barcodeResult*****: %@", barcodeResult);//if this "http://www.5staroffice.com" will crash
     
     //its a NSString so cant use objectForKey
      NSString *barcodeString = barcodeResult[@"barcode"];
@@ -486,6 +488,7 @@
     NSString *barcodeType = (NSString *)barcodeResult[@"symbology"];
     
     
+    NSDictionary *barcode;
     //conditionals to extract/process the type of barcode scanned i.e. QR or 128
     //if scan QR barcode
     //Hard code YES here
@@ -495,15 +498,23 @@
         DLog(@"barcodeType: %@", barcodeType);//QR - correct
         
         //parses a barcode string and creates a dictionary
-        NSDictionary *barcode = [self parseBarcodeFromString:barcodeString];
+        barcode = [self parseBarcodeFromString:barcodeString];
         DLog(@"barcodeDict: %@", barcode);
         
 //        Barcode *barcode = [Barcode instanceFromDictionary:barcodeDict];
         
+        // -> crashed here for regular QR code
+        if ([barcode count] >= 3) {//differ count than model
+        
         //External device
         //Now parsed correctly proceed with the new QRBarcode model constructor
-        _qrBarcode = [[QRBarcode alloc]initBarcodeWithType:barcodeType branch:barcode[@"Branch NSC"] process:barcode[@"Process"] safeID:[barcode[@"Safe ID"]intValue] andDevice:@"UnKnown"];
+        _qrBarcode = [[QRBarcode alloc]initBarcodeWithType:barcodeType branch:barcode[@"Branch NSC"] process:barcode[@"Process"] safeID:[barcode[@"Safe ID"]intValue] andDevice:@"UnKnown"];//what the Safe ID rounds off int
+            //Add to barcodeArray collection
+            [_barcodeArray addObject:_qrBarcode];
+            
+        }//close if
         
+        //ToDo add _qrBarcode to array if need be and some processing involved for conditional statements
         
         
         
@@ -514,16 +525,20 @@
     {
         DLog(@"barcodeType: %@", barcodeType);//128 - correct
         
+        if ([barcode count] >= 3) {
+            
+            
+        }
         
     }
     
     
-
-    //NOTE: Model not correct yet needs to be parsed 1st
-    Barcode *barcodeObject = [Barcode instanceFromDictionary:barcodeResult];//will need custom initWith method
-    //Add to collection
-    [_barcodeArray addObject:barcodeObject];
-    DLog(@"barcode from model>>>>>>>>: %@", [barcodeObject barcodeData]);
+        //OLD code
+//    //NOTE: Model not correct yet needs to be parsed 1st
+//    Barcode *barcodeObject = [Barcode instanceFromDictionary:barcodeResult];//will need custom initWith method
+//    //Add to collection
+//    [_barcodeArray addObject:barcodeObject];
+//    DLog(@"barcode from model>>>>>>>>: %@", [barcodeObject barcodeData]);
     
     
     
@@ -532,18 +547,35 @@
     [picker stopScanning];
 
     //Create a custom Alert -> AlertView.xib
-    [self showPopup:[barcodeObject barcodeData]];
+    [self showPopup:barcode];
 }
 
--(void)showPopup:(NSString *)barcode {
+-(void)showPopup:(NSDictionary *)barcode {
     //Create a custom Alert -> AlertView.xib
     AlertView *popup = [AlertView loadFromNibNamed:@"AlertView"];
     //Add custom delegate method here to restart picker scanning
     [popup setDelegate:self];
     //pass the time
     popup.timeString = dateString;//not very OO
-    //set the barcode text
-    popup.barcodeString.text = [NSString stringWithFormat:@"%@", barcode];
+    
+    if ([barcode count] >= 3) { //add && barcodeType isEqualToString:QR
+        
+        //populate the QR barcode popup
+        popup.symbologyLbl.text = [NSString stringWithFormat:@"Symbology: %@", [_qrBarcode barcodeSymbology]];
+        popup.branchLbl.text = [NSString stringWithFormat:@"Branch: %@", [_qrBarcode barcodeBranch]];
+        popup.processLbl.text = [NSString stringWithFormat:@"Process: %@", [_qrBarcode barcodeProcess]];
+        popup.safeIDLbl.text = [NSString stringWithFormat:@"Safe ID: %2i", [_qrBarcode barcodeSafeID]];
+        
+    }
+    else
+    {
+        //populate the QR barcode popup
+        popup.symbologyLbl.text = [NSString stringWithFormat:@"Symbology: Not available"];
+        popup.branchLbl.text = [NSString stringWithFormat:@"Branch: Not available"];
+        popup.processLbl.text = [NSString stringWithFormat:@"Process: Not available"];
+        popup.safeIDLbl.text = [NSString stringWithFormat:@"Safe ID: Not available"];
+    }
+    
     [popup showOnView:picker.view];
 }
 
@@ -568,7 +600,7 @@
     [_barcodeArray addObject:barcodeObject];
     
     //Create a custom Alert -> AlertView.xib
-    [self showPopup:[barcodeObject barcodeData]];
+    [self showPopup:manualDict];//TEMP
     
 //    //Create a custom Alert -> AlertView.xib
 //    AlertView *popup = [AlertView loadFromNibNamed:@"AlertView"];

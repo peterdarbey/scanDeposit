@@ -18,25 +18,42 @@
                 <view contentMode="scaleToFill" id="116" userLabel="View - Zone Background">
                     <rect key="frame" x="8" y="57" width="244" height="52"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                    <subviews>
-                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Barcode here" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" id="224">
-                            <rect key="frame" x="0.0" y="0.0" width="244" height="50"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                            <color key="highlightedColor" red="0.0" green="0.56862745100000001" blue="0.82352941180000006" alpha="1" colorSpace="calibratedRGB"/>
-                            <color key="shadowColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            <size key="shadowOffset" width="0.0" height="1"/>
-                        </label>
-                    </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </view>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Barcode is" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="81">
-                    <rect key="frame" x="8" y="28" width="244" height="36"/>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Symbology" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="81">
+                    <rect key="frame" x="10" y="25" width="244" height="25"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <color key="textColor" red="0.23529411759999999" green="0.31372549020000001" blue="0.37254901959999998" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                    <color key="shadowColor" red="0.96078431369999995" green="0.97254901959999995" blue="0.98039215690000003" alpha="1" colorSpace="calibratedRGB"/>
+                    <size key="shadowOffset" width="0.0" height="1"/>
+                </label>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Branch" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" id="224">
+                    <rect key="frame" x="10" y="45" width="244" height="25"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <color key="textColor" red="0.23529411764705882" green="0.31372549019607843" blue="0.37254901960784315" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="highlightedColor" red="0.0" green="0.56862745100000001" blue="0.82352941180000006" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="shadowColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <size key="shadowOffset" width="0.0" height="1"/>
+                </label>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Process" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="y9Z-2s-jcI">
+                    <rect key="frame" x="10" y="65" width="244" height="25"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <color key="textColor" red="0.23529411764705882" green="0.31372549019607843" blue="0.37254901960784315" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                    <color key="shadowColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                    <size key="shadowOffset" width="0.0" height="1"/>
+                </label>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Safe ID" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ebo-hU-9AH">
+                    <rect key="frame" x="10" y="85" width="244" height="25"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <color key="textColor" red="0.23529411759999999" green="0.31372549020000001" blue="0.37254901959999998" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
-                    <color key="shadowColor" red="0.96078431369999995" green="0.97254901959999995" blue="0.98039215690000003" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="shadowColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                     <size key="shadowOffset" width="0.0" height="1"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="127">
@@ -65,16 +82,16 @@
                     </state>
                 </button>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Barcode recognised" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="15">
-                    <rect key="frame" x="0.0" y="6" width="260" height="21"/>
+                    <rect key="frame" x="0.0" y="5" width="260" height="21"/>
                     <autoresizingMask key="autoresizingMask"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <color key="textColor" red="0.23529411759999999" green="0.31372549020000001" blue="0.37254901959999998" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                     <color key="shadowColor" red="0.96078431369999995" green="0.97254901959999995" blue="0.98039215690000003" alpha="1" colorSpace="calibratedRGB"/>
                     <size key="shadowOffset" width="0.0" height="1"/>
                 </label>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter amount" textAlignment="center" clearsOnBeginEditing="YES" minimumFontSize="17" id="15J-zA-yZy">
-                    <rect key="frame" x="20" y="105" width="220" height="30"/>
+                    <rect key="frame" x="20" y="107" width="220" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                     <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="namePhonePad" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
@@ -85,11 +102,14 @@
                 <accessibilityTraits key="traits" none="YES" image="YES"/>
             </accessibility>
             <connections>
-                <outlet property="barcodeString" destination="224" id="2Gx-46-lOY"/>
+                <outlet property="branchLbl" destination="224" id="q2X-5W-fqg"/>
                 <outlet property="cancelBtn" destination="130" id="gIJ-qR-A6b"/>
                 <outlet property="imagePlaceHolder" destination="Qo9-yN-Urh" id="DZc-r4-rWH"/>
                 <outlet property="inputAmountTF" destination="15J-zA-yZy" id="cbs-dF-i86"/>
+                <outlet property="processLbl" destination="y9Z-2s-jcI" id="YaC-XQ-05U"/>
+                <outlet property="safeIDLbl" destination="ebo-hU-9AH" id="Lzt-L4-S4q"/>
                 <outlet property="saveBtn" destination="127" id="vx0-TG-5TC"/>
+                <outlet property="symbologyLbl" destination="81" id="F3P-3o-Fih"/>
                 <outlet property="zoneBackground" destination="116" id="223"/>
             </connections>
         </view>

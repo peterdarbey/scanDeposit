@@ -22,6 +22,8 @@
 
 #import "LogInVC.h"
 
+//#define kScanditSDKAppKey @"KJpKMq+6EeGFMRBVrjSCgiia2gavuhHhm6SvQEFkLzs" -> scanRedeem
+
 
 #define kScanditSDKAppKey @"4w8vXjD2EeOZw8u2pkkjQH4S+hfplxDDtzKnte2lX4s"
 
@@ -29,7 +31,7 @@
 {
     NSString *dateString;//not very OO
     NSNotificationCenter *notificationCenter;
-    UIButton *scanBtn;
+    UIButton *scanDeviceBtn, *scanBagBtn;
     UIBarButtonItem *barBtnFinished;
 }
 
@@ -41,5 +43,7 @@
 @property (strong, nonatomic) NSMutableArray *depositsArray;
 @property BOOL isAdmin;
 @property BOOL isUser;
+//could be a enum
+@property BOOL scanModeIsDevice;
 
 @end

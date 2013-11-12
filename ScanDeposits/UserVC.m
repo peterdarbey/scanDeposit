@@ -284,6 +284,17 @@
     
 }
 
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if( indexPath.row == 0 ) {
+        if ([tableView numberOfRowsInSection:indexPath.section] == 1) {
+            cell.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"singleCell.png"]];
+            cell.selectedBackgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"singleCellSelected.png"]];
+        }
+    }
+    
+}
+
 
 //not called
 - (void)viewWillAppear:(BOOL)animated {
@@ -513,7 +524,7 @@
     
         if ([_displayArray count] >= 1) {//was _dataSource
             
-            if (indexPath.row == 0) {
+            if (indexPath.row == 0) {// && [_userTV numberOfRowsInSection:indexPath.section] == 1) {
                 
                 //retrieve the properties
 //                userNameTF = (UITextField *)[cell.contentView viewWithTag:USER_NAME_TF];
@@ -524,14 +535,16 @@
 //                [userNameLbl setFrame:CGRectMake(110, cell.bounds.size.height/4, 70 , 25)];
 //                [userNameLbl setBackgroundColor:[UIColor orangeColor]];//test
                 
-                cell.backgroundColor = [UIColor colorWithRed:210.0/255.0 green:210.0/255.0 blue:210.0/255.0 alpha:1.0];//light white
-                cell.imageView.image = [UIImage imageNamed:@"rightArrow.png"];//add resource
+//                cell.backgroundColor = [UIColor colorWithRed:210.0/255.0 green:210.0/255.0 blue:210.0/255.0 alpha:1.0];//light white
+                
+//                cell.imageView.image = [UIImage imageNamed:@"rightArrow.png"];//add resource
+                
                 
             }
             else
             {
                 cell.backgroundColor = [UIColor whiteColor];
-                cell.imageView.image = nil;
+//                cell.imageView.image = nil;
             }
         }//close if
     

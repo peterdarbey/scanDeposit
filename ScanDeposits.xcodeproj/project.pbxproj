@@ -77,6 +77,20 @@
 		BF922120182279340084DCA0 /* PersistenceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BF92211F182279340084DCA0 /* PersistenceManager.m */; };
 		BF92212318227AEC0084DCA0 /* usersCollection.plist in Resources */ = {isa = PBXBuildFile; fileRef = BF92212218227AEC0084DCA0 /* usersCollection.plist */; };
 		BF92212518280EB20084DCA0 /* adminsCollection.plist in Resources */ = {isa = PBXBuildFile; fileRef = BF92212418280EB20084DCA0 /* adminsCollection.plist */; };
+		BF99DD3F1832283400183FE2 /* greenButton.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DD3B1832283400183FE2 /* greenButton.png */; };
+		BF99DD401832283400183FE2 /* greenButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DD3C1832283400183FE2 /* greenButton@2x.png */; };
+		BF99DD411832283400183FE2 /* greenButtonSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DD3D1832283400183FE2 /* greenButtonSelected.png */; };
+		BF99DD421832283400183FE2 /* greenButtonSelected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DD3E1832283400183FE2 /* greenButtonSelected@2x.png */; };
+		BF99DD451832285400183FE2 /* whiteCell.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DD431832285400183FE2 /* whiteCell.png */; };
+		BF99DD461832285400183FE2 /* whiteCell@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DD441832285400183FE2 /* whiteCell@2x.png */; };
+		BF99DD4B1832286600183FE2 /* singleCell.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DD471832286600183FE2 /* singleCell.png */; };
+		BF99DD4C1832286600183FE2 /* singleCell@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DD481832286600183FE2 /* singleCell@2x.png */; };
+		BF99DD4D1832286600183FE2 /* singleCellSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DD491832286600183FE2 /* singleCellSelected.png */; };
+		BF99DD4E1832286600183FE2 /* singleCellSelected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DD4A1832286600183FE2 /* singleCellSelected@2x.png */; };
+		BF99DD511832287900183FE2 /* rightArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DD4F1832287900183FE2 /* rightArrow.png */; };
+		BF99DD521832287900183FE2 /* rightArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DD501832287900183FE2 /* rightArrow@2x.png */; };
+		BF99DD551832288100183FE2 /* accountIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DD531832288100183FE2 /* accountIcon.png */; };
+		BF99DD561832288100183FE2 /* accountIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DD541832288100183FE2 /* accountIcon@2x.png */; };
 		BF9B6D4818290F8300BC0E13 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF9B6D4718290F8300BC0E13 /* MessageUI.framework */; };
 		BF9B6D9E182AA03A00BC0E13 /* users.plist in Resources */ = {isa = PBXBuildFile; fileRef = BF9B6D9D182AA03A00BC0E13 /* users.plist */; };
 		BF9B6DA1182AA34600BC0E13 /* LogInVC.m in Sources */ = {isa = PBXBuildFile; fileRef = BF9B6DA0182AA34600BC0E13 /* LogInVC.m */; };
@@ -183,6 +197,20 @@
 		BF92211F182279340084DCA0 /* PersistenceManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersistenceManager.m; sourceTree = "<group>"; };
 		BF92212218227AEC0084DCA0 /* usersCollection.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = usersCollection.plist; sourceTree = "<group>"; };
 		BF92212418280EB20084DCA0 /* adminsCollection.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = adminsCollection.plist; sourceTree = "<group>"; };
+		BF99DD3B1832283400183FE2 /* greenButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = greenButton.png; sourceTree = "<group>"; };
+		BF99DD3C1832283400183FE2 /* greenButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "greenButton@2x.png"; sourceTree = "<group>"; };
+		BF99DD3D1832283400183FE2 /* greenButtonSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = greenButtonSelected.png; sourceTree = "<group>"; };
+		BF99DD3E1832283400183FE2 /* greenButtonSelected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "greenButtonSelected@2x.png"; sourceTree = "<group>"; };
+		BF99DD431832285400183FE2 /* whiteCell.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = whiteCell.png; sourceTree = "<group>"; };
+		BF99DD441832285400183FE2 /* whiteCell@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "whiteCell@2x.png"; sourceTree = "<group>"; };
+		BF99DD471832286600183FE2 /* singleCell.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = singleCell.png; sourceTree = "<group>"; };
+		BF99DD481832286600183FE2 /* singleCell@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "singleCell@2x.png"; sourceTree = "<group>"; };
+		BF99DD491832286600183FE2 /* singleCellSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = singleCellSelected.png; sourceTree = "<group>"; };
+		BF99DD4A1832286600183FE2 /* singleCellSelected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "singleCellSelected@2x.png"; sourceTree = "<group>"; };
+		BF99DD4F1832287900183FE2 /* rightArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rightArrow.png; sourceTree = "<group>"; };
+		BF99DD501832287900183FE2 /* rightArrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rightArrow@2x.png"; sourceTree = "<group>"; };
+		BF99DD531832288100183FE2 /* accountIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = accountIcon.png; sourceTree = "<group>"; };
+		BF99DD541832288100183FE2 /* accountIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "accountIcon@2x.png"; sourceTree = "<group>"; };
 		BF9B6D4718290F8300BC0E13 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		BF9B6D9D182AA03A00BC0E13 /* users.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = users.plist; sourceTree = "<group>"; };
 		BF9B6D9F182AA34600BC0E13 /* LogInVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogInVC.h; sourceTree = "<group>"; };
@@ -367,6 +395,20 @@
 		BF2C4FC91806FE7900A87C18 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				BF99DD531832288100183FE2 /* accountIcon.png */,
+				BF99DD541832288100183FE2 /* accountIcon@2x.png */,
+				BF99DD4F1832287900183FE2 /* rightArrow.png */,
+				BF99DD501832287900183FE2 /* rightArrow@2x.png */,
+				BF99DD3B1832283400183FE2 /* greenButton.png */,
+				BF99DD3C1832283400183FE2 /* greenButton@2x.png */,
+				BF99DD3D1832283400183FE2 /* greenButtonSelected.png */,
+				BF99DD3E1832283400183FE2 /* greenButtonSelected@2x.png */,
+				BF99DD431832285400183FE2 /* whiteCell.png */,
+				BF99DD441832285400183FE2 /* whiteCell@2x.png */,
+				BF99DD471832286600183FE2 /* singleCell.png */,
+				BF99DD481832286600183FE2 /* singleCell@2x.png */,
+				BF99DD491832286600183FE2 /* singleCellSelected.png */,
+				BF99DD4A1832286600183FE2 /* singleCellSelected@2x.png */,
 				BF92211A18214DC80084DCA0 /* aib_logo_original_cut.png */,
 				BF92211C18214E290084DCA0 /* logo_80_121.png */,
 				BF37033C180EAEF10027AE4F /* Default-568h.png */,
@@ -494,20 +536,32 @@
 				BF2C4FA01805C23300A87C18 /* beep.wav in Resources */,
 				BF2C4FD01806FEB100A87C18 /* bluebuttonSelected.png in Resources */,
 				BF2C4FAB1805C23300A87C18 /* flashlight-turn-off-icon@2x.png in Resources */,
+				BF99DD4C1832286600183FE2 /* singleCell@2x.png in Resources */,
 				BF370344180EAEF10027AE4F /* Default.png in Resources */,
 				BF2C4FCF1806FEB100A87C18 /* blueButton@2x.png in Resources */,
 				BF2C4F631805C08B00A87C18 /* Main_iPad.storyboard in Resources */,
 				BF2C4FAF1805C23300A87C18 /* flashlight-turn-on-icon@2x.png in Resources */,
 				BF92212518280EB20084DCA0 /* adminsCollection.plist in Resources */,
+				BF99DD521832287900183FE2 /* rightArrow@2x.png in Resources */,
+				BF99DD511832287900183FE2 /* rightArrow.png in Resources */,
 				BF2C4F681805C08B00A87C18 /* Images.xcassets in Resources */,
 				BF370347180EAEF10027AE4F /* Icon@2x.png in Resources */,
+				BF99DD3F1832283400183FE2 /* greenButton.png in Resources */,
+				BF99DD411832283400183FE2 /* greenButtonSelected.png in Resources */,
+				BF99DD551832288100183FE2 /* accountIcon.png in Resources */,
+				BF99DD4D1832286600183FE2 /* singleCellSelected.png in Resources */,
 				BF92212318227AEC0084DCA0 /* usersCollection.plist in Resources */,
+				BF99DD561832288100183FE2 /* accountIcon@2x.png in Resources */,
 				BF2C4FAE1805C23300A87C18 /* flashlight-turn-on-icon.png in Resources */,
 				BF92211D18214E290084DCA0 /* logo_80_121.png in Resources */,
+				BF99DD401832283400183FE2 /* greenButton@2x.png in Resources */,
+				BF99DD461832285400183FE2 /* whiteCell@2x.png in Resources */,
 				BF92211B18214DC80084DCA0 /* aib_logo_original_cut.png in Resources */,
+				BF99DD4B1832286600183FE2 /* singleCell.png in Resources */,
 				BF2C4F601805C08B00A87C18 /* Main_iPhone.storyboard in Resources */,
 				BF2C4F571805C08B00A87C18 /* InfoPlist.strings in Resources */,
 				BF370342180EAEF10027AE4F /* Default-568h.png in Resources */,
+				BF99DD451832285400183FE2 /* whiteCell.png in Resources */,
 				BF2C4FA51805C23300A87C18 /* CHANGELOG.txt in Resources */,
 				BF2C4FA11805C23300A87C18 /* camera-swap-icon-pressed.png in Resources */,
 				BF2C4FA31805C23300A87C18 /* camera-swap-icon.png in Resources */,
@@ -521,6 +575,7 @@
 				BF2C4FAA1805C23300A87C18 /* flashlight-turn-off-icon.png in Resources */,
 				BF2C4FAD1805C23300A87C18 /* flashlight-turn-on-icon-pressed@2x.png in Resources */,
 				BF370329180844990027AE4F /* bg_gradient.png in Resources */,
+				BF99DD4E1832286600183FE2 /* singleCellSelected@2x.png in Resources */,
 				BF9B6DA3182BE58700BC0E13 /* admins.plist in Resources */,
 				BF9B6D9E182AA03A00BC0E13 /* users.plist in Resources */,
 				BF2C4FCE1806FEB100A87C18 /* blueButton.png in Resources */,
@@ -531,6 +586,7 @@
 				BF2C4FA91805C23300A87C18 /* flashlight-turn-off-icon-pressed@2x.png in Resources */,
 				BF2C4FB31805C23300A87C18 /* poweredby@2x.png in Resources */,
 				BF2C4FA41805C23300A87C18 /* camera-swap-icon@2x.png in Resources */,
+				BF99DD421832283400183FE2 /* greenButtonSelected@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

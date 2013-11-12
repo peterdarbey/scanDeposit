@@ -111,9 +111,13 @@
     }];
     
          DLog(@"parsedString >>>>>: %@", parsedString);
-   
-    return newString; //newString
+    
+    NSString *tabString = [NSString stringWithFormat:@"%@\t\t\t\t", newString];
+    DLog(@"tabString: %@", tabString);
+    return tabString; //newString
+    
 }
+
 //email button
 - (void)proceedPressed:(UIButton *)sender {
     
@@ -430,23 +434,9 @@
 {
     if( indexPath.row == 0 ) {
         if ([tableView numberOfRowsInSection:indexPath.section] == 1) {
-//            cell.backgroundView = [appDelegate styleTableCell:@"singleCell"];
-//            cell.selectedBackgroundView = [appDelegate styleTableCell:@"singleCellSelected"];
-            
+            cell.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"singleCell"]];
+            cell.selectedBackgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"singleCellSelected"]];
         }
-        else
-        {
-//            cell.backgroundView = [appDelegate styleTableCell:@"top"];
-//            cell.selectedBackgroundView = [appDelegate styleTableCell:@"top"];
-        }
-    }
-    else if (indexPath.row == [_depositsTV numberOfRowsInSection:0] -1 ) {
-//        cell.backgroundView = [appDelegate styleTableCell:@"bottom"];
-//        cell.selectedBackgroundView = [appDelegate styleTableCell:@"bottom"];
-    }
-    else {
-//        cell.backgroundView = [appDelegate styleTableCell:@"middle"];
-//        cell.selectedBackgroundView = [appDelegate styleTableCell:@"middle"];
     }
     
 }

@@ -38,7 +38,6 @@
         
         //if admin not a user
         _isUser = NO;
-       
         //will need for packaging off to email with other data
         _validAdminsDict = users;//pass to deposits
     }
@@ -46,7 +45,6 @@
     {
         DLog(@"is USERS: %@", users);//is dictionary
         _isUser = YES;
-        
         //will need for packaging off to email with other data
         _validUsersDict = users;//pass to deposits
     }
@@ -62,78 +60,69 @@
     }
     return self;
 }
-- (void)cancelScansPressed:(UIButton *)sender {
 
-//    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
-     [self dismissViewControllerAnimated:YES completion:nil];
-    
-}
+//Note: 128 barcode
+- (void)cancelScanPressed:(UIButton *)sender {
 
-- (void)finishedScansPressed:(UIButton *)sender {
    
-    [picker dismissViewControllerAnimated:YES completion:^{
-        //stop picker scanning
+//    [picker stopScanning];
+//     [self dismissViewControllerAnimated:YES completion:nil];
+    
+    [self dismissViewControllerAnimated:YES completion:^{
+        //Stop the picker scanning
         [picker stopScanning];
-        //needs the deposits data from the AlertView
-        //now pass the deposits data to DepositsVC to pop its tblView
-        DepositsVC *depositsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"DepositsVC"];
-        depositsVC.title = NSLocalizedString(@"Deposits", @"Deposits View");
-        depositsVC.depositsCollection = _depositsArray;//bag data
-        //package off logged in users/admins data
-        if (_validUsersDict) {
-            depositsVC.usersDict = _validUsersDict;
-            DLog(@"_validUsersDict: %@", _validUsersDict);//one should have value
-        }
-        else if (_validAdminsDict)
-        {
-            depositsVC.adminsDict = _validAdminsDict;
-            DLog(@"_validAdminsDict: %@", _validAdminsDict);//one should have value
-        }
-        
-        [self.navigationController pushViewController:depositsVC animated:YES];
-        DLog(@"Push to viewController delegate method called");
-        
+        //cancelled scanning device QR barcode
+        _scanModeIsDevice = YES;//this may vary
     }];
-        
+    
 }
 
-- (void)scanBtnTapped:(UIButton *)sender
-{
-    picker =
-    [[ScanditSDKBarcodePicker alloc] initWithAppKey:kScanditSDKAppKey];
-    picker.overlayController.delegate = self;
-    [picker.overlayController showSearchBar:YES];
-    
-    //construct barButtonItems
-    UIBarButtonItem *barBtnCancel = [[UIBarButtonItem alloc]initWithTitle:@"CancelScans" style:UIBarButtonItemStyleBordered target:self action:@selector(cancelScansPressed:)];
-    [barBtnCancel setTintColor:[UIColor blackColor]];
-    
-    barBtnFinished = [[UIBarButtonItem alloc]initWithTitle:@"FinishedScans" style:UIBarButtonItemStyleBordered target:self action:@selector(finishedScansPressed:)];
-    [barBtnFinished setTintColor:[UIColor blackColor]];
-    
-    //Add a divider for the toolBar barButtonItems
-    UIBarButtonItem *flexible = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-    
-    NSArray *barBtnArray = [NSArray arrayWithObjects:barBtnCancel, flexible, barBtnFinished, nil];
-    
-    UIToolbar *customTB = [[UIToolbar alloc]initWithFrame:CGRectMake(0 , self.view.frame.size.height - 44, self.view.frame.size.width, 44)];
-    
-    [customTB setBarStyle:UIBarStyleBlackTranslucent];//works
-    customTB.items = barBtnArray;
+//set conditions for appropriate behaviours
+- (void)finishedScanPressed:(UIButton *)sender {
+   
+    //QR barcode
+    if (_scanModeIsDevice) {
+        
+        DLog(@"Scanning functionality for QR barcode");
+        [picker dismissViewControllerAnimated:YES completion:^{
+            [picker stopScanning];
+            //scanned device QR barcode, now set to 128 barcode
+            _scanModeIsDevice = NO;
+        }];
 
-    [picker.view addSubview:customTB];//removing setToolBar and using addSubview fixed toolbar setup
-//    [picker.overlayController setToolbarItems:barButtonsArray];
+        
+    }//close if
     
-    
-    [picker.overlayController setTextForInitializingCamera:@"Please Wait"];//not working yet
-    [picker startScanning];
-    //set the keyboard type
-    [picker.overlayController setSearchBarKeyboardType:UIKeyboardTypeNamePhonePad];//lose keybopard toolbar
-    
-    //Dont need Observer currently
-//    [self dispatchEventOnTouch];
-    
-    [self.navigationController presentViewController:picker animated:YES completion:nil];
+    else //128 barcode
+    {
+        DLog(@"Scanning functionality for 128 barcode");
+        
+        [picker dismissViewControllerAnimated:YES completion:^{
+            //stop picker scanning
+            [picker stopScanning];
+            //needs the deposits data from the AlertView
+            //now pass the deposits data to DepositsVC to pop its tblView
+            DepositsVC *depositsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"DepositsVC"];
+            depositsVC.title = NSLocalizedString(@"Deposits", @"Deposits View");
+            depositsVC.depositsCollection = _depositsArray;//bag data
+            //package off logged in users/admins data
+            if (_validUsersDict) {
+                depositsVC.usersDict = _validUsersDict;
+                DLog(@"_validUsersDict: %@", _validUsersDict);//one should have value
+            }
+            else if (_validAdminsDict)
+            {
+                depositsVC.adminsDict = _validAdminsDict;
+                DLog(@"_validAdminsDict: %@", _validAdminsDict);
+            }
+            
+            [self.navigationController pushViewController:depositsVC animated:YES];
+            DLog(@"Push to viewController delegate method called");
+            
+        }];
+
+        
+    }//close else
 
     
     
@@ -151,6 +140,42 @@
     
 }
 
+//setup the barcode engine
+- (void)scanBtnPressed:(UIButton *)sender {
+    
+
+    //make sure only ONE instance
+    picker = [[ScanditSDKBarcodePicker alloc] initWithAppKey:kScanditSDKAppKey];
+    picker.overlayController.delegate = self;
+    [picker.overlayController showSearchBar:NO];
+    
+    //construct barButtonItems
+    UIBarButtonItem *barBtnCancel = [[UIBarButtonItem alloc]initWithTitle:@"CancelScan" style:UIBarButtonItemStyleBordered target:self action:@selector(cancelScanPressed:)];
+    [barBtnCancel setTintColor:[UIColor blackColor]];
+    
+    barBtnFinished = [[UIBarButtonItem alloc]initWithTitle:@"FinishedScan" style:UIBarButtonItemStyleBordered target:self action:@selector(finishedScanPressed:)];
+    [barBtnFinished setTintColor:[UIColor blackColor]];
+    
+    //Add a divider for the toolBar barButtonItems
+    UIBarButtonItem *flexible = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    
+    NSArray *barBtnArray = [NSArray arrayWithObjects:barBtnCancel, flexible, barBtnFinished, nil];
+    UIToolbar *customTB = [[UIToolbar alloc]initWithFrame:CGRectMake(0 , self.view.frame.size.height - 44, self.view.frame.size.width, 44)];
+    
+    [customTB setBarStyle:UIBarStyleBlackTranslucent];
+    customTB.items = barBtnArray;
+    [picker.view addSubview:customTB];
+    
+    [picker.overlayController setTextForInitializingCamera:@"Please Wait"];
+    [picker startScanning];
+    
+    [self.navigationController presentViewController:picker animated:YES completion:nil];
+    
+    //Dont need Observer currently
+//    [self dispatchEventOnTouch];
+    
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -158,9 +183,28 @@
     
     _barcodeArray = [NSMutableArray array];
     
-     _depositsArray = [NSMutableArray array];
+    _depositsArray = [NSMutableArray array];
     
     barBtnFinished.enabled = NO;
+    
+    
+    
+    //How to use the app wording to be revised
+    UITextView *helpTV = [[UITextView alloc]initWithFrame:CGRectMake(10, 175, self.view.frame.size.width -20, 250)];
+//    [helpTV setText:@"How to use this app\nPlease scan the external device (ATM) barcode.\n\nThen scan the bag barcode and enter the amount for each deposit.\n\nFinally press proceed to confirm email"];
+    
+    [helpTV setBackgroundColor:[UIColor clearColor]];
+    [helpTV setFont:[UIFont systemFontOfSize:21]];
+    //    [helpTV setTextColor:[UIColor colorWithRed:172.0/255.0 green:74.0/255.0 blue:0.0/255.0 alpha:1.0]];//orange
+    [helpTV setTextColor:[UIColor whiteColor]];
+    [helpTV setEditable:NO];
+    [helpTV setUserInteractionEnabled:NO];
+    [helpTV setTextAlignment:NSTextAlignmentCenter];
+    
+//    [self.view addSubview:helpTV];
+    
+    
+    
     
 //    [self.navigationController.navigationBar setTintColor:[UIColor blackColor]];
     self.navigationController.navigationBar.barStyle = UIBarStyleBlackTranslucent;
@@ -170,30 +214,54 @@
     UIImageView *imgView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"Default-568h.png"]];
     [self.view addSubview:imgView];
     
-    //construct the scanBtn
-    scanBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self buttonStyle:scanBtn WithImgName:@"blueButton.png" imgSelectedName:@"bluebuttonSelected" withTitle:@"Scan Barcode"];
+    //construct the scanBtn for DEVICE -> QR
+    scanDeviceBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self buttonStyle:scanDeviceBtn WithImgName:@"blueButton.png" imgSelectedName:@"bluebuttonSelected.png" withTitle:@"Scan Device Barcode"];
 //    scanBtn.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:18.0];
-    scanBtn.titleLabel.font = [UIFont systemFontOfSize:17.0];
+    scanDeviceBtn.titleLabel.font = [UIFont systemFontOfSize:17.0];
+    [scanDeviceBtn setFrame:CGRectMake(20, self.view.frame.size.height -60, 280, 44)];
+    [scanDeviceBtn addTarget:self action:@selector(scanBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
+    //see condition below
+//    [self.view addSubview:scanDeviceBtn];
     
-//    [scanBtn setFrame:CGRectMake(20, self.view.frame.size.height/2, 280, 44)];
-    [scanBtn setFrame:CGRectMake(20, self.view.frame.size.height -60, 280, 44)];
-    [scanBtn addTarget:self action:@selector(scanBtnTapped:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:scanBtn];
+    //Construct new scan device button for BAG -> 128
+    scanBagBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self buttonStyle:scanBagBtn WithImgName:@"greenButton.png" imgSelectedName:@"greenbuttonSelected.png" withTitle:@"Scan Bag Barcode"];
+    scanBagBtn.titleLabel.font = [UIFont systemFontOfSize:17.0];
+    [scanBagBtn setFrame:CGRectMake(20, self.view.frame.size.height -60, 280, 44)];
+    [scanBagBtn addTarget:self action:@selector(scanBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
     
-    //How to use the app wording to be revised 
-    UITextView *helpTV = [[UITextView alloc]initWithFrame:CGRectMake(10, 160, self.view.frame.size.width -20, 200)];
-    [helpTV setText:@"How to use this app\n\nPlease scan the external device (ATM) barcode.\nThen scan the bag barcode and enter the amount for each deposit.\nFinally press proceed to confirm email"];
     
-    [helpTV setBackgroundColor:[UIColor clearColor]];
-    [helpTV setFont:[UIFont systemFontOfSize:20]];
-//    [helpTV setTextColor:[UIColor colorWithRed:172.0/255.0 green:74.0/255.0 blue:0.0/255.0 alpha:1.0]];//orange
-    [helpTV setTextColor:[UIColor whiteColor]];
-    [helpTV setEditable:NO];
-    [helpTV setUserInteractionEnabled:NO];
-    [helpTV setTextAlignment:NSTextAlignmentCenter];
     
-    [self.view addSubview:helpTV];
+    //hardcode NO
+    _scanModeIsDevice = NO;
+    
+    //if scan QR barcode
+    if (_scanModeIsDevice) {
+        [self.view addSubview:scanBagBtn];
+        //Add other behaviour here
+        
+        [helpTV setText:@"How to use this app\n\nPlease scan the barcode on the external device (ATM)..."];
+        
+        [self.view addSubview:helpTV];
+        
+    }
+    else //else 128 barcode
+    {
+        [self.view addSubview:scanDeviceBtn];
+        
+        //Add other behaviour here
+        [helpTV setText:@"Now scan the bag barcode and enter the amount for each deposit.\n\nFinally press proceed to send email"];
+        [self.view addSubview:helpTV];
+        
+    }
+
+    
+    UIImage *aibImg = [UIImage imageNamed:@"logo_80_121.png"];//not great resolution
+    UIImageView *aibImgV = [[UIImageView alloc]initWithImage:aibImg];
+    [aibImgV setFrame:CGRectMake(10, 54, aibImg.size.width, aibImg.size.height)];
+    
+    [self.view addSubview:aibImgV];
     
 }
 
@@ -269,8 +337,8 @@
 -(void)dispatchEventOnTouch
 {
     //register the control object and associated key with a notification 
-    NSDictionary *userInfo = @{@"scanBtnTapped" : scanBtn};
-    [notificationCenter postNotificationName: @"scanBtnTapped" object:nil userInfo:userInfo];
+    NSDictionary *userInfo = @{@"scanDeviceBtnTapped" : scanDeviceBtn};
+    [notificationCenter postNotificationName: @"scanDeviceBtnTapped" object:nil userInfo:userInfo];
     DLog(@"EVENT DISPATCHED");
 }
 
@@ -283,7 +351,7 @@
     
     [notificationCenter addObserver:self
                            selector:@selector(xibDismissed:)
-                               name:@"scanBtnTapped"
+                               name:@"scanDeviceBtnTapped"
                              object:nil];//not interested in who posted notification just event
     
 }
@@ -294,7 +362,7 @@
     DLog(@"userInfo: %@", userInfo.description);
     
     DLog(@"Test this notification: %@", notification.name);
-    if ([notification.name isEqualToString:@"scanBtnTapped"]) {
+    if ([notification.name isEqualToString:@"scanDeviceBtnTapped"]) {
         DLog(@"Notified");//works
     }
     
@@ -317,7 +385,17 @@
 - (void)passScannedData:(Deposit *)deposit {
     
     DLog(@"dataArray: %@", deposit);
-    //Pass the deposits data back to self 
+    //NOTE: data structure may be different here
+    if (_scanModeIsDevice) {
+       
+            
+    }
+    else
+    {
+        
+    }
+    
+    //Pass the deposits data back to self
 //    _depositsArray = dataArray;
 //    _depositsArray = [NSMutableArray array];
     
@@ -342,53 +420,78 @@
 - (void)scanditSDKOverlayController:
 (ScanditSDKOverlayController *)scanditSDKOverlayController didScanBarcode:(NSDictionary *)barcodeResult {
     
-    //ToDo need conditionals to extract the type of barcode that it is i.e. QR -> 1 course of action differ than bagBarcode
-    
-    
     //Capture Time stamp here -> when scan bag thats when date/time is created
     dateString = [self formatMyDateString];
-    DLog(@"dateString: %@", dateString);//16/10/2013 14:08 -> is 24 hr so fine
+    DLog(@"<< dateString >>: %@", dateString);//12/11/2013 11:46 -> is 24 hr so correct
     
-    DLog(@"barcodeResult**********: %@", barcodeResult);
+    DLog(@"barcodeResult*****: %@", barcodeResult);
+    
     //Parse barcode string first before init model obj
-    NSString *parseString = barcodeResult[@"barcode"];
-    DLog(@"parseString: %@", parseString);
-    NSArray *barcodeArray = [parseString componentsSeparatedByString:@"\""];//was @","
-    DLog(@"barcodeArray_____: %@", barcodeArray);
+//    NSString *parseString = barcodeResult[@"barcode"];
+    
+    //its a NSString so cant use objectForKey
+     NSString *barcodeString = barcodeResult[@"barcode"];
+    DLog(@"barcodeString: %@", barcodeString);
+    
+    //extract the Symbology to determine the relevant data model and construct appropriately
+    NSString *barcodeType = (NSString *)barcodeResult[@"symbology"];
+    DLog(@"barcodeType >>>>>: %@", barcodeType);//QR - correct
     
     
-    NSMutableDictionary *barcodeDict = [NSMutableDictionary dictionary];
-//    for (id object in barcodeArray) {
-//        [barcodeDict setValue:object forKey:@"Branch NSC"];
-//    }
-   //wrong i think
-    for (int i = 0; i < [barcodeArray count]; i++) {
-        [barcodeDict setValue:[barcodeArray objectAtIndex:i] forKey:@"Branch NSC"];
-        [barcodeDict setValue:[barcodeArray objectAtIndex:i] forKey:@"Process"];
-        [barcodeDict setValue:[barcodeArray objectAtIndex:i] forKey:@"Safe ID"];
+    //conditionals to extract/process the type of barcode scanned i.e. QR or 128
+    //if scan QR barcode
+    //HArd code YES here
+    _scanModeIsDevice = YES;
+    if (_scanModeIsDevice && [barcodeType isEqualToString:@"QR"]) {
+        
+        DLog(@"barcodeType: %@", barcodeType);
+        
+        
+        //NOTE: parse first
+        NSArray *array = [barcodeString componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@","]];//create a dictionary from data in string
+        DLog(@"array: %@", array);
+        NSMutableString *stringEntry = [NSMutableString string];
+        NSMutableArray *elementArray = [NSMutableArray array];
+        //iterate each string object in the array
+        for (NSString *string in array) {
+            //retrieve each string of K / V pairs
+            stringEntry = (NSMutableString *)string;
+//            NSString *valueString = [stringEntry stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"\""]];
+            NSArray *valueArray = [stringEntry componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"\""]];
+            DLog(@"valueArray: %@", valueArray);
+            [elementArray addObject:valueArray];
+            
+        }
+        
+        
+        //Proceed with the QRBarcode model
+//        Barcode *barcodeObject = [Barcode instanceFromDictionary:barcodeResult];//need custom initWith method
+    
+        
     }
-     NSLog(@"barcodeDict: %@", barcodeDict);
+    //else scan 128 barcode
+    else
+    {
+        DLog(@"barcodeType: %@", barcodeType);
+    }
     
-//    NSString *filteredString = [parseString stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"Device"]];
-//    DLog(@"filteredString: %@", filteredString);
     
-    
-    //create our custom model object with the barcode data from the retrieved barcode recognition engine
+
+    //NOTE: Model not correct yet needs to be parsed 1st
+    //create our custom model object with the barcode data
     Barcode *barcodeObject = [Barcode instanceFromDictionary:barcodeResult];//will need custom initWith method
     //Add to collection
     [_barcodeArray addObject:barcodeObject];
     
-    DLog(@"barcode from model object>>>>>>>>: %@", [barcodeObject barcodeData]);
+    DLog(@"barcode from model>>>>>>>>: %@", [barcodeObject barcodeData]);
+    
+    NSDictionary *dictBarcode = [barcodeObject dictionaryRepresentation];
+    DLog(@"dictBarcode: %@", dictBarcode);//needs to be parsed first??
+    
     
     //present alertView and temp stop scanning
     [picker stopScanning];
 
-    /*********ToDO will need some variation on the barcode scanning process to deter the scan owner ie safe or bag
-    will be a value within the scan data to determine the type of scan owner then on if check for that
-    and displayv accordingly
-    differ alertView perhaps
-    **********/
-    
     //Create a custom Alert -> AlertView.xib
     [self showPopup:[barcodeObject barcodeData]];
 }
@@ -411,7 +514,7 @@
     DLog(@"status dictionary: %@", status);
 //    [picker.overlayController searchBarTextDidEndEditing:picker.overlayController];
     [self dismissViewControllerAnimated:YES completion:^{
-        [picker stopScanning];//why cancel
+        [picker stopScanning];
     }];
 }
 

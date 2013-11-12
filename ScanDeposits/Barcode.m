@@ -14,12 +14,9 @@
 }
 
 //private members
-@property (strong, nonatomic) NSString *symbology;
-
 @property (strong, nonatomic) NSString *process;//Process
-@property (strong, nonatomic) NSString *barcode;
+@property (strong, nonatomic) NSString *barcode;//barcode containing all relevant data
 @property (strong, nonatomic) NSString *branchNSC;//Branch NSC
-
 @property (strong, nonatomic) NSString *device;// -> TDR
 @property (strong, nonatomic) NSString *safeID;//Safe ID
 
@@ -66,6 +63,7 @@
 
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key {
     
+    //this method sets the properties and values from a dictionary
     if ([key isEqualToString:@"Barcode"]) {
         [self setValue:value forKey:@"barcode"];//property ivar contains all data?
     } else if ([key isEqualToString:@"Symbology"]) {
@@ -75,7 +73,7 @@
     } else if ([key isEqualToString:@"Branch NSC"]) {
         [self setValue:value forKey:@"branchNSC"];
     } else if ([key isEqualToString:@"Device"]) {
-        [self setValue:value forKey:@"device"];//property ivar
+        [self setValue:value forKey:@"device"];
     } else if ([key isEqualToString:@"Safe ID"]) {
         [self setValue:value forKey:@"safeID"];
     } else {
@@ -91,7 +89,7 @@
         [dictionary setObject:self.barcode forKey:@"Barcode"];
     }
     if (self.symbology) {
-        [dictionary setObject:self.symbology forKey:@"symbology"];
+        [dictionary setObject:self.symbology forKey:@"Symbology"];
     }if (self.process) {
         [dictionary setObject:self.process forKey:@"Process"];
     }
@@ -99,7 +97,7 @@
         [dictionary setObject:self.branchNSC forKey:@"Branch NSC"];
     }
     if (self.device) {
-        [dictionary setObject:self.device forKey:@"device"];
+        [dictionary setObject:self.device forKey:@"Device"];
     }
     if (self.safeID) {
         [dictionary setObject:self.safeID forKey:@"Safe ID"];
@@ -108,6 +106,7 @@
     return dictionary;
 }
 
+//getters
 - (NSString *)branchNSC {
     
     return _branchNSC;

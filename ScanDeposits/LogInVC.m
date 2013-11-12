@@ -278,6 +278,17 @@
     return fullFilePath;
 }
 
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if( indexPath.row == 0 ) {
+        if ([tableView numberOfRowsInSection:indexPath.section] == 1) {
+            cell.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"singleCell.png"]];
+            cell.selectedBackgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"singleCellSelected.png"]];
+        }
+    }
+    
+}
+
 
 - (void)viewDidLoad
 {
@@ -469,7 +480,7 @@
         
         //maybe add to the tableView section
         loginBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [self buttonStyle:loginBtn WithImgName:@"blueButton.png" imgSelectedName:@"bluebuttonSelected" withTitle:@"Log In"];
+        [self buttonStyle:loginBtn WithImgName:@"greenButton.png" imgSelectedName:@"greenButtonSelected.png" withTitle:@"LOG IN"];
         
         loginBtn.titleLabel.font = [UIFont systemFontOfSize:17.0];
         [loginBtn setFrame:CGRectMake(10, 23, 300, 44)];

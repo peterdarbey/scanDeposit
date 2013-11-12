@@ -548,6 +548,18 @@
     
 }
 
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if( indexPath.row == 0 ) {
+        if ([tableView numberOfRowsInSection:indexPath.section] == 1) {
+            cell.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"singleCell.png"]];
+            cell.selectedBackgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"singleCellSelected.png"]];
+        }
+    }
+    
+}
+
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
     

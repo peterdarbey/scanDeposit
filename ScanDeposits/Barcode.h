@@ -13,16 +13,9 @@
     
 }
 
-//@property (strong, nonatomic) NSString *barcode;
-//@property (strong, nonatomic) NSString *symbology;
-////New attributes
-//@property (strong, nonatomic) NSString *device;// -> TDR
-//@property (strong, nonatomic) NSString *ID;// blank
 
-//@property (strong, nonatomic, readonly) NSString *lodgementType;// -> 932388 003
-
-//@property (strong, nonatomic) NSDate *currentDate;//already captured
-
+//@property (strong, nonatomic) NSString *barcodeType;
+@property (strong, nonatomic) NSString *symbology;
 
 + (Barcode *)instanceFromDictionary:(NSDictionary *)aDictionary;
 - (void)setAttributesFromDictionary:(NSDictionary *)aDictionary;

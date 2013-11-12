@@ -416,18 +416,61 @@
     DLog(@"Start scanning delegate");
 }
 
+- (NSDictionary *)parseBarcodeFromString:(NSString *)barcodeString {
+    
+    //NOTE: parse first
+    //construct an array with the substrings separated by commas -> 3 entries
+    NSArray *array = [barcodeString componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@","]];//create a dictionary from data in string
+    
+    //create objects for iteration operations
+    NSMutableString *stringEntry = [NSMutableString string];
+    NSMutableArray *elementArray = [NSMutableArray array];
+    
+    //iterate each comma separated string in the array
+    for (NSString *string in array) {
+        //retrieve each string of K / V pairs
+        stringEntry = (NSMutableString *)string;
+        //construct another array by separating ":"
+        NSArray *valueArray = [stringEntry componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@":"]];
+        [elementArray addObject:valueArray];
+    }//close for
+    
+    //create objects for iteration operations
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    NSMutableArray *kvPairsArray = [NSMutableArray array];
+    
+    //iterate
+    for (NSArray *valueArray in elementArray) {
+        for (int i = 0; i < [valueArray count]; i++) {
+            NSString *entryString = [valueArray objectAtIndex:i];
+            //remove the white space
+            NSString *keyString = [entryString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];//removes any white sapace if any there
+            //if index:1 remove the back slash
+            if (i == 1) {
+                keyString = [keyString stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"\""]];
+                [dict setObject:keyString forKey:[[valueArray objectAtIndex:0]stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];//works fine but probably a better way
+            }
+            //add to collection
+            [kvPairsArray addObject:keyString];
+        }//close inner for
+        
+    }//close outer for
+    
+//        DLog(@"kvPairsArray: %@", kvPairsArray);//works
+        DLog(@"*** dict ***: %@", dict);//works
+    
+    return dict;
+}
+
 #pragma mark Scandit SDK - delegate methods
 - (void)scanditSDKOverlayController:
 (ScanditSDKOverlayController *)scanditSDKOverlayController didScanBarcode:(NSDictionary *)barcodeResult {
     
-    //Capture Time stamp here -> when scan bag thats when date/time is created
+    //Capture Time stamp here -> when bag scanned when date/time is created
     dateString = [self formatMyDateString];
-    DLog(@"<< dateString >>: %@", dateString);//12/11/2013 11:46 -> is 24 hr so correct
+    DLog(@"<< dateString >>: %@", dateString);//current 24 Hr format: 12/11/2013 11:46
     
     DLog(@"barcodeResult*****: %@", barcodeResult);
-    
-    //Parse barcode string first before init model obj
-//    NSString *parseString = barcodeResult[@"barcode"];
     
     //its a NSString so cant use objectForKey
      NSString *barcodeString = barcodeResult[@"barcode"];
@@ -435,33 +478,20 @@
     
     //extract the Symbology to determine the relevant data model and construct appropriately
     NSString *barcodeType = (NSString *)barcodeResult[@"symbology"];
-    DLog(@"barcodeType >>>>>: %@", barcodeType);//QR - correct
     
     
     //conditionals to extract/process the type of barcode scanned i.e. QR or 128
     //if scan QR barcode
-    //HArd code YES here
+    //Hard code YES here
     _scanModeIsDevice = YES;
     if (_scanModeIsDevice && [barcodeType isEqualToString:@"QR"]) {
         
-        DLog(@"barcodeType: %@", barcodeType);
+        DLog(@"barcodeType: %@", barcodeType);//QR - correct
         
+        //parses a barcode string and creates a dictionary
+        NSDictionary *barcodeDict = [self parseBarcodeFromString:barcodeString];
+        DLog(@"barcodeDict: %@", barcodeDict);
         
-        //NOTE: parse first
-        NSArray *array = [barcodeString componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@","]];//create a dictionary from data in string
-        DLog(@"array: %@", array);
-        NSMutableString *stringEntry = [NSMutableString string];
-        NSMutableArray *elementArray = [NSMutableArray array];
-        //iterate each string object in the array
-        for (NSString *string in array) {
-            //retrieve each string of K / V pairs
-            stringEntry = (NSMutableString *)string;
-//            NSString *valueString = [stringEntry stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"\""]];
-            NSArray *valueArray = [stringEntry componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"\""]];
-            DLog(@"valueArray: %@", valueArray);
-            [elementArray addObject:valueArray];
-            
-        }
         
         
         //Proceed with the QRBarcode model
@@ -470,9 +500,11 @@
         
     }
     //else scan 128 barcode
-    else
+    else if (_scanModeIsDevice && [barcodeType isEqualToString:@"128"])
     {
-        DLog(@"barcodeType: %@", barcodeType);
+        DLog(@"barcodeType: %@", barcodeType);//128 - correct
+        
+        
     }
     
     

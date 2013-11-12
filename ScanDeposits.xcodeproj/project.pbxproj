@@ -91,6 +91,7 @@
 		BF99DD521832287900183FE2 /* rightArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DD501832287900183FE2 /* rightArrow@2x.png */; };
 		BF99DD551832288100183FE2 /* accountIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DD531832288100183FE2 /* accountIcon.png */; };
 		BF99DD561832288100183FE2 /* accountIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DD541832288100183FE2 /* accountIcon@2x.png */; };
+		BF99DD591832842A00183FE2 /* QRBarcode.m in Sources */ = {isa = PBXBuildFile; fileRef = BF99DD581832842A00183FE2 /* QRBarcode.m */; };
 		BF9B6D4818290F8300BC0E13 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF9B6D4718290F8300BC0E13 /* MessageUI.framework */; };
 		BF9B6D9E182AA03A00BC0E13 /* users.plist in Resources */ = {isa = PBXBuildFile; fileRef = BF9B6D9D182AA03A00BC0E13 /* users.plist */; };
 		BF9B6DA1182AA34600BC0E13 /* LogInVC.m in Sources */ = {isa = PBXBuildFile; fileRef = BF9B6DA0182AA34600BC0E13 /* LogInVC.m */; };
@@ -211,6 +212,8 @@
 		BF99DD501832287900183FE2 /* rightArrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "rightArrow@2x.png"; sourceTree = "<group>"; };
 		BF99DD531832288100183FE2 /* accountIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = accountIcon.png; sourceTree = "<group>"; };
 		BF99DD541832288100183FE2 /* accountIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "accountIcon@2x.png"; sourceTree = "<group>"; };
+		BF99DD571832842A00183FE2 /* QRBarcode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRBarcode.h; sourceTree = "<group>"; };
+		BF99DD581832842A00183FE2 /* QRBarcode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRBarcode.m; sourceTree = "<group>"; };
 		BF9B6D4718290F8300BC0E13 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		BF9B6D9D182AA03A00BC0E13 /* users.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = users.plist; sourceTree = "<group>"; };
 		BF9B6D9F182AA34600BC0E13 /* LogInVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogInVC.h; sourceTree = "<group>"; };
@@ -384,6 +387,8 @@
 				BF370337180D5C5D0027AE4F /* Deposit.m */,
 				BF2C4FC21806C96400A87C18 /* Barcode.h */,
 				BF2C4FC31806C96400A87C18 /* Barcode.m */,
+				BF99DD571832842A00183FE2 /* QRBarcode.h */,
+				BF99DD581832842A00183FE2 /* QRBarcode.m */,
 				BF37035D1817C6480027AE4F /* User.h */,
 				BF37035E1817C6480027AE4F /* User.m */,
 				BF92211E182279340084DCA0 /* PersistenceManager.h */,
@@ -612,6 +617,7 @@
 				BF2C4FC41806C96400A87C18 /* Barcode.m in Sources */,
 				BF922120182279340084DCA0 /* PersistenceManager.m in Sources */,
 				BF9B6DA1182AA34600BC0E13 /* LogInVC.m in Sources */,
+				BF99DD591832842A00183FE2 /* QRBarcode.m in Sources */,
 				BF3703551816D5860027AE4F /* UserPopup.m in Sources */,
 				BF37035A1816E1880027AE4F /* PopupTV.m in Sources */,
 				BF370335180D4DE40027AE4F /* DepositsVC.m in Sources */,

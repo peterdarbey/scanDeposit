@@ -14,6 +14,8 @@
 #import "AlertView.h"
 
 @class Barcode;
+@class QRBarcode;
+
 @class Deposit;
 @class DepositsVC;
 @class RegistrationVC;
@@ -36,8 +38,6 @@
 }
 
 @property (strong, nonatomic) NSMutableArray *array;
-
-@property (strong, nonatomic) IBOutlet UITextView *howToUseTV;
 
 @property (strong, nonatomic) NSMutableArray *barcodeArray;
 @property (strong, nonatomic) NSMutableArray *depositsArray;

@@ -8,7 +8,9 @@
 
 #import "HomeVC.h"
 
-#import "Barcode.h"
+#import "Barcode.h"//old
+#import "QRBarcode.h"
+
 #import "DepositsVC.h"
 #import "Deposit.h"
 #import "RegistrationVC.h"
@@ -22,6 +24,7 @@
 }
 @property (strong, nonatomic) NSMutableDictionary *validUsersDict;
 @property (strong, nonatomic) NSMutableDictionary *validAdminsDict;
+@property (strong, nonatomic) QRBarcode *qrBarcode;
 
 @end
 
@@ -441,6 +444,7 @@
     
     //iterate
     for (NSMutableArray *valueArray in elementArray) {
+        //iterate through each Key / Value pair in valuesArray
         for (int i = 0; i < [valueArray count]; i++) {
             NSString *entryString = [valueArray objectAtIndex:i];
             //removes the white space if any and replaces in the source array
@@ -491,14 +495,18 @@
         DLog(@"barcodeType: %@", barcodeType);//QR - correct
         
         //parses a barcode string and creates a dictionary
-        NSDictionary *barcodeDict = [self parseBarcodeFromString:barcodeString];
-        DLog(@"barcodeDict: %@", barcodeDict);
+        NSDictionary *barcode = [self parseBarcodeFromString:barcodeString];
+        DLog(@"barcodeDict: %@", barcode);
+        
+//        Barcode *barcode = [Barcode instanceFromDictionary:barcodeDict];
+        
+        //External device
+        //Now parsed correctly proceed with the new QRBarcode model constructor
+        _qrBarcode = [[QRBarcode alloc]initBarcodeWithType:barcodeType branch:barcode[@"Branch NSC"] process:barcode[@"Process"] safeID:[barcode[@"Safe ID"]intValue] andDevice:@"UnKnown"];
         
         
         
-        //Proceed with the QRBarcode model
-//        Barcode *barcodeObject = [Barcode instanceFromDictionary:barcodeResult];//need custom initWith method
-    
+        
         
     }
     //else scan 128 barcode
@@ -512,15 +520,12 @@
     
 
     //NOTE: Model not correct yet needs to be parsed 1st
-    //create our custom model object with the barcode data
     Barcode *barcodeObject = [Barcode instanceFromDictionary:barcodeResult];//will need custom initWith method
     //Add to collection
     [_barcodeArray addObject:barcodeObject];
-    
     DLog(@"barcode from model>>>>>>>>: %@", [barcodeObject barcodeData]);
     
-    NSDictionary *dictBarcode = [barcodeObject dictionaryRepresentation];
-    DLog(@"dictBarcode: %@", dictBarcode);//needs to be parsed first??
+    
     
     
     //present alertView and temp stop scanning

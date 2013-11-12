@@ -124,6 +124,8 @@
             [self.navigationController pushViewController:depositsVC animated:YES];
             DLog(@"Push to viewController delegate method called");
             
+            _scanModeIsDevice = YES;//reset to scan QR barcode
+            
         }];
 
         
@@ -243,7 +245,8 @@
     
     //if scan QR barcode
     if (_scanModeIsDevice) {
-        [self.view addSubview:scanBagBtn];
+        
+        [self.view addSubview:scanDeviceBtn];//correct
         //Add other behaviour here
         
         [helpTV setText:@"How to use this app\n\nPlease scan the barcode on the external device (ATM)..."];
@@ -253,7 +256,7 @@
     }
     else //else 128 barcode
     {
-        [self.view addSubview:scanDeviceBtn];
+        [self.view addSubview:scanBagBtn];//correct
         
         //Add other behaviour here
         [helpTV setText:@"Now scan the bag barcode and enter the amount for each deposit.\n\nFinally press proceed to send email"];
@@ -391,7 +394,7 @@
     
     DLog(@"dataArray: %@", deposit);
     //NOTE: data structure may be different here
-    if (_scanModeIsDevice) {
+    if (_scanModeIsDevice) {//dont think we need this
        
             
     }
@@ -492,7 +495,7 @@
     //conditionals to extract/process the type of barcode scanned i.e. QR or 128
     //if scan QR barcode
     //Hard code YES here
-    _scanModeIsDevice = YES;
+    _scanModeIsDevice = YES;//hard coded here
     if (_scanModeIsDevice && [barcodeType isEqualToString:@"QR"]) {
         
         DLog(@"barcodeType: %@", barcodeType);//QR - correct

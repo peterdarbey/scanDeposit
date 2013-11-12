@@ -418,7 +418,7 @@
 
 - (NSDictionary *)parseBarcodeFromString:(NSString *)barcodeString {
     
-    //NOTE: parse first
+    //parse functionality
     //construct an array with the substrings separated by commas -> 3 entries
     NSArray *array = [barcodeString componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@","]];//create a dictionary from data in string
     
@@ -440,15 +440,17 @@
     NSMutableArray *kvPairsArray = [NSMutableArray array];
     
     //iterate
-    for (NSArray *valueArray in elementArray) {
+    for (NSMutableArray *valueArray in elementArray) {
         for (int i = 0; i < [valueArray count]; i++) {
             NSString *entryString = [valueArray objectAtIndex:i];
-            //remove the white space
-            NSString *keyString = [entryString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];//removes any white sapace if any there
-            //if index:1 remove the back slash
+            //removes the white space if any and replaces in the source array
+            NSString *keyString = [entryString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+            //replace string in collection
+            [valueArray replaceObjectAtIndex:i withObject:keyString];
+            //if index:1 remove the backslash
             if (i == 1) {
                 keyString = [keyString stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"\""]];
-                [dict setObject:keyString forKey:[[valueArray objectAtIndex:0]stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];//works fine but probably a better way
+                [dict setObject:keyString forKey:[valueArray objectAtIndex:0]];//works but probably a better way
             }
             //add to collection
             [kvPairsArray addObject:keyString];
@@ -456,7 +458,7 @@
         
     }//close outer for
     
-//        DLog(@"kvPairsArray: %@", kvPairsArray);//works
+//        DLog(@"kvPairsArray: %@", kvPairsArray);//nice
         DLog(@"*** dict ***: %@", dict);//works
     
     return dict;

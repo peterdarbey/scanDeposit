@@ -520,8 +520,6 @@
         //ToDo add _qrBarcode to array if need be and some processing involved for conditional statements
         
         
-        
-        
     }
     //else scan 128 barcode
     else if (_scanModeIsDevice && [barcodeType isEqualToString:@"128"])

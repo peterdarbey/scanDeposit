@@ -75,7 +75,7 @@
     [self dismissViewControllerAnimated:YES completion:^{
         //Stop the picker scanning
         [picker stopScanning];
-        //cancelled scanning device QR barcode
+        //cancelled scanning device QR barcode so set to YES again
         _scanModeIsDevice = YES;//this may vary
     }];
     
@@ -91,7 +91,7 @@
         [picker dismissViewControllerAnimated:YES completion:^{
             [picker stopScanning];
             //scanned device QR barcode, now set to 128 barcode
-            _scanModeIsDevice = NO;
+            _scanModeIsDevice = NO;//correct
         }];
 
         
@@ -109,7 +109,8 @@
             DepositsVC *depositsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"DepositsVC"];
             depositsVC.title = NSLocalizedString(@"Deposits", @"Deposits View");
             depositsVC.depositsCollection = _depositsArray;//bag data
-            depositsVC.QRArray = _barcodeArray; //may need a condition here before adding check
+            depositsVC.QRArray = _barcodeArray; //may need a condition here before adding check -> can add all barcode models to this and id by key @"Symbology"
+            
             
             //package off logged in users/admins data
             if (_validUsersDict) {
@@ -124,8 +125,8 @@
             
             [self.navigationController pushViewController:depositsVC animated:YES];
             DLog(@"Push to viewController delegate method called");
-            
-            _scanModeIsDevice = YES;//reset to scan QR barcode
+            //careful though as user may want to scan more
+//            _scanModeIsDevice = YES;//reset to scan QR barcode as viewDidLoad is Not called unless app is quit
             
         }];
 
@@ -240,9 +241,13 @@
     [scanBagBtn addTarget:self action:@selector(scanBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
     
     
+    /*if the admin setup is completed then RegisrationVC (Users not included in that BOOL) has 
+     occurred so only show the RegisrationVC when admin has logged in so always show LogInVC
+     */
     
-    //hardcode NO
-    _scanModeIsDevice = NO;
+    
+    //Set to YES on app launch as first time will always be QR external device barcode
+    _scanModeIsDevice = YES;//hardcode YES here
     
     //if scan QR barcode
     if (_scanModeIsDevice) {
@@ -277,6 +282,24 @@
 - (void)viewWillAppear:(BOOL)animated {
     
 
+    //NSUserDefaults
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    //retrieve the app state for use case app flow
+    //    _isAdmin = [[userDefaults objectForKey:@"Is Administrator"]boolValue];
+    _isSetup = [[userDefaults objectForKey:@"Is Setup"]boolValue];
+    
+    //NOTE: when setup has occurred then the app flow is LogInVC for both users
+    //if setup done and not admin present LogInVC
+    if (_isSetup && !_isAdmin) {
+        //ToDo set isAmin = NO;
+        
+        
+    }
+
+    
+    
+    
 //    _isAdmin = YES; //HARD CODE here for implementation of Administrator functionality
     DLog(@"_isAdmin: %d", _isAdmin);
     
@@ -346,8 +369,8 @@
 -(void)dispatchEventOnTouch
 {
     //register the control object and associated key with a notification 
-    NSDictionary *userInfo = @{@"scanDeviceBtnTapped" : scanDeviceBtn};
-    [notificationCenter postNotificationName: @"scanDeviceBtnTapped" object:nil userInfo:userInfo];
+    NSDictionary *userInfo = @{@"scanBtnPressed" : scanDeviceBtn};
+    [notificationCenter postNotificationName: @"scanBtnPressed" object:nil userInfo:userInfo];
     DLog(@"EVENT DISPATCHED");
 }
 
@@ -360,7 +383,7 @@
     
     [notificationCenter addObserver:self
                            selector:@selector(xibDismissed:)
-                               name:@"scanDeviceBtnTapped"
+                               name:@"scanBtnPressed"
                              object:nil];//not interested in who posted notification just event
     
 }
@@ -371,7 +394,7 @@
     DLog(@"userInfo: %@", userInfo.description);
     
     DLog(@"Test this notification: %@", notification.name);
-    if ([notification.name isEqualToString:@"scanDeviceBtnTapped"]) {
+    if ([notification.name isEqualToString:@"scanBtnPressed"]) {
         DLog(@"Notified");//works
     }
     
@@ -422,7 +445,6 @@
 -(void)startScanning {
     
     [picker startScanning];
-    DLog(@"Start scanning delegate");
 }
 
 - (NSDictionary *)parseBarcodeFromString:(NSString *)barcodeString {
@@ -496,7 +518,6 @@
     //conditionals to extract/process the type of barcode scanned i.e. QR or 128
     
     
-    _scanModeIsDevice = YES;//hardcode YES here
     
     //if scan QR barcode
     if (_scanModeIsDevice && [barcodeType isEqualToString:@"QR"] && [barcodeResult count] >= 3) {

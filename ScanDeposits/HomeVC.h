@@ -45,6 +45,8 @@
 @property (strong, nonatomic) NSMutableArray *depositsArray;
 @property BOOL isAdmin;
 @property BOOL isUser;
+@property BOOL isSetup;
+
 //could be a enum
 @property BOOL scanModeIsDevice;
 

@@ -37,6 +37,8 @@
 
 @property BOOL allowEdit;
 
+@property BOOL isSetup;
+
 @property BOOL fileExists;
 
 @property BOOL isWritten;

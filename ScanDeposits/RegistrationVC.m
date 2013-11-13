@@ -15,6 +15,8 @@
 @interface RegistrationVC ()
 {
     UIBarButtonItem *editBtn;
+    UIButton *doneBtn;
+    
     CGSize keyboardSize;
     
     
@@ -71,6 +73,21 @@
     [self.navigationItem setRightBarButtonItem:editBtn];
     //disable on load
     [editBtn setEnabled:YES];
+    
+    
+    //enable when the user has successfully been created
+    //if one admin setup enable button
+    if (_isSetup) {
+        
+        [doneBtn setEnabled:YES];
+    }
+    //else no admin setup dont enable Done button
+    else
+    {
+        
+        [doneBtn setEnabled:NO];
+    }
+    
     
     
     //Add a notification for the keyboard
@@ -452,25 +469,20 @@
     DLog(@"_administratorArray: %@ with Count: %i ", _administratorArray, [_administratorArray count]);
     
     
-//    [_administratorArray addObject:adminsDict];
-//    //write to file here also
-//    [_administratorArray writeToFile:adminsPath atomically:YES];
-//    DLog(@"_administratorArray: %@", _administratorArray);
-    
-    
-    //Create a local array
-//    NSMutableArray *localUserArray = [NSMutableArray array];
-//    [localUserArray addObject:[user userName]];
-//    [localUserArray addObject:[user userEMail]];
-//    [localUserArray addObject:[user userStaffID]];
-//    [localUserArray addObject:[user userPassword]];
-    //Add to the overAll collection
-//    [_adminArray addObject:localUserArray];
-//    DLog(@"_adminArray__: %@ with Count: %i ", _adminArray, [_adminArray count]);
-//    //write to file
-//    [_adminArray writeToFile:filePath atomically:YES];
-//    _isWritten = YES;
-    
+    //set gobal ivar for admin setup completed
+    if ([User isAdminUser] && user && _isWritten) {
+        //Now at least 1 admin setup so proceed and create gobal ivar
+        
+        //NSUserDefaults
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setObject:@YES forKey:@"Is Administrator"];
+        [userDefaults setObject:@YES forKey:@"Is Setup"];//setup complete
+        [userDefaults synchronize];
+        
+        //enable when the user has successfully been created
+        [doneBtn setEnabled:YES];
+    }
+
 }
 
 - (void)createInitialsFromText:(NSString *)text {
@@ -562,8 +574,6 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
-    
-//     [_registerTV setEditing:NO animated:NO];//test
     
     _allowEdit = NO;
     
@@ -727,7 +737,7 @@
         
         
         //construct a button to save user details in NSUserDefaults
-        UIButton *doneBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        doneBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [doneBtn setFrame:CGRectMake(10, 74, 300, 44)];
         [doneBtn setUserInteractionEnabled:YES];
         [doneBtn addTarget:self action:@selector(donePressed:) forControlEvents:UIControlEventTouchUpInside];
@@ -749,6 +759,29 @@
     
     //unbalanced calls because its dismissing and then pushing back up from viewDIdLoad and cant do that if anim here as its conflicting
     //so Q is where does admin go from here currently back here
+    
+    
+    //NSUserDefaults
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    BOOL isAdmin = [[userDefaults objectForKey:@"Is Administrator"]boolValue];
+    
+    //retrieve the setup value from NSUserDefaults
+    _isSetup = [[userDefaults objectForKey:@"Is Setup"]boolValue];
+    
+    //if one admin setup allow dismissal of VC
+    if (_isSetup && isAdmin) {
+       
+        [self dismissViewControllerAnimated:NO completion:nil];
+        
+    }
+    //else no admin setup so display error message -> custom popup if time
+    else
+    {
+        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"Error: No Administrator setup" message:@"Please create an Administrator" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        [alertView show];
+    }
+
+    
     [self dismissViewControllerAnimated:NO completion:nil];
         //ToDo add saving functionality here
         //        //Save the admins to file here

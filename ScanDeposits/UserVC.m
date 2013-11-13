@@ -8,6 +8,8 @@
 
 #import "UserVC.h"
 #import "User.h"
+#import "HomeVC.h"
+
 
 #import "PersistenceManager.h"
 
@@ -304,9 +306,17 @@
 
 - (void)donePressed:(UIButton *)sender {
     
-//    [self.navigationController popToRootViewControllerAnimated:YES];//Pushes to previous navController as I instaniated another one
-    [self.navigationController popViewControllerAnimated:YES];
     
+    [self.navigationController popViewControllerAnimated:YES];//popToRoot doesnt work only 1VC on this navController
+    
+    //test more than one UINavigationController -> doesnt work
+//    for (UIViewController *ViewController in self.navigationController.viewControllers) {
+//        if ([ViewController isKindOfClass:[HomeVC class]]) {
+//            
+//            [self.navigationController popToViewController:ViewController animated:YES];
+//        }
+//    }
+
 }
 
 - (void)addUserPressed:(UIButton *)sender {
@@ -769,6 +779,15 @@
         [_userTV reloadData];
         
     }//close if
+    
+    if (user && [_usersArray count] > 0 && _isWritten) {
+        //store user 
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setObject:@YES forKey:@"Is User"];
+        [userDefaults setObject:@YES forKey:@"Is User Setup"];
+        [userDefaults synchronize];
+        
+    }
     
     
 }

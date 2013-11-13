@@ -11,6 +11,14 @@
 @class User;
 @class UserVC;
 
+@class RegistrationVC;
+
+@protocol LogoutDelegate <NSObject>
+
+- (void)logoutAdministrator:(NSNumber *)admin;
+
+@end
+
 
 #define NAME_TF 100
 #define USER_LBL 250
@@ -25,6 +33,9 @@
     NSNotificationCenter *notificationCenter;
 
 }
+
+//Protocol method
+@property (weak, nonatomic) id <LogoutDelegate> delegate;
 
 @property (strong, nonatomic) IBOutlet UITableView *registerTV;
 

@@ -24,13 +24,14 @@
 @class UserVC;
 
 #import "LogInVC.h"
+#import "RegistrationVC.h"
 
 //#define kScanditSDKAppKey @"KJpKMq+6EeGFMRBVrjSCgiia2gavuhHhm6SvQEFkLzs" -> scanRedeem
 
 
 #define kScanditSDKAppKey @"4w8vXjD2EeOZw8u2pkkjQH4S+hfplxDDtzKnte2lX4s"
 
-@interface HomeVC : UIViewController <ScanditSDKOverlayControllerDelegate, ResumeScanMode, DismissLoginWithValidationDelegate>
+@interface HomeVC : UIViewController <ScanditSDKOverlayControllerDelegate, ResumeScanMode, DismissLoginWithValidationDelegate, LogoutDelegate>
 {
     NSString *dateString;//not very OO
     NSNotificationCenter *notificationCenter;
@@ -46,6 +47,7 @@
 @property BOOL isAdmin;
 @property BOOL isUser;
 @property BOOL isSetup;
+@property BOOL isLoggedOut;
 
 //could be a enum
 @property BOOL scanModeIsDevice;

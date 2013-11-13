@@ -741,7 +741,7 @@
         [doneBtn setFrame:CGRectMake(10, 74, 300, 44)];
         [doneBtn setUserInteractionEnabled:YES];
         [doneBtn addTarget:self action:@selector(donePressed:) forControlEvents:UIControlEventTouchUpInside];
-        [self buttonStyle:doneBtn WithImgName:@"blueButton.png" imgSelectedName:@"blueButtonSelected.png" withTitle:@"DONE"];
+        [self buttonStyle:doneBtn WithImgName:@"greenButton.png" imgSelectedName:@"greenbuttonSelected.png" withTitle:@"LOG OUT"];
         
         //add to parent view
         [bottomView addSubview:doneBtn];
@@ -778,13 +778,24 @@
     else
     {
         UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"Error: No Administrator setup" message:@"Please create an Administrator" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        //may need to implement set delegate of UIAlertView to take hit from button press to allow dismissVC below
         [alertView show];
     }
 
     
-    [self dismissViewControllerAnimated:NO completion:nil];
-        //ToDo add saving functionality here
-        //        //Save the admins to file here
+//    [self dismissViewControllerAnimated:NO completion:nil];
+    //watch the dismissal of this may need a duration delay as UINav unbalanced calls
+//    [self dismissViewControllerAnimated:YES completion:^{
+    
+        //need to Logout maybe delegate method required
+        if ([self.delegate respondsToSelector:@selector(logoutAdministrator:)]) {
+            DLog(@"logoutAdmin delegate called on done/logout press");
+            [self.delegate performSelector:@selector(logoutAdministrator:) withObject:@(YES)];
+        }
+    
+        [self dismissViewControllerAnimated:YES completion:nil];
+        
+//    }];//close block
     
 }
 

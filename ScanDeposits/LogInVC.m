@@ -36,6 +36,7 @@
 - (void)donePressed:(UIButton *)sender {
     
     
+    
 }
 
 - (void)loginPressed:(UIButton *)sender {
@@ -79,7 +80,7 @@
                     //dismissLoginVC
                     [self.delegate performSelector:@selector(dismissLoginVC: isAdmin:) withObject:_packagedAdmins withObject:@(isAdmin)];// -> works @(YES) but dont hardcode
                     DLog(@"New Admin delgate protocol implemented");
-                    [self dismissViewControllerAnimated:NO completion:nil];//was YES no completion block required
+                    [self dismissViewControllerAnimated:YES completion:nil];//was YES no completion block required
                 }//close if
                 
             }//close if

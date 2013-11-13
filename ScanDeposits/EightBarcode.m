@@ -18,6 +18,7 @@
 //@property (strong, nonatomic) NSString *timeStamp;
 
 @property (strong, nonatomic) NSDictionary *internalDict;
+@property (strong, nonatomic) NSDictionary *barcodeDict;
 
 
 @end
@@ -31,23 +32,28 @@
 - (void)commonInit:(NSDictionary *)dict {
     
     _symbology = dict[@"Symbology"];
-    _processType = dict[@"ProcessType"];
-    _uniqueBagNumber = dict[@"UniqueNumber"];
+    _processType = dict[@"Process Type"];
+    _uniqueBagNumber = dict[@"Unique Bag Number"];
+    
+    if (_symbology) {
+        //create a dict with a barcodeType identifier
+        _barcodeDict = @{_symbology : dict};
+        DLog(@"_barcodeDict in commonInit: %@", _barcodeDict);
+    }
     
     _internalDict = dict;//3 entries
-    
     
 }
 
 //NOTE: uniqueBagNumber and more passed to Deposit model objects constructor
-- (id)initBarcodeWithType:(NSString *)symbology processType:(NSString *)process
+- (id)initBarcodeWithSymbology:(NSString *)symbology processType:(NSString *)process
                                           uniqueBagNumber:(NSString *)uniqueNumber {
     
     self = [super init];
     if (self) {
         
-        NSDictionary *dict = @{@"Symbology" : symbology, @"ProcessType" : process,
-                               @"UniqueNumber" : uniqueNumber};//dont think we need time here
+        NSDictionary *dict = @{@"Symbology" : symbology, @"Process Type" : process,
+                               @"Unique Bag Number" : uniqueNumber};//dont think we need time here
         
         [self commonInit:dict];
     }
@@ -70,6 +76,11 @@
 - (NSString *)barcodeUniqueBagNumber {
     
     return _uniqueBagNumber;
+}
+//returns a dictionary containing the barcode model with its symbology as a key
+- (NSDictionary *)barcodeDictionaryWithSymbology {
+    
+    return _barcodeDict;
 }
 
 

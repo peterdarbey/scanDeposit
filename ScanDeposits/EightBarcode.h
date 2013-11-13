@@ -16,7 +16,7 @@
 
 - (void)commonInit:(NSDictionary *)dict;
 
-- (id)initBarcodeWithType:(NSString *)symbology processType:(NSString *)process
+- (id)initBarcodeWithSymbology:(NSString *)symbology processType:(NSString *)process
         uniqueBagNumber:(NSString *)uniqueNumber;
 
 
@@ -24,5 +24,7 @@
 - (NSString *)barcodeSymbology;
 - (NSString *)barcodeProcess;
 - (NSString *)barcodeUniqueBagNumber;
+
+- (NSDictionary *)barcodeDictionaryWithSymbology;
 
 @end

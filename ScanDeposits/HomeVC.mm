@@ -481,8 +481,9 @@
     //Capture Time stamp here -> when bag scanned when date/time is created
     dateString = [self formatMyDateString];
     DLog(@"<< dateString >>: %@", dateString);//current 24 Hr format: 12/11/2013 11:46
-    //scanned barcode
-    DLog(@"barcodeResult: %@", barcodeResult);
+    
+    //see whats inside before parsing
+    DLog(@"barcodeResult returned by scan engine: %@", barcodeResult);
     
     //its a NSString so cant use objectForKey
      NSString *barcodeString = barcodeResult[@"barcode"];
@@ -506,14 +507,12 @@
         barcode = [self parseBarcodeFromString:barcodeString];
         DLog(@"barcodeDict: %@", barcode);
         
-//        Barcode *barcode = [Barcode instanceFromDictionary:barcodeDict];
-        
         // -> crashed here for regular QR code
         if ([barcode count] >= 3) {//differ count than model -> probably a different if
         
         //External device
         //Now parsed correctly proceed with the new QRBarcode model constructor
-        _qrBarcode = [[QRBarcode alloc]initBarcodeWithType:barcodeType branch:barcode[@"Branch NSC"] process:barcode[@"Process"] safeID:[barcode[@"Safe ID"]intValue] andDevice:@"UnKnown"];//what the Safe ID rounds off int
+        _qrBarcode = [[QRBarcode alloc]initBarcodeWithSymbology:barcodeType branch:barcode[@"Branch NSC"] process:barcode[@"Process"] safeID:[barcode[@"Safe ID"]intValue] andDevice:@"UnKnown"];//what the Safe ID rounds off int
             //Add to barcodeArray collection
             [_barcodeArray addObject:_qrBarcode];
             
@@ -533,15 +532,19 @@
         
         if ([barcode count] >= 3) {
             
+        //old model data structure
+//      Barcode *barcodeObject = [Barcode instanceFromDictionary:barcodeResult];
+            
+            
             //Note: may need to parse depending on 128 data structure so create new barcodeDict
+            
             //construct custom 128Barcode model
-            EightBarcode *eightBarcode = [[EightBarcode alloc]initBarcodeWithType:barcodeResult[@"symbology"] processType:barcodeResult[@"Process Type"] uniqueBagNumber:barcodeResult[@"Unique Bag Number"]];//test
+            EightBarcode *eightBarcode = [[EightBarcode alloc]initBarcodeWithSymbology:barcodeResult[@"symbology"] processType:barcodeResult[@"Process Type"] uniqueBagNumber:barcodeResult[@"Unique Bag Number"]];
+            DLog(@"eightBarcode: %@", eightBarcode);
             
+            //Add to collection
+//          [_barcodeArray addObject:eightBarcode];
             
-            //    //NOTE: Model not correct yet needs to be parsed 1st
-            //    Barcode *barcodeObject = [Barcode instanceFromDictionary:barcodeResult];//will need custom initWith method
-            //    //Add to collection
-            //    [_barcodeArray addObject:barcodeObject];
         }//close if
         
         //Construct custom popup here for 128
@@ -562,7 +565,7 @@
     //pass the time
     popup.timeString = dateString;//not very OO -> passing to the Deposit model via the popup xib
     
-    if ([barcode count] >= 3) { //add && barcodeType isEqualToString:QR
+    if ([barcode count] >= 3) { //cant test for barcodeType as Its a custom QR
         
         //populate the QR barcode popup
         popup.symbologyLbl.text = [NSString stringWithFormat:@"Symbology: %@", [_qrBarcode barcodeSymbology]];

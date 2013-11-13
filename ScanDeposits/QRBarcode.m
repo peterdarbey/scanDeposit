@@ -21,6 +21,8 @@
 //internal representation
 @property (strong, nonatomic) NSDictionary *internalDict;
 
+@property (strong, nonatomic) NSDictionary *barcodeDict;
+
 @end
 
 
@@ -34,11 +36,17 @@
     _safeID = [dict[@"Safe ID"]intValue];//retrieve int value
     _device = dict[@"Device"];
     
+    if (_symbology) {
+        //create a dict with a barcodeType identifier
+        _barcodeDict = @{_symbology : dict};//i.e @"Symbology : dict
+    }
+
+    
     _internalDict = dict; //5 entries
     
 }
 
-- (id)initBarcodeWithType:(NSString *)symbology branch:(NSString *)branchNSC
+- (id)initBarcodeWithSymbology:(NSString *)symbology branch:(NSString *)branchNSC
                   process:(NSString *)processType
                 safeID:(int)safeType andDevice:(NSString *)device {
     
@@ -75,6 +83,13 @@
     
     return _device;
 }
+
+//returns a dictionary containing the barcode model with its symbology as a key
+- (NSDictionary *)barcodeDictionaryWithSymbology {
+    
+    return _barcodeDict;
+}
+
 
 
 

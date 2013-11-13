@@ -16,7 +16,7 @@
 
 - (void)commonInit:(NSDictionary *)dict;
 
-- (id)initBarcodeWithType:(NSString *)symbology branch:(NSString *)branchNSC
+- (id)initBarcodeWithSymbology:(NSString *)symbology branch:(NSString *)branchNSC
                   process:(NSString *)processType
                    safeID:(int)safeType
                 andDevice:(NSString *)device;
@@ -27,5 +27,7 @@
 - (NSString *)barcodeProcess;
 - (int)barcodeSafeID;
 - (NSString *)barcodeDevice;
+//returns a dict for a symbology key
+- (NSDictionary *)barcodeDictionaryWithSymbology;
 
 @end

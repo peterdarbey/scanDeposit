@@ -10,6 +10,7 @@
 
 #import "Barcode.h"//old
 #import "QRBarcode.h"
+#import "EightBarcode.h"//new
 
 #import "DepositsVC.h"
 #import "Deposit.h"
@@ -480,8 +481,8 @@
     //Capture Time stamp here -> when bag scanned when date/time is created
     dateString = [self formatMyDateString];
     DLog(@"<< dateString >>: %@", dateString);//current 24 Hr format: 12/11/2013 11:46
-    
-    DLog(@"barcodeResult*****: %@", barcodeResult);//if this "http://www.5staroffice.com" will crash
+    //scanned barcode
+    DLog(@"barcodeResult: %@", barcodeResult);
     
     //its a NSString so cant use objectForKey
      NSString *barcodeString = barcodeResult[@"barcode"];
@@ -489,14 +490,15 @@
     
     //extract the Symbology to determine the relevant data model and construct appropriately
     NSString *barcodeType = (NSString *)barcodeResult[@"symbology"];
-    
-    
+    //declare the dictionary to hold the parsed dict model object
     NSDictionary *barcode;
     //conditionals to extract/process the type of barcode scanned i.e. QR or 128
+    
+    
+    _scanModeIsDevice = YES;//hardcode YES here
+    
     //if scan QR barcode
-    //Hard code YES here
-    _scanModeIsDevice = YES;//hard coded here
-    if (_scanModeIsDevice && [barcodeType isEqualToString:@"QR"]) {
+    if (_scanModeIsDevice && [barcodeType isEqualToString:@"QR"] && [barcodeResult count] >= 3) {
         
         DLog(@"barcodeType: %@", barcodeType);//QR - correct
         
@@ -507,7 +509,7 @@
 //        Barcode *barcode = [Barcode instanceFromDictionary:barcodeDict];
         
         // -> crashed here for regular QR code
-        if ([barcode count] >= 3) {//differ count than model
+        if ([barcode count] >= 3) {//differ count than model -> probably a different if
         
         //External device
         //Now parsed correctly proceed with the new QRBarcode model constructor
@@ -519,45 +521,46 @@
         
         //ToDo add _qrBarcode to array if need be and some processing involved for conditional statements
         
+        //present the appropriate popup -> AlertView.xib and temp stop scanning
+        [picker stopScanning];
+        [self showPopup:barcode];//pass relevant custom model or dictionary
         
     }
     //else scan 128 barcode
-    else if (_scanModeIsDevice && [barcodeType isEqualToString:@"128"])
+    else if (_scanModeIsDevice && [barcodeType isEqualToString:@"128"] && [barcodeResult count] >= 3)//may change
     {
         DLog(@"barcodeType: %@", barcodeType);//128 - correct
         
         if ([barcode count] >= 3) {
             
+            //Note: may need to parse depending on 128 data structure so create new barcodeDict
+            //construct custom 128Barcode model
+            EightBarcode *eightBarcode = [[EightBarcode alloc]initBarcodeWithType:barcodeResult[@"symbology"] processType:barcodeResult[@"Process Type"] uniqueBagNumber:barcodeResult[@"Unique Bag Number"]];//test
             
-        }
+            
+            //    //NOTE: Model not correct yet needs to be parsed 1st
+            //    Barcode *barcodeObject = [Barcode instanceFromDictionary:barcodeResult];//will need custom initWith method
+            //    //Add to collection
+            //    [_barcodeArray addObject:barcodeObject];
+        }//close if
         
-    }
+        //Construct custom popup here for 128
+        //present the appropriate popup -> AlertView.xib and temp stop scanning
+        [picker stopScanning];
+        [self showPopup:barcode];//pass relevant custom model or dictionary
+        
+    }//close else if
     
     
-        //OLD code
-//    //NOTE: Model not correct yet needs to be parsed 1st
-//    Barcode *barcodeObject = [Barcode instanceFromDictionary:barcodeResult];//will need custom initWith method
-//    //Add to collection
-//    [_barcodeArray addObject:barcodeObject];
-//    DLog(@"barcode from model>>>>>>>>: %@", [barcodeObject barcodeData]);
-    
-    
-    
-    
-    //present alertView and temp stop scanning
-    [picker stopScanning];
-
-    //Create a custom Alert -> AlertView.xib
-    [self showPopup:barcode];
 }
 
 -(void)showPopup:(NSDictionary *)barcode {
-    //Create a custom Alert -> AlertView.xib
+    //Create a custom AlertView.xib
     AlertView *popup = [AlertView loadFromNibNamed:@"AlertView"];
     //Add custom delegate method here to restart picker scanning
     [popup setDelegate:self];
     //pass the time
-    popup.timeString = dateString;//not very OO
+    popup.timeString = dateString;//not very OO -> passing to the Deposit model via the popup xib
     
     if ([barcode count] >= 3) { //add && barcodeType isEqualToString:QR
         

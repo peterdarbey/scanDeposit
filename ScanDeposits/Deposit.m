@@ -53,15 +53,12 @@ static double _totalBagsAmount;
     if (self) {
         NSDictionary *dict = @{@"BagNumber": bagNumber, @"Barcode" : barcode, @"BagAmount" : [NSNumber numberWithDouble:amount], @"BagCount" : [NSNumber numberWithInt:count], @"Time" : time};
         DLog(@"init dict has: %@", dict);
+        
         //In constructor increment bag count
-//        _bagCount++;
         _totalBagCount++;
         DLog(@"_totalBagCount********: %i", _totalBagCount);
         _totalBagsAmount += [dict[@"BagAmount"]doubleValue];//retreive the instance amount and Add to total
        
-//        //Use for now
-//        AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-//        appDelegate.totalBagCount += _bagCount;
         
         [self commonInit:dict];
     }

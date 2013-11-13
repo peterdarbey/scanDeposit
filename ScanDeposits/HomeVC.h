@@ -15,6 +15,7 @@
 
 @class Barcode;
 @class QRBarcode;
+@class EightBarcode;
 
 @class Deposit;
 @class DepositsVC;

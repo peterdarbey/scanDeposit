@@ -434,8 +434,8 @@
 {
     if( indexPath.row == 0 ) {
         if ([tableView numberOfRowsInSection:indexPath.section] == 1) {
-            cell.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"singleCell"]];
-            cell.selectedBackgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"singleCellSelected"]];
+            cell.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"singleCell.png"]];
+            cell.selectedBackgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"singleCellSelected.png"]];
         }
     }
     

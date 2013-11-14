@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface EightBarcode : NSObject
+@interface EightBarcode : NSObject // -> 2/5 interleaved 
 
 
 @property (strong, nonatomic) NSString *symbology;

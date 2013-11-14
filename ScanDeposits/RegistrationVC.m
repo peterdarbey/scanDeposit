@@ -757,10 +757,6 @@
 
 - (void)donePressed:(UIButton *)sender {
     
-    //unbalanced calls because its dismissing and then pushing back up from viewDIdLoad and cant do that if anim here as its conflicting
-    //so Q is where does admin go from here currently back here
-    
-    
     //NSUserDefaults
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     BOOL isAdmin = [[userDefaults objectForKey:@"Is Administrator"]boolValue];
@@ -768,35 +764,29 @@
     //retrieve the setup value from NSUserDefaults
     _isSetup = [[userDefaults objectForKey:@"Is Setup"]boolValue];
     
-    //if one admin setup allow dismissal of VC
-    if (_isSetup && isAdmin) {
-       
-        [self dismissViewControllerAnimated:NO completion:nil];
-        
-    }
-    //else no admin setup so display error message -> custom popup if time
-    else
-    {
-        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"Error: No Administrator setup" message:@"Please create an Administrator" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-        //may need to implement set delegate of UIAlertView to take hit from button press to allow dismissVC below
-        [alertView show];
-    }
-
     
-//    [self dismissViewControllerAnimated:NO completion:nil];
-    //watch the dismissal of this may need a duration delay as UINav unbalanced calls
-//    [self dismissViewControllerAnimated:YES completion:^{
     
-        //need to Logout maybe delegate method required
+        //preform delegate protocol
         if ([self.delegate respondsToSelector:@selector(logoutAdministrator:)]) {
             DLog(@"logoutAdmin delegate called on done/logout press");
             [self.delegate performSelector:@selector(logoutAdministrator:) withObject:@(YES)];
         }
     
-        [self dismissViewControllerAnimated:YES completion:nil];
-        
-//    }];//close block
     
+        //if one admin setup allow dismissal of VC
+        if (_isSetup && isAdmin) {
+            
+            [self dismissViewControllerAnimated:NO completion:nil];//set to YES
+            
+        }
+        //else no admin setup so display error message -> custom popup if time
+        else
+        {
+            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"Error: No Administrator setup" message:@"Please create an Administrator" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            //may need to implement set delegate of UIAlertView to take hit from button press to allow dismissVC below
+            [alertView show];
+        }
+
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {

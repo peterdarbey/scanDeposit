@@ -32,8 +32,8 @@
 - (void)commonInit:(NSDictionary *)dict {
     
     _symbology = dict[@"Symbology"];
-    _processType = dict[@"Process Type"];
-    _uniqueBagNumber = dict[@"Unique Bag Number"];
+    _processType = dict[@"Process Type"];//coin only
+    _uniqueBagNumber = dict[@"Unique Bag Number"];//12 digit code with 1st 3 deter processType 
     
     if (_symbology) {
         //create a dict with a barcodeType identifier
@@ -44,10 +44,10 @@
     _internalDict = dict;//3 entries
     
 }
-
+                                                //processType:Coin only
 //NOTE: uniqueBagNumber and more passed to Deposit model objects constructor
 - (id)initBarcodeWithSymbology:(NSString *)symbology processType:(NSString *)process
-                                          uniqueBagNumber:(NSString *)uniqueNumber {
+                                          uniqueBagNumber:(NSString *)uniqueNumber { //uniqune is 12 digit
     
     self = [super init];
     if (self) {

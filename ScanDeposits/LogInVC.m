@@ -80,7 +80,8 @@
                     //dismissLoginVC
                     [self.delegate performSelector:@selector(dismissLoginVC: isAdmin:) withObject:_packagedAdmins withObject:@(isAdmin)];// -> works @(YES) but dont hardcode
                     DLog(@"New Admin delgate protocol implemented");
-                    [self dismissViewControllerAnimated:YES completion:nil];//was YES no completion block required
+                    //dismiss
+                    [self dismissViewControllerAnimated:YES completion:nil];//correct
                 }//close if
                 
             }//close if
@@ -153,7 +154,7 @@
                 
                         [self.delegate performSelector:@selector(dismissLoginVC: isAdmin:) withObject:_packagedUsers withObject:@(isAdmin)];//isAdmin set to last value, dont need to worry about admin here
                         //now dismiss the LoginVC once the appropriate values are set in HomeVC conditions
-                        [self dismissViewControllerAnimated:YES completion:nil];//no code to execute now - correct
+                        [self dismissViewControllerAnimated:NO completion:nil];//no code to execute now - 0.3 secs
                     }
                 
                 }//close if

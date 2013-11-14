@@ -66,8 +66,8 @@
     
     if (_isLoggedOut) {
         
-        //try should work
-        _isAdmin = NO;//should really be logged out BOOL not _isAdmin
+        //sets the admin to no as logged out before the viewWillAppear is called
+        _isAdmin = NO;//should really be logged out BOOL not _isAdmin -> goes here
     }
     
    
@@ -275,7 +275,7 @@
         [self.view addSubview:scanDeviceBtn];//correct
         //Add other behaviour here
         
-        [helpTV setText:@"How to use this app\n\nPlease scan the barcode on the external device (ATM)..."];
+        [helpTV setText:@"How to use this app\n\nPlease scan the barcode on the Device/Process..."];
         
         [self.view addSubview:helpTV];
         
@@ -303,6 +303,7 @@
     
     //Once setup complete Always present LogInVC for all users/admins
     LogInVC *loginVC = [self.storyboard instantiateViewControllerWithIdentifier:@"LogInVC"];
+    //
     UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:loginVC];
     
     //Add delay to presentation of LoginVC until HomeVC has appeared first
@@ -329,17 +330,18 @@
     DLog(@"Presenting RegistrationVC");
     
     RegistrationVC *registerVC = [self.storyboard instantiateViewControllerWithIdentifier:@"RegistrationVC"];
+    //Attempt to present on some other navController whilst pres in progress
     UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:registerVC];
     [navController.navigationBar setBarStyle:UIBarStyleBlackTranslucent];
     
     //Add delay to presentation of LoginVC until HomeVC has appeared first
-    double delayInSeconds = 0.3;
+    double delayInSeconds = 1.3;//works -> gives the LogInVC time to dismiss and allow presentation of regVC
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        
+    
         //NOTE: dont need the dispatch delay for RegistrationVC as admin ???
         //Delay added has resolved the issue with the unbalanced calls to navController
-        [self presentViewController:navController animated:YES completion:^{
+        [self presentViewController:navController animated:YES completion:^{ //returns here after 1.3 
             [registerVC setModalPresentationStyle:UIModalPresentationFullScreen];
             [registerVC setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
             [registerVC setTitle:NSLocalizedString(@"Admin Settings", @"Adminstrator Settings")];
@@ -374,12 +376,11 @@
             DLog(@"Proceed and scan away");
         }
         //is admin via login and not user
-        else if (_isAdmin && !_isUser) {
+        else if (_isAdmin && !_isUser) { //enters here on Logout Mmm ????
             //admin has Logged in so now dismiss LogInVC
-            DLog(@"Admin delegate protocol did dismiss LogInVC");
             //add time delay here
             //Add delay to presentation of LoginVC until HomeVC has appeared first
-            double delayInSeconds = 0.3;
+            double delayInSeconds = 0.3;//1.3 in method
             dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
             dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
                 
@@ -628,7 +629,7 @@
     
     
     //if scan QR barcode
-    if (_scanModeIsDevice && [barcodeType isEqualToString:@"QR"] && [barcodeResult count] >= 3) {
+    if (_scanModeIsDevice && [barcodeType isEqualToString:@"QR"]) {// && [barcodeResult count] >= 3) {
         
         DLog(@"barcodeType: %@", barcodeType);//QR - correct
         

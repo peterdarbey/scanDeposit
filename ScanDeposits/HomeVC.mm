@@ -555,6 +555,10 @@
      NSString *barcodeString = barcodeResult[@"barcode"];
     DLog(@"barcodeString: %@", barcodeString);
     
+    //need to improve if condition
+    BOOL containsString = [barcodeString hasPrefix:@"Branch NSC"];
+    DLog(@"containsString: %d", containsString);//works
+    
     //extract the Symbology to determine the relevant data model and construct appropriately
     NSString *barcodeType = (NSString *)barcodeResult[@"symbology"];
     //declare the dictionary to hold the parsed dict model object
@@ -562,9 +566,8 @@
     //conditionals to extract/process the type of barcode scanned i.e. QR or 128
     
     
-    
     //if scan QR barcode
-    if (_scanModeIsDevice && [barcodeType isEqualToString:@"QR"]) {// && [barcodeResult count] >= 3) {
+    if (_scanModeIsDevice && [barcodeType isEqualToString:@"QR"] && [barcodeString hasPrefix:@"Branch NSC"]) {
         
         DLog(@"barcodeType: %@", barcodeType);//QR - correct
         
@@ -590,8 +593,8 @@
         [self showPopup:barcode];//pass relevant custom model or dictionary
         
     }
-    //else scan 128 barcode
-    else if (_scanModeIsDevice && [barcodeType isEqualToString:@"128"] && [barcodeResult count] >= 3)//may change
+    //else scan 128 barcode   --> will be different Prefix for 2/5 interleaved not 128
+    else if (_scanModeIsDevice && [barcodeType isEqualToString:@"128"] && [barcodeString hasPrefix:@"Branch NSC"])
     {
         DLog(@"barcodeType: %@", barcodeType);//128 - correct
         

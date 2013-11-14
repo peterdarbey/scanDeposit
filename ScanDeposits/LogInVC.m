@@ -77,7 +77,7 @@
                 
                 //different custom delegate method call
                 if ([self.delegate respondsToSelector:@selector(dismissLoginVC: isAdmin:)]) {
-                    //dismissLoginVC
+                    //dismissLoginVC -> sets isAdmin to YES and isUser to NO
                     [self.delegate performSelector:@selector(dismissLoginVC: isAdmin:) withObject:_packagedAdmins withObject:@(isAdmin)];// -> works @(YES) but dont hardcode
                     DLog(@"New Admin delgate protocol implemented");
                     //dismiss

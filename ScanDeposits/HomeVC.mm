@@ -335,7 +335,7 @@
     [navController.navigationBar setBarStyle:UIBarStyleBlackTranslucent];
     
     //Add delay to presentation of LoginVC until HomeVC has appeared first
-    double delayInSeconds = 1.3;//works -> gives the LogInVC time to dismiss and allow presentation of regVC
+    double delayInSeconds = 1.0;//works -> gives the LogInVC time to dismiss and allow presentation of regVC
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
     
@@ -378,22 +378,17 @@
         //is admin via login and not user
         else if (_isAdmin && !_isUser) { //enters here on Logout Mmm ????
             //admin has Logged in so now dismiss LogInVC
-            //add time delay here
-            //Add delay to presentation of LoginVC until HomeVC has appeared first
-            double delayInSeconds = 0.3;//1.3 in method
-            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-                
-                //and present Administration settings/RegisrationVC
-                [self presentRegistrationVC];
-                
-            });//close dispatch block
+            //and present Administration settings/RegisrationVC
+            
+            //Added 1.0 delay to presentation of RegistrationVC in method below
+                [self presentRegistrationVC];//correct
             
         }//close else if
 
         else
         {
             //Once setup complete Always present LogInVC for all users/admins if not already LOGGED IN
+            //Added delay to presentation of LogInVC in method below until HomeVC has appeared first
             [self presentLogInVC];
         }
         
@@ -406,66 +401,6 @@
         //FIRST TIME LAUNCH: -> present Administration settings/RegisrationVC
         [self presentRegistrationVC];
     }
-
-    
-    
-    
-    
-    
-//    //NOTE: may need to add user to NSUserDefaults 
-//    //if Administrator (filled in password so admin) go to RegistrationVC / Administrator Settings
-//    if (_isAdmin) { //&& !_isUser 
-////        DLog(@"User is ADMIN");
-////        RegistrationVC *registerVC = [self.storyboard instantiateViewControllerWithIdentifier:@"RegistrationVC"];
-////        UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:registerVC];
-////        [navController.navigationBar setBarStyle:UIBarStyleBlackTranslucent];
-////        
-////        //Add delay to presentation of LoginVC until HomeVC has appeared first
-////        double delayInSeconds = 0.3;
-////        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-////        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-////        
-////            //NOTE: dont need the dispatch delay for RegistrationVC as admin ???
-////            //Delay added has resolved the issue with the unbalanced calls to navController
-////            [self presentViewController:navController animated:YES completion:^{
-////                [registerVC setModalPresentationStyle:UIModalPresentationFullScreen];
-////                [registerVC setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
-////                [registerVC setTitle:NSLocalizedString(@"Admin Settings", @"Adminstrator Settings")];
-////            }];
-////            
-////        });//close dispatch block
-//        
-//    }
-//    //not administrator or a reg user
-//    else if (!_isAdmin && !_isUser) { //correct behaviour now
-//        
-////        LogInVC *loginVC = [self.storyboard instantiateViewControllerWithIdentifier:@"LogInVC"];
-////        
-////        UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:loginVC];
-////        
-////        //Add delay to presentation of LoginVC until HomeVC has appeared first
-////        double delayInSeconds = 0.3;//0.25
-////        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-////        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-////            
-////            //HomeVC been by another NavController when we dismiss the LoginVC? -> solved
-////            [self presentViewController:navController animated:YES completion:^{
-////                //ToDo add some functionality here
-////                [loginVC setModalPresentationStyle:UIModalPresentationFullScreen];
-////                [loginVC setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
-////                [loginVC setTitle:NSLocalizedString(@"Log In", @"Log In")];
-////                //set the HomeVC as the delegate for the LoginVC dismissLoginVCWithValidation
-////                [loginVC setDelegate:self];
-////            }];
-////            
-////        });//close dispatch block
-//        
-//        
-//    }
-//    else
-//    {
-//        DLog(@"is user scan away");//temp remove condition later
-//    }
 
 }
 

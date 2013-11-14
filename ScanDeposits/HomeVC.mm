@@ -557,7 +557,7 @@
     
     //need to improve if condition
     BOOL containsString = [barcodeString hasPrefix:@"Branch NSC"];
-    DLog(@"containsString: %d", containsString);//works
+    DLog(@"containsString: %d", containsString);//YES
     
     //extract the Symbology to determine the relevant data model and construct appropriately
     NSString *barcodeType = (NSString *)barcodeResult[@"symbology"];
@@ -566,7 +566,7 @@
     //conditionals to extract/process the type of barcode scanned i.e. QR or 128
     
     
-    //if scan QR barcode
+    //if scan QR barcode and stops regular QR code from entering 
     if (_scanModeIsDevice && [barcodeType isEqualToString:@"QR"] && [barcodeString hasPrefix:@"Branch NSC"]) {
         
         DLog(@"barcodeType: %@", barcodeType);//QR - correct
@@ -575,16 +575,12 @@
         barcode = [self parseBarcodeFromString:barcodeString];
         DLog(@"barcodeDict: %@", barcode);
         
-        // -> crashed here for regular QR code
-        if ([barcode count] >= 3) {//differ count than model -> probably a different if
-        
         //External device
         //Now parsed correctly proceed with the new QRBarcode model constructor
         _qrBarcode = [[QRBarcode alloc]initBarcodeWithSymbology:barcodeType branch:barcode[@"Branch NSC"] process:barcode[@"Process"] safeID:[barcode[@"Safe ID"]intValue] andDevice:@"UnKnown"];//what the Safe ID rounds off int
             //Add to barcodeArray collection
             [_barcodeArray addObject:_qrBarcode];
-            
-        }//close if
+        
         
         //ToDo add _qrBarcode to array if need be and some processing involved for conditional statements
         
@@ -592,28 +588,23 @@
         [picker stopScanning];
         [self showPopup:barcode];//pass relevant custom model or dictionary
         
+        //set _scanModel to bag barcode now as we have a successful QR scan
+        _scanModeIsDevice = NO;
+        
     }
     //else scan 128 barcode   --> will be different Prefix for 2/5 interleaved not 128
-    else if (_scanModeIsDevice && [barcodeType isEqualToString:@"128"] && [barcodeString hasPrefix:@"Branch NSC"])
+    else if (!_scanModeIsDevice && [barcodeType isEqualToString:@"128"] && [barcodeString hasPrefix:@"Branch NSC"])
     {
         DLog(@"barcodeType: %@", barcodeType);//128 - correct
-        
-        if ([barcode count] >= 3) {
-            
-        //old model data structure
-//      Barcode *barcodeObject = [Barcode instanceFromDictionary:barcodeResult];
-            
-            
+    
             //Note: may need to parse depending on 128 data structure so create new barcodeDict
             
             //construct custom 128Barcode model
             EightBarcode *eightBarcode = [[EightBarcode alloc]initBarcodeWithSymbology:barcodeResult[@"symbology"] processType:barcodeResult[@"Process Type"] uniqueBagNumber:barcodeResult[@"Unique Bag Number"]];
             DLog(@"eightBarcode: %@", eightBarcode);
-            
             //Add to collection
 //          [_barcodeArray addObject:eightBarcode];
             
-        }//close if
         
         //Construct custom popup here for 128
         //present the appropriate popup -> AlertView.xib and temp stop scanning

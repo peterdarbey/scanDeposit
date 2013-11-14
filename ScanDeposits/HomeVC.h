@@ -29,6 +29,7 @@
 //#define kScanditSDKAppKey @"4w8vXjD2EeOZw8u2pkkjQH4S+hfplxDDtzKnte2lX4s"//current community version
 
 #define kScanditSDKAppKey @"tKjFyk0cEeOBqwy+jrUhbfCJDNgUVhVIAzazaaLmsvw"//trial version
+                            
 
 @interface HomeVC : UIViewController <ScanditSDKOverlayControllerDelegate, ResumeScanMode, DismissLoginWithValidationDelegate, LogoutDelegate>
 {

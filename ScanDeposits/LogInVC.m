@@ -152,9 +152,9 @@
                     //custom delegate method call
                     if ([self.delegate respondsToSelector:@selector(dismissLoginVC: isAdmin:)]) {
                 
-                        [self.delegate performSelector:@selector(dismissLoginVC: isAdmin:) withObject:_packagedUsers withObject:@(isAdmin)];//isAdmin set to last value, dont need to worry about admin here
+                        [self.delegate performSelector:@selector(dismissLoginVC: isAdmin:) withObject:_packagedUsers withObject:@(isAdmin)];//isAdmin set to NO and isUser set to YES and then returns
                         //now dismiss the LoginVC once the appropriate values are set in HomeVC conditions
-                        [self dismissViewControllerAnimated:NO completion:nil];//no code to execute now - 0.3 secs
+                        [self dismissViewControllerAnimated:YES completion:nil];
                     }
                 
                 }//close if

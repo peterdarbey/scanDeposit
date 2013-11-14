@@ -70,9 +70,6 @@
         _isAdmin = NO;//should really be logged out BOOL not _isAdmin -> goes here
     }
     
-   
-    
-    
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -307,7 +304,7 @@
     UINavigationController *navController = [[UINavigationController alloc]initWithRootViewController:loginVC];
     
     //Add delay to presentation of LoginVC until HomeVC has appeared first
-    double delayInSeconds = 0.3;//0.25
+    double delayInSeconds = 1.0;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         
@@ -364,9 +361,6 @@
     //NOTE: when setup has occurred then the app flow is LogInVC for both users
     if (_isSetup) {
         
-//        //Once setup complete Always present LogInVC for all users/admins if not already logged in
-//        [self presentLogInVC];
-        
         //setup is complete and NOT administrator but _isUser = YES
         if (!_isAdmin && _isUser) {
             
@@ -376,7 +370,7 @@
             DLog(@"Proceed and scan away");
         }
         //is admin via login and not user
-        else if (_isAdmin && !_isUser) { //enters here on Logout Mmm ????
+        else if (_isAdmin && !_isUser) {
             //admin has Logged in so now dismiss LogInVC
             //and present Administration settings/RegisrationVC
             
@@ -389,7 +383,13 @@
         {
             //Once setup complete Always present LogInVC for all users/admins if not already LOGGED IN
             //Added delay to presentation of LogInVC in method below until HomeVC has appeared first
-            [self presentLogInVC];
+            
+            double delayInSeconds = 0.75;
+            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                //added additional delay here as its required by dismissal event on Logout press but dont want in method below
+                [self presentLogInVC];
+            });
         }
         
         

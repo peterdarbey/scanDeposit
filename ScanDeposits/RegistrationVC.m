@@ -769,14 +769,14 @@
         //preform delegate protocol
         if ([self.delegate respondsToSelector:@selector(logoutAdministrator:)]) {
             DLog(@"logoutAdmin delegate called on done/logout press");
-            [self.delegate performSelector:@selector(logoutAdministrator:) withObject:@(YES)];
+            [self.delegate performSelector:@selector(logoutAdministrator:) withObject:@(YES)];//isAdmin set to NO
         }
     
     
         //if one admin setup allow dismissal of VC
         if (_isSetup && isAdmin) {
             
-            [self dismissViewControllerAnimated:NO completion:nil];//set to YES
+            [self dismissViewControllerAnimated:YES completion:nil];//set to YES
             
         }
         //else no admin setup so display error message -> custom popup if time

@@ -25,7 +25,10 @@
 }
 @property (strong, nonatomic) NSMutableDictionary *validUsersDict;
 @property (strong, nonatomic) NSMutableDictionary *validAdminsDict;
+//QR barcode model
 @property (strong, nonatomic) QRBarcode *qrBarcode;
+//2/5 interleaved barcode model
+@property (strong, nonatomic) EightBarcode *eightBarcode;
 
 @end
 
@@ -38,12 +41,12 @@
     _isAdmin = admin.boolValue;//set by object returned -> NO for users
     
     //NOTE: Logout button required?
-    if (_isAdmin) {//because NSNumber wasnt used and dismissVCWithCompletion block
+    if (_isAdmin) {
         
         //if admin not a user
         _isUser = NO;
         //will need for packaging off to email with other data
-        _validAdminsDict = users;//pass to deposits
+        _validAdminsDict = users;
     }
     else
     {
@@ -52,8 +55,11 @@
         //Note: _isAdmin is NO if execution enters here
         
         //will need for packaging off to email with other data
-        _validUsersDict = users;//pass to deposits
+        _validUsersDict = users;
     }
+    
+    //disable scanBtn
+    [scanDeviceBtn setEnabled:YES];
     
 }
 
@@ -82,7 +88,7 @@
     return self;
 }
 
-//Note: 128 barcode
+//Note: 2/5 interleaved barcode
 - (void)cancelScanPressed:(UIButton *)sender {
 
    
@@ -107,16 +113,16 @@
         DLog(@"Scanning functionality for QR barcode");
         [picker dismissViewControllerAnimated:YES completion:^{
             [picker stopScanning];
-            //scanned device QR barcode, now set to 128 barcode
+            //scanned device QR barcode, now set to 2/5 interleaved barcode
             _scanModeIsDevice = NO;//correct
         }];
 
         
     }//close if
     
-    else //128 barcode
+    else //2/5 interleaved barcode
     {
-        DLog(@"Scanning functionality for 128 barcode");
+        DLog(@"Scanning functionality for 2/5 interleaved barcode");
         
         [picker dismissViewControllerAnimated:YES completion:^{
             //stop picker scanning
@@ -141,7 +147,7 @@
             }
             
             [self.navigationController pushViewController:depositsVC animated:YES];
-            DLog(@"Push to viewController delegate method called");
+            
             //careful though as user may want to scan more
 //            _scanModeIsDevice = YES;//reset to scan QR barcode as viewDidLoad is Not called unless app is quit
             
@@ -149,8 +155,6 @@
 
         
     }//close else
-
-    
     
 }
 
@@ -277,7 +281,7 @@
         [self.view addSubview:helpTV];
         
     }
-    else //else 128 barcode
+    else //else 2/5 interleaved barcode
     {
         [self.view addSubview:scanBagBtn];//correct
         
@@ -388,7 +392,9 @@
             dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
             dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
                 //added additional delay here as its required by dismissal event on Logout press but dont want in method below
-                [self presentLogInVC];
+                [self presentLogInVC];//needs this duration
+                //disable scanBtn
+                [scanDeviceBtn setEnabled:NO];
             });
         }
         
@@ -491,7 +497,7 @@
     [picker startScanning];
 }
 
-- (NSDictionary *)parseBarcodeFromString:(NSString *)barcodeString {
+- (NSDictionary *)parseQRBarcodeFromString:(NSString *)barcodeString {
     
     //parse functionality
     //construct an array with the substrings separated by commas -> 3 entries
@@ -535,7 +541,6 @@
     }//close outer for
     
 //        DLog(@"kvPairsArray: %@", kvPairsArray);//nice
-        DLog(@"*** dict ***: %@", dict);//works
     
     return dict;
 }
@@ -553,11 +558,7 @@
     
     //its a NSString so cant use objectForKey
      NSString *barcodeString = barcodeResult[@"barcode"];
-    DLog(@"barcodeString: %@", barcodeString);
-    
-    //need to improve if condition
-    BOOL containsString = [barcodeString hasPrefix:@"Branch NSC"];
-    DLog(@"containsString: %d", containsString);//YES
+    DLog(@"barcodeString: %@", barcodeString);//190053495691
     
     //extract the Symbology to determine the relevant data model and construct appropriately
     NSString *barcodeType = (NSString *)barcodeResult[@"symbology"];
@@ -566,42 +567,44 @@
     //conditionals to extract/process the type of barcode scanned i.e. QR or 128
     
     
-    //if scan QR barcode and stops regular QR code from entering 
+    //if scan QR barcode and stops regular QR code from entering
     if (_scanModeIsDevice && [barcodeType isEqualToString:@"QR"] && [barcodeString hasPrefix:@"Branch NSC"]) {
         
         DLog(@"barcodeType: %@", barcodeType);//QR - correct
         
         //parses a barcode string and creates a dictionary
-        barcode = [self parseBarcodeFromString:barcodeString];
+        barcode = [self parseQRBarcodeFromString:barcodeString];
         DLog(@"barcodeDict: %@", barcode);
         
-        //External device
         //Now parsed correctly proceed with the new QRBarcode model constructor
-        _qrBarcode = [[QRBarcode alloc]initBarcodeWithSymbology:barcodeType branch:barcode[@"Branch NSC"] process:barcode[@"Process"] safeID:[barcode[@"Safe ID"]intValue] andDevice:@"UnKnown"];//what the Safe ID rounds off int
-            //Add to barcodeArray collection
+        _qrBarcode = [[QRBarcode alloc]initBarcodeWithSymbology:barcodeType branch:barcode[@"Branch NSC"] process:barcode[@"Process"] safeID:[barcode[@"Safe ID"]intValue] andDevice:@"UnKnown"];//the Safe ID rounds off int
+            //Add to barcodeArray collection as once I have this barcode is overwritten on 2/5 interleaved scan
             [_barcodeArray addObject:_qrBarcode];
-        
-        
-        //ToDo add _qrBarcode to array if need be and some processing involved for conditional statements
         
         //present the appropriate popup -> AlertView.xib and temp stop scanning
         [picker stopScanning];
-        [self showPopup:barcode];//pass relevant custom model or dictionary
+        //NOTE: different popup for QR
+        [self showPopup:barcodeString];//pass relevant custom model or dictionary
         
         //set _scanModel to bag barcode now as we have a successful QR scan
         _scanModeIsDevice = NO;
         
+        //Dismiss Picker once this has been scanned
+        
+        
     }
-    //else scan 128 barcode   --> will be different Prefix for 2/5 interleaved not 128
-    else if (!_scanModeIsDevice && [barcodeType isEqualToString:@"128"] && [barcodeString hasPrefix:@"Branch NSC"])
+    //else scan 2/5 interleaved barcode --> will be different Prefix for 2/5 interleaved not 128
+    else if (!_scanModeIsDevice && [barcodeType isEqualToString:@"ITF"] && [barcodeString hasPrefix:@"190"])
     {
-        DLog(@"barcodeType: %@", barcodeType);//128 - correct
+        DLog(@"barcodeType: %@", barcodeType);// 2/5 interleaved correct --> 190053495691
     
-            //Note: may need to parse depending on 128 data structure so create new barcodeDict
-            
+        //Note: need to parse the 2/5 interleaved barcode before constructing dictionary
+        barcode = [self parseILBarcodeFromString:barcodeString withBarcodeType:barcodeResult[@"symbology"]];
+        
             //construct custom 128Barcode model
-            EightBarcode *eightBarcode = [[EightBarcode alloc]initBarcodeWithSymbology:barcodeResult[@"symbology"] processType:barcodeResult[@"Process Type"] uniqueBagNumber:barcodeResult[@"Unique Bag Number"]];
-            DLog(@"eightBarcode: %@", eightBarcode);
+            _eightBarcode = [[EightBarcode alloc]initBarcodeWithSymbology:barcode[@"Symbology"] processType:barcode[@"Process Type"] uniqueBagNumber:barcode[@"Barcode"]];//barcodeResult[@"Unique Bag Number"];
+        
+            DLog(@"eightBarcode: %@", _eightBarcode);
             //Add to collection
 //          [_barcodeArray addObject:eightBarcode];
             
@@ -609,14 +612,44 @@
         //Construct custom popup here for 128
         //present the appropriate popup -> AlertView.xib and temp stop scanning
         [picker stopScanning];
-        [self showPopup:barcode];//pass relevant custom model or dictionary
+        [self showPopup:barcodeString];//pass relevant custom model or dictionary
         
     }//close else if
     
     
 }
+//parse method for parsing the 2/5 interleaved barcode string
+- (NSDictionary *)parseILBarcodeFromString:(NSString *)barcodeString withBarcodeType:(NSString *)barcodeType {
+    
+    //190053495691 --> current bag barcode string
+    //Process Type comes from 1st 3 digits of barcode
+    NSString *processString = [barcodeString substringToIndex:3];//correct -> 190 first 3 digits
+    DLog(@"processString: %@", processString); //barcodeResult[@"symbology"];
+    
+    //assigned by conditional
+    NSString *processType;
+    
+    //if processString isEq to 291 then its "A Coin Only Dropsafe"
+    if ([processString isEqualToString:@"291"]) {
+        DLog(@"Process Type: %@", processString);
+        
+        processType = @"A Coin Only Dropsafe";
+        
+    }//close if
+    
+    //else its not a recognised barcode --> tin of beans
+    else
+    {
+        processType = @"Not a valid barcode";
+    }
+    
+    //construct a dict for 2/5 interleaved model
+     NSDictionary *dict = @{@"Symbology" : barcodeType, @"Process Type" : processType, @"Barcode" : barcodeString};
+  
+    return dict;
+}
 
--(void)showPopup:(NSDictionary *)barcode {
+-(void)showPopup:(NSString *)barcodeString {
     //Create a custom AlertView.xib
     AlertView *popup = [AlertView loadFromNibNamed:@"AlertView"];
     //Add custom delegate method here to restart picker scanning
@@ -624,13 +657,24 @@
     //pass the time
     popup.timeString = dateString;//not very OO -> passing to the Deposit model via the popup xib
     
-    if ([barcode count] >= 3) { //cant test for barcodeType as Its a custom QR
+    if ([barcodeString hasPrefix:@"Branch NSC"]) { //cant test for barcodeType as Its a custom QR
         
         //populate the QR barcode popup
         popup.symbologyLbl.text = [NSString stringWithFormat:@"Symbology: %@", [_qrBarcode barcodeSymbology]];
         popup.branchLbl.text = [NSString stringWithFormat:@"Branch: %@", [_qrBarcode barcodeBranch]];
         popup.processLbl.text = [NSString stringWithFormat:@"Process: %@", [_qrBarcode barcodeProcess]];
         popup.safeIDLbl.text = [NSString stringWithFormat:@"Safe ID: %2i", [_qrBarcode barcodeSafeID]];
+        
+    }
+    //Add another Prefix test from the 2/5 interleaved barcode
+    else if ([barcodeString hasPrefix:@"Branch NSC"]) {
+        
+        //populate the 2/5 interleave barcode popup 
+        popup.symbologyLbl.text = [NSString stringWithFormat:@"Symbology: %@", [_eightBarcode barcodeSymbology]];
+        popup.branchLbl.text = [NSString stringWithFormat:@"Unique Bag Number:%@", [_eightBarcode barcodeUniqueBagNumber]];
+        popup.processLbl.text = [NSString stringWithFormat:@"Process: %@", [_eightBarcode barcodeProcess]];
+        popup.safeIDLbl.text = [NSString stringWithFormat:@"Safe ID: Not Applicable"];
+        //with relevant popup instantsiated in each conditional
         
     }
     else
@@ -666,7 +710,8 @@
     [_barcodeArray addObject:barcodeObject];
     
     //Create a custom Alert -> AlertView.xib
-    [self showPopup:manualDict];//TEMP
+//    [self showPopup:manualDict];//TEMP
+    
     
 //    //Create a custom Alert -> AlertView.xib
 //    AlertView *popup = [AlertView loadFromNibNamed:@"AlertView"];

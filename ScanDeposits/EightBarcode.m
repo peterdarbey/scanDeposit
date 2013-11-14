@@ -15,8 +15,8 @@
 //private properties
 @property (strong, nonatomic) NSString *processType;
 @property (strong, nonatomic) NSString *uniqueBagNumber;
-//@property (strong, nonatomic) NSString *timeStamp;
 
+//internal dicts
 @property (strong, nonatomic) NSDictionary *internalDict;
 @property (strong, nonatomic) NSDictionary *barcodeDict;
 
@@ -32,8 +32,8 @@
 - (void)commonInit:(NSDictionary *)dict {
     
     _symbology = dict[@"Symbology"];
-    _processType = dict[@"Process Type"];//coin only
-    _uniqueBagNumber = dict[@"Unique Bag Number"];//12 digit code with 1st 3 deter processType 
+    _processType = dict[@"Process Type"];//(coin only)comes from the unique bag no 1st 3 digits
+    _uniqueBagNumber = dict[@"Unique Bag Number"];//12 digit code with 1st 3 deter processType--> its the barcode key
     
     if (_symbology) {
         //create a dict with a barcodeType identifier

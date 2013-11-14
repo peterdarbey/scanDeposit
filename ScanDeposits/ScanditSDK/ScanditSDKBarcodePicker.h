@@ -90,8 +90,6 @@ typedef enum {
  * @brief  acquires camera frames, decodes barcodes in the
  * camera frames and updates the ScanditSDKOverlayController.
  * 
- * @snippet ../DemoViewController.mm Show scan view modally
- * 
  * @ingroup scanditsdk-ios-api
  * 
  * @since 1.0.0
@@ -349,7 +347,7 @@ typedef enum {
 ///@}
 
 /** @name Barcode Decoder Configuration and Symbology Selection
- *  Configure which symbologies are decoded and configure barcode decoder 
+ *  Configure which symbologies are decoded and adjust decoder parameters. 
  */
 ///@{
 /**
@@ -383,6 +381,7 @@ typedef enum {
  *
  * @since 1.0.0
  * 
+ * @param boolean indicating whether this symbology should be enabled.
  */
 - (void)setEan13AndUpc12Enabled:(BOOL)enabled;
 
@@ -392,6 +391,8 @@ typedef enum {
  * By default scanning of EAN8 barcodes is enabled.
  *
  * @since 1.0.0
+ *
+ * @param boolean indicating whether this symbology should be enabled.
  */
 - (void)setEan8Enabled:(BOOL)enabled;
 
@@ -401,6 +402,8 @@ typedef enum {
  * By default scanning of UPCE barcodes is enabled.
  *
  * @since 1.0.0
+ * 
+ * @param boolean indicating whether this symbology should be enabled.
  */
 - (void)setUpceEnabled:(BOOL)enabled;
 
@@ -413,6 +416,7 @@ typedef enum {
  *
  * @since 1.0.0
  * 
+ * @param boolean indicating whether this symbology should be enabled.
  */
 - (void)setCode39Enabled:(BOOL)enabled;
 
@@ -425,6 +429,7 @@ typedef enum {
  *
  * @since 1.0.0
  * 
+ * @param boolean indicating whether this symbology should be enabled.
  */
 - (void)setCode128Enabled:(BOOL)enabled;
 
@@ -436,6 +441,8 @@ typedef enum {
  * Scandit SDK Enterprise Basic or Enterprise Premium Package.
  *
  * @since 1.0.0
+ * 
+ * @param boolean indicating whether this symbology should be enabled.
  */
 - (void)setItfEnabled:(BOOL)enabled;
 
@@ -447,13 +454,15 @@ typedef enum {
  * Scandit SDK Enterprise Basic or Enterprise Premium Package.
  *
  * @since 3.0.0
+ * 
+ * @param boolean indicating whether this symbology should be enabled.
  */
 - (void)setMsiPlesseyEnabled:(BOOL)enabled;
 
 /**
  * @brief Sets the type of checksum that is expected of the MSI Plessey codes.
  *
- * MSI Plessey is used with different checksum. Set the checksum your application uses 
+ * MSI Plessey is used with different checksums. Set the checksum your application uses
  * with this method. 
  *
  * By default it is set to CHECKSUM_MOD_10. 
@@ -470,6 +479,8 @@ typedef enum {
  * By default scanning of QR barcodes is enabled.
  *
  * @since 2.0.0
+ * 
+ * @param boolean indicating whether this symbology should be enabled.
  */
 - (void)setQrEnabled:(BOOL)enabled;
 
@@ -483,19 +494,21 @@ typedef enum {
  * 
  * @since 2.0.0
  * 
+ * @param boolean indicating whether this symbology should be enabled.
  */
 - (void)setDataMatrixEnabled:(BOOL)enabled;
 
 /**
  * @brief Enables or disables the barcode decoder for PDF417 codes.
  *
- * By default scanning of PDF417 codes is enabled.
+ * By default scanning of PDF417 codes is disabled (since 3.2.0).
  *
  * Note: PDF417 scanning is only available with the
  * Scandit SDK Enterprise Premium Package.
  *
- * @since 2.0.0
+ * @since 3.0.0
  * 
+ * @param boolean indicating whether this symbology should be enabled.
  */
 - (void)setPdf417Enabled:(BOOL)enabled;
 
@@ -511,6 +524,8 @@ typedef enum {
  * By default this mode is disabled.
  * 
  * @since 2.0.0
+ *
+ * @param boolean indicating whether this mode should be enabled.
  */
 - (void)setMicroDataMatrixEnabled:(BOOL)enabled;
 
@@ -521,6 +536,8 @@ typedef enum {
  * By default this mode is disabled.
  * 
  * @since 2.0.0
+ * 
+ * @param boolean indicating whether this mode should be enabled.
  */
 - (void)setInverseDetectionEnabled:(BOOL)enabled;
 
@@ -576,7 +593,7 @@ typedef enum {
  * @see ScanditSDKBarcodePicker::restrictActiveScanningArea:
  * @see ScanditSDKBarcodePicker::setScanningHotSpotHeight: 
  * 
- * @since 2.0.0
+ * @since 1.0.0
  * 
  * @param x coordinate of hotspot 
  * @param y coordinate of hotspot
@@ -588,7 +605,6 @@ typedef enum {
  * when restrictActiveScanningArea is activated.
  * 
  * The height of the active scanning area is relative to the height of the screen and has to be between 0.0 and 0.5.
- * We do not recommend values above 0.25 since the barcode detection is slowed down. 
  *
  * This only applies if the active scanning area is restricted.
  * 
@@ -597,7 +613,7 @@ typedef enum {
  * @see ScanditSDKBarcodePicker::restrictActiveScanningArea:
  * @see ScanditSDKBarcodePicker::setScanningHotSpotToX:andY:
  *
- * @since 2.0.0
+ * @since 1.0.0
  *
  * @param height of the active scanning area 
  */
@@ -639,7 +655,6 @@ typedef enum {
  */
 - (void)sendNextFrameToDelegate:(id<ScanditSDKNextFrameDelegate>)delegate;
 ///@}
-
 
 
 @end

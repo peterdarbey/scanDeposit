@@ -73,26 +73,26 @@
 		BF99DD561832288100183FE2 /* accountIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DD541832288100183FE2 /* accountIcon@2x.png */; };
 		BF99DD591832842A00183FE2 /* QRBarcode.m in Sources */ = {isa = PBXBuildFile; fileRef = BF99DD581832842A00183FE2 /* QRBarcode.m */; };
 		BF99DD5F1833873800183FE2 /* EightBarcode.m in Sources */ = {isa = PBXBuildFile; fileRef = BF99DD5E1833873800183FE2 /* EightBarcode.m */; };
-		BF99DDA6183510B800183FE2 /* beep.wav in Resources */ = {isa = PBXBuildFile; fileRef = BF99DD8E183510B800183FE2 /* beep.wav */; };
-		BF99DDA7183510B800183FE2 /* camera-swap-icon-pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DD8F183510B800183FE2 /* camera-swap-icon-pressed.png */; };
-		BF99DDA8183510B800183FE2 /* camera-swap-icon-pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DD90183510B800183FE2 /* camera-swap-icon-pressed@2x.png */; };
-		BF99DDA9183510B800183FE2 /* camera-swap-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DD91183510B800183FE2 /* camera-swap-icon.png */; };
-		BF99DDAA183510B800183FE2 /* camera-swap-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DD92183510B800183FE2 /* camera-swap-icon@2x.png */; };
-		BF99DDAB183510B800183FE2 /* CHANGELOG.txt in Resources */ = {isa = PBXBuildFile; fileRef = BF99DD93183510B800183FE2 /* CHANGELOG.txt */; };
-		BF99DDAC183510B800183FE2 /* scanditsdk.strings in Resources */ = {isa = PBXBuildFile; fileRef = BF99DD94183510B800183FE2 /* scanditsdk.strings */; };
-		BF99DDAD183510B800183FE2 /* empty.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF99DD96183510B800183FE2 /* empty.cpp */; };
-		BF99DDAE183510B800183FE2 /* flashlight-turn-off-icon-pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DD98183510B800183FE2 /* flashlight-turn-off-icon-pressed.png */; };
-		BF99DDAF183510B800183FE2 /* flashlight-turn-off-icon-pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DD99183510B800183FE2 /* flashlight-turn-off-icon-pressed@2x.png */; };
-		BF99DDB0183510B800183FE2 /* flashlight-turn-off-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DD9A183510B800183FE2 /* flashlight-turn-off-icon.png */; };
-		BF99DDB1183510B800183FE2 /* flashlight-turn-off-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DD9B183510B800183FE2 /* flashlight-turn-off-icon@2x.png */; };
-		BF99DDB2183510B800183FE2 /* flashlight-turn-on-icon-pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DD9C183510B800183FE2 /* flashlight-turn-on-icon-pressed.png */; };
-		BF99DDB3183510B800183FE2 /* flashlight-turn-on-icon-pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DD9D183510B800183FE2 /* flashlight-turn-on-icon-pressed@2x.png */; };
-		BF99DDB4183510B800183FE2 /* flashlight-turn-on-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DD9E183510B800183FE2 /* flashlight-turn-on-icon.png */; };
-		BF99DDB5183510B800183FE2 /* flashlight-turn-on-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DD9F183510B800183FE2 /* flashlight-turn-on-icon@2x.png */; };
-		BF99DDB6183510B800183FE2 /* libscanditsdk-iphone-3.1.1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BF99DDA0183510B800183FE2 /* libscanditsdk-iphone-3.1.1.a */; };
-		BF99DDB7183510B800183FE2 /* LICENSE-2.0.txt in Resources */ = {isa = PBXBuildFile; fileRef = BF99DDA1183510B800183FE2 /* LICENSE-2.0.txt */; };
-		BF99DDB8183510B800183FE2 /* poweredby.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DDA2183510B800183FE2 /* poweredby.png */; };
-		BF99DDB9183510B800183FE2 /* poweredby@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DDA3183510B800183FE2 /* poweredby@2x.png */; };
+		BF99DDD31835223000183FE2 /* beep.wav in Resources */ = {isa = PBXBuildFile; fileRef = BF99DDBB1835222F00183FE2 /* beep.wav */; };
+		BF99DDD41835223000183FE2 /* camera-swap-icon-pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DDBC1835222F00183FE2 /* camera-swap-icon-pressed.png */; };
+		BF99DDD51835223000183FE2 /* camera-swap-icon-pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DDBD1835222F00183FE2 /* camera-swap-icon-pressed@2x.png */; };
+		BF99DDD61835223000183FE2 /* camera-swap-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DDBE1835222F00183FE2 /* camera-swap-icon.png */; };
+		BF99DDD71835223000183FE2 /* camera-swap-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DDBF1835222F00183FE2 /* camera-swap-icon@2x.png */; };
+		BF99DDD81835223000183FE2 /* CHANGELOG.txt in Resources */ = {isa = PBXBuildFile; fileRef = BF99DDC01835222F00183FE2 /* CHANGELOG.txt */; };
+		BF99DDD91835223000183FE2 /* scanditsdk.strings in Resources */ = {isa = PBXBuildFile; fileRef = BF99DDC11835222F00183FE2 /* scanditsdk.strings */; };
+		BF99DDDA1835223000183FE2 /* empty.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BF99DDC31835222F00183FE2 /* empty.cpp */; };
+		BF99DDDB1835223000183FE2 /* flashlight-turn-off-icon-pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DDC51835222F00183FE2 /* flashlight-turn-off-icon-pressed.png */; };
+		BF99DDDC1835223000183FE2 /* flashlight-turn-off-icon-pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DDC61835222F00183FE2 /* flashlight-turn-off-icon-pressed@2x.png */; };
+		BF99DDDD1835223000183FE2 /* flashlight-turn-off-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DDC71835222F00183FE2 /* flashlight-turn-off-icon.png */; };
+		BF99DDDE1835223000183FE2 /* flashlight-turn-off-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DDC81835222F00183FE2 /* flashlight-turn-off-icon@2x.png */; };
+		BF99DDDF1835223000183FE2 /* flashlight-turn-on-icon-pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DDC91835223000183FE2 /* flashlight-turn-on-icon-pressed.png */; };
+		BF99DDE01835223000183FE2 /* flashlight-turn-on-icon-pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DDCA1835223000183FE2 /* flashlight-turn-on-icon-pressed@2x.png */; };
+		BF99DDE11835223000183FE2 /* flashlight-turn-on-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DDCB1835223000183FE2 /* flashlight-turn-on-icon.png */; };
+		BF99DDE21835223000183FE2 /* flashlight-turn-on-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DDCC1835223000183FE2 /* flashlight-turn-on-icon@2x.png */; };
+		BF99DDE31835223000183FE2 /* libscanditsdk-iphone-3.2.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BF99DDCD1835223000183FE2 /* libscanditsdk-iphone-3.2.0.a */; };
+		BF99DDE41835223000183FE2 /* LICENSE-2.0.txt in Resources */ = {isa = PBXBuildFile; fileRef = BF99DDCE1835223000183FE2 /* LICENSE-2.0.txt */; };
+		BF99DDE51835223000183FE2 /* poweredby.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DDCF1835223000183FE2 /* poweredby.png */; };
+		BF99DDE61835223000183FE2 /* poweredby@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DDD01835223000183FE2 /* poweredby@2x.png */; };
 		BF9B6D4818290F8300BC0E13 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF9B6D4718290F8300BC0E13 /* MessageUI.framework */; };
 		BF9B6D9E182AA03A00BC0E13 /* users.plist in Resources */ = {isa = PBXBuildFile; fileRef = BF9B6D9D182AA03A00BC0E13 /* users.plist */; };
 		BF9B6DA1182AA34600BC0E13 /* LogInVC.m in Sources */ = {isa = PBXBuildFile; fileRef = BF9B6DA0182AA34600BC0E13 /* LogInVC.m */; };
@@ -194,29 +194,29 @@
 		BF99DD581832842A00183FE2 /* QRBarcode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRBarcode.m; sourceTree = "<group>"; };
 		BF99DD5D1833873800183FE2 /* EightBarcode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EightBarcode.h; sourceTree = "<group>"; };
 		BF99DD5E1833873800183FE2 /* EightBarcode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EightBarcode.m; sourceTree = "<group>"; };
-		BF99DD8E183510B800183FE2 /* beep.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = beep.wav; sourceTree = "<group>"; };
-		BF99DD8F183510B800183FE2 /* camera-swap-icon-pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera-swap-icon-pressed.png"; sourceTree = "<group>"; };
-		BF99DD90183510B800183FE2 /* camera-swap-icon-pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera-swap-icon-pressed@2x.png"; sourceTree = "<group>"; };
-		BF99DD91183510B800183FE2 /* camera-swap-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera-swap-icon.png"; sourceTree = "<group>"; };
-		BF99DD92183510B800183FE2 /* camera-swap-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera-swap-icon@2x.png"; sourceTree = "<group>"; };
-		BF99DD93183510B800183FE2 /* CHANGELOG.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CHANGELOG.txt; sourceTree = "<group>"; };
-		BF99DD95183510B800183FE2 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/scanditsdk.strings; sourceTree = "<group>"; };
-		BF99DD96183510B800183FE2 /* empty.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = empty.cpp; sourceTree = "<group>"; };
-		BF99DD97183510B800183FE2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/scanditsdk.strings; sourceTree = "<group>"; };
-		BF99DD98183510B800183FE2 /* flashlight-turn-off-icon-pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "flashlight-turn-off-icon-pressed.png"; sourceTree = "<group>"; };
-		BF99DD99183510B800183FE2 /* flashlight-turn-off-icon-pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "flashlight-turn-off-icon-pressed@2x.png"; sourceTree = "<group>"; };
-		BF99DD9A183510B800183FE2 /* flashlight-turn-off-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "flashlight-turn-off-icon.png"; sourceTree = "<group>"; };
-		BF99DD9B183510B800183FE2 /* flashlight-turn-off-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "flashlight-turn-off-icon@2x.png"; sourceTree = "<group>"; };
-		BF99DD9C183510B800183FE2 /* flashlight-turn-on-icon-pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "flashlight-turn-on-icon-pressed.png"; sourceTree = "<group>"; };
-		BF99DD9D183510B800183FE2 /* flashlight-turn-on-icon-pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "flashlight-turn-on-icon-pressed@2x.png"; sourceTree = "<group>"; };
-		BF99DD9E183510B800183FE2 /* flashlight-turn-on-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "flashlight-turn-on-icon.png"; sourceTree = "<group>"; };
-		BF99DD9F183510B800183FE2 /* flashlight-turn-on-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "flashlight-turn-on-icon@2x.png"; sourceTree = "<group>"; };
-		BF99DDA0183510B800183FE2 /* libscanditsdk-iphone-3.1.1.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libscanditsdk-iphone-3.1.1.a"; sourceTree = "<group>"; };
-		BF99DDA1183510B800183FE2 /* LICENSE-2.0.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LICENSE-2.0.txt"; sourceTree = "<group>"; };
-		BF99DDA2183510B800183FE2 /* poweredby.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = poweredby.png; sourceTree = "<group>"; };
-		BF99DDA3183510B800183FE2 /* poweredby@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "poweredby@2x.png"; sourceTree = "<group>"; };
-		BF99DDA4183510B800183FE2 /* ScanditSDKBarcodePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanditSDKBarcodePicker.h; sourceTree = "<group>"; };
-		BF99DDA5183510B800183FE2 /* ScanditSDKOverlayController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanditSDKOverlayController.h; sourceTree = "<group>"; };
+		BF99DDBB1835222F00183FE2 /* beep.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = beep.wav; sourceTree = "<group>"; };
+		BF99DDBC1835222F00183FE2 /* camera-swap-icon-pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera-swap-icon-pressed.png"; sourceTree = "<group>"; };
+		BF99DDBD1835222F00183FE2 /* camera-swap-icon-pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera-swap-icon-pressed@2x.png"; sourceTree = "<group>"; };
+		BF99DDBE1835222F00183FE2 /* camera-swap-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera-swap-icon.png"; sourceTree = "<group>"; };
+		BF99DDBF1835222F00183FE2 /* camera-swap-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "camera-swap-icon@2x.png"; sourceTree = "<group>"; };
+		BF99DDC01835222F00183FE2 /* CHANGELOG.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CHANGELOG.txt; sourceTree = "<group>"; };
+		BF99DDC21835222F00183FE2 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/scanditsdk.strings; sourceTree = "<group>"; };
+		BF99DDC31835222F00183FE2 /* empty.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = empty.cpp; sourceTree = "<group>"; };
+		BF99DDC41835222F00183FE2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/scanditsdk.strings; sourceTree = "<group>"; };
+		BF99DDC51835222F00183FE2 /* flashlight-turn-off-icon-pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "flashlight-turn-off-icon-pressed.png"; sourceTree = "<group>"; };
+		BF99DDC61835222F00183FE2 /* flashlight-turn-off-icon-pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "flashlight-turn-off-icon-pressed@2x.png"; sourceTree = "<group>"; };
+		BF99DDC71835222F00183FE2 /* flashlight-turn-off-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "flashlight-turn-off-icon.png"; sourceTree = "<group>"; };
+		BF99DDC81835222F00183FE2 /* flashlight-turn-off-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "flashlight-turn-off-icon@2x.png"; sourceTree = "<group>"; };
+		BF99DDC91835223000183FE2 /* flashlight-turn-on-icon-pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "flashlight-turn-on-icon-pressed.png"; sourceTree = "<group>"; };
+		BF99DDCA1835223000183FE2 /* flashlight-turn-on-icon-pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "flashlight-turn-on-icon-pressed@2x.png"; sourceTree = "<group>"; };
+		BF99DDCB1835223000183FE2 /* flashlight-turn-on-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "flashlight-turn-on-icon.png"; sourceTree = "<group>"; };
+		BF99DDCC1835223000183FE2 /* flashlight-turn-on-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "flashlight-turn-on-icon@2x.png"; sourceTree = "<group>"; };
+		BF99DDCD1835223000183FE2 /* libscanditsdk-iphone-3.2.0.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libscanditsdk-iphone-3.2.0.a"; sourceTree = "<group>"; };
+		BF99DDCE1835223000183FE2 /* LICENSE-2.0.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "LICENSE-2.0.txt"; sourceTree = "<group>"; };
+		BF99DDCF1835223000183FE2 /* poweredby.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = poweredby.png; sourceTree = "<group>"; };
+		BF99DDD01835223000183FE2 /* poweredby@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "poweredby@2x.png"; sourceTree = "<group>"; };
+		BF99DDD11835223000183FE2 /* ScanditSDKBarcodePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanditSDKBarcodePicker.h; sourceTree = "<group>"; };
+		BF99DDD21835223000183FE2 /* ScanditSDKOverlayController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanditSDKOverlayController.h; sourceTree = "<group>"; };
 		BF9B6D4718290F8300BC0E13 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		BF9B6D9D182AA03A00BC0E13 /* users.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = users.plist; sourceTree = "<group>"; };
 		BF9B6D9F182AA34600BC0E13 /* LogInVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogInVC.h; sourceTree = "<group>"; };
@@ -229,11 +229,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BF99DDB6183510B800183FE2 /* libscanditsdk-iphone-3.1.1.a in Frameworks */,
 				BF9B6D4818290F8300BC0E13 /* MessageUI.framework in Frameworks */,
 				BF2C4FC11806B16B00A87C18 /* AVFoundation.framework in Frameworks */,
 				BF2C4FBF1806B14800A87C18 /* libz.dylib in Frameworks */,
 				BF2C4FBD1806B13D00A87C18 /* libiconv.dylib in Frameworks */,
+				BF99DDE31835223000183FE2 /* libscanditsdk-iphone-3.2.0.a in Frameworks */,
 				BF2C4FBB1806B11F00A87C18 /* CoreMedia.framework in Frameworks */,
 				BF2C4FB91806B10B00A87C18 /* SystemConfiguration.framework in Frameworks */,
 				BF2C4FB71806B0F100A87C18 /* AudioToolbox.framework in Frameworks */,
@@ -298,7 +298,7 @@
 		BF2C4F521805C08B00A87C18 /* ScanDeposits */ = {
 			isa = PBXGroup;
 			children = (
-				BF99DD8D183510B800183FE2 /* ScanditSDK */,
+				BF99DDBA1835222F00183FE2 /* ScanditSDK */,
 				BF2C4FC91806FE7900A87C18 /* Assets */,
 				BF2C4FC51806DF5C00A87C18 /* Model Objects */,
 				BF92212118227AAE0084DCA0 /* Stored_Data */,
@@ -433,31 +433,31 @@
 			name = Stored_Data;
 			sourceTree = "<group>";
 		};
-		BF99DD8D183510B800183FE2 /* ScanditSDK */ = {
+		BF99DDBA1835222F00183FE2 /* ScanditSDK */ = {
 			isa = PBXGroup;
 			children = (
-				BF99DD8E183510B800183FE2 /* beep.wav */,
-				BF99DD8F183510B800183FE2 /* camera-swap-icon-pressed.png */,
-				BF99DD90183510B800183FE2 /* camera-swap-icon-pressed@2x.png */,
-				BF99DD91183510B800183FE2 /* camera-swap-icon.png */,
-				BF99DD92183510B800183FE2 /* camera-swap-icon@2x.png */,
-				BF99DD93183510B800183FE2 /* CHANGELOG.txt */,
-				BF99DD94183510B800183FE2 /* scanditsdk.strings */,
-				BF99DD96183510B800183FE2 /* empty.cpp */,
-				BF99DD98183510B800183FE2 /* flashlight-turn-off-icon-pressed.png */,
-				BF99DD99183510B800183FE2 /* flashlight-turn-off-icon-pressed@2x.png */,
-				BF99DD9A183510B800183FE2 /* flashlight-turn-off-icon.png */,
-				BF99DD9B183510B800183FE2 /* flashlight-turn-off-icon@2x.png */,
-				BF99DD9C183510B800183FE2 /* flashlight-turn-on-icon-pressed.png */,
-				BF99DD9D183510B800183FE2 /* flashlight-turn-on-icon-pressed@2x.png */,
-				BF99DD9E183510B800183FE2 /* flashlight-turn-on-icon.png */,
-				BF99DD9F183510B800183FE2 /* flashlight-turn-on-icon@2x.png */,
-				BF99DDA0183510B800183FE2 /* libscanditsdk-iphone-3.1.1.a */,
-				BF99DDA1183510B800183FE2 /* LICENSE-2.0.txt */,
-				BF99DDA2183510B800183FE2 /* poweredby.png */,
-				BF99DDA3183510B800183FE2 /* poweredby@2x.png */,
-				BF99DDA4183510B800183FE2 /* ScanditSDKBarcodePicker.h */,
-				BF99DDA5183510B800183FE2 /* ScanditSDKOverlayController.h */,
+				BF99DDBB1835222F00183FE2 /* beep.wav */,
+				BF99DDBC1835222F00183FE2 /* camera-swap-icon-pressed.png */,
+				BF99DDBD1835222F00183FE2 /* camera-swap-icon-pressed@2x.png */,
+				BF99DDBE1835222F00183FE2 /* camera-swap-icon.png */,
+				BF99DDBF1835222F00183FE2 /* camera-swap-icon@2x.png */,
+				BF99DDC01835222F00183FE2 /* CHANGELOG.txt */,
+				BF99DDC11835222F00183FE2 /* scanditsdk.strings */,
+				BF99DDC31835222F00183FE2 /* empty.cpp */,
+				BF99DDC51835222F00183FE2 /* flashlight-turn-off-icon-pressed.png */,
+				BF99DDC61835222F00183FE2 /* flashlight-turn-off-icon-pressed@2x.png */,
+				BF99DDC71835222F00183FE2 /* flashlight-turn-off-icon.png */,
+				BF99DDC81835222F00183FE2 /* flashlight-turn-off-icon@2x.png */,
+				BF99DDC91835223000183FE2 /* flashlight-turn-on-icon-pressed.png */,
+				BF99DDCA1835223000183FE2 /* flashlight-turn-on-icon-pressed@2x.png */,
+				BF99DDCB1835223000183FE2 /* flashlight-turn-on-icon.png */,
+				BF99DDCC1835223000183FE2 /* flashlight-turn-on-icon@2x.png */,
+				BF99DDCD1835223000183FE2 /* libscanditsdk-iphone-3.2.0.a */,
+				BF99DDCE1835223000183FE2 /* LICENSE-2.0.txt */,
+				BF99DDCF1835223000183FE2 /* poweredby.png */,
+				BF99DDD01835223000183FE2 /* poweredby@2x.png */,
+				BF99DDD11835223000183FE2 /* ScanditSDKBarcodePicker.h */,
+				BF99DDD21835223000183FE2 /* ScanditSDKOverlayController.h */,
 			);
 			path = ScanditSDK;
 			sourceTree = "<group>";
@@ -543,10 +543,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				BF370346180EAEF10027AE4F /* Icon.png in Resources */,
-				BF99DDB4183510B800183FE2 /* flashlight-turn-on-icon.png in Resources */,
+				BF99DDE11835223000183FE2 /* flashlight-turn-on-icon.png in Resources */,
 				BF2C4FD01806FEB100A87C18 /* bluebuttonSelected.png in Resources */,
 				BF99DD4C1832286600183FE2 /* singleCell@2x.png in Resources */,
-				BF99DDB2183510B800183FE2 /* flashlight-turn-on-icon-pressed.png in Resources */,
+				BF99DDDF1835223000183FE2 /* flashlight-turn-on-icon-pressed.png in Resources */,
 				BF370344180EAEF10027AE4F /* Default.png in Resources */,
 				BF2C4FCF1806FEB100A87C18 /* blueButton@2x.png in Resources */,
 				BF2C4F631805C08B00A87C18 /* Main_iPad.storyboard in Resources */,
@@ -554,48 +554,48 @@
 				BF99DD521832287900183FE2 /* rightArrow@2x.png in Resources */,
 				BF99DD511832287900183FE2 /* rightArrow.png in Resources */,
 				BF2C4F681805C08B00A87C18 /* Images.xcassets in Resources */,
-				BF99DDA6183510B800183FE2 /* beep.wav in Resources */,
+				BF99DDD31835223000183FE2 /* beep.wav in Resources */,
 				BF370347180EAEF10027AE4F /* Icon@2x.png in Resources */,
 				BF99DD3F1832283400183FE2 /* greenButton.png in Resources */,
 				BF99DD411832283400183FE2 /* greenButtonSelected.png in Resources */,
 				BF99DD551832288100183FE2 /* accountIcon.png in Resources */,
-				BF99DDB3183510B800183FE2 /* flashlight-turn-on-icon-pressed@2x.png in Resources */,
+				BF99DDE01835223000183FE2 /* flashlight-turn-on-icon-pressed@2x.png in Resources */,
 				BF99DD4D1832286600183FE2 /* singleCellSelected.png in Resources */,
 				BF92212318227AEC0084DCA0 /* usersCollection.plist in Resources */,
 				BF99DD561832288100183FE2 /* accountIcon@2x.png in Resources */,
 				BF92211D18214E290084DCA0 /* logo_80_121.png in Resources */,
 				BF99DD401832283400183FE2 /* greenButton@2x.png in Resources */,
 				BF99DD461832285400183FE2 /* whiteCell@2x.png in Resources */,
-				BF99DDAF183510B800183FE2 /* flashlight-turn-off-icon-pressed@2x.png in Resources */,
-				BF99DDB1183510B800183FE2 /* flashlight-turn-off-icon@2x.png in Resources */,
+				BF99DDDC1835223000183FE2 /* flashlight-turn-off-icon-pressed@2x.png in Resources */,
+				BF99DDDE1835223000183FE2 /* flashlight-turn-off-icon@2x.png in Resources */,
 				BF92211B18214DC80084DCA0 /* aib_logo_original_cut.png in Resources */,
-				BF99DDB7183510B800183FE2 /* LICENSE-2.0.txt in Resources */,
-				BF99DDB5183510B800183FE2 /* flashlight-turn-on-icon@2x.png in Resources */,
+				BF99DDE41835223000183FE2 /* LICENSE-2.0.txt in Resources */,
+				BF99DDE21835223000183FE2 /* flashlight-turn-on-icon@2x.png in Resources */,
 				BF99DD4B1832286600183FE2 /* singleCell.png in Resources */,
-				BF99DDA7183510B800183FE2 /* camera-swap-icon-pressed.png in Resources */,
-				BF99DDB9183510B800183FE2 /* poweredby@2x.png in Resources */,
+				BF99DDD41835223000183FE2 /* camera-swap-icon-pressed.png in Resources */,
+				BF99DDE61835223000183FE2 /* poweredby@2x.png in Resources */,
 				BF2C4F601805C08B00A87C18 /* Main_iPhone.storyboard in Resources */,
 				BF2C4F571805C08B00A87C18 /* InfoPlist.strings in Resources */,
-				BF99DDB0183510B800183FE2 /* flashlight-turn-off-icon.png in Resources */,
+				BF99DDDD1835223000183FE2 /* flashlight-turn-off-icon.png in Resources */,
 				BF370342180EAEF10027AE4F /* Default-568h.png in Resources */,
 				BF99DD451832285400183FE2 /* whiteCell.png in Resources */,
 				BF3703241808229A0027AE4F /* AlertView.xib in Resources */,
-				BF99DDAA183510B800183FE2 /* camera-swap-icon@2x.png in Resources */,
-				BF99DDAC183510B800183FE2 /* scanditsdk.strings in Resources */,
-				BF99DDAB183510B800183FE2 /* CHANGELOG.txt in Resources */,
+				BF99DDD71835223000183FE2 /* camera-swap-icon@2x.png in Resources */,
+				BF99DDD91835223000183FE2 /* scanditsdk.strings in Resources */,
+				BF99DDD81835223000183FE2 /* CHANGELOG.txt in Resources */,
 				BF370343180EAEF10027AE4F /* Default-568h@2x.png in Resources */,
 				BF3703521816D47B0027AE4F /* UserPopup.xib in Resources */,
 				BF370329180844990027AE4F /* bg_gradient.png in Resources */,
 				BF99DD4E1832286600183FE2 /* singleCellSelected@2x.png in Resources */,
 				BF9B6DA3182BE58700BC0E13 /* admins.plist in Resources */,
 				BF9B6D9E182AA03A00BC0E13 /* users.plist in Resources */,
-				BF99DDAE183510B800183FE2 /* flashlight-turn-off-icon-pressed.png in Resources */,
+				BF99DDDB1835223000183FE2 /* flashlight-turn-off-icon-pressed.png in Resources */,
 				BF2C4FCE1806FEB100A87C18 /* blueButton.png in Resources */,
 				BF370345180EAEF10027AE4F /* Default@2x.png in Resources */,
-				BF99DDA9183510B800183FE2 /* camera-swap-icon.png in Resources */,
+				BF99DDD61835223000183FE2 /* camera-swap-icon.png in Resources */,
 				BF2C4FD11806FEB100A87C18 /* blueButtonSelected@2x.png in Resources */,
-				BF99DDB8183510B800183FE2 /* poweredby.png in Resources */,
-				BF99DDA8183510B800183FE2 /* camera-swap-icon-pressed@2x.png in Resources */,
+				BF99DDE51835223000183FE2 /* poweredby.png in Resources */,
+				BF99DDD51835223000183FE2 /* camera-swap-icon-pressed@2x.png in Resources */,
 				BF99DD421832283400183FE2 /* greenButtonSelected@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -620,7 +620,7 @@
 				BF370350181674820027AE4F /* UserVC.m in Sources */,
 				BF2C4FC41806C96400A87C18 /* Barcode.m in Sources */,
 				BF922120182279340084DCA0 /* PersistenceManager.m in Sources */,
-				BF99DDAD183510B800183FE2 /* empty.cpp in Sources */,
+				BF99DDDA1835223000183FE2 /* empty.cpp in Sources */,
 				BF9B6DA1182AA34600BC0E13 /* LogInVC.m in Sources */,
 				BF99DD591832842A00183FE2 /* QRBarcode.m in Sources */,
 				BF3703551816D5860027AE4F /* UserPopup.m in Sources */,
@@ -687,11 +687,11 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		BF99DD94183510B800183FE2 /* scanditsdk.strings */ = {
+		BF99DDC11835222F00183FE2 /* scanditsdk.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				BF99DD95183510B800183FE2 /* de */,
-				BF99DD97183510B800183FE2 /* en */,
+				BF99DDC21835222F00183FE2 /* de */,
+				BF99DDC41835222F00183FE2 /* en */,
 			);
 			name = scanditsdk.strings;
 			sourceTree = "<group>";

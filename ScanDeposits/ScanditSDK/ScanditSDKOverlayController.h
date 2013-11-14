@@ -156,6 +156,8 @@ typedef enum {
  * Enabled by default.
  * 
  * @since 1.0.0
+ * 
+ * @param boolean indicating whether beep is enabled
  */
 - (void)setBeepEnabled:(BOOL)enabled;
 
@@ -165,6 +167,8 @@ typedef enum {
  * Enabled by default.
  * 
  * @since 1.0.0
+ *
+ * @param boolean indicating whether vibrate is enabled
  */
 - (void)setVibrateEnabled:(BOOL)enabled;
 
@@ -420,7 +424,7 @@ typedef enum {
  *
  * By default this is enabled.
  * 
- * @since 2.0.0
+ * @since 1.0.0
  */
 - (void)drawViewfinder:(BOOL)draw;
 
@@ -501,7 +505,8 @@ typedef enum {
 *
 * @brief Deprecated: Sets the y offset at which the Scandit logo should be drawn.
 *
-* Please note that the standard Scandit SDK licenses do not allow you to hide the logo.
+* Please note that the standard Scandit SDK licenses do not allow you to hide the logo. Do not
+* use this method to hide the poweredby logo.
 *
 * @since 2.0.0
 *
@@ -520,6 +525,8 @@ typedef enum {
  * @brief Adds (or removes) a tool bar to/from the bottom of the scan screen.
  *
  * @since 1.0.0
+ * 
+ * @param boolean indicating whether toolbar should be shown.
  *
  */
 - (void)showToolBar:(BOOL)show;
@@ -530,6 +537,8 @@ typedef enum {
  * By default this is: "Cancel"
  *
  * @since 1.0.0
+ * 
+ * @param string caption for button
  *
  */
 - (void)setToolBarButtonCaption:(NSString *)caption;
@@ -545,6 +554,8 @@ typedef enum {
  * @brief Adds (or removes) a search bar to/from the top of the scan screen.
  *
  * @since 1.0.0
+ * 
+ * @param boolean indicating whether searchbar should be visible
  *
  */
 - (void)showSearchBar:(BOOL)show;
@@ -756,9 +767,7 @@ typedef enum {
  * @deprecated This method serves no purpose any more in Scandit SDK 3.* and is deprecated.
  * 
  * @brief Deprecated: Sets whether to draw the hook at the top of the viewfinder that displays text.
- * 
- * Note: This feature is only available with the
- * Scandit SDK Enterprise Packages.
+ *
  *
  * By default this is enabled.
  */

@@ -13,6 +13,8 @@
 //delegate method need import
 #import "AlertView.h"
 
+#import "QRPopup.h"
+
 @class Barcode;
 @class QRBarcode;
 @class EightBarcode;
@@ -31,7 +33,7 @@
 #define kScanditSDKAppKey @"tKjFyk0cEeOBqwy+jrUhbfCJDNgUVhVIAzazaaLmsvw"//trial version
                             
 
-@interface HomeVC : UIViewController <ScanditSDKOverlayControllerDelegate, ResumeScanMode, DismissLoginWithValidationDelegate, LogoutDelegate>
+@interface HomeVC : UIViewController <ScanditSDKOverlayControllerDelegate, ResumeScanMode, DismissLoginWithValidationDelegate, LogoutDelegate, ResumeScanningModeDelegate>
 {
     NSString *dateString;//not very OO
     NSNotificationCenter *notificationCenter;

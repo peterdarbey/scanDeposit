@@ -93,6 +93,8 @@
 		BF99DDE41835223000183FE2 /* LICENSE-2.0.txt in Resources */ = {isa = PBXBuildFile; fileRef = BF99DDCE1835223000183FE2 /* LICENSE-2.0.txt */; };
 		BF99DDE51835223000183FE2 /* poweredby.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DDCF1835223000183FE2 /* poweredby.png */; };
 		BF99DDE61835223000183FE2 /* poweredby@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DDD01835223000183FE2 /* poweredby@2x.png */; };
+		BF99DDE818353A9400183FE2 /* QRPopup.xib in Resources */ = {isa = PBXBuildFile; fileRef = BF99DDE718353A9400183FE2 /* QRPopup.xib */; };
+		BF99DDEB18353B0F00183FE2 /* QRPopup.m in Sources */ = {isa = PBXBuildFile; fileRef = BF99DDEA18353B0F00183FE2 /* QRPopup.m */; };
 		BF9B6D4818290F8300BC0E13 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF9B6D4718290F8300BC0E13 /* MessageUI.framework */; };
 		BF9B6D9E182AA03A00BC0E13 /* users.plist in Resources */ = {isa = PBXBuildFile; fileRef = BF9B6D9D182AA03A00BC0E13 /* users.plist */; };
 		BF9B6DA1182AA34600BC0E13 /* LogInVC.m in Sources */ = {isa = PBXBuildFile; fileRef = BF9B6DA0182AA34600BC0E13 /* LogInVC.m */; };
@@ -217,6 +219,9 @@
 		BF99DDD01835223000183FE2 /* poweredby@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "poweredby@2x.png"; sourceTree = "<group>"; };
 		BF99DDD11835223000183FE2 /* ScanditSDKBarcodePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanditSDKBarcodePicker.h; sourceTree = "<group>"; };
 		BF99DDD21835223000183FE2 /* ScanditSDKOverlayController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanditSDKOverlayController.h; sourceTree = "<group>"; };
+		BF99DDE718353A9400183FE2 /* QRPopup.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QRPopup.xib; sourceTree = "<group>"; };
+		BF99DDE918353B0F00183FE2 /* QRPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRPopup.h; sourceTree = "<group>"; };
+		BF99DDEA18353B0F00183FE2 /* QRPopup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRPopup.m; sourceTree = "<group>"; };
 		BF9B6D4718290F8300BC0E13 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		BF9B6D9D182AA03A00BC0E13 /* users.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = users.plist; sourceTree = "<group>"; };
 		BF9B6D9F182AA34600BC0E13 /* LogInVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogInVC.h; sourceTree = "<group>"; };
@@ -418,6 +423,9 @@
 				BF3703511816D47B0027AE4F /* UserPopup.xib */,
 				BF3703581816E1870027AE4F /* PopupTV.h */,
 				BF3703591816E1880027AE4F /* PopupTV.m */,
+				BF99DDE918353B0F00183FE2 /* QRPopup.h */,
+				BF99DDEA18353B0F00183FE2 /* QRPopup.m */,
+				BF99DDE718353A9400183FE2 /* QRPopup.xib */,
 			);
 			name = PopupViews;
 			sourceTree = "<group>";
@@ -592,6 +600,7 @@
 				BF99DDDB1835223000183FE2 /* flashlight-turn-off-icon-pressed.png in Resources */,
 				BF2C4FCE1806FEB100A87C18 /* blueButton.png in Resources */,
 				BF370345180EAEF10027AE4F /* Default@2x.png in Resources */,
+				BF99DDE818353A9400183FE2 /* QRPopup.xib in Resources */,
 				BF99DDD61835223000183FE2 /* camera-swap-icon.png in Resources */,
 				BF2C4FD11806FEB100A87C18 /* blueButtonSelected@2x.png in Resources */,
 				BF99DDE51835223000183FE2 /* poweredby.png in Resources */,
@@ -619,6 +628,7 @@
 				BF2C4F861805C0E000A87C18 /* HomeVC.mm in Sources */,
 				BF370350181674820027AE4F /* UserVC.m in Sources */,
 				BF2C4FC41806C96400A87C18 /* Barcode.m in Sources */,
+				BF99DDEB18353B0F00183FE2 /* QRPopup.m in Sources */,
 				BF922120182279340084DCA0 /* PersistenceManager.m in Sources */,
 				BF99DDDA1835223000183FE2 /* empty.cpp in Sources */,
 				BF9B6DA1182AA34600BC0E13 /* LogInVC.m in Sources */,

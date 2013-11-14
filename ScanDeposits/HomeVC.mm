@@ -14,7 +14,6 @@
 
 #import "DepositsVC.h"
 #import "Deposit.h"
-//#import "RegistrationVC.h"
 
 #import "UserVC.h"
 
@@ -497,6 +496,14 @@
     [picker startScanning];
 }
 
+#pragma mark - custom delegate method for QRPopup 
+- (void)startScanningWithScanMode:(BOOL)mode {
+    
+     [picker startScanning];
+    
+    _scanModeIsDevice = mode;
+}
+
 - (NSDictionary *)parseQRBarcodeFromString:(NSString *)barcodeString {
     
     //parse functionality
@@ -581,10 +588,10 @@
             //Add to barcodeArray collection as once I have this barcode is overwritten on 2/5 interleaved scan
             [_barcodeArray addObject:_qrBarcode];
         
+         [picker stopScanning];
         //present the appropriate popup -> AlertView.xib and temp stop scanning
-        [picker stopScanning];
         //NOTE: different popup for QR
-        [self showPopup:barcodeString];//pass relevant custom model or dictionary
+        [self showQRPopup:barcodeString];//pass relevant custom model or dictionary
         
         //set _scanModel to bag barcode now as we have a successful QR scan
         _scanModeIsDevice = NO;
@@ -610,8 +617,8 @@
             
         
         //Construct custom popup here for 128
-        //present the appropriate popup -> AlertView.xib and temp stop scanning
         [picker stopScanning];
+        //present the appropriate popup -> 2/5 interleaved .xib and temp stop scanning
         [self showPopup:barcodeString];//pass relevant custom model or dictionary
         
     }//close else if
@@ -648,7 +655,36 @@
   
     return dict;
 }
+- (void)showQRPopup:(NSString *)barcodeString {
+    
+    //Create a custom QRPopup.xib
+    QRPopup *qrPopup = [QRPopup loadFromNibNamed:@"QRPopup"];
+    //Add custom delegate method here to restart picker scanning
+    [qrPopup setDelegate:self];
+    //ToDo add whatever setup code required here
+    
+    if ([barcodeString hasPrefix:@"Branch NSC"]) { //cant test for barcodeType as Its a custom QR
+        
+        //populate the QR barcode popup
+        qrPopup.branchLbl.text = [NSString stringWithFormat:@"Branch: %@", [_qrBarcode barcodeBranch]];
+        qrPopup.processLbl.text = [NSString stringWithFormat:@"Process: %@", [_qrBarcode barcodeProcess]];
+        qrPopup.safeIDLbl.text = [NSString stringWithFormat:@"Safe ID: %2i", [_qrBarcode barcodeSafeID]];
+        
+    }
+    else
+    {
+        
+        //populate the QR barcode popup
+        qrPopup.branchLbl.text = [NSString stringWithFormat:@"Branch: Not available"];
+        qrPopup.processLbl.text = [NSString stringWithFormat:@"Process: Not available"];
+        qrPopup.safeIDLbl.text = [NSString stringWithFormat:@"Safe ID: Not available"];
+    }
 
+    
+    [qrPopup showOnView:picker.view];
+}
+
+//this will be the2/5 interleave
 -(void)showPopup:(NSString *)barcodeString {
     //Create a custom AlertView.xib
     AlertView *popup = [AlertView loadFromNibNamed:@"AlertView"];
@@ -657,17 +693,8 @@
     //pass the time
     popup.timeString = dateString;//not very OO -> passing to the Deposit model via the popup xib
     
-    if ([barcodeString hasPrefix:@"Branch NSC"]) { //cant test for barcodeType as Its a custom QR
-        
-        //populate the QR barcode popup
-        popup.symbologyLbl.text = [NSString stringWithFormat:@"Symbology: %@", [_qrBarcode barcodeSymbology]];
-        popup.branchLbl.text = [NSString stringWithFormat:@"Branch: %@", [_qrBarcode barcodeBranch]];
-        popup.processLbl.text = [NSString stringWithFormat:@"Process: %@", [_qrBarcode barcodeProcess]];
-        popup.safeIDLbl.text = [NSString stringWithFormat:@"Safe ID: %2i", [_qrBarcode barcodeSafeID]];
-        
-    }
     //Add another Prefix test from the 2/5 interleaved barcode
-    else if ([barcodeString hasPrefix:@"Branch NSC"]) {
+    if ([barcodeString hasPrefix:@"190"]) {
         
         //populate the 2/5 interleave barcode popup 
         popup.symbologyLbl.text = [NSString stringWithFormat:@"Symbology: %@", [_eightBarcode barcodeSymbology]];

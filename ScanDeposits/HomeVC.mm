@@ -603,7 +603,7 @@
         
         
          [picker stopScanning];
-        //different popup for QR
+        //present the QR popup
         [self showQRPopup:barcodeString];//pass relevant custom model or dictionary
         
     }
@@ -631,7 +631,7 @@
         
         //Construct custom popup here for 2/5 interleaved barcode
         [picker stopScanning];
-        //present the appropriate popup -> 2/5 interleaved .xib and temp stop scanning
+        //present the 2/5 interleaved popup
         [self showPopup:barcodeString];//pass relevant custom model or dictionary
         
     }//close else if
@@ -640,6 +640,8 @@
     else
     {
         //ToDo display a error popup
+        
+        
         
         
     }//close else
@@ -692,15 +694,6 @@
         qrPopup.safeIDLbl.text = [NSString stringWithFormat:@"Safe ID: %2i", [_qrBarcode barcodeSafeID]];
         
     }
-    else
-    {
-        
-        //populate the QR barcode popup
-        qrPopup.branchLbl.text = [NSString stringWithFormat:@"Branch: Not available"];
-        qrPopup.processLbl.text = [NSString stringWithFormat:@"Process: Not available"];
-        qrPopup.safeIDLbl.text = [NSString stringWithFormat:@"Safe ID: Not available"];
-    }
-
     
     [qrPopup showOnView:picker.view];
 }
@@ -708,33 +701,26 @@
 //this will be the2/5 interleave
 -(void)showPopup:(NSString *)barcodeString {
     //Create a custom AlertView.xib
-    AlertView *popup = [AlertView loadFromNibNamed:@"AlertView"];
+    AlertView *ILPopup = [AlertView loadFromNibNamed:@"AlertView"];
     //Add custom delegate method here to restart picker scanning
-    [popup setDelegate:self];
+    [ILPopup setDelegate:self];
     //pass the time
-    popup.timeString = dateString;//not very OO -> passing to the Deposit model via the popup xib
+    ILPopup.timeString = dateString;//not very OO -> passing to the Deposit model via the popup xib
     
     //Add another Prefix test from the 2/5 interleaved barcode
     if ([barcodeString hasPrefix:@"190"]) {
         
         //populate the 2/5 interleave barcode popup 
-        popup.symbologyLbl.text = [NSString stringWithFormat:@"Symbology: %@", [_eightBarcode barcodeSymbology]];
-        popup.branchLbl.text = [NSString stringWithFormat:@"Unique Bag Number:%@", [_eightBarcode barcodeUniqueBagNumber]];
-        popup.processLbl.text = [NSString stringWithFormat:@"Process: %@", [_eightBarcode barcodeProcess]];
-        popup.safeIDLbl.text = [NSString stringWithFormat:@"Safe ID: Not Applicable"];
+        ILPopup.symbologyLbl.text = [NSString stringWithFormat:@"Symbology: %@", [_eightBarcode barcodeSymbology]];
+        ILPopup.branchLbl.text = [NSString stringWithFormat:@"Unique Bag Number:%@", [_eightBarcode barcodeUniqueBagNumber]];
+        ILPopup.processLbl.text = [NSString stringWithFormat:@"Process: %@", [_eightBarcode barcodeProcess]];
+        ILPopup.safeIDLbl.text = [NSString stringWithFormat:@"Safe ID: Not Applicable"];
         //with relevant popup instantsiated in each conditional
         
     }
-    else
-    {
-        //populate the QR barcode popup
-        popup.symbologyLbl.text = [NSString stringWithFormat:@"Symbology: Not available"];
-        popup.branchLbl.text = [NSString stringWithFormat:@"Branch: Not available"];
-        popup.processLbl.text = [NSString stringWithFormat:@"Process: Not available"];
-        popup.safeIDLbl.text = [NSString stringWithFormat:@"Safe ID: Not available"];
-    }
     
-    [popup showOnView:picker.view];
+    
+    [ILPopup showOnView:picker.view];
 }
 
 - (void)scanditSDKOverlayController:

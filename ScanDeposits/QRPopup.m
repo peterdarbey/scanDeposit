@@ -37,7 +37,6 @@
 
 -(void)setupView {
     
-    
     //Create semi-transparent background
     _backgroundView = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [_backgroundView setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:0.0]];
@@ -46,8 +45,6 @@
     [self buttonStyle:_proceedBtn WithImgName:@"blueButton.png" imgSelectedName:@"blueButtonSelected.png" withTitle:@"Proceed"];
     [_proceedBtn addTarget:self action:@selector(proceedPressed:) forControlEvents:UIControlEventTouchUpInside];
     
-    //on launch not enabled
-//    [_proceedBtn setEnabled:NO];
     
 }
 

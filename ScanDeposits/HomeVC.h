@@ -10,10 +10,11 @@
 #import "ScanditSDKOverlayController.h"
 #import "ScanditSDKBarcodePicker.h"
 
-//delegate method need import
-#import "ITFPopup.h"
 
+//custom xib imports
+#import "WarningPopup.h"
 #import "QRPopup.h"
+#import "ITFPopup.h"
 
 @class Barcode;
 @class QRBarcode;
@@ -33,7 +34,7 @@
 #define kScanditSDKAppKey @"tKjFyk0cEeOBqwy+jrUhbfCJDNgUVhVIAzazaaLmsvw"//trial version
                             
 
-@interface HomeVC : UIViewController <ScanditSDKOverlayControllerDelegate, ResumeScanMode, DismissLoginWithValidationDelegate, LogoutDelegate, ResumeScanningModeDelegate>
+@interface HomeVC : UIViewController <ScanditSDKOverlayControllerDelegate,  DismissLoginWithValidationDelegate, LogoutDelegate, ResumeScanMode, ResumeScanningModeDelegate, ResumeScanDelegate>
 {
     NSString *dateString;//not very OO
     NSNotificationCenter *notificationCenter;

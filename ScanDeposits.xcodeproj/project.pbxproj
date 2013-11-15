@@ -34,7 +34,7 @@
 		BF2C4FCF1806FEB100A87C18 /* blueButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BF2C4FCB1806FEB100A87C18 /* blueButton@2x.png */; };
 		BF2C4FD01806FEB100A87C18 /* bluebuttonSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = BF2C4FCC1806FEB100A87C18 /* bluebuttonSelected.png */; };
 		BF2C4FD11806FEB100A87C18 /* blueButtonSelected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BF2C4FCD1806FEB100A87C18 /* blueButtonSelected@2x.png */; };
-		BF3703241808229A0027AE4F /* AlertView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BF3703231808229A0027AE4F /* AlertView.xib */; };
+		BF3703241808229A0027AE4F /* ITFPopup.xib in Resources */ = {isa = PBXBuildFile; fileRef = BF3703231808229A0027AE4F /* ITFPopup.xib */; };
 		BF370327180822A90027AE4F /* ITFPopup.m in Sources */ = {isa = PBXBuildFile; fileRef = BF370326180822A90027AE4F /* ITFPopup.m */; };
 		BF370329180844990027AE4F /* bg_gradient.png in Resources */ = {isa = PBXBuildFile; fileRef = BF370328180844990027AE4F /* bg_gradient.png */; };
 		BF370335180D4DE40027AE4F /* DepositsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = BF370334180D4DE40027AE4F /* DepositsVC.m */; };
@@ -95,6 +95,8 @@
 		BF99DDE61835223000183FE2 /* poweredby@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BF99DDD01835223000183FE2 /* poweredby@2x.png */; };
 		BF99DDE818353A9400183FE2 /* QRPopup.xib in Resources */ = {isa = PBXBuildFile; fileRef = BF99DDE718353A9400183FE2 /* QRPopup.xib */; };
 		BF99DDEB18353B0F00183FE2 /* QRPopup.m in Sources */ = {isa = PBXBuildFile; fileRef = BF99DDEA18353B0F00183FE2 /* QRPopup.m */; };
+		BF99DDEE1836412800183FE2 /* WarningPopup.m in Sources */ = {isa = PBXBuildFile; fileRef = BF99DDED1836412800183FE2 /* WarningPopup.m */; };
+		BF99DDF01836414700183FE2 /* WarningPopup.xib in Resources */ = {isa = PBXBuildFile; fileRef = BF99DDEF1836414700183FE2 /* WarningPopup.xib */; };
 		BF9B6D4818290F8300BC0E13 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF9B6D4718290F8300BC0E13 /* MessageUI.framework */; };
 		BF9B6D9E182AA03A00BC0E13 /* users.plist in Resources */ = {isa = PBXBuildFile; fileRef = BF9B6D9D182AA03A00BC0E13 /* users.plist */; };
 		BF9B6DA1182AA34600BC0E13 /* LogInVC.m in Sources */ = {isa = PBXBuildFile; fileRef = BF9B6DA0182AA34600BC0E13 /* LogInVC.m */; };
@@ -145,7 +147,7 @@
 		BF2C4FCB1806FEB100A87C18 /* blueButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blueButton@2x.png"; sourceTree = "<group>"; };
 		BF2C4FCC1806FEB100A87C18 /* bluebuttonSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bluebuttonSelected.png; sourceTree = "<group>"; };
 		BF2C4FCD1806FEB100A87C18 /* blueButtonSelected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blueButtonSelected@2x.png"; sourceTree = "<group>"; };
-		BF3703231808229A0027AE4F /* AlertView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AlertView.xib; sourceTree = "<group>"; };
+		BF3703231808229A0027AE4F /* ITFPopup.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ITFPopup.xib; sourceTree = "<group>"; };
 		BF370325180822A30027AE4F /* ITFPopup.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ITFPopup.h; sourceTree = "<group>"; };
 		BF370326180822A90027AE4F /* ITFPopup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ITFPopup.m; sourceTree = "<group>"; };
 		BF370328180844990027AE4F /* bg_gradient.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg_gradient.png; sourceTree = "<group>"; };
@@ -222,6 +224,9 @@
 		BF99DDE718353A9400183FE2 /* QRPopup.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = QRPopup.xib; sourceTree = "<group>"; };
 		BF99DDE918353B0F00183FE2 /* QRPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRPopup.h; sourceTree = "<group>"; };
 		BF99DDEA18353B0F00183FE2 /* QRPopup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRPopup.m; sourceTree = "<group>"; };
+		BF99DDEC1836412800183FE2 /* WarningPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WarningPopup.h; sourceTree = "<group>"; };
+		BF99DDED1836412800183FE2 /* WarningPopup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WarningPopup.m; sourceTree = "<group>"; };
+		BF99DDEF1836414700183FE2 /* WarningPopup.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = WarningPopup.xib; sourceTree = "<group>"; };
 		BF9B6D4718290F8300BC0E13 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		BF9B6D9D182AA03A00BC0E13 /* users.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = users.plist; sourceTree = "<group>"; };
 		BF9B6D9F182AA34600BC0E13 /* LogInVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogInVC.h; sourceTree = "<group>"; };
@@ -415,17 +420,20 @@
 		BF370332180D303A0027AE4F /* PopupViews */ = {
 			isa = PBXGroup;
 			children = (
+				BF99DDEC1836412800183FE2 /* WarningPopup.h */,
+				BF99DDED1836412800183FE2 /* WarningPopup.m */,
+				BF99DDEF1836414700183FE2 /* WarningPopup.xib */,
 				BF370325180822A30027AE4F /* ITFPopup.h */,
 				BF370326180822A90027AE4F /* ITFPopup.m */,
-				BF3703231808229A0027AE4F /* AlertView.xib */,
+				BF3703231808229A0027AE4F /* ITFPopup.xib */,
+				BF99DDE918353B0F00183FE2 /* QRPopup.h */,
+				BF99DDEA18353B0F00183FE2 /* QRPopup.m */,
+				BF99DDE718353A9400183FE2 /* QRPopup.xib */,
 				BF3703531816D5860027AE4F /* UserPopup.h */,
 				BF3703541816D5860027AE4F /* UserPopup.m */,
 				BF3703511816D47B0027AE4F /* UserPopup.xib */,
 				BF3703581816E1870027AE4F /* PopupTV.h */,
 				BF3703591816E1880027AE4F /* PopupTV.m */,
-				BF99DDE918353B0F00183FE2 /* QRPopup.h */,
-				BF99DDEA18353B0F00183FE2 /* QRPopup.m */,
-				BF99DDE718353A9400183FE2 /* QRPopup.xib */,
 			);
 			name = PopupViews;
 			sourceTree = "<group>";
@@ -567,6 +575,7 @@
 				BF99DD3F1832283400183FE2 /* greenButton.png in Resources */,
 				BF99DD411832283400183FE2 /* greenButtonSelected.png in Resources */,
 				BF99DD551832288100183FE2 /* accountIcon.png in Resources */,
+				BF99DDF01836414700183FE2 /* WarningPopup.xib in Resources */,
 				BF99DDE01835223000183FE2 /* flashlight-turn-on-icon-pressed@2x.png in Resources */,
 				BF99DD4D1832286600183FE2 /* singleCellSelected.png in Resources */,
 				BF92212318227AEC0084DCA0 /* usersCollection.plist in Resources */,
@@ -587,7 +596,7 @@
 				BF99DDDD1835223000183FE2 /* flashlight-turn-off-icon.png in Resources */,
 				BF370342180EAEF10027AE4F /* Default-568h.png in Resources */,
 				BF99DD451832285400183FE2 /* whiteCell.png in Resources */,
-				BF3703241808229A0027AE4F /* AlertView.xib in Resources */,
+				BF3703241808229A0027AE4F /* ITFPopup.xib in Resources */,
 				BF99DDD71835223000183FE2 /* camera-swap-icon@2x.png in Resources */,
 				BF99DDD91835223000183FE2 /* scanditsdk.strings in Resources */,
 				BF99DDD81835223000183FE2 /* CHANGELOG.txt in Resources */,
@@ -639,6 +648,7 @@
 				BF37035F1817C6480027AE4F /* User.m in Sources */,
 				BF2C4F5D1805C08B00A87C18 /* AppDelegate.m in Sources */,
 				BF37034D181539160027AE4F /* RegistrationVC.m in Sources */,
+				BF99DDEE1836412800183FE2 /* WarningPopup.m in Sources */,
 				BF99DD5F1833873800183FE2 /* EightBarcode.m in Sources */,
 				BF370327180822A90027AE4F /* ITFPopup.m in Sources */,
 				BF370338180D5C5D0027AE4F /* Deposit.m in Sources */,

@@ -280,14 +280,13 @@
 #pragma factory method
 - (Deposit *)createDepositModelObject {
     
-//    NSMutableArray *array = [NSMutableArray array];
     
-    //Init custom model object
+    //Init custom model object have to pass the unique bag number here 
     Deposit *deposit = [[Deposit alloc]initWithBagNumber:@"987565-4646" bagBarcode:@"987565-4646"//uniqueBagNumber
                                                bagAmount: _bagAmount bagCount:_bagCount timeStamp:_timeString];
     
     //Add to collection before passing to delegate
-//    [array addObject:deposit];
+
     return deposit;
 }
 
@@ -314,7 +313,7 @@
     [self setupView];
     
     self.transform = CGAffineTransformMakeScale(0.5f, 0.5f);
-    CGPoint offset = CGPointMake(view.center.x, view.center.y -20);
+    CGPoint offset = CGPointMake(view.center.x, view.center.y -30);
 //    self.center = view.center;//pass picker.view.center to view
     self.center = offset;
     self.layer.cornerRadius = 5.0;

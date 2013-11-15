@@ -9,8 +9,9 @@
 #import "HomeVC.h"
 
 #import "Barcode.h"//old
+
 #import "QRBarcode.h"
-#import "EightBarcode.h"//new
+#import "EightBarcode.h"
 
 #import "DepositsVC.h"
 #import "Deposit.h"
@@ -21,7 +22,10 @@
 @interface HomeVC ()
 {
     ScanditSDKBarcodePicker *picker;
+    NSMutableArray *uniqueBagArray;
 }
+
+
 @property (strong, nonatomic) NSMutableDictionary *validUsersDict;
 @property (strong, nonatomic) NSMutableDictionary *validAdminsDict;
 //QR barcode model
@@ -199,10 +203,9 @@
     [picker.view addSubview:customTB];
     
     [picker.overlayController setTextForInitializingCamera:@"Please Wait"];
-    [picker startScanning];
-    
+
     [self.navigationController presentViewController:picker animated:YES completion:nil];
-    
+    [picker startScanning];
     //Dont need Observer currently
 //    [self dispatchEventOnTouch];
     
@@ -216,6 +219,8 @@
     _barcodeArray = [NSMutableArray array];
     
     _depositsArray = [NSMutableArray array];
+    
+    uniqueBagArray = [NSMutableArray array];
     
     barBtnFinished.enabled = NO;
     
@@ -494,6 +499,17 @@
     
 }
 
+#pragma mark - custom delegate method for WarningPopup
+//should not need 3 delegate protocols here
+- (void)resumeScanning {
+    
+    [picker startScanning];
+    //not sure what mode we are in yet??
+//    _scanModeIsQR = ;
+    
+}
+
+#pragma mark - custom delegate method for ITFPopup
 -(void)startScanning {
     
     [picker startScanning];
@@ -507,7 +523,7 @@
     if (!mode.boolValue) {
     
         //set _scanModel to bag barcode now as we have a successful QR scan
-       _scanModeIsQR = mode.boolValue;//is always NO
+       _scanModeIsQR = mode.boolValue;//is always NO -> correct
         
         //NOTE: we dont have to dismiss the picker we can just start scanning again dismiss picker so that we can change the UI
         [picker dismissViewControllerAnimated:YES completion:nil];
@@ -584,7 +600,7 @@
     NSString *barcodeType = (NSString *)barcodeResult[@"symbology"];
     
     //declare the dictionary to hold the parsed dict model object
-    NSDictionary *barcode;
+    NSDictionary *__block barcode;
     
     
     //if scan QR barcode and stops regular QR code from entering
@@ -607,42 +623,82 @@
         [self showQRPopup:barcodeString];//pass relevant custom model or dictionary
         
     }
-    //else scan 2/5 interleaved barcode --> will be different Prefix for 2/5 interleaved not 128
-    else if (!_scanModeIsQR && [barcodeType isEqualToString:@"ITF"] && [barcodeString hasPrefix:@"190"])
+    //enter else if in 2/5 interleaved barcode mode and its a valid bank bag
+    else if (!_scanModeIsQR && [barcodeType isEqualToString:@"ITF"] && [barcodeString hasPrefix:@"190"])//prefix may change
     {
         DLog(@"barcodeType: %@", barcodeType);// 2/5 interleaved correct --> 190053495691
-    
-        //Note: need to parse the 2/5 interleaved barcode before constructing dictionary
-        barcode = [self parseILBarcodeFromString:barcodeString withBarcodeType:barcodeResult[@"symbology"]];
-        
-            //construct custom 128Barcode model
-            _eightBarcode = [[EightBarcode alloc]initBarcodeWithSymbology:barcode[@"Symbology"] processType:barcode[@"Process Type"] uniqueBagNumber:barcode[@"Unique Bag Number"]];
-        
-            //Add to collection -> we have a key value pair here to ID the type of barcode object so add to same array as QRBarcode
-            [_barcodeArray addObject:_eightBarcode];
-        
-            DLog(@"_eightBarcode: %@", _eightBarcode);
-        
-        if (_eightBarcode) {
-            
-            //set to enabled when we have a valid QR and at least 1 2/5 interleaved scanned
-            [barBtnFinished setEnabled:YES];
-        }
-        
-        //Construct custom popup here for 2/5 interleaved barcode
+        //stop scanning
         [picker stopScanning];
-        //present the 2/5 interleaved popup
-        [self showPopup:barcodeString];//pass relevant custom model or dictionary
+        
+        //Check bag has not been scanned already and store in an array
+        NSString *uniqueSubString = [barcodeString substringFromIndex:7];//correct is last five digits 95691
+        DLog(@"uniqueString >>>>>>>>>>>>>>>>: %@", uniqueSubString);
+        [uniqueBagArray addObject:uniqueSubString];//possibly from file as may save
+        
+        //could maybe use an NSSet as it doesnt allow duplicates? -> NO need to keep a record so can compare
+        [uniqueBagArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            //if the collection already has that barcode subString then it has already been scanned
+            //need to addObj after 1st enumerate
+            for (obj in uniqueBagArray) { // -> should be comparing to objects in collection only
+                //dont add uniqueSubString till we have checked for its existence first
+                //if entries in the collecftion enumerate and then add barcode
+                if ([uniqueBagArray count] > 0) {
+                    //has some entries so perform check
+                    if ([uniqueSubString isEqual:obj]) {
+                        //Display warning popup and dont allow scanning
+                        NSString *title = @"Warning this bag has already\n been scanned";
+                        NSString *message = @"Please scan a different bag to \ncontinue";
+                        [self showWarningPopupWithTitle:title andMessage:message forBarcode:barcodeString];
+                    }
+                    //else its has never been scanned before so proceed and construct model etc..
+                    else
+                    {
+                        //add to collection
+//                        [uniqueBagArray addObject:uniqueSubString];//possibly from file as may save
+                        
+                        //Note: need to parse the 2/5 interleaved barcode before constructing dictionary
+                        barcode = [self parseILBarcodeFromString:barcodeString withBarcodeType:barcodeResult[@"symbology"]];
+                        
+                        //construct custom 2/5 interleaved barcode model
+                        _eightBarcode = [[EightBarcode alloc]initBarcodeWithSymbology:barcode[@"Symbology"] processType:barcode[@"Process Type"] uniqueBagNumber:barcode[@"Unique Bag Number"]];
+                        
+                        //Add to collection -> we have a key value pair here to ID the type of barcode object so add to same array as QRBarcode
+                        [_barcodeArray addObject:_eightBarcode];
+                        
+                        DLog(@"_eightBarcode: %@", _eightBarcode);
+                        
+                        if (_eightBarcode) {
+                            //set to enabled when we have a valid QR and at least 1 2/5 interleaved scanned
+                            [barBtnFinished setEnabled:YES];
+                        }
+                        
+                        //Construct custom popup here for 2/5 interleaved barcode
+                        //present the 2/5 interleaved popup
+                        [self showPopup:barcodeString];//pass relevant custom model or dictionary
+                    }//close else
+
+                }//close if entries in collection condition
+                else //empty so add
+                {
+//
+                }
+                
+            }//close for in
+            
+        }];//close enumerate block
         
     }//close else if
     
     //need this else here for displaying a Non QR / 2/5 interleaved type
     else
     {
-        //ToDo display a error popup
-        
-        
-        
+
+        //Construct custom warning popup
+        [picker stopScanning];
+        //Display warning popup and dont allow scanning
+        NSString *title = @"Warning this is not a valid type";
+        NSString *message = @"Please scan another item";
+        [self showWarningPopupWithTitle:title andMessage:message forBarcode:barcodeString];
         
     }//close else
 
@@ -664,6 +720,10 @@
         DLog(@"Process Type: %@", processString);
         
         processType = @"A Coin Only Dropsafe";
+        //if not a valid barcode then dont allow user to proceed
+        //display warning message again
+        //ToDo record the digits in an array to check the bag scanned is never the same again -> see sdk didScan
+        
         
     }//close if
     
@@ -678,6 +738,28 @@
   
     return dict;
 }
+
+#pragma mark - custom popup xibs
+
+- (void)showWarningPopupWithTitle:(NSString *)title andMessage:(NSString *)message
+                       forBarcode:(NSString *)barcodeString {
+    
+    //Create a custom WarningPopup.xib
+    WarningPopup *warningPopup = [WarningPopup loadFromNibNamed:@"WarningPopup"];
+    //set delegate
+    [warningPopup setDelegate:self];
+    //set text
+    warningPopup.titleLbl.text = title;
+    warningPopup.messageLbl.text = message;
+    
+    
+    //ToDo add whatever setup code required here
+    
+    
+    [warningPopup showOnView:picker.view];
+    
+}
+
 - (void)showQRPopup:(NSString *)barcodeString {
     
     //Create a custom QRPopup.xib

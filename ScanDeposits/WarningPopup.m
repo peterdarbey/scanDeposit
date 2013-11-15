@@ -63,29 +63,13 @@
         
         if (_confirmed) {
         
-            //dismissed popup and resume scanning mode and save barcode data if applicable
-            //        if ([self.delegate respondsToSelector:@selector(startScanning)]) {
-            //            [self.delegate performSelector:@selector(startScanning)];
-            //            DLog(@"Delgate performSelector");
-            //        }
-        
+            if ([self.delegate respondsToSelector:@selector(resumeScanning)]) {
+                [self.delegate performSelector:@selector(resumeScanning)];
+            }//close if
+
         }//close if
         
     }];
-    
-}
-
-//_saveBtn
--(void)confirmPressed:(UIButton *)sender {
-    
-//    _confirmed = YES;
-    
-    if ([self.delegate respondsToSelector:@selector(resumeScanning)]) {
-        [self.delegate performSelector:@selector(resumeScanning)];
-        
-    }
-    
-    [self dismissPopupAndResumeScanning];
     
 }
 
@@ -118,7 +102,7 @@
     self.layer.cornerRadius = 5.0;
     self.layer.borderColor = [UIColor colorWithRed:212.0/255.0 green:0.0/255.0 blue:20.0/255.5 alpha:0.5].CGColor;
 //    self.layer.borderColor = [UIColor whiteColor].CGColor;
-    self.layer.borderWidth = 1.0;
+    self.layer.borderWidth = 1.5;
     
     
     [view addSubview:_backgroundView];

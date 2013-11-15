@@ -301,7 +301,7 @@
     DLog(@"eightBarcode barcodeUniqueBagNumber: %@", [eightBarcode barcodeUniqueBagNumber]);
     
     //Init custom model object have to pass the unique bag number here 
-    Deposit *deposit = [[Deposit alloc]initWithBagNumber:@"987565-4646"
+    Deposit *deposit = [[Deposit alloc]initWithBagNumber:[eightBarcode barcodeUniqueBagNumber]
                                               bagBarcode:[eightBarcode barcodeUniqueBagNumber] bagAmount: _bagAmount bagCount:_bagCount timeStamp:_timeString];
     
     //Add to collection before passing to delegate

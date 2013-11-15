@@ -136,7 +136,8 @@
             DepositsVC *depositsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"DepositsVC"];
             depositsVC.title = NSLocalizedString(@"Deposits", @"Deposits View");
             depositsVC.depositsCollection = _depositsArray;//bag data
-            depositsVC.QRArray = _barcodeArray; //may need a condition here before adding check -> can add all barcode models to this and id by key @"Symbology"
+            //wrong place deposit model already setup here
+//            depositsVC.QRArray = _barcodeArray; //may need a condition here before adding check -> can add all barcode models to this and id by key @"Symbology"
             
             
             //package off logged in users/admins data
@@ -508,7 +509,7 @@
     
     [picker startScanning];
     //not sure what mode we are in yet??
-//    _scanModeIsQR = ;
+//    _scanModeIsQR = ;// -> NO as called in differ instances
     
 }
 
@@ -626,6 +627,16 @@
         [self showQRPopup:barcodeString];//pass relevant custom model or dictionary
         
     }
+    //else if in QR scan mode, its an ITF with valid bank bag details, but we have not scanned QR first
+    else if (_scanModeIsQR && [barcodeType isEqualToString:@"ITF"] && [barcodeString hasPrefix:@"190"])
+    {
+        //Construct custom warning popup
+        [picker stopScanning];
+        //Display warning popup and dont allow scanning
+        NSString *title = @"Warning: No QR code scanned yet!";
+        NSString *message = @"To continue please scan the Device / Process first";
+        [self showWarningPopupWithTitle:title andMessage:message forBarcode:barcodeString];
+    }
     //enter else if in 2/5 interleaved scan mode, its an ITF and its a valid bank bag                    @"291"
     else if (!_scanModeIsQR && [barcodeType isEqualToString:@"ITF"] && [barcodeString hasPrefix:@"190"])//prefix may change
     {
@@ -637,11 +648,11 @@
         DLog(@"uniqueString >>>>>>>>>>>>>>>>: %@", uniqueSubString);
         
         //if the collection already has that barcode subString then it has already been scanned
-        if ([uniqueBagArray containsObject:uniqueSubString]) {
+        if ([uniqueBagArray containsObject:uniqueSubString]) { //note -> not stored on device so valid but launch
             
             //Display warning popup and dont allow scanning
-            NSString *title = @"Warning this bag has already\n been scanned";
-            NSString *message = @"Please scan a different bag to \ncontinue";
+            NSString *title = @"Warning this bag has already been scanned";
+            NSString *message = @"Please scan a different bag to continue";
             [self showWarningPopupWithTitle:title andMessage:message forBarcode:barcodeString];
         }
         //else its has never been scanned before so proceed and construct model etc..
@@ -671,16 +682,6 @@
         
     }//close else if
     
-    //else if in QR scan mode, its an ITF with valid bank bag details, but we have not scanned QR first
-    else if (_scanModeIsQR && [barcodeType isEqualToString:@"ITF"] && [barcodeString hasPrefix:@"190"])
-    {
-        //Construct custom warning popup
-        [picker stopScanning];
-        //Display warning popup and dont allow scanning
-        NSString *title = @"Warning: No QR code scanned yet!";
-        NSString *message = @"To continue please scan the Device / Process first";
-        [self showWarningPopupWithTitle:title andMessage:message forBarcode:barcodeString];
-    }
     else if (!_scanModeIsQR && [barcodeType isEqualToString:@"QR"] && [barcodeString hasPrefix:@"Branch NSC"])
     {
         //Construct custom warning popup
@@ -697,7 +698,7 @@
         //Construct custom warning popup
         [picker stopScanning];
         //Display warning popup and dont allow scanning
-        NSString *title = @"Warning: this is not a valid type";
+        NSString *title = @"Warning: this is not a valid bank type";
         NSString *message = @"Please scan another item";
         [self showWarningPopupWithTitle:title andMessage:message forBarcode:barcodeString];
     }
@@ -789,6 +790,8 @@
     [ILPopup setDelegate:self];
     //pass the time
     ILPopup.timeString = dateString;//not very OO -> passing to the Deposit model via the popup xib
+    //pass the barcode data
+    ILPopup.barcodeArray = _barcodeArray;
     
     //Add another Prefix test from the 2/5 interleaved barcode
     if ([barcodeString hasPrefix:@"190"]) {

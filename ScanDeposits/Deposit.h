@@ -25,6 +25,7 @@
 - (double)countOfBagAmount;
 - (int)countOfBagCount;
 
+- (NSString *)getBagNumber;
 
 @end
 

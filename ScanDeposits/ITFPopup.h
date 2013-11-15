@@ -33,6 +33,9 @@
 
 @property (weak, nonatomic) IBOutlet UIView *zoneBackground;
 
+//Add an array to store all barcode model types as we have K / V pairs
+@property (strong, nonatomic) NSMutableArray *barcodeArray;
+
 
 @property (strong, nonatomic) IBOutlet UILabel *branchLbl;
 

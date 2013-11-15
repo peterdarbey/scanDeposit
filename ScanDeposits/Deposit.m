@@ -82,6 +82,9 @@ static double _totalBagsAmount;
 - (int)countOfBagCount {
     return _bagCount;
 }
+- (NSString *)getBagNumber {
+    return _bagNumber;
+}
 
 
 @end

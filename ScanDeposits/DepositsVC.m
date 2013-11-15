@@ -424,8 +424,9 @@
     
     
         //get the indiviual bag number from indexPath and add one
-        NSInteger bagRow = indexPath.section;
-        bagNumberLbl.text = [NSString stringWithFormat:@"Bag number: %i", bagRow +1];
+//        NSInteger bagRow = indexPath.section;
+//        bagNumberLbl.text = [NSString stringWithFormat:@"Bag number: %i", bagRow +1];
+        bagNumberLbl.text = [NSString stringWithFormat:@"Bag number: %@", [deposit getBagNumber]];//should work
     
         return cell;
 }

@@ -6,6 +6,8 @@
 
 #import "Deposit.h"
 
+#import "EightBarcode.h"
+
 @interface ITFPopup ()
 {
     
@@ -69,6 +71,8 @@
     [_backgroundView setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:0.0]];
     //init string array
     stringArray = [NSMutableArray array];
+    
+    //init our barcodeArray -> wait its passed to us
     
     [_inputAmountTF setKeyboardType:UIKeyboardTypeNumberPad];
     
@@ -280,10 +284,25 @@
 #pragma factory method
 - (Deposit *)createDepositModelObject {
     
+    DLog(@"_barcodeArray: %@", _barcodeArray);
+    
+//    NSDictionary *modelTypeDict;
+    EightBarcode *eightBarcode;
+    
+    //not sure this is completely safe --> actually will be
+    if ([[_barcodeArray lastObject] isKindOfClass:[EightBarcode class]]) {
+         eightBarcode = [_barcodeArray lastObject];//should always be last object as QR is first and its an ordered collection
+//         modelTypeDict = barcodeDict[@"ITF"];
+        
+    }
+    
+//    NSString *uniqueBagNumber = modelTypeDict[@"Unique Bag Number"];
+    
+    DLog(@"eightBarcode barcodeUniqueBagNumber: %@", [eightBarcode barcodeUniqueBagNumber]);
     
     //Init custom model object have to pass the unique bag number here 
-    Deposit *deposit = [[Deposit alloc]initWithBagNumber:@"987565-4646" bagBarcode:@"987565-4646"//uniqueBagNumber
-                                               bagAmount: _bagAmount bagCount:_bagCount timeStamp:_timeString];
+    Deposit *deposit = [[Deposit alloc]initWithBagNumber:@"987565-4646"
+                                              bagBarcode:[eightBarcode barcodeUniqueBagNumber] bagAmount: _bagAmount bagCount:_bagCount timeStamp:_timeString];
     
     //Add to collection before passing to delegate
 

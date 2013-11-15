@@ -52,6 +52,6 @@
 @property BOOL isLoggedOut;
 
 //could be a enum
-@property BOOL scanModeIsDevice;
+@property BOOL scanModeIsQR;
 
 @end

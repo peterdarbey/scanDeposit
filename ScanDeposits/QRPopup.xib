@@ -16,7 +16,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Safe ID" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" id="Xj7-CU-d14">
-                    <rect key="frame" x="10" y="95" width="244" height="25"/>
+                    <rect key="frame" x="10" y="90" width="244" height="25"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                     <color key="textColor" red="0.23529411759999999" green="0.31372549020000001" blue="0.37254901959999998" alpha="1" colorSpace="calibratedRGB"/>
@@ -34,7 +34,7 @@
                     <size key="shadowOffset" width="0.0" height="1"/>
                 </label>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Branch" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" id="iYH-5K-ZLu">
-                    <rect key="frame" x="10" y="35" width="244" height="25"/>
+                    <rect key="frame" x="10" y="40" width="244" height="25"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                     <color key="textColor" red="0.23529411759999999" green="0.31372549020000001" blue="0.37254901959999998" alpha="1" colorSpace="calibratedRGB"/>
@@ -42,10 +42,10 @@
                     <color key="shadowColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <size key="shadowOffset" width="0.0" height="1"/>
                 </label>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Now scan bag barcodes" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="bsx-ae-GwO">
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Now scan a bag barcode" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="bsx-ae-GwO">
                     <rect key="frame" x="0.0" y="130" width="260" height="25"/>
                     <autoresizingMask key="autoresizingMask"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <color key="textColor" red="0.23529411759999999" green="0.31372549020000001" blue="0.37254901959999998" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                     <color key="shadowColor" red="0.96078431369999995" green="0.97254901959999995" blue="0.98039215690000003" alpha="1" colorSpace="calibratedRGB"/>
@@ -73,7 +73,7 @@
                     </state>
                 </button>
             </subviews>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
             <connections>
                 <outlet property="branchLbl" destination="iYH-5K-ZLu" id="NvW-To-a8d"/>
                 <outlet property="imagePlaceHolder" destination="f6P-b2-6cQ" id="gAX-Me-RcB"/>

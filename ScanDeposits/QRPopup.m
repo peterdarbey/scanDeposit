@@ -46,6 +46,9 @@
     [self buttonStyle:_proceedBtn WithImgName:@"blueButton.png" imgSelectedName:@"blueButtonSelected.png" withTitle:@"Proceed"];
     [_proceedBtn addTarget:self action:@selector(proceedPressed:) forControlEvents:UIControlEventTouchUpInside];
     
+    //on launch not enabled
+//    [_proceedBtn setEnabled:NO];
+    
 }
 
 -(void)dismissPopupAndResumeScanning {
@@ -55,23 +58,16 @@
     } completion:^(BOOL finished) {
         [_backgroundView removeFromSuperview];
         
-//        //only executed if user presses confirm
-//        if (_confirmed) {
-//            
-//            //Init custom model object and add to collection before passing to delegate
-//            Deposit *deposit = [self createDepositModelObject];
-//            //call this delegate method from HomeVC if _confirmPressed
-//            if ([self.delegate respondsToSelector:@selector(passScannedData:)]) {
-//                [self.delegate performSelector:@selector(passScannedData:) withObject:deposit];
-//            }
-//            
-//        }//close if
-//        
-        //dismissed popup and resume scanning mode and save barcode data if applicable
-        if ([self.delegate respondsToSelector:@selector(startScanningWithScanMode:)]) {
-            [self.delegate performSelector:@selector(startScanningWithScanMode:) withObject:@(NO)];
-            DLog(@"Delegate performSelector for QRPopup");
-        }
+        //only executed if user presses confirm
+        if (_confirmed) {
+       
+            //dismissed popup and resume scanning mode and
+            if ([self.delegate respondsToSelector:@selector(startScanningWithScanMode:)]) {
+                [self.delegate performSelector:@selector(startScanningWithScanMode:) withObject:@(NO)];
+                DLog(@"Delegate performSelector for QRPopup");
+            }
+            
+        }//close if
         
     }];
     
@@ -82,8 +78,6 @@
     
     _confirmed = YES;
     [self dismissPopupAndResumeScanning];
-    //need a custom delegate method here to pass a BOOL to set the _scanIsDeviceModel to YES to 2/5 interleaved if its YES and if NO _scanIsDeviceModel is not set to NO
-    //ToDo delegate method ........
     
 }
 

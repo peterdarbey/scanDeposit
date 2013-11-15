@@ -98,7 +98,7 @@
         //Stop the picker scanning
         [picker stopScanning];
         //cancelled scanning device QR barcode so set to YES again
-        _scanModeIsDevice = YES;//this may vary
+        _scanModeIsQR = YES;//this may vary
     }];
     
 }
@@ -107,13 +107,13 @@
 - (void)finishedScanPressed:(UIButton *)sender {
    
     //QR barcode
-    if (_scanModeIsDevice) {
+    if (_scanModeIsQR) {
         
         DLog(@"Scanning functionality for QR barcode");
         [picker dismissViewControllerAnimated:YES completion:^{
             [picker stopScanning];
             //scanned device QR barcode, now set to 2/5 interleaved barcode
-            _scanModeIsDevice = NO;//correct
+            _scanModeIsQR = NO;//correct
         }];
 
         
@@ -184,6 +184,9 @@
     
     barBtnFinished = [[UIBarButtonItem alloc]initWithTitle:@"FinishedScan" style:UIBarButtonItemStyleBordered target:self action:@selector(finishedScanPressed:)];
     [barBtnFinished setTintColor:[UIColor blackColor]];
+    //set to disabled until a valid QR and at least 1 2/5 interleaved is scanned
+    [barBtnFinished setEnabled:NO];
+    
     
     //Add a divider for the toolBar barButtonItems
     UIBarButtonItem *flexible = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
@@ -267,10 +270,10 @@
     
     
     //Set to YES on app launch as first time will always be QR external device barcode
-    _scanModeIsDevice = YES;//hardcode YES here
+    _scanModeIsQR = YES;//hardcode YES here
     
     //if scan QR barcode
-    if (_scanModeIsDevice) {
+    if (_scanModeIsQR) {
         
         [self.view addSubview:scanDeviceBtn];//correct
         //Add other behaviour here
@@ -467,7 +470,7 @@
     
     DLog(@"dataArray: %@", deposit);
     //NOTE: data structure may be different here
-    if (_scanModeIsDevice) {//dont think we need this
+    if (_scanModeIsQR) {//dont think we need this
        
             
     }
@@ -497,11 +500,21 @@
 }
 
 #pragma mark - custom delegate method for QRPopup 
-- (void)startScanningWithScanMode:(BOOL)mode {
+//QRPopup is only called from a successful QR scan in if statement
+- (void)startScanningWithScanMode:(NSNumber *)mode {
+
+    //if the mode is NO set the scanMode to 2/5 interleaved
+    if (!mode.boolValue) {
     
-     [picker startScanning];
+        //set _scanModel to bag barcode now as we have a successful QR scan
+       _scanModeIsQR = mode.boolValue;//is always NO
+        
+        //NOTE: we dont have to dismiss the picker we can just start scanning again dismiss picker so that we can change the UI
+        [picker dismissViewControllerAnimated:YES completion:nil];
+        //or start scan process again
+//     [picker startScanning];
+    }
     
-    _scanModeIsDevice = mode;
 }
 
 - (NSDictionary *)parseQRBarcodeFromString:(NSString *)barcodeString {
@@ -569,15 +582,15 @@
     
     //extract the Symbology to determine the relevant data model and construct appropriately
     NSString *barcodeType = (NSString *)barcodeResult[@"symbology"];
+    
     //declare the dictionary to hold the parsed dict model object
     NSDictionary *barcode;
-    //conditionals to extract/process the type of barcode scanned i.e. QR or 128
     
     
     //if scan QR barcode and stops regular QR code from entering
-    if (_scanModeIsDevice && [barcodeType isEqualToString:@"QR"] && [barcodeString hasPrefix:@"Branch NSC"]) {
+    if (_scanModeIsQR && [barcodeType isEqualToString:@"QR"] && [barcodeString hasPrefix:@"Branch NSC"]) {
         
-        DLog(@"barcodeType: %@", barcodeType);//QR - correct
+        DLog(@"barcodeType: %@", barcodeType);//QR - correct if execution enters here we have a valid QR for app
         
         //parses a barcode string and creates a dictionary
         barcode = [self parseQRBarcodeFromString:barcodeString];
@@ -588,20 +601,14 @@
             //Add to barcodeArray collection as once I have this barcode is overwritten on 2/5 interleaved scan
             [_barcodeArray addObject:_qrBarcode];
         
+        
          [picker stopScanning];
-        //present the appropriate popup -> AlertView.xib and temp stop scanning
-        //NOTE: different popup for QR
+        //different popup for QR
         [self showQRPopup:barcodeString];//pass relevant custom model or dictionary
-        
-        //set _scanModel to bag barcode now as we have a successful QR scan
-        _scanModeIsDevice = NO;
-        
-        //Dismiss Picker once this has been scanned
-        
         
     }
     //else scan 2/5 interleaved barcode --> will be different Prefix for 2/5 interleaved not 128
-    else if (!_scanModeIsDevice && [barcodeType isEqualToString:@"ITF"] && [barcodeString hasPrefix:@"190"])
+    else if (!_scanModeIsQR && [barcodeType isEqualToString:@"ITF"] && [barcodeString hasPrefix:@"190"])
     {
         DLog(@"barcodeType: %@", barcodeType);// 2/5 interleaved correct --> 190053495691
     
@@ -609,22 +616,36 @@
         barcode = [self parseILBarcodeFromString:barcodeString withBarcodeType:barcodeResult[@"symbology"]];
         
             //construct custom 128Barcode model
-            _eightBarcode = [[EightBarcode alloc]initBarcodeWithSymbology:barcode[@"Symbology"] processType:barcode[@"Process Type"] uniqueBagNumber:barcode[@"Barcode"]];//barcodeResult[@"Unique Bag Number"];
+            _eightBarcode = [[EightBarcode alloc]initBarcodeWithSymbology:barcode[@"Symbology"] processType:barcode[@"Process Type"] uniqueBagNumber:barcode[@"Unique Bag Number"]];
         
-            DLog(@"eightBarcode: %@", _eightBarcode);
-            //Add to collection
-//          [_barcodeArray addObject:eightBarcode];
+            //Add to collection -> we have a key value pair here to ID the type of barcode object so add to same array as QRBarcode
+            [_barcodeArray addObject:_eightBarcode];
+        
+            DLog(@"_eightBarcode: %@", _eightBarcode);
+        
+        if (_eightBarcode) {
             
+            //set to enabled when we have a valid QR and at least 1 2/5 interleaved scanned
+            [barBtnFinished setEnabled:YES];
+        }
         
-        //Construct custom popup here for 128
+        //Construct custom popup here for 2/5 interleaved barcode
         [picker stopScanning];
         //present the appropriate popup -> 2/5 interleaved .xib and temp stop scanning
         [self showPopup:barcodeString];//pass relevant custom model or dictionary
         
     }//close else if
     
-    
+    //need this else here for displaying a Non QR / 2/5 interleaved type
+    else
+    {
+        //ToDo display a error popup
+        
+        
+    }//close else
+
 }
+
 //parse method for parsing the 2/5 interleaved barcode string
 - (NSDictionary *)parseILBarcodeFromString:(NSString *)barcodeString withBarcodeType:(NSString *)barcodeType {
     
@@ -651,7 +672,7 @@
     }
     
     //construct a dict for 2/5 interleaved model
-     NSDictionary *dict = @{@"Symbology" : barcodeType, @"Process Type" : processType, @"Barcode" : barcodeString};
+     NSDictionary *dict = @{@"Symbology" : barcodeType, @"Process Type" : processType, @"Unique Bag Number" : barcodeString};
   
     return dict;
 }

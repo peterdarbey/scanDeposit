@@ -11,7 +11,7 @@
 
 @protocol ResumeScanningModeDelegate <NSObject>
 
-- (void)startScanningWithScanMode:(BOOL)mode;
+- (void)startScanningWithScanMode:(NSNumber *)mode;
 
 @end
 

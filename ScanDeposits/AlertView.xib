@@ -7,7 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="scaleToFill" id="4" customClass="AlertView">
+        <view contentMode="scaleToFill" id="4" customClass="ITFPopup">
             <rect key="frame" x="0.0" y="0.0" width="260" height="215"/>
             <autoresizingMask key="autoresizingMask" heightSizable="YES"/>
             <subviews>
@@ -20,17 +20,8 @@
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </view>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Symbology" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="81">
-                    <rect key="frame" x="10" y="25" width="244" height="25"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                    <color key="textColor" red="0.23529411759999999" green="0.31372549020000001" blue="0.37254901959999998" alpha="1" colorSpace="calibratedRGB"/>
-                    <nil key="highlightedColor"/>
-                    <color key="shadowColor" red="0.96078431369999995" green="0.97254901959999995" blue="0.98039215690000003" alpha="1" colorSpace="calibratedRGB"/>
-                    <size key="shadowOffset" width="0.0" height="1"/>
-                </label>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Branch" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" id="224">
-                    <rect key="frame" x="10" y="45" width="244" height="25"/>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Process Type" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" id="224">
+                    <rect key="frame" x="10" y="35" width="244" height="25"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                     <color key="textColor" red="0.23529411764705882" green="0.31372549019607843" blue="0.37254901960784315" alpha="1" colorSpace="calibratedRGB"/>
@@ -38,8 +29,8 @@
                     <color key="shadowColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <size key="shadowOffset" width="0.0" height="1"/>
                 </label>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Process" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="y9Z-2s-jcI">
-                    <rect key="frame" x="10" y="65" width="244" height="25"/>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Unique Bag Number" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="y9Z-2s-jcI">
+                    <rect key="frame" x="10" y="60" width="244" height="25"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <color key="textColor" red="0.23529411764705882" green="0.31372549019607843" blue="0.37254901960784315" alpha="1" colorSpace="calibratedRGB"/>
@@ -47,17 +38,8 @@
                     <color key="shadowColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                     <size key="shadowOffset" width="0.0" height="1"/>
                 </label>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Safe ID" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ebo-hU-9AH">
-                    <rect key="frame" x="10" y="85" width="244" height="25"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                    <color key="textColor" red="0.23529411759999999" green="0.31372549020000001" blue="0.37254901959999998" alpha="1" colorSpace="calibratedRGB"/>
-                    <nil key="highlightedColor"/>
-                    <color key="shadowColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                    <size key="shadowOffset" width="0.0" height="1"/>
-                </label>
                 <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="127">
-                    <rect key="frame" x="142" y="153" width="110" height="44"/>
+                    <rect key="frame" x="142" y="150" width="110" height="44"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                     <state key="normal" title="Confirm">
@@ -69,7 +51,7 @@
                     </state>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="130">
-                    <rect key="frame" x="8" y="153" width="110" height="44"/>
+                    <rect key="frame" x="8" y="150" width="110" height="44"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
@@ -81,7 +63,7 @@
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                 </button>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Barcode recognised" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="15">
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="ITF Barcode recognised" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="15">
                     <rect key="frame" x="0.0" y="5" width="260" height="21"/>
                     <autoresizingMask key="autoresizingMask"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -91,7 +73,7 @@
                     <size key="shadowOffset" width="0.0" height="1"/>
                 </label>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter amount" textAlignment="center" clearsOnBeginEditing="YES" minimumFontSize="17" id="15J-zA-yZy">
-                    <rect key="frame" x="20" y="107" width="220" height="30"/>
+                    <rect key="frame" x="20" y="100" width="220" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                     <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="namePhonePad" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
@@ -107,9 +89,7 @@
                 <outlet property="imagePlaceHolder" destination="Qo9-yN-Urh" id="DZc-r4-rWH"/>
                 <outlet property="inputAmountTF" destination="15J-zA-yZy" id="cbs-dF-i86"/>
                 <outlet property="processLbl" destination="y9Z-2s-jcI" id="YaC-XQ-05U"/>
-                <outlet property="safeIDLbl" destination="ebo-hU-9AH" id="Lzt-L4-S4q"/>
                 <outlet property="saveBtn" destination="127" id="vx0-TG-5TC"/>
-                <outlet property="symbologyLbl" destination="81" id="F3P-3o-Fih"/>
                 <outlet property="zoneBackground" destination="116" id="223"/>
             </connections>
         </view>

@@ -700,8 +700,9 @@
 
 //this will be the2/5 interleave
 -(void)showPopup:(NSString *)barcodeString {
+    
     //Create a custom AlertView.xib
-    AlertView *ILPopup = [AlertView loadFromNibNamed:@"AlertView"];
+    ITFPopup *ILPopup = [ITFPopup loadFromNibNamed:@"ITFPopup"];
     //Add custom delegate method here to restart picker scanning
     [ILPopup setDelegate:self];
     //pass the time
@@ -711,16 +712,14 @@
     if ([barcodeString hasPrefix:@"190"]) {
         
         //populate the 2/5 interleave barcode popup 
-        ILPopup.symbologyLbl.text = [NSString stringWithFormat:@"Symbology: %@", [_eightBarcode barcodeSymbology]];
         ILPopup.branchLbl.text = [NSString stringWithFormat:@"Unique Bag Number:%@", [_eightBarcode barcodeUniqueBagNumber]];
         ILPopup.processLbl.text = [NSString stringWithFormat:@"Process: %@", [_eightBarcode barcodeProcess]];
-        ILPopup.safeIDLbl.text = [NSString stringWithFormat:@"Safe ID: Not Applicable"];
         //with relevant popup instantsiated in each conditional
         
     }
     
-    
     [ILPopup showOnView:picker.view];
+    
 }
 
 - (void)scanditSDKOverlayController:

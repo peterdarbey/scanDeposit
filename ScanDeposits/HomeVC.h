@@ -11,7 +11,7 @@
 #import "ScanditSDKBarcodePicker.h"
 
 //delegate method need import
-#import "AlertView.h"
+#import "ITFPopup.h"
 
 #import "QRPopup.h"
 

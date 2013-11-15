@@ -2,11 +2,11 @@
 
 //
 
-#import "AlertView.h"
+#import "ITFPopup.h"
 
 #import "Deposit.h"
 
-@interface AlertView ()
+@interface ITFPopup ()
 {
     
 }
@@ -17,7 +17,7 @@
 
 @end
 
-@implementation AlertView
+@implementation ITFPopup
 
 @synthesize zoneBackground = _zoneBackground;
 
@@ -291,9 +291,9 @@
     return deposit;
 }
 
-+(AlertView*)loadFromNibNamed:(NSString*)nibName {
++(ITFPopup *)loadFromNibNamed:(NSString*)nibName {
     NSArray *xib = [[NSBundle mainBundle] loadNibNamed:nibName owner:self options:nil];
-    AlertView *view = [xib objectAtIndex:0];
+    ITFPopup *view = [xib objectAtIndex:0];
     return view;
 }
 

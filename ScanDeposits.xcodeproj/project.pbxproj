@@ -35,7 +35,7 @@
 		BF2C4FD01806FEB100A87C18 /* bluebuttonSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = BF2C4FCC1806FEB100A87C18 /* bluebuttonSelected.png */; };
 		BF2C4FD11806FEB100A87C18 /* blueButtonSelected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BF2C4FCD1806FEB100A87C18 /* blueButtonSelected@2x.png */; };
 		BF3703241808229A0027AE4F /* AlertView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BF3703231808229A0027AE4F /* AlertView.xib */; };
-		BF370327180822A90027AE4F /* AlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = BF370326180822A90027AE4F /* AlertView.m */; };
+		BF370327180822A90027AE4F /* ITFPopup.m in Sources */ = {isa = PBXBuildFile; fileRef = BF370326180822A90027AE4F /* ITFPopup.m */; };
 		BF370329180844990027AE4F /* bg_gradient.png in Resources */ = {isa = PBXBuildFile; fileRef = BF370328180844990027AE4F /* bg_gradient.png */; };
 		BF370335180D4DE40027AE4F /* DepositsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = BF370334180D4DE40027AE4F /* DepositsVC.m */; };
 		BF370338180D5C5D0027AE4F /* Deposit.m in Sources */ = {isa = PBXBuildFile; fileRef = BF370337180D5C5D0027AE4F /* Deposit.m */; };
@@ -146,8 +146,8 @@
 		BF2C4FCC1806FEB100A87C18 /* bluebuttonSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bluebuttonSelected.png; sourceTree = "<group>"; };
 		BF2C4FCD1806FEB100A87C18 /* blueButtonSelected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blueButtonSelected@2x.png"; sourceTree = "<group>"; };
 		BF3703231808229A0027AE4F /* AlertView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AlertView.xib; sourceTree = "<group>"; };
-		BF370325180822A30027AE4F /* AlertView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AlertView.h; sourceTree = "<group>"; };
-		BF370326180822A90027AE4F /* AlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlertView.m; sourceTree = "<group>"; };
+		BF370325180822A30027AE4F /* ITFPopup.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ITFPopup.h; sourceTree = "<group>"; };
+		BF370326180822A90027AE4F /* ITFPopup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ITFPopup.m; sourceTree = "<group>"; };
 		BF370328180844990027AE4F /* bg_gradient.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg_gradient.png; sourceTree = "<group>"; };
 		BF370333180D4DE40027AE4F /* DepositsVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DepositsVC.h; sourceTree = "<group>"; };
 		BF370334180D4DE40027AE4F /* DepositsVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DepositsVC.m; sourceTree = "<group>"; };
@@ -415,8 +415,8 @@
 		BF370332180D303A0027AE4F /* PopupViews */ = {
 			isa = PBXGroup;
 			children = (
-				BF370325180822A30027AE4F /* AlertView.h */,
-				BF370326180822A90027AE4F /* AlertView.m */,
+				BF370325180822A30027AE4F /* ITFPopup.h */,
+				BF370326180822A90027AE4F /* ITFPopup.m */,
 				BF3703231808229A0027AE4F /* AlertView.xib */,
 				BF3703531816D5860027AE4F /* UserPopup.h */,
 				BF3703541816D5860027AE4F /* UserPopup.m */,
@@ -640,7 +640,7 @@
 				BF2C4F5D1805C08B00A87C18 /* AppDelegate.m in Sources */,
 				BF37034D181539160027AE4F /* RegistrationVC.m in Sources */,
 				BF99DD5F1833873800183FE2 /* EightBarcode.m in Sources */,
-				BF370327180822A90027AE4F /* AlertView.m in Sources */,
+				BF370327180822A90027AE4F /* ITFPopup.m in Sources */,
 				BF370338180D5C5D0027AE4F /* Deposit.m in Sources */,
 				BF2C4F591805C08B00A87C18 /* main.m in Sources */,
 			);

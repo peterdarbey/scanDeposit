@@ -15,14 +15,14 @@
 
 @end
 
-@interface AlertView : UIView <UITextFieldDelegate>
+@interface ITFPopup : UIView <UITextFieldDelegate>
 {
     NSMutableArray *stringArray;
 }
 
 -(void)showOnView:(UIView*)view;
 
-+(AlertView*)loadFromNibNamed:(NSString*)nibName;
++(ITFPopup *)loadFromNibNamed:(NSString*)nibName;
 
 @property (strong, nonatomic) IBOutlet UITextField *inputAmountTF;
 
@@ -32,14 +32,11 @@
 @property BOOL confirmed;//ivar so is NO by default
 
 @property (weak, nonatomic) IBOutlet UIView *zoneBackground;
-//@property (weak, nonatomic) IBOutlet UILabel *barcodeString;
 
-@property (strong, nonatomic) IBOutlet UILabel *symbologyLbl;
+
 @property (strong, nonatomic) IBOutlet UILabel *branchLbl;
 
 @property (strong, nonatomic) IBOutlet UILabel *processLbl;
-@property (strong, nonatomic) IBOutlet UILabel *safeIDLbl;
-
 
 @property (weak, nonatomic) IBOutlet UIButton *cancelBtn;
 @property (weak, nonatomic) IBOutlet UIButton *saveBtn;

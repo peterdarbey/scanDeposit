@@ -90,8 +90,9 @@
     NSString *__block newString = [[NSMutableString alloc]init];
     
     
-    //sent inline with subject body -> need to get this working
-    NSMutableArray *userArray = [NSMutableArray arrayWithContentsOfFile:[self getFilePath]];
+    //Sent as an attachment -> Note: this is all the data we need to send pertaining to a lodgement
+    NSMutableArray *userArray = [NSMutableArray arrayWithContentsOfFile:[self getFilePath]];//NOT this anymore
+    
     //ToDo add comma separated pairs to collection
     [userArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         
@@ -131,10 +132,12 @@
 
     
 
+    
+    
     //ToDo package data up to fire off to webservice
 //    //Create our recipients -> Note this will come from file later
 //    NSArray *emailRecipArray = @[@"peterdarbey@gmail.com", @"david.h.roberts@aib.ie", @"gavin.e.bennett@aib.ie"];
-    //for now
+    //TEMP email assignees
     NSArray *emailRecipArray = @[@"peterdarbey@gmail.com", @"fintan.a.killoran@aib.ie"];
     
     
@@ -144,22 +147,23 @@
 //        NSMutableDictionary *appData = [[NSMutableDictionary alloc]init];
 //        NSData *attachData = [NSPropertyListSerialization dataFromPropertyList:appData format:NSPropertyListXMLFormat_v1_0 errorDescription:nil];
     
+    
         //sent inline with subject body
         NSMutableArray *userArray = [NSMutableArray arrayWithContentsOfFile:[self getFilePath]];
     
         //Populate the mail data with the logged in users also
         DLog(@"Logged in usersDict passed: %@", _usersDict);
-        //users associated with the lodgement
+    
+        //returns a dict for each user associated with the lodgement via log in
         NSDictionary *userOne = _usersDict[@"1"];
         NSDictionary *userTwo = _usersDict[@"2"];
         DLog(@"userone: %@ and UserTwo: %@", userOne, userTwo);
     
-        //create our recipients via users logged in
-        NSMutableArray *loggedInUsersArray = [NSMutableArray array];
-        [loggedInUsersArray addObject:userOne[@"Name"]];//retrieve the users name
-        [loggedInUsersArray addObject:userTwo[@"Name"]];
+        //retrieves each logged in users name --> may need users emails also
+        NSString *userOneName = userOne[@"Name"];
+        NSString *userTwoName = userTwo[@"Name"];
     
-        //Create our default recipients from file
+        //Create our default recipients from file for all emails
         NSMutableArray *emailRecipientsArray = [NSMutableArray array];
         //iterate through collection to retrieve the recipients
         for (int i = 0; i < [userArray count]; i++) {
@@ -186,19 +190,23 @@
         [mailController setMailComposeDelegate:self];
 
     
-        //ToDo alot of parsing -> Temp code ***
-        NSString *userName1 = [[userArray objectAtIndex:0]objectAtIndex:1];//hardCoded will need data from barcode too i.e. -> Process, SafeID and Date/Time
-         NSString *userName2 = [[userArray objectAtIndex:1]objectAtIndex:1];//hardCoded
+        // -> Temp code ***
+//        NSString *userName1 = [[userArray objectAtIndex:0]objectAtIndex:1];//hardCoded will need data from barcode too i.e. -> Process, SafeID and Date/Time
+//         NSString *userName2 = [[userArray objectAtIndex:1]objectAtIndex:1];//hardCoded
+    
         //Inline with draft
-        [mailController setMessageBody:[NSString stringWithFormat:@"This mail is your copy of the record that you\n (<Control User 1: %@>) and (<Control User 2: %@>) together opened and record the following contents of the <process> taken from <Safe ID> on <date><time>.\n\nContent Summary\n%@\n\n\n\n%@", userName1, userName2, contentArray, disclaimerString] isHTML:NO];//add disclaimer at end also
+        [mailController setMessageBody:[NSString stringWithFormat:@"This mail is your copy of the record that you\n (<Control User 1: %@>) and (<Control User 2: %@>) together opened and record the following contents of the <process> taken from <Safe ID> on <date><time>.\n\nContent Summary\n%@\n\n\n\n%@", userOneName, userTwoName, contentArray, disclaimerString] isHTML:NO];//add disclaimer at end also
     
         [mailController addAttachmentData:dataString mimeType:@"text/csv" fileName:@"testData.csv"];//text/xml for plist content
+    
+        //present the mail composer
+        [self presentViewController:mailController animated:YES completion:nil];
+    
+    
     
 //        [mailController addAttachmentData:csvData
 //                                 mimeType:@"text/csv" //@"application/pdf" or text/plain or @"mime"
 //                                 fileName:@"usersCollection.plist"];//@"CSVFile.csv" -> works as plist fileName
-    
-        [self presentViewController:mailController animated:YES completion:nil];
    
 }
 

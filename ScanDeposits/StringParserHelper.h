@@ -10,6 +10,9 @@
 
 @interface StringParserHelper : NSObject
 
++ (NSString *)getFilePathForName:(NSString *)fileName;
+
 + (NSDictionary *)parseQRBarcodeFromString:(NSString *)barcodeString;
++ (NSDictionary *)parseILBarcodeFromString:(NSString *)barcodeString withBarcodeType:(NSString *)barcodeType;
 
 @end

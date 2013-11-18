@@ -528,54 +528,6 @@
     
 }
 
-- (NSDictionary *)parseQRBarcodeFromString:(NSString *)barcodeString {
-    
-    //parse functionality
-    //construct an array with the substrings separated by commas -> 3 entries
-    NSArray *array = [barcodeString componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@","]];//create a dictionary from data in string
-    
-    //create objects for iteration operations
-    NSMutableString *stringEntry = [NSMutableString string];
-    NSMutableArray *elementArray = [NSMutableArray array];
-    
-    //iterate each comma separated string in the array
-    for (NSString *string in array) {
-        //retrieve each string of K / V pairs
-        stringEntry = (NSMutableString *)string;
-        //construct another array by separating ":"
-        NSArray *valueArray = [stringEntry componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@":"]];
-        [elementArray addObject:valueArray];
-    }//close for
-    
-    //create objects for iteration operations
-    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-    NSMutableArray *kvPairsArray = [NSMutableArray array];
-    
-    //iterate
-    for (NSMutableArray *valueArray in elementArray) {
-        //iterate through each Key / Value pair in valuesArray
-        for (int i = 0; i < [valueArray count]; i++) {
-            NSString *entryString = [valueArray objectAtIndex:i];
-            //removes the white space if any and replaces in the source array
-            NSString *keyString = [entryString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-            //replace string in collection
-            [valueArray replaceObjectAtIndex:i withObject:keyString];
-            //if index:1 remove the backslash
-            if (i == 1) {
-                keyString = [keyString stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"\""]];
-                [dict setObject:keyString forKey:[valueArray objectAtIndex:0]];//works but probably a better way
-            }
-            //add to collection
-            [kvPairsArray addObject:keyString];
-        }//close inner for
-        
-    }//close outer for
-    
-//        DLog(@"kvPairsArray: %@", kvPairsArray);//nice
-    
-    return dict;
-}
-
 #pragma mark Scandit SDK - delegate methods
 - (void)scanditSDKOverlayController:
 (ScanditSDKOverlayController *)scanditSDKOverlayController didScanBarcode:(NSDictionary *)barcodeResult {
@@ -604,8 +556,11 @@
         
         _scanModeIsQR = NO; // --> NOTE BOOL to say scanned QR already
         
+        
+//        barcode = [self parseQRBarcodeFromString:barcodeString];//Note: replaced by helper
+        
         //parses a barcode string and creates a dictionary
-        barcode = [self parseQRBarcodeFromString:barcodeString];// --> change to class method form Helper
+        barcode = [StringParserHelper parseQRBarcodeFromString:barcodeString];// --> changed to class Helper method
         DLog(@"barcodeDict: %@", barcode);
         
         //Now parsed correctly proceed with the new QRBarcode model constructor
@@ -653,8 +608,12 @@
             //need to addObj after 1st check
             [uniqueBagArray addObject:uniqueSubString];//possibly from file as may save
             
+            //Note: replaced by helper
+//            barcode = [self parseILBarcodeFromString:barcodeString withBarcodeType:barcodeResult[@"symbology"]];
+            
             //Note: need to parse the 2/5 interleaved barcode before constructing dictionary
-            barcode = [self parseILBarcodeFromString:barcodeString withBarcodeType:barcodeResult[@"symbology"]];
+            barcode = [StringParserHelper parseILBarcodeFromString:barcodeString
+                                                   withBarcodeType:barcodeResult[@"symbology"]];//--> changed to class Helper method
             
             //construct custom 2/5 interleaved barcode model
             _eightBarcode = [[EightBarcode alloc]initBarcodeWithSymbology:barcode[@"Symbology"] processType:barcode[@"Process Type"] uniqueBagNumber:barcode[@"Unique Bag Number"]];
@@ -697,41 +656,6 @@
 
 }
 
-//parse method for parsing the 2/5 interleaved barcode string
-- (NSDictionary *)parseILBarcodeFromString:(NSString *)barcodeString withBarcodeType:(NSString *)barcodeType {
-    
-    //190053495691 --> current bag barcode string
-    //Process Type comes from 1st 3 digits of barcode
-    NSString *processString = [barcodeString substringToIndex:3];//correct -> 190 first 3 digits
-    DLog(@"processString: %@", processString); //barcodeResult[@"symbology"];
-    
-    //assigned by conditional
-    NSString *processType;
-    
-    //if processString isEq to 291 then its "A Coin Only Dropsafe"
-    if ([processString isEqualToString:@"291"]) {
-        DLog(@"Process Type: %@", processString);
-        
-        processType = @"A Coin Only Dropsafe";
-        //if not a valid barcode then dont allow user to proceed
-        //display warning message again
-        //ToDo record the digits in an array to check the bag scanned is never the same again -> see sdk didScan
-        
-        
-    }//close if
-    
-    //else its not a recognised barcode --> tin of beans
-    else
-    {
-        processType = @"Not a valid barcode";
-    }
-    
-    //construct a dict for 2/5 interleaved model
-     NSDictionary *dict = @{@"Symbology" : barcodeType, @"Process Type" : processType, @"Unique Bag Number" : barcodeString};
-  
-    return dict;
-}
-
 #pragma mark - custom popup xibs
 
 - (void)showWarningPopupWithTitle:(NSString *)title andMessage:(NSString *)message
@@ -747,8 +671,6 @@
     
     
     //ToDo add whatever setup code required here
-    
-    
     [warningPopup showOnView:picker.view];
     
 }

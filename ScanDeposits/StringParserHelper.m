@@ -60,7 +60,8 @@
     return tabString; //newString
     
 }
-//parse the QR barcode for external device
+
+//parses the QR barcode string for external device and creates a dictionary
 + (NSDictionary *)parseQRBarcodeFromString:(NSString *)barcodeString {
     
     //parse functionality
@@ -110,7 +111,7 @@
 }
 
 //parse method for parsing the 2/5 interleaved barcode string
-- (NSDictionary *)parseILBarcodeFromString:(NSString *)barcodeString withBarcodeType:(NSString *)barcodeType {
++ (NSDictionary *)parseILBarcodeFromString:(NSString *)barcodeString withBarcodeType:(NSString *)barcodeType {
     
     //190053495691 --> current bag barcode string
     //Process Type comes from 1st 3 digits of barcode

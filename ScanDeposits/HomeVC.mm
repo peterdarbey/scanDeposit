@@ -152,7 +152,7 @@
             else if (_validAdminsDict)
             {
                 depositsVC.adminsDict = _validAdminsDict;
-                DLog(@"_validAdminsDict: %@", _validAdminsDict);
+                DLog(@"_validAdminsDict: %@", _validAdminsDict);//dont need this for email
             }
             
             [self.navigationController pushViewController:depositsVC animated:YES];

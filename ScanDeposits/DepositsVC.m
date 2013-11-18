@@ -10,6 +10,9 @@
 
 #import "Deposit.h"
 
+#import "QRBarcode.h"
+#import "EightBarcode.h"
+
 @interface DepositsVC ()
 {
 //    Deposit *deposit;
@@ -77,7 +80,7 @@
     NSString *documentsDirectoryPath = [NSSearchPathForDirectoriesInDomains( NSDocumentDirectory,
                                                                             NSUserDomainMask, YES ) objectAtIndex:0];
     
-    NSString *fullPath = [documentsDirectoryPath stringByAppendingPathComponent:@"usersCollection.plist"];
+    NSString *fullPath = [documentsDirectoryPath stringByAppendingPathComponent:@"admins.plist"];
     
     return fullPath;
 }
@@ -89,7 +92,7 @@
     NSString *__block parsedString = [[NSMutableString alloc]init];
     
     //Sent as an attachment -> Note: this is all the data we need to send pertaining to a lodgement
-//    NSMutableArray *userArray = [NSMutableArray arrayWithContentsOfFile:[self getFilePath]];//NOT this anymore
+    NSMutableArray *adminArray = [NSMutableArray arrayWithContentsOfFile:[self getFilePath]];//NOW admin
     
     DLog(@"_depositsArray contains: %@", _depositsCollection);// --> actual bag deposit details
     //extract the required fields for attachment
@@ -139,10 +142,60 @@
     }//close outer for
     
         DLog(@"parsedString>>>>>>>>>>>>>: %@", parsedString);
-        NSString *tabString = [NSString stringWithFormat:@"%@,,,,,,,,,,", parsedString];//correct
-        return tabString;// --> use excel xml format and create headers
+//        NSString *tabString = [NSString stringWithFormat:@"%@,,,,,,,,,,", parsedString];//correct
+        return parsedString;// --> use excel xml format and create headers
     
 }
+
+- (NSString *)collectMyData {
+    
+    NSMutableArray *ITFArray = [NSMutableArray array];
+    NSString *qrAppendedString;
+     NSString *itfAppendedString;
+    
+        //_barcodeArray --> QR + ITF barcode data
+        DLog(@"barcodeArray: %@", _barcodeArray);
+    if (_barcodeArray) {
+        
+        //QR data
+        QRBarcode *qrBarcode;
+        if ([[_barcodeArray objectAtIndex:0] isKindOfClass:[QRBarcode class]]) {
+            qrBarcode = [_barcodeArray objectAtIndex:0];
+        }
+        
+        NSString *nscString;
+        NSString *processTypeString;
+        int safeID;
+        
+        if (qrBarcode) {
+            nscString = [qrBarcode barcodeBranch];
+            processTypeString = [qrBarcode barcodeProcess];
+            safeID = [qrBarcode barcodeSafeID];
+            qrAppendedString = [NSString stringWithFormat:@"%@,%@,%i", nscString, processTypeString, safeID];
+        }
+        
+        
+        //ITF data
+        EightBarcode *eightBarcode;
+        //need loop here
+        if ([[_barcodeArray lastObject] isKindOfClass:[EightBarcode class]]) {
+            eightBarcode = [_barcodeArray lastObject];//always the last object as QR is first and its ordered
+            
+        }
+        if (eightBarcode) {
+            NSString *itfString = [eightBarcode barcodeUniqueBagNumber];
+            itfAppendedString = [itfAppendedString stringByAppendingString:itfString];//NO -> test
+            [ITFArray addObject:itfString];
+        }
+        
+        
+        
+    }//close if
+    
+    
+    return qrAppendedString;//TEMP
+}
+
 
 // https://github.com/jetseven/skpsmtpmessage rather than using MFMailController
 - (void)proceedPressed:(UIButton *)sender {
@@ -161,61 +214,68 @@
     
     
         //send email to all the users stored on the device for now
-        NSMutableArray *userArray = [NSMutableArray arrayWithContentsOfFile:[self getFilePath]];
+        NSMutableArray *adminArray = [NSMutableArray arrayWithContentsOfFile:[self getFilePath]];
         //Create our default recipients from file for all emails
         NSMutableArray *emailRecipientsArray = [NSMutableArray array];
         //iterate through collection to retrieve the recipients
-        for (int i = 0; i < [userArray count]; i++) {
-            NSString *recipient = [[userArray objectAtIndex:i]objectAtIndex:2];
+        for (int i = 0; i < [adminArray count]; i++) { //was userArray
+            NSString *recipient = [[adminArray objectAtIndex:i]objectAtIndex:2];
             [emailRecipientsArray addObject:recipient];
         }
-        DLog(@"emailRecipientsArray: %@", emailRecipientsArray);
+        DLog(@"emailRecipientsArray: %@", emailRecipientsArray);//was userArray
     
     
     
-        //Populate the mail data with the logged in users also
+        //retrieves each LOGGED IN users name --> may need users emails also
         DLog(@"Logged in usersDict passed: %@", _usersDict);
-        //returns a dict for each user associated with the lodgement via log in
+        //data returned a dict for each user associated with the lodgement via log in
         NSDictionary *userOne = _usersDict[@1];//correct
         NSDictionary *userTwo = _usersDict[@2];
         DLog(@"userOne: %@ and UserTwo: %@", userOne, userTwo);
-        
-        //retrieves each logged in users name --> may need users emails also
         NSString *userOneName = userOne[@"Name"];
         NSString *userOneEMail = userOne[@"Email"];
         NSString *userTwoName = userTwo[@"Name"];
         NSString *userTwoEMail = userTwo[@"Email"];
+        NSString *usersString = [NSString stringWithFormat:@"%@,%@,%@,%@", userOneName, userOneEMail,
+                                 userTwoName, userTwoEMail];
     
     
-        NSArray *contentArray = @[@"<number of bags>", @"<value of bags>"];
     
-        NSString *newUserString = [self convertMyCollectionFromCollection:_depositsCollection];
+        //data from the deposit lodgements
+        NSString *depositString = [self convertMyCollectionFromCollection:_depositsCollection];
+        //data from the barcode captured data
+        NSString *qrString = [self collectMyData];//TEMP --> need ITF also
+        NSString *appendedString = [qrString stringByAppendingString:depositString];
+        //TEST
+        NSString *string = [usersString stringByAppendingString:appendedString];
+    
+        NSString *finalString = [NSString stringWithFormat:@"%@,,,,,,,,,,", string];//correct
         //serialize and convert to data for webservice
-        NSData *dataString = [newUserString dataUsingEncoding:NSUTF8StringEncoding];
+        NSData *dataString = [finalString dataUsingEncoding:NSUTF8StringEncoding];
+    
+    
+    
+    
     
     
         //construct the mailVC and set its necessary parameters
         MFMailComposeViewController *mailController = [[MFMailComposeViewController alloc]init];
-        
         [mailController setTitle:@"Please find the attached documents."];
         [mailController setSubject:NSLocalizedString(@"Device Manager Report + Date/time ->Process", @"Device Manager Report")];
         [mailController setCcRecipients:emailRecipArray];
-        [mailController setToRecipients:emailRecipArray];//to me for now
+        [mailController setToRecipients:emailRecipArray];//currently me
         [mailController setMailComposeDelegate:self];
-
     
-    
+        //Email container settings
+        NSArray *contentArray = @[@"<number of bags>", @"<value of bags>"];
         //disclaimer content
         NSString *disclaimerString = @"IMPORTANT - IF THE ABOVE CONFIRMATION IS IN ANY WAY INACCURATE, YOU SHOULD IMMEDIATELY ADVISE YOUR BRANCH MANAGER / HRQMO. OTHERWISE, YOU ARE CONFIRMING THAT YOU WERE A CONTROL USER AS DESCRIBED ABOVE AND THAT THE CONTENTS OF THIS CONFIRMING MAIL ARE ACCURATE.";
-    
         //Inline with draft
         [mailController setMessageBody:[NSString stringWithFormat:@"This mail is your copy of the record that you\n <Control User 1: %@> and <Control User 2: %@> together opened and record the following contents of the <process> taken from <Safe ID> on <date><time>.\n\nContent Summary\n%@\n\n\n\n%@", userOneName, userTwoName, contentArray, disclaimerString] isHTML:NO];
-    
+        //add attachment to email
         [mailController addAttachmentData:dataString mimeType:@"text/csv" fileName:@"testData.csv"];//text/xml for plist content
-    
         //present the mail composer
         [self presentViewController:mailController animated:YES completion:nil];
-    
     
     
 //        [mailController addAttachmentData:csvData

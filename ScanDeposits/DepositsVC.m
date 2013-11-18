@@ -83,39 +83,63 @@
 }
 
 //should be a helper object
-- (NSString *)convertMyCollection {
+- (NSString *)convertMyCollectionFromCollection:(NSMutableArray *)deposits {
     
     
     NSString *__block parsedString = [[NSMutableString alloc]init];
-    NSString *__block newString = [[NSMutableString alloc]init];
-    
     
     //Sent as an attachment -> Note: this is all the data we need to send pertaining to a lodgement
-    NSMutableArray *userArray = [NSMutableArray arrayWithContentsOfFile:[self getFilePath]];//NOT this anymore
+//    NSMutableArray *userArray = [NSMutableArray arrayWithContentsOfFile:[self getFilePath]];//NOT this anymore
     
-    //ToDo add comma separated pairs to collection
-    [userArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        
-        for (NSArray *array in userArray) {
-            for (int i = 0; i < [array count]; i++) {
-                //retrieve each element
-                obj = [array objectAtIndex:i];
-                //cast and format
-                NSString *stringObj = (NSString *) [NSString stringWithFormat:@"%@,", obj];//@"\"%@\","
-                //add to collection
-                parsedString = [parsedString stringByAppendingString:stringObj];
-               newString = [parsedString stringByAppendingString:stringObj];
+    DLog(@"_depositsArray contains: %@", _depositsCollection);
+    //extract the required fields for attachment
+    NSMutableArray *depositArray = [NSMutableArray array];
+    DLog(@"depositArray: %@", depositArray);
+    
+    for (id object in _depositsCollection) {
+        Deposit *deposit = (Deposit *)object;
+        NSMutableArray *array = [NSMutableArray array];
+        [array addObject:@([deposit bagAmount])];//each bag amount
+        [array addObject:[deposit bagNumber]];//Unique bag number -> now Process
+        [array addObject:[deposit bagBarcode]];//Unigue bag number
+        //add to depositArray
+        [depositArray addObject:array];//crash
+    }
+    //add the total amount and count at the end
+//    [depositArray addObject:@([Deposit totalBagsAmount])];
+//    [depositArray addObject:@([Deposit totalBagCount])];
+    
+    DLog(@"<< depositArray >>: %@", depositArray);
+    
+    double bagAmount;
+    NSString *uniqueBagNo;
+    //now format the array with required fields for CSV attachment
+    for (NSArray *array in depositArray) {
+        for (int i = 0; i < [array count]; i++) {
+            
+            NSString *bagBarcode;
+            NSString *appendedString;
+            //retrieve each element and format
+            if (i == 0) {
+                bagAmount = [array[i]doubleValue];
             }
-        }
+            else if (i == 1) {
+                uniqueBagNo = array[i];
+            }
+            else if (i == 2 && bagAmount && uniqueBagNo) {
+                bagBarcode = array[i];
+                appendedString = [NSString stringWithFormat:@"€%.2f,%@,%@,\n", bagAmount, uniqueBagNo, bagBarcode];
+                DLog(@"appendedString: %@", appendedString);
+                parsedString = [parsedString stringByAppendingString:appendedString];//452.130000,A Coin Only Dropsafe,19005349, --> Dont forget newLine escape seq
+            }
+           
+        }//close inner for
         
-        DLog(@"newString: %@", newString);
-    }];
+    }//close outer for
     
-         DLog(@"parsedString >>>>>: %@", parsedString);
-    
-    NSString *tabString = [NSString stringWithFormat:@"%@\t\t\t\t", newString];
-    DLog(@"tabString: %@", tabString);
-    return tabString; //newString
+        DLog(@"parsedString>>>>>>>>>>>>>: %@", parsedString);
+        NSString *tabString = [NSString stringWithFormat:@"%@,,,,,,,,,,", parsedString];
+        return tabString;// --> use excel xml format and create headers
     
 }
 
@@ -130,7 +154,8 @@
 //    NSString *Path = [docDir stringByAppendingString:@"/CSVFile.csv"];
 //    NSData *csvData = [NSData dataWithContentsOfFile:Path];
 
-    
+//        NSMutableDictionary *appData = [[NSMutableDictionary alloc]init];
+//        NSData *attachData = [NSPropertyListSerialization dataFromPropertyList:appData format:NSPropertyListXMLFormat_v1_0 errorDescription:nil];
 
     
     
@@ -138,30 +163,11 @@
 //    //Create our recipients -> Note this will come from file later
 //    NSArray *emailRecipArray = @[@"peterdarbey@gmail.com", @"david.h.roberts@aib.ie", @"gavin.e.bennett@aib.ie"];
     //TEMP email assignees
-    NSArray *emailRecipArray = @[@"peterdarbey@gmail.com", @"fintan.a.killoran@aib.ie"];
+    NSArray *emailRecipArray = @[@"peterdarbey@gmail.com"];//, @"fintan.a.killoran@aib.ie"];
     
     
-        NSString *disclaimerString = @"IMPORTANT - IF THE ABOVE CONFIRMATION IS IN ANY WAY INACCURATE, YOU SHOULD IMMEDIATELY ADVISE YOUR BRANCH MANAGER / HRQMO. OTHERWISE, YOU ARE CONFIRMING THAT YOU WERE A CONTROL USER AS DESCRIBED ABOVE AND THAT THE CONTENTS OF THIS CONFIRMING MAIL ARE ACCURATE.";
-   
-    
-//        NSMutableDictionary *appData = [[NSMutableDictionary alloc]init];
-//        NSData *attachData = [NSPropertyListSerialization dataFromPropertyList:appData format:NSPropertyListXMLFormat_v1_0 errorDescription:nil];
-    
-    
-        //sent inline with subject body
+        //send email to all the users stored on the device for now
         NSMutableArray *userArray = [NSMutableArray arrayWithContentsOfFile:[self getFilePath]];
-    
-        //Populate the mail data with the logged in users also
-        DLog(@"Logged in usersDict passed: %@", _usersDict);
-    
-        //returns a dict for each user associated with the lodgement via log in
-        NSDictionary *userOne = _usersDict[@"1"];
-        NSDictionary *userTwo = _usersDict[@"2"];
-        DLog(@"userone: %@ and UserTwo: %@", userOne, userTwo);
-    
-        //retrieves each logged in users name --> may need users emails also
-        NSString *userOneName = userOne[@"Name"];
-        NSString *userTwoName = userTwo[@"Name"];
     
         //Create our default recipients from file for all emails
         NSMutableArray *emailRecipientsArray = [NSMutableArray array];
@@ -170,12 +176,27 @@
             NSString *recipient = [[userArray objectAtIndex:i]objectAtIndex:2];
             [emailRecipientsArray addObject:recipient];
         }
-    
         DLog(@"emailRecipientsArray: %@", emailRecipientsArray);//works but need to receive myself as no aib.ie acc
+    
+    
+    
+        //Populate the mail data with the logged in users also
+        DLog(@"Logged in usersDict passed: %@", _usersDict);
+        
+        //returns a dict for each user associated with the lodgement via log in
+        NSDictionary *userOne = _usersDict[@1];//null --> should be right now -> NSNumber
+        NSDictionary *userTwo = _usersDict[@2];//correct
+        DLog(@"userOne: %@ and UserTwo: %@", userOne, userTwo);
+        
+        //retrieves each logged in users name --> may need users emails also
+        NSString *userOneName = userOne[@"Name"];
+        NSString *userTwoName = userTwo[@"Name"];
+    
+    
     
         NSArray *contentArray = @[@"<number of bags>", @"<value of bags>"];
     
-        NSString *newUserString = [self convertMyCollection];
+        NSString *newUserString = [self convertMyCollectionFromCollection:_depositsCollection];
         //serialize and convert to data for webservice
         NSData *dataString = [newUserString dataUsingEncoding:NSUTF8StringEncoding];
     
@@ -190,12 +211,12 @@
         [mailController setMailComposeDelegate:self];
 
     
-        // -> Temp code ***
-//        NSString *userName1 = [[userArray objectAtIndex:0]objectAtIndex:1];//hardCoded will need data from barcode too i.e. -> Process, SafeID and Date/Time
-//         NSString *userName2 = [[userArray objectAtIndex:1]objectAtIndex:1];//hardCoded
+    
+        //disclaimer content
+        NSString *disclaimerString = @"IMPORTANT - IF THE ABOVE CONFIRMATION IS IN ANY WAY INACCURATE, YOU SHOULD IMMEDIATELY ADVISE YOUR BRANCH MANAGER / HRQMO. OTHERWISE, YOU ARE CONFIRMING THAT YOU WERE A CONTROL USER AS DESCRIBED ABOVE AND THAT THE CONTENTS OF THIS CONFIRMING MAIL ARE ACCURATE.";
     
         //Inline with draft
-        [mailController setMessageBody:[NSString stringWithFormat:@"This mail is your copy of the record that you\n (<Control User 1: %@>) and (<Control User 2: %@>) together opened and record the following contents of the <process> taken from <Safe ID> on <date><time>.\n\nContent Summary\n%@\n\n\n\n%@", userOneName, userTwoName, contentArray, disclaimerString] isHTML:NO];//add disclaimer at end also
+        [mailController setMessageBody:[NSString stringWithFormat:@"This mail is your copy of the record that you\n <Control User 1: %@> and <Control User 2: %@> together opened and record the following contents of the <process> taken from <Safe ID> on <date><time>.\n\nContent Summary\n%@\n\n\n\n%@", userOneName, userTwoName, contentArray, disclaimerString] isHTML:NO];
     
         [mailController addAttachmentData:dataString mimeType:@"text/csv" fileName:@"testData.csv"];//text/xml for plist content
     
@@ -217,10 +238,13 @@
         //ToDo popup with message saying email sent successfully
 //        [self becomeFirstResponder];
         [self dismissViewControllerAnimated:YES completion:^{
-            //ToDo add code here --> add custom popup here green for go
+            //ToDo add code here --> add custom popup here green for go and reset all the deposit data
+            
              UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"Email sent" message:@"Email successfully sent to recipients" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
             [alertView show];//change for xib later
             [self.navigationController popToRootViewControllerAnimated:YES];//returning to HomeVC
+            //Log the user out also******
+            
             //ToDo reset app and clear data -> clear some data on device except usersCollection.plist
         }];
     }
@@ -228,12 +252,33 @@
         //ToDo error sending email
         
         [self dismissViewControllerAnimated:YES completion:^{
-            //ToDo add code here --> Warning popup here - Red
-//            UIAlertView *alertView = [UIAlertView alloc]initWithTitle:@"Email sent" message:@"" delegate:nil cancelButtonTitle:nil otherButtonTitles:nil, nil];
+             //ToDo add code here --> Warning popup here - Red
+            [self showWarningPopupWithTitle:@"Error: Unable to send email" andMessage:@"Unable to send email, please check your signal" forBarcode:nil];
         }];
     }
     
 }
+
+#pragma mark - custom popup xibs
+
+- (void)showWarningPopupWithTitle:(NSString *)title andMessage:(NSString *)message
+                       forBarcode:(NSString *)barcodeString {
+    
+    //Create a custom WarningPopup.xib
+    WarningPopup *warningPopup = [WarningPopup loadFromNibNamed:@"WarningPopup"];
+    //set delegate
+//    [warningPopup setDelegate:self];
+    
+    //set text
+    warningPopup.titleLbl.text = title;
+    warningPopup.messageLbl.text = message;
+    
+    
+    //ToDo add whatever setup code required here
+    [warningPopup showOnView:self.view];
+    
+}
+
 
 -(void)buttonStyle:(UIButton *)button WithImgName:(NSString *)imgName imgSelectedName:(NSString *)selectedName withTitle:(NSString *)title
 {
@@ -280,11 +325,11 @@
         bagLbl.shadowOffset = CGSizeMake(1.0, 1.0);
 
 //        [bagLbl setText:[NSString stringWithFormat:@"Total bags: %i", [Deposit totalNumberOfBags]]];
-        DLog(@"BAG COUNT: %i", [Deposit getTotalBagCount]);//appDelegate.totalBagCount
+        DLog(@"BAG COUNT: %i", [Deposit totalBagCount]);//appDelegate.totalBagCount
         //TEST
 //        [bagLbl setText:[NSString stringWithFormat:@"Total bags: %i",appDelegate.totalBagCount]];
         
-        [bagLbl setText:[NSString stringWithFormat:@"Total bags: %i",[Deposit getTotalBagCount]]];
+        [bagLbl setText:[NSString stringWithFormat:@"Total bags: %i",[Deposit totalBagCount]]];
 //        DLog(@"BAG COUNT: %i", appDelegate.totalBagCount);
         
         [bagLbl setUserInteractionEnabled:NO];
@@ -318,7 +363,7 @@
         [amountTF setUserInteractionEnabled:NO];
         
 //        [amountTF setText:[NSString stringWithFormat:@"Total: €%.2f", _totalDepositAmount]];
-        [amountTF setText:[NSString stringWithFormat:@"Total deposit:"]];
+        [amountTF setText:[NSString stringWithFormat:@"Total:"]];
 
         //add to view
         [innerView addSubview:amountTF];
@@ -376,7 +421,6 @@
     static NSString *myIdentifier = @"depositCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:myIdentifier];
     
-    UITextField *bagAmountTF;
     UILabel *bagAmountLbl;
     UILabel *bagNumberLbl;
     
@@ -388,17 +432,17 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:myIdentifier];
         //Construct textField
-        bagAmountTF = [[UITextField alloc]initWithFrame:CGRectMake(130, cell.bounds.size.height/4, 160, 25)];
-        bagAmountTF.tag = BAG_AMOUNT_TF;
-        bagAmountTF.textAlignment = NSTextAlignmentLeft;
-//        bagAmountTF.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
-        bagAmountTF.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-        bagAmountTF.font = [UIFont systemFontOfSize:17];
-        bagAmountTF.textColor = [UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0];//darkGray
-        [bagAmountTF setUserInteractionEnabled:NO];
-        
-        bagAmountTF.backgroundColor = [UIColor clearColor];
-        [cell.contentView addSubview:bagAmountTF];
+//        bagAmountTF = [[UITextField alloc]initWithFrame:CGRectMake(130, cell.bounds.size.height/4, 160, 25)];
+//        bagAmountTF.tag = BAG_AMOUNT_TF;
+//        bagAmountTF.textAlignment = NSTextAlignmentLeft;
+////        bagAmountTF.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
+//        bagAmountTF.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+//        bagAmountTF.font = [UIFont systemFontOfSize:17];
+//        bagAmountTF.textColor = [UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0];//darkGray
+//        [bagAmountTF setUserInteractionEnabled:NO];
+//        
+//        bagAmountTF.backgroundColor = [UIColor redColor];
+
         
         
         //Construct another label for amount
@@ -414,13 +458,13 @@
         [cell.contentView addSubview:bagAmountLbl];
         
         //Construct Label
-        bagNumberLbl = [[UILabel alloc]initWithFrame:CGRectMake(10, cell.bounds.size.height/4, 120 , 25)];
+        bagNumberLbl = [[UILabel alloc]initWithFrame:CGRectMake(10, cell.bounds.size.height/4, 190 , 25)];
         bagNumberLbl.tag = BAG_NO_LBL;
         bagNumberLbl.textAlignment = NSTextAlignmentLeft;
         bagNumberLbl.font = [UIFont fontWithName:@"Arial-BoldMT" size:15];//17
         bagNumberLbl.textColor = [UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0];//blue
         bagNumberLbl.shadowColor = [UIColor grayColor];
-        bagNumberLbl.shadowOffset = CGSizeMake(1.0, 1.0);//better
+        bagNumberLbl.shadowOffset = CGSizeMake(1.0, 1.0);
         bagNumberLbl.backgroundColor = [UIColor clearColor];
         [bagNumberLbl setUserInteractionEnabled:NO];
         [cell.contentView addSubview:bagNumberLbl];
@@ -428,7 +472,6 @@
     }
     else
     {
-        bagAmountTF = (UITextField *)[cell.contentView viewWithTag:BAG_AMOUNT_TF];
         bagAmountLbl = (UILabel *)[cell.contentView viewWithTag:BAG_AMOUNT];
         bagNumberLbl = (UILabel *)[cell.contentView viewWithTag:BAG_NO_LBL];
     }
@@ -438,16 +481,11 @@
         DLog(@"_totalDepositAmount>>>: %f", _totalDepositAmount);
         DLog(@"_depositsCollection contains: %@", _depositsCollection);
         //need getter here for these private ivars
-        bagAmountTF.text = [NSString stringWithFormat:@"Amount:"];//@"€%.2f"
-        DLog(@"countOfBagAmount: %f", [deposit countOfBagAmount]);
+        DLog(@"countOfBagAmount: %f", [deposit bagAmount]);
     
-        bagAmountLbl.text = [NSString stringWithFormat:@"€%.2f", [deposit countOfBagAmount]];
+        bagAmountLbl.text = [NSString stringWithFormat:@"€%.2f", [deposit bagAmount]];
     
-    
-        //get the indiviual bag number from indexPath and add one
-//        NSInteger bagRow = indexPath.section;
-//        bagNumberLbl.text = [NSString stringWithFormat:@"Bag number: %i", bagRow +1];
-        bagNumberLbl.text = [NSString stringWithFormat:@"Bag: %@", [deposit getBagNumber]];
+        bagNumberLbl.text = [NSString stringWithFormat:@"Bag No: %@", [deposit bagBarcode]];//unique bag number
     
         return cell;
 }

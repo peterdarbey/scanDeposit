@@ -591,8 +591,10 @@
         //stop scanning
         [picker stopScanning];
         
+        //NOTE: Make sure that the barcode for the bag has been fully scanned all digits not just 8
         NSString *uniqueSubString = [barcodeString substringFromIndex:7];//correct is last five digits 95691
         DLog(@"uniqueString >>>>>>>>>>>>>>>>: %@", uniqueSubString);
+        //if barcodeString length < 12 dont allow display a warning message insufficient barcode data
         
         //if the collection already has that barcode subString then it has already been scanned
         if ([uniqueBagArray containsObject:uniqueSubString]) { //note -> not stored on device so valid but launch

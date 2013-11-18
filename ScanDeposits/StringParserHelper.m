@@ -25,20 +25,22 @@
 }
 
 
-+ (NSString *)convertMyCollection {
++ (NSString *)convertMyCollectionFromCollection:(NSMutableArray *)deposit {
     
     
     NSString *__block parsedString = [[NSMutableString alloc]init];
     NSString *__block newString = [[NSMutableString alloc]init];
     
     
-    //sent inline with subject body -> need to get this working
-    NSMutableArray *userArray = [NSMutableArray arrayWithContentsOfFile:[self getFilePathForName:@"usersCollection.plist"]];
+    //Sent as an attachment -> Note: this is all the data we need to send pertaining to a lodgement
+//    NSMutableArray *userArray = [NSMutableArray arrayWithContentsOfFile:[StringParserHelper getFilePathForName:@"usersCollection.plist"]];
+    
+    
     
     //ToDo add comma separated pairs to collection
-    [userArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+    [deposit enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         
-        for (NSArray *array in userArray) {
+        for (NSArray *array in deposit) {
             for (int i = 0; i < [array count]; i++) {
                 //retrieve each element
                 obj = [array objectAtIndex:i];

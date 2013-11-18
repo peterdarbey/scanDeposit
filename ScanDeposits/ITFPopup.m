@@ -302,7 +302,7 @@
     DLog(@"eightBarcode barcodeUniqueBagNumber: %@", [eightBarcode barcodeUniqueBagNumber]);
     
     //Init custom model object have to pass the unique bag number here plus maybe the QR branch or something?
-    Deposit *deposit = [[Deposit alloc]initWithBagNumber:[qrBarcode barcodeProcess]
+    Deposit *deposit = [[Deposit alloc]initWithBagNumber:[qrBarcode barcodeProcess]// --> think thats right
                                               bagBarcode:[eightBarcode barcodeUniqueBagNumber] bagAmount: _bagAmount bagCount:_bagCount timeStamp:_timeString];
     
     return deposit;

@@ -15,4 +15,6 @@
 + (NSDictionary *)parseQRBarcodeFromString:(NSString *)barcodeString;
 + (NSDictionary *)parseILBarcodeFromString:(NSString *)barcodeString withBarcodeType:(NSString *)barcodeType;
 
++ (NSString *)convertMyCollectionFromCollection:(NSMutableArray *)array;
+
 @end

@@ -100,8 +100,8 @@
 //    self.center = view.center;//pass picker.view.center to view
     self.center = offset;
     self.layer.cornerRadius = 5.0;
-    self.layer.borderColor = [UIColor colorWithRed:212.0/255.0 green:0.0/255.0 blue:20.0/255.5 alpha:0.5].CGColor;
-//    self.layer.borderColor = [UIColor whiteColor].CGColor;
+//    self.layer.borderColor = [UIColor colorWithRed:212.0/255.0 green:0.0/255.0 blue:20.0/255.5 alpha:0.5].CGColor;
+    self.layer.borderColor = [UIColor whiteColor].CGColor;
     self.layer.borderWidth = 1.5;
     
     

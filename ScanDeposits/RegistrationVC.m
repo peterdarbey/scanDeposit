@@ -628,6 +628,9 @@
         UIView *topView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, _registerTV.frame.size.width, 143)];//128
         [topView setBackgroundColor:[UIColor clearColor]];
         
+        //        NSInteger bagRow = indexPath.section;
+        //        bagNumberLbl.text = [NSString stringWithFormat:@"Bag number: %i", bagRow +1];
+        
         //construct an innerView for the admin section
         UIView *innerView = [[UIView alloc]initWithFrame:CGRectMake(10, 64, _registerTV.frame.size.width -20, 44)];
         [innerView setBackgroundColor:[UIColor colorWithRed:200.0/255.0 green:200.0/255.0 blue:200.0/255.0 alpha:1.0]];//dark white;
@@ -639,9 +642,9 @@
 //        [adminLbl setFont:[UIFont fontWithName:@"Helvetica" size:17]];
         [adminLbl setFont:[UIFont fontWithName:@"Arial-BoldMT" size:17]];
         [adminLbl setTextAlignment:NSTextAlignmentLeft];
-        [adminLbl setTextColor:[UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0]];//darkGray
+        [adminLbl setTextColor:[UIColor whiteColor]];
         [adminLbl setBackgroundColor:[UIColor clearColor]];
-        adminLbl.shadowColor = [UIColor whiteColor];
+        adminLbl.shadowColor = [UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0];//darkGray
         adminLbl.shadowOffset = CGSizeMake(0.0, 1.0);
         [topView addSubview:adminLbl];
         
@@ -692,10 +695,10 @@
         [adminLbl setText:@"Administrator 2"];
         
         [adminLbl setFont:[UIFont fontWithName:@"Arial-BoldMT" size:17]];
-        [adminLbl setTextColor:[UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0]];//darkGray
+        [adminLbl setTextColor:[UIColor whiteColor]];
         [adminLbl setTextAlignment:NSTextAlignmentLeft];
         [adminLbl setBackgroundColor:[UIColor clearColor]];
-        adminLbl.shadowColor = [UIColor whiteColor];
+        adminLbl.shadowColor = [UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0];//darkGray
         adminLbl.shadowOffset = CGSizeMake(0.0, 1.0);
         [topView addSubview:adminLbl];
 

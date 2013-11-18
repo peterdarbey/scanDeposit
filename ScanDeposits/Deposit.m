@@ -16,8 +16,8 @@
 
 //Private members
 @property (strong, nonatomic) NSString *bagNumber;
-@property int bagCount;
-@property double bagAmount;
+@property (nonatomic)  int bagCount;
+@property (nonatomic)  double bagAmount;
 @property (strong, nonatomic) NSString *bagBarcode;
 @property (strong, nonatomic) NSString *timeStamp;
 
@@ -67,7 +67,7 @@ static double _totalBagsAmount;
 }
 
 //public getters members
-+ (NSInteger)getTotalBagCount {
++ (NSInteger)totalBagCount {
     
     return _totalBagCount;
 }
@@ -76,14 +76,18 @@ static double _totalBagsAmount;
     return _totalBagsAmount;
 }
 
-- (double)countOfBagAmount {
+- (double)bagAmount {
     return _bagAmount;
 }
-- (int)countOfBagCount {
+- (int)bagCount {
     return _bagCount;
 }
-- (NSString *)getBagNumber {
+- (NSString *)bagNumber {
     return _bagNumber;
+}
+
+- (NSString *)bagBarcode {
+    return _bagBarcode;
 }
 
 

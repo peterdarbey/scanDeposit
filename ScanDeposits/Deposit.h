@@ -15,17 +15,18 @@
 }
 
 //class methods
-+ (NSInteger)getTotalBagCount;
++ (NSInteger)totalBagCount;
 + (double)totalBagsAmount;
 
 //instance methods
 - (id)initWithBagNumber:(NSString *)bagNumber bagBarcode:(NSString *)barcode
               bagAmount:(double)amount bagCount:(int)count timeStamp:(NSString *)time;
 
-- (double)countOfBagAmount;
-- (int)countOfBagCount;
-
-- (NSString *)getBagNumber;
+//instance getters
+- (double)bagAmount;
+- (int)bagCount;
+- (NSString *)bagNumber;
+- (NSString *)bagBarcode;
 
 @end
 

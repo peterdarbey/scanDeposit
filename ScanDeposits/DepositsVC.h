@@ -17,6 +17,7 @@
 @class Deposit;
 
 #import "AppDelegate.h"
+#import "WarningPopup.h"
 
 @interface DepositsVC : UIViewController <UITableViewDataSource, UITableViewDelegate,MFMailComposeViewControllerDelegate>
 {

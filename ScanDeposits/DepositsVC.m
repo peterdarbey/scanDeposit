@@ -82,9 +82,9 @@
     return fullPath;
 }
 
+//should be a helper object
 - (NSString *)convertMyCollection {
     
-//     NSMutableArray * __block parsedArray = [NSMutableArray array];
     
     NSString *__block parsedString = [[NSMutableString alloc]init];
     NSString *__block newString = [[NSMutableString alloc]init];
@@ -121,6 +121,8 @@
 //email button
 - (void)proceedPressed:(UIButton *)sender {
     
+    // https://github.com/jetseven/skpsmtpmessage rather than using MFMailController
+    
     
 //    NSArray *arrayPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES);
 //    NSString *docDir = [arrayPaths objectAtIndex:0];
@@ -131,14 +133,13 @@
 
     //ToDo package data up to fire off to webservice
 //    //Create our recipients -> Note this will come from file later
-    NSArray *emailRecipArray = @[@"peterdarbey@gmail.com", @"david.h.roberts@aib.ie", @"gavin.e.bennett@aib.ie"]; //@"fintan.a.killoran@aib.ie"];
+//    NSArray *emailRecipArray = @[@"peterdarbey@gmail.com", @"david.h.roberts@aib.ie", @"gavin.e.bennett@aib.ie"];
+    //for now
+    NSArray *emailRecipArray = @[@"peterdarbey@gmail.com", @"fintan.a.killoran@aib.ie"];
     
     
         NSString *disclaimerString = @"IMPORTANT - IF THE ABOVE CONFIRMATION IS IN ANY WAY INACCURATE, YOU SHOULD IMMEDIATELY ADVISE YOUR BRANCH MANAGER / HRQMO. OTHERWISE, YOU ARE CONFIRMING THAT YOU WERE A CONTROL USER AS DESCRIBED ABOVE AND THAT THE CONTENTS OF THIS CONFIRMING MAIL ARE ACCURATE.";
    
-    
-    
-        // https://github.com/jetseven/skpsmtpmessage rather than using MFMailController
     
 //        NSMutableDictionary *appData = [[NSMutableDictionary alloc]init];
 //        NSData *attachData = [NSPropertyListSerialization dataFromPropertyList:appData format:NSPropertyListXMLFormat_v1_0 errorDescription:nil];
@@ -146,7 +147,19 @@
         //sent inline with subject body
         NSMutableArray *userArray = [NSMutableArray arrayWithContentsOfFile:[self getFilePath]];
     
-        //Create our recipients -> Note this will come from file later
+        //Populate the mail data with the logged in users also
+        DLog(@"Logged in usersDict passed: %@", _usersDict);
+        //users associated with the lodgement
+        NSDictionary *userOne = _usersDict[@"1"];
+        NSDictionary *userTwo = _usersDict[@"2"];
+        DLog(@"userone: %@ and UserTwo: %@", userOne, userTwo);
+    
+        //create our recipients via users logged in
+        NSMutableArray *loggedInUsersArray = [NSMutableArray array];
+        [loggedInUsersArray addObject:userOne[@"Name"]];//retrieve the users name
+        [loggedInUsersArray addObject:userTwo[@"Name"]];
+    
+        //Create our default recipients from file
         NSMutableArray *emailRecipientsArray = [NSMutableArray array];
         //iterate through collection to retrieve the recipients
         for (int i = 0; i < [userArray count]; i++) {
@@ -171,7 +184,7 @@
         [mailController setCcRecipients:emailRecipArray];
         [mailController setToRecipients:emailRecipArray];//to me for now
         [mailController setMailComposeDelegate:self];
-//        [mailController setMessageBody:[NSString stringWithFormat:@"Please find the attached documents: \n%@", userArray] isHTML:NO];
+
     
         //ToDo alot of parsing -> Temp code ***
         NSString *userName1 = [[userArray objectAtIndex:0]objectAtIndex:1];//hardCoded will need data from barcode too i.e. -> Process, SafeID and Date/Time
@@ -196,7 +209,7 @@
         //ToDo popup with message saying email sent successfully
 //        [self becomeFirstResponder];
         [self dismissViewControllerAnimated:YES completion:^{
-            //ToDo add code here
+            //ToDo add code here --> add custom popup here green for go
              UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"Email sent" message:@"Email successfully sent to recipients" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
             [alertView show];//change for xib later
             [self.navigationController popToRootViewControllerAnimated:YES];//returning to HomeVC
@@ -207,7 +220,7 @@
         //ToDo error sending email
         
         [self dismissViewControllerAnimated:YES completion:^{
-            //ToDo add code here
+            //ToDo add code here --> Warning popup here - Red
 //            UIAlertView *alertView = [UIAlertView alloc]initWithTitle:@"Email sent" message:@"" delegate:nil cancelButtonTitle:nil otherButtonTitles:nil, nil];
         }];
     }
@@ -243,7 +256,7 @@
         [proceedBtn setFrame:CGRectMake(10, aView.frame.size.height -60, 300, 44)];
         [proceedBtn setUserInteractionEnabled:YES];
         [proceedBtn addTarget:self action:@selector(proceedPressed:) forControlEvents:UIControlEventTouchUpInside];
-        [self buttonStyle:proceedBtn WithImgName:@"blueButton.png" imgSelectedName:@"blueButtonSelected.png" withTitle:@"PROCEED"];
+        [self buttonStyle:proceedBtn WithImgName:@"blueButton.png" imgSelectedName:@"blueButtonSelected.png" withTitle:@"SEND EMAIL"];
         
         //add to parent view
         [aView addSubview:proceedBtn];
@@ -408,7 +421,7 @@
     else
     {
         bagAmountTF = (UITextField *)[cell.contentView viewWithTag:BAG_AMOUNT_TF];
-        bagAmountLbl = (UILabel *)[cell.contentView viewWithTag:BAG_AMOUNT];//new property
+        bagAmountLbl = (UILabel *)[cell.contentView viewWithTag:BAG_AMOUNT];
         bagNumberLbl = (UILabel *)[cell.contentView viewWithTag:BAG_NO_LBL];
     }
     
@@ -417,16 +430,16 @@
         DLog(@"_totalDepositAmount>>>: %f", _totalDepositAmount);
         DLog(@"_depositsCollection contains: %@", _depositsCollection);
         //need getter here for these private ivars
-        bagAmountTF.text = [NSString stringWithFormat:@"Amount is:"];//@"€%.2f"
+        bagAmountTF.text = [NSString stringWithFormat:@"Amount:"];//@"€%.2f"
         DLog(@"countOfBagAmount: %f", [deposit countOfBagAmount]);
     
-        bagAmountLbl.text = [NSString stringWithFormat:@"€%.2f", [deposit countOfBagAmount]];//@"€%.2f"
+        bagAmountLbl.text = [NSString stringWithFormat:@"€%.2f", [deposit countOfBagAmount]];
     
     
         //get the indiviual bag number from indexPath and add one
 //        NSInteger bagRow = indexPath.section;
 //        bagNumberLbl.text = [NSString stringWithFormat:@"Bag number: %i", bagRow +1];
-        bagNumberLbl.text = [NSString stringWithFormat:@"Bag number: %@", [deposit getBagNumber]];//should work
+        bagNumberLbl.text = [NSString stringWithFormat:@"Bag: %@", [deposit getBagNumber]];
     
         return cell;
 }

@@ -101,6 +101,7 @@
 		BF9B6D9E182AA03A00BC0E13 /* users.plist in Resources */ = {isa = PBXBuildFile; fileRef = BF9B6D9D182AA03A00BC0E13 /* users.plist */; };
 		BF9B6DA1182AA34600BC0E13 /* LogInVC.m in Sources */ = {isa = PBXBuildFile; fileRef = BF9B6DA0182AA34600BC0E13 /* LogInVC.m */; };
 		BF9B6DA3182BE58700BC0E13 /* admins.plist in Resources */ = {isa = PBXBuildFile; fileRef = BF9B6DA2182BE58700BC0E13 /* admins.plist */; };
+		BFB13639183A1F240051CB0F /* StringParserHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BFB13638183A1F240051CB0F /* StringParserHelper.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -232,6 +233,8 @@
 		BF9B6D9F182AA34600BC0E13 /* LogInVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogInVC.h; sourceTree = "<group>"; };
 		BF9B6DA0182AA34600BC0E13 /* LogInVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogInVC.m; sourceTree = "<group>"; };
 		BF9B6DA2182BE58700BC0E13 /* admins.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = admins.plist; sourceTree = "<group>"; };
+		BFB13637183A1F240051CB0F /* StringParserHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringParserHelper.h; sourceTree = "<group>"; };
+		BFB13638183A1F240051CB0F /* StringParserHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StringParserHelper.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -379,6 +382,8 @@
 				BF37035E1817C6480027AE4F /* User.m */,
 				BF92211E182279340084DCA0 /* PersistenceManager.h */,
 				BF92211F182279340084DCA0 /* PersistenceManager.m */,
+				BFB13637183A1F240051CB0F /* StringParserHelper.h */,
+				BFB13638183A1F240051CB0F /* StringParserHelper.m */,
 			);
 			name = "Model Objects";
 			sourceTree = "<group>";
@@ -636,6 +641,7 @@
 				BF37033B180D5C820027AE4F /* Bag.m in Sources */,
 				BF2C4F861805C0E000A87C18 /* HomeVC.mm in Sources */,
 				BF370350181674820027AE4F /* UserVC.m in Sources */,
+				BFB13639183A1F240051CB0F /* StringParserHelper.m in Sources */,
 				BF2C4FC41806C96400A87C18 /* Barcode.m in Sources */,
 				BF99DDEB18353B0F00183FE2 /* QRPopup.m in Sources */,
 				BF922120182279340084DCA0 /* PersistenceManager.m in Sources */,

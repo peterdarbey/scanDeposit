@@ -7,16 +7,20 @@
 //
 
 #import "HomeVC.h"
+#import "DepositsVC.h"
 
-#import "Barcode.h"//old
-
+//models
+#import "Deposit.h"
+#import "UserVC.h"
+//barcode models
 #import "QRBarcode.h"
 #import "EightBarcode.h"
+//helper object for parsing
+#import "StringParserHelper.h"
 
-#import "DepositsVC.h"
-#import "Deposit.h"
 
-#import "UserVC.h"
+#import "Barcode.h"//--> keep for now
+
 
 
 @interface HomeVC ()
@@ -135,9 +139,8 @@
             //now pass the deposits data to DepositsVC to pop its tblView
             DepositsVC *depositsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"DepositsVC"];
             depositsVC.title = NSLocalizedString(@"Deposits", @"Deposits View");
-            depositsVC.depositsCollection = _depositsArray;//bag data
-            //wrong place deposit model already setup here
-//            depositsVC.QRArray = _barcodeArray; //may need a condition here before adding check -> can add all barcode models to this and id by key @"Symbology"
+            depositsVC.depositsCollection = _depositsArray;//bag/deposit data
+            
             
             
             //package off logged in users/admins data
@@ -478,23 +481,11 @@
 - (void)passScannedData:(Deposit *)deposit {
     
     DLog(@"dataArray: %@", deposit);
-    //NOTE: data structure may be different here
-    if (_scanModeIsQR) {//dont think we need this
-       
-            
-    }
-    else
-    {
-        
-    }
     
-    //Pass the deposits data back to self
-//    _depositsArray = dataArray;
-//    _depositsArray = [NSMutableArray array];
-    
+    //Pass the deposits data back to self and add to collection
     [_depositsArray addObject:deposit];
     
-    //enable finishedScans button now as we have at least 1 scanned deposit
+    //enable finishedScans button now as a scanned deposit
     barBtnFinished.enabled = YES;
     
 }
@@ -614,7 +605,7 @@
         _scanModeIsQR = NO; // --> NOTE BOOL to say scanned QR already
         
         //parses a barcode string and creates a dictionary
-        barcode = [self parseQRBarcodeFromString:barcodeString];
+        barcode = [self parseQRBarcodeFromString:barcodeString];// --> change to class method form Helper
         DLog(@"barcodeDict: %@", barcode);
         
         //Now parsed correctly proceed with the new QRBarcode model constructor
@@ -623,6 +614,7 @@
             [_barcodeArray addObject:_qrBarcode];
         
          [picker stopScanning];
+//        [picker setItfEnabled:YES];
         //present the QR popup
         [self showQRPopup:barcodeString];//pass relevant custom model or dictionary
         

@@ -6,6 +6,7 @@
 
 #import "Deposit.h"
 
+#import "QRBarcode.h"
 #import "EightBarcode.h"
 
 @interface ITFPopup ()
@@ -286,26 +287,24 @@
     
     DLog(@"_barcodeArray: %@", _barcodeArray);
     
-//    NSDictionary *modelTypeDict;
+    QRBarcode *qrBarcode;
     EightBarcode *eightBarcode;
     
-    //not sure this is completely safe --> actually will be
-    if ([[_barcodeArray lastObject] isKindOfClass:[EightBarcode class]]) {
-         eightBarcode = [_barcodeArray lastObject];//should always be last object as QR is first and its an ordered collection
-//         modelTypeDict = barcodeDict[@"ITF"];
-        
+    if ([[_barcodeArray objectAtIndex:0] isKindOfClass:[QRBarcode class]]) {
+        qrBarcode = [_barcodeArray objectAtIndex:0];
     }
     
-//    NSString *uniqueBagNumber = modelTypeDict[@"Unique Bag Number"];
+    
+    if ([[_barcodeArray lastObject] isKindOfClass:[EightBarcode class]]) {
+         eightBarcode = [_barcodeArray lastObject];//always the last object as QR is first and its an ordered collection
+    }
     
     DLog(@"eightBarcode barcodeUniqueBagNumber: %@", [eightBarcode barcodeUniqueBagNumber]);
     
-    //Init custom model object have to pass the unique bag number here 
-    Deposit *deposit = [[Deposit alloc]initWithBagNumber:[eightBarcode barcodeUniqueBagNumber]
+    //Init custom model object have to pass the unique bag number here plus maybe the QR branch or something?
+    Deposit *deposit = [[Deposit alloc]initWithBagNumber:[qrBarcode barcodeProcess]
                                               bagBarcode:[eightBarcode barcodeUniqueBagNumber] bagAmount: _bagAmount bagCount:_bagCount timeStamp:_timeString];
     
-    //Add to collection before passing to delegate
-
     return deposit;
 }
 

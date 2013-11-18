@@ -23,6 +23,8 @@
 @class Deposit;
 @class DepositsVC;
 @class RegistrationVC;
+//helper object
+@class StringParserHelper;
 
 @class UserVC;
 

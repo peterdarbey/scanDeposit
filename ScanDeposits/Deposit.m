@@ -90,5 +90,9 @@ static double _totalBagsAmount;
     return _bagBarcode;
 }
 
+- (NSString *)timeStamp {
+    return _timeStamp;
+}
+
 
 @end

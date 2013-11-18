@@ -140,6 +140,7 @@
             DepositsVC *depositsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"DepositsVC"];
             depositsVC.title = NSLocalizedString(@"Deposits", @"Deposits View");
             depositsVC.depositsCollection = _depositsArray;//bag/deposit data
+            depositsVC.barcodeArray = _barcodeArray;//pass all barcode data to deposits
             
             
             
@@ -541,7 +542,7 @@
     
     //its a NSString so cant use objectForKey
      NSString *barcodeString = barcodeResult[@"barcode"];
-    DLog(@"barcodeString: %@", barcodeString);//190053495691
+    DLog(@"barcodeString: %@", barcodeString);//190053495691 --> 12 digits
     
     //extract the Symbology to determine the relevant data model and construct appropriately
     NSString *barcodeType = (NSString *)barcodeResult[@"symbology"];
@@ -564,14 +565,15 @@
         DLog(@"barcodeDict: %@", barcode);
         
         //Now parsed correctly proceed with the new QRBarcode model constructor
-        _qrBarcode = [[QRBarcode alloc]initBarcodeWithSymbology:barcodeType branch:barcode[@"Branch NSC"] process:barcode[@"Process"] safeID:[barcode[@"Safe ID"]intValue] andDevice:@"UnKnown"];//the Safe ID rounds off int
+        _qrBarcode = [[QRBarcode alloc]initBarcodeWithSymbology:barcodeType branch:barcode[@"Branch NSC"] process:barcode[@"Process"] safeID:[barcode[@"Safe ID"]intValue] andDevice:@"UnKnown"];
             //Add to barcodeArray collection as once I have this barcode is overwritten on 2/5 interleaved scan
             [_barcodeArray addObject:_qrBarcode];
         
          [picker stopScanning];
 //        [picker setItfEnabled:YES];
+        
         //present the QR popup
-        [self showQRPopup:barcodeString];//pass relevant custom model or dictionary
+        [self showQRPopup:barcodeString];
         
     }
     //else if in QR scan mode, its an ITF with valid bank bag details, but we have not scanned QR first
@@ -701,25 +703,25 @@
 -(void)showITFPopup:(NSString *)barcodeString {
     
     //Create a custom AlertView.xib
-    ITFPopup *ILPopup = [ITFPopup loadFromNibNamed:@"ITFPopup"];
+    ITFPopup *itfPopup = [ITFPopup loadFromNibNamed:@"ITFPopup"];
     //Add custom delegate method here to restart picker scanning
-    [ILPopup setDelegate:self];
+    [itfPopup setDelegate:self];
     //pass the time
-    ILPopup.timeString = dateString;//not very OO -> passing to the Deposit model via the popup xib
+    itfPopup.timeString = dateString;//not very OO -> passing to the Deposit model via the popup xib
     //pass the barcode data
-    ILPopup.barcodeArray = _barcodeArray;
+    itfPopup.barcodeArray = _barcodeArray;
     
     //Add another Prefix test from the 2/5 interleaved barcode
     if ([barcodeString hasPrefix:@"190"]) {
         
         //populate the 2/5 interleave barcode popup 
-        ILPopup.branchLbl.text = [NSString stringWithFormat:@"Unique Bag Number:%@", [_eightBarcode barcodeUniqueBagNumber]];
-        ILPopup.processLbl.text = [NSString stringWithFormat:@"Process: %@", [_eightBarcode barcodeProcess]];
+        itfPopup.branchLbl.text = [NSString stringWithFormat:@"Unique Bag Number:%@", [_eightBarcode barcodeUniqueBagNumber]];
+        itfPopup.processLbl.text = [NSString stringWithFormat:@"Process: %@", [_eightBarcode barcodeProcess]];
         //with relevant popup instantsiated in each conditional
         
     }
     
-    [ILPopup showOnView:picker.view];
+    [itfPopup showOnView:picker.view];
     
 }
 

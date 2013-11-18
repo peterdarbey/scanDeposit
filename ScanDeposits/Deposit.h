@@ -27,6 +27,7 @@
 - (int)bagCount;
 - (NSString *)bagNumber;
 - (NSString *)bagBarcode;
+- (NSString *)timeStamp;
 
 @end
 

@@ -132,6 +132,12 @@
 
 
 
+//    NSArray *arrayPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES);
+//    NSString *docDir = [arrayPaths objectAtIndex:0];
+//    NSString *Path = [docDir stringByAppendingString:@"/CSVFile.csv"];
+//    NSData *csvData = [NSData dataWithContentsOfFile:Path];
+
+
 //if (_isSetup) {
 //    
 //    //        //Once setup complete Always present LogInVC for all users/admins if not already logged in

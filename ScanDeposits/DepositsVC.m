@@ -91,7 +91,7 @@
     //Sent as an attachment -> Note: this is all the data we need to send pertaining to a lodgement
 //    NSMutableArray *userArray = [NSMutableArray arrayWithContentsOfFile:[self getFilePath]];//NOT this anymore
     
-    DLog(@"_depositsArray contains: %@", _depositsCollection);
+    DLog(@"_depositsArray contains: %@", _depositsCollection);// --> actual bag deposit details
     //extract the required fields for attachment
     NSMutableArray *depositArray = [NSMutableArray array];
     DLog(@"depositArray: %@", depositArray);
@@ -99,6 +99,7 @@
     for (id object in _depositsCollection) {
         Deposit *deposit = (Deposit *)object;
         NSMutableArray *array = [NSMutableArray array];
+//        [array addObject:[deposit timeStamp]];//actual time
         [array addObject:@([deposit bagAmount])];//each bag amount
         [array addObject:[deposit bagNumber]];//Unique bag number -> now Process
         [array addObject:[deposit bagBarcode]];//Unigue bag number
@@ -138,37 +139,29 @@
     }//close outer for
     
         DLog(@"parsedString>>>>>>>>>>>>>: %@", parsedString);
-        NSString *tabString = [NSString stringWithFormat:@"%@,,,,,,,,,,", parsedString];
+        NSString *tabString = [NSString stringWithFormat:@"%@,,,,,,,,,,", parsedString];//correct
         return tabString;// --> use excel xml format and create headers
     
 }
 
-//email button
+// https://github.com/jetseven/skpsmtpmessage rather than using MFMailController
 - (void)proceedPressed:(UIButton *)sender {
-    
-    // https://github.com/jetseven/skpsmtpmessage rather than using MFMailController
-    
-    
-//    NSArray *arrayPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES);
-//    NSString *docDir = [arrayPaths objectAtIndex:0];
-//    NSString *Path = [docDir stringByAppendingString:@"/CSVFile.csv"];
-//    NSData *csvData = [NSData dataWithContentsOfFile:Path];
 
 //        NSMutableDictionary *appData = [[NSMutableDictionary alloc]init];
 //        NSData *attachData = [NSPropertyListSerialization dataFromPropertyList:appData format:NSPropertyListXMLFormat_v1_0 errorDescription:nil];
 
     
     
-    //ToDo package data up to fire off to webservice
+    
 //    //Create our recipients -> Note this will come from file later
 //    NSArray *emailRecipArray = @[@"peterdarbey@gmail.com", @"david.h.roberts@aib.ie", @"gavin.e.bennett@aib.ie"];
-    //TEMP email assignees
-    NSArray *emailRecipArray = @[@"peterdarbey@gmail.com"];//, @"fintan.a.killoran@aib.ie"];
+    
+        //TEMP email assignees
+        NSArray *emailRecipArray = @[@"peterdarbey@gmail.com"];//, @"fintan.a.killoran@aib.ie"];
     
     
         //send email to all the users stored on the device for now
         NSMutableArray *userArray = [NSMutableArray arrayWithContentsOfFile:[self getFilePath]];
-    
         //Create our default recipients from file for all emails
         NSMutableArray *emailRecipientsArray = [NSMutableArray array];
         //iterate through collection to retrieve the recipients
@@ -176,22 +169,22 @@
             NSString *recipient = [[userArray objectAtIndex:i]objectAtIndex:2];
             [emailRecipientsArray addObject:recipient];
         }
-        DLog(@"emailRecipientsArray: %@", emailRecipientsArray);//works but need to receive myself as no aib.ie acc
+        DLog(@"emailRecipientsArray: %@", emailRecipientsArray);
     
     
     
         //Populate the mail data with the logged in users also
         DLog(@"Logged in usersDict passed: %@", _usersDict);
-        
         //returns a dict for each user associated with the lodgement via log in
-        NSDictionary *userOne = _usersDict[@1];//null --> should be right now -> NSNumber
-        NSDictionary *userTwo = _usersDict[@2];//correct
+        NSDictionary *userOne = _usersDict[@1];//correct
+        NSDictionary *userTwo = _usersDict[@2];
         DLog(@"userOne: %@ and UserTwo: %@", userOne, userTwo);
         
         //retrieves each logged in users name --> may need users emails also
         NSString *userOneName = userOne[@"Name"];
+        NSString *userOneEMail = userOne[@"Email"];
         NSString *userTwoName = userTwo[@"Name"];
-    
+        NSString *userTwoEMail = userTwo[@"Email"];
     
     
         NSArray *contentArray = @[@"<number of bags>", @"<value of bags>"];

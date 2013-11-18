@@ -36,6 +36,10 @@
 //QRBarcode model can be added to the DepositVC straight away as its a 1 of scan
 @property (strong, nonatomic) NSMutableArray *QRArray;
 
+@property (strong, nonatomic) NSMutableArray *barcodeArray;
+
+
+
 //@property int depositCount;
 
 @end

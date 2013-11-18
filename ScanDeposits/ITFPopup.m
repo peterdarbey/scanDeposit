@@ -299,7 +299,6 @@
          eightBarcode = [_barcodeArray lastObject];//always the last object as QR is first and its an ordered collection
     }
     
-    DLog(@"eightBarcode barcodeUniqueBagNumber: %@", [eightBarcode barcodeUniqueBagNumber]);
     
     //Init custom model object have to pass the unique bag number here plus maybe the QR branch or something?
     Deposit *deposit = [[Deposit alloc]initWithBagNumber:[qrBarcode barcodeProcess]// --> think thats right

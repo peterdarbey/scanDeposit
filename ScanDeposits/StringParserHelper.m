@@ -24,6 +24,90 @@
     return fullPath;
 }
 
+//- (NSMutableArray *)collectMyData {
+//    
+//    //_barcodeArray --> QR + ITF barcode data
+//    DLog(@"barcodeArray: %@", _barcodeArray);
+//    
+//    if (_barcodeArray) {
+//        
+//        //extract the barcode objects required values
+//        for (id object in _barcodeArray) {
+//            
+//            if ([object isKindOfClass:[QRBarcode class]]) {
+//                QRBarcode *qrBarcode = (QRBarcode *)object;
+//                //Add elements to the array
+//                [_dataArray addObject:[qrBarcode barcodeBranch]];
+//                [_dataArray addObject:[qrBarcode barcodeProcess]];
+//                [_dataArray addObject:@([qrBarcode barcodeSafeID])];//Device
+//            }
+//            //                else if ([object isKindOfClass:[EightBarcode class]]) {
+//            //                    EightBarcode *ITFBarcode = (EightBarcode *) object;
+//            //                    //added last 6digits --> Sequence Number
+//            //                    [_dataArray addObject:[[ITFBarcode barcodeUniqueBagNumber]substringFromIndex:6]];
+//            //                    [_dataArray addObject:[ITFBarcode barcodeUniqueBagNumber]];//dont need
+//            //                }
+//            
+//        }//close for
+//    }
+//    
+//    DLog(@"depositsCollection: %@", _depositsCollection);
+//    if (_depositsCollection) {
+//        
+//        for (id object in _depositsCollection) {
+//            if ([object isKindOfClass:[Deposit class]]) {
+//                Deposit *deposit = (Deposit *)object;
+//                //                [_dataArray addObject:[deposit bagNumber]];// is QR Process instead
+//                //added last 6digits --> Sequence Number
+//                [_dataArray addObject:[[deposit bagBarcode]substringFromIndex:6]];//has ITF
+//                [_dataArray addObject:[deposit bagBarcode]];//has ITF --> barcodeUniqueBagNumber
+//                [_dataArray addObject:@([deposit bagCount])];//int
+//                [_dataArray addObject:@([deposit bagAmount])];//double
+//                [_dataArray addObject:[deposit timeStamp]];//add date/time
+//            }
+//        }//close for
+//        //dont forget static methods ie count and amount total
+//        [_dataArray addObject:@([Deposit totalBagCount])];//should be right
+//        [_dataArray addObject:@([Deposit totalBagsAmount])];
+//        
+//    }
+//    
+//    DLog(@"_usersDict: %@", _usersDict);
+//    //extract the logged in users details
+//    if (_usersDict) { // --> a dict with 2 k / v pairs
+//        
+//        
+//        //extract the users Name and Email details for logged in users
+//        //userOne
+//        NSDictionary *userOneDict = _usersDict[@1];
+//        [_dataArray addObject:userOneDict[@"Name"]];
+//        [_dataArray addObject:userOneDict[@"Email"]];
+//        //userTwo
+//        NSDictionary *userTwoDict = _usersDict[@2];
+//        [_dataArray addObject:userTwoDict[@"Name"]];
+//        [_dataArray addObject:userTwoDict[@"Email"]];
+//        
+//    }//close userDict
+//    
+//    //Also need Administrators after --> use the adminsCollection.plist for this data
+//    NSMutableArray *adminArray = [NSMutableArray arrayWithContentsOfFile:[self getFilePath]];//NOW admin
+//    DLog(@"adminArray: %@", adminArray);
+//    
+//    //    if (adminArray) {
+//    //
+//    //        for (id object in adminArray) {
+//    //            if ([object isKindOfClass:[NSArray class]]) {
+//    //                NSArray *adminArray = (NSArray *)object;
+//    //            }
+//    //        }
+//    //    }
+//    
+//    DLog(@"<<<<<<<< _dataArray contents >>>>>>>>>>: %@", _dataArray);
+//    
+//    
+//    return _dataArray;
+//}
+
 
 + (NSString *)parseMyCollection:(NSMutableArray *)array {
     

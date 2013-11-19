@@ -94,76 +94,13 @@
 }
 
 //should be a helper object
-- (NSString *)convertMyCollectionFromCollection:(NSMutableArray *)deposits {
-    
-    
-    NSString *__block parsedString = [[NSMutableString alloc]init];
-    
-    //Sent as an attachment -> Note: this is all the data we need to send pertaining to a lodgement
-//    NSMutableArray *adminArray = [NSMutableArray arrayWithContentsOfFile:[self getFilePath]];//NOW admin
-    
-    DLog(@"_depositsArray contains: %@", _depositsCollection);// --> actual bag deposit details
-    //extract the required fields for attachment
-    NSMutableArray *depositArray = [NSMutableArray array];
-    DLog(@"depositArray: %@", depositArray);
-    
-    for (id object in _depositsCollection) {
-        Deposit *deposit = (Deposit *)object;
-        NSMutableArray *array = [NSMutableArray array];
-//        [array addObject:[deposit timeStamp]];//actual time
-        [array addObject:@([deposit bagAmount])];//each bag amount
-        [array addObject:[deposit bagNumber]];//Unique bag number -> now Process
-        [array addObject:[deposit bagBarcode]];//Unigue bag number
-        //add to depositArray
-        [depositArray addObject:array];//crash
-    }
-    //add the total amount and count at the end
-//    [depositArray addObject:@([Deposit totalBagsAmount])];
-//    [depositArray addObject:@([Deposit totalBagCount])];
-    
-   
-    
-    double bagAmount;
-    NSString *uniqueBagNo;
-    //now format the array with required fields for CSV attachment
-    for (NSArray *array in depositArray) {
-        for (int i = 0; i < [array count]; i++) {
-            
-            NSString *bagBarcode;
-            NSString *appendedString;
-            //retrieve each element and format
-            if (i == 0) {
-                bagAmount = [array[i]doubleValue];
-            }
-            else if (i == 1) {
-                uniqueBagNo = array[i];
-            }
-            else if (i == 2 && bagAmount && uniqueBagNo) {
-                bagBarcode = array[i];
-                appendedString = [NSString stringWithFormat:@"€%.2f,%@,%@,\n", bagAmount, uniqueBagNo, bagBarcode];
-                DLog(@"appendedString: %@", appendedString);
-                parsedString = [parsedString stringByAppendingString:appendedString];//452.130000,A Coin Only Dropsafe,19005349, --> Dont forget newLine escape seq
-            }
-           
-        }//close inner for
-        
-    }//close outer for
-    
-        DLog(@"parsedString>>>>>>>>>>>>>: %@", parsedString);
-        return parsedString;// --> use excel xml format and create headers
-    
-}
 
 - (NSMutableArray *)collectMyData {
-    
-    //_barcodeArray --> QR + ITF barcode data
-    DLog(@"barcodeArray: %@", _barcodeArray);
-    
+        //extract barcode data
         if (_barcodeArray) {
     
             //extract the barcode objects required values
             for (id object in _barcodeArray) {
-                
                 if ([object isKindOfClass:[QRBarcode class]]) {
                     QRBarcode *qrBarcode = (QRBarcode *)object;
                     //Add elements to the array
@@ -171,25 +108,17 @@
                     [_dataArray addObject:[qrBarcode barcodeProcess]];
                     [_dataArray addObject:@([qrBarcode barcodeSafeID])];//Device
                 }
-//                else if ([object isKindOfClass:[EightBarcode class]]) {
-//                    EightBarcode *ITFBarcode = (EightBarcode *) object;
-//                    //added last 6digits --> Sequence Number
-//                    [_dataArray addObject:[[ITFBarcode barcodeUniqueBagNumber]substringFromIndex:6]];
-//                    [_dataArray addObject:[ITFBarcode barcodeUniqueBagNumber]];//dont need
-//                }
-                
             }//close for
         }
     
-    DLog(@"depositsCollection: %@", _depositsCollection);
+    //extract all the deposit data
     if (_depositsCollection) {
         
         for (id object in _depositsCollection) {
             if ([object isKindOfClass:[Deposit class]]) {
                 Deposit *deposit = (Deposit *)object;
-//                [_dataArray addObject:[deposit bagNumber]];// is QR Process instead
                 //added last 6digits --> Sequence Number
-                [_dataArray addObject:[[deposit bagBarcode]substringFromIndex:6]];//has ITF
+                [_dataArray addObject:[[deposit bagBarcode]substringFromIndex:6]];
                 [_dataArray addObject:[deposit bagBarcode]];//has ITF --> barcodeUniqueBagNumber
                 [_dataArray addObject:@([deposit bagCount])];//int
                 [_dataArray addObject:@([deposit bagAmount])];//double
@@ -202,38 +131,33 @@
         
     }
 
-    DLog(@"_usersDict: %@", _usersDict);
-    //extract the logged in users details
-    if (_usersDict) { // --> a dict with 2 k / v pairs
+        //extract the Logged in Users details
+        if (_usersDict) {
         
+            //userOne
+            NSDictionary *userOneDict = _usersDict[@1];
+            [_dataArray addObject:userOneDict[@"Name"]];
+            [_dataArray addObject:userOneDict[@"Email"]];
+            //userTwo
+            NSDictionary *userTwoDict = _usersDict[@2];
+            [_dataArray addObject:userTwoDict[@"Name"]];
+            [_dataArray addObject:userTwoDict[@"Email"]];
         
-            //extract the users Name and Email details for logged in users
-                //userOne
-                NSDictionary *userOneDict = _usersDict[@1];
-                [_dataArray addObject:userOneDict[@"Name"]];
-                [_dataArray addObject:userOneDict[@"Email"]];
-                //userTwo
-                NSDictionary *userTwoDict = _usersDict[@2];
-                [_dataArray addObject:userTwoDict[@"Name"]];
-                [_dataArray addObject:userTwoDict[@"Email"]];
-        
-    }//close userDict
+        }//close userDict
 
+    
     //Also need Administrators after --> use the adminsCollection.plist for this data
-    NSMutableArray *adminArray = [NSMutableArray arrayWithContentsOfFile:[self getFilePath]];//NOW admin
+    NSMutableArray *adminArray = [NSMutableArray arrayWithContentsOfFile:[self getFilePath]];
     DLog(@"adminArray: %@", adminArray);
 
-//    if (adminArray) {
-//        
-//        for (id object in adminArray) {
-//            if ([object isKindOfClass:[NSArray class]]) {
-//                NSArray *adminArray = (NSArray *)object;
-//            }
-//        }
-//    }
+        if (adminArray) {
+            for (int i = 0; i < [adminArray count]; i++) {
+                NSString *adminName = [[adminArray objectAtIndex:i]objectAtIndex:0];//name
+                [_dataArray addObject:adminName];//just name
+            }
+        }//close if
     
     DLog(@"<<<<<<<< _dataArray contents >>>>>>>>>>: %@", _dataArray);
-        
     
     return _dataArray;
 }
@@ -283,13 +207,10 @@
         NSString *userTwoEMail = userTwo[@"Email"];
     
     
-        //data from the deposit lodgements --> OLD
-        NSString *depositString = [self convertMyCollectionFromCollection:_depositsCollection];
-    
         //returns a string with as a csv format
         _dataArray = [self collectMyData];
         //Now need to parse my new data collection
-        NSString *finalString = [self parseMyCollection:_dataArray];
+        NSString *finalString = [StringParserHelper parseMyCollection:_dataArray];
 //        finalString = [NSString stringWithFormat:@"%@,,,,,,,,,,", finalString];//correct
     
         //serialize and convert to data for webservice
@@ -326,45 +247,7 @@
    
 }
 
-- (NSString *)parseMyCollection:(NSMutableArray *)array {
-    
-    NSMutableString *parsingString = [[NSMutableString alloc]init];
-    NSString *finalString;
-    
-    if (_dataArray) {
-        
-        for (int i = 0; i < [_dataArray count]; i++) {
-            NSString *string;
-            //string
-            if ([_dataArray[i] isKindOfClass:[NSString class]]) {
-                string = [NSString stringWithFormat:@"%@,", _dataArray[i]];
-                parsingString = (NSMutableString *)[parsingString stringByAppendingString:string];
-            }
-            else if ([_dataArray[i] isKindOfClass:[NSNumber class]]) {
-                //double
-                if ((strcmp([_dataArray[i] objCType], @encode(double)) == 0)) {
-                    string = [NSString stringWithFormat:@"€%.2f,", [_dataArray[i]doubleValue]];
-                    parsingString = (NSMutableString *)[parsingString stringByAppendingString:string];
-                }
-                //integer
-                else if ((strcmp([_dataArray[i] objCType], @encode(int)) == 0)) {
-                    string = [NSString stringWithFormat:@"%i,", [_dataArray[i]intValue]];
-                    parsingString = (NSMutableString *)[parsingString stringByAppendingString:string];
-                }
-            }//else if close
-            
-            finalString = parsingString;
-        }
-        
-        DLog(@"finalString: %@", finalString);//works except for number issue
-        
-        //test building xml for csv file
-//        NSString *XML= [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE en-note SYSTEM \"http://xml.evernote.com/pub/enml2.dtd\">\n<en-note>%@",finalString];
-        
-        
-    }
-    return finalString;
-}
+
 
 #pragma mark - MFMailCompose delegate callbacks
 - (void)mailComposeController:(MFMailComposeViewController*)mailController didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error

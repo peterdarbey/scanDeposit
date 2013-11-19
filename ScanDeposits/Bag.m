@@ -873,7 +873,66 @@
 //        
 //    }
     
-    
+//    - (NSString *)convertMyCollectionFromCollection:(NSMutableArray *)deposits {
+//        
+//        
+//        NSString *__block parsedString = [[NSMutableString alloc]init];
+//        
+//        //Sent as an attachment -> Note: this is all the data we need to send pertaining to a lodgement
+//        //    NSMutableArray *adminArray = [NSMutableArray arrayWithContentsOfFile:[self getFilePath]];//NOW admin
+//        
+//        DLog(@"_depositsArray contains: %@", _depositsCollection);// --> actual bag deposit details
+//        //extract the required fields for attachment
+//        NSMutableArray *depositArray = [NSMutableArray array];
+//        DLog(@"depositArray: %@", depositArray);
+//        
+//        for (id object in _depositsCollection) {
+//            Deposit *deposit = (Deposit *)object;
+//            NSMutableArray *array = [NSMutableArray array];
+//            //        [array addObject:[deposit timeStamp]];//actual time
+//            [array addObject:@([deposit bagAmount])];//each bag amount
+//            [array addObject:[deposit bagNumber]];//Unique bag number -> now Process
+//            [array addObject:[deposit bagBarcode]];//Unigue bag number
+//            //add to depositArray
+//            [depositArray addObject:array];//crash
+//        }
+//        //add the total amount and count at the end
+//        //    [depositArray addObject:@([Deposit totalBagsAmount])];
+//        //    [depositArray addObject:@([Deposit totalBagCount])];
+//        
+//        
+//        
+//        double bagAmount;
+//        NSString *uniqueBagNo;
+//        //now format the array with required fields for CSV attachment
+//        for (NSArray *array in depositArray) {
+//            for (int i = 0; i < [array count]; i++) {
+//                
+//                NSString *bagBarcode;
+//                NSString *appendedString;
+//                //retrieve each element and format
+//                if (i == 0) {
+//                    bagAmount = [array[i]doubleValue];
+//                }
+//                else if (i == 1) {
+//                    uniqueBagNo = array[i];
+//                }
+//                else if (i == 2 && bagAmount && uniqueBagNo) {
+//                    bagBarcode = array[i];
+//                    appendedString = [NSString stringWithFormat:@"€%.2f,%@,%@,\n", bagAmount, uniqueBagNo, bagBarcode];
+//                    DLog(@"appendedString: %@", appendedString);
+//                    parsedString = [parsedString stringByAppendingString:appendedString];//452.130000,A Coin Only Dropsafe,19005349, --> Dont forget newLine escape seq
+//                }
+//                
+//            }//close inner for
+//            
+//        }//close outer for
+//        
+//        DLog(@"parsedString>>>>>>>>>>>>>: %@", parsedString);
+//        return parsedString;// --> use excel xml format and create headers
+//        
+//    }
+
     
     
 }

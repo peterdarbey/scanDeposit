@@ -25,42 +25,44 @@
 }
 
 
-+ (NSString *)convertMyCollectionFromCollection:(NSMutableArray *)deposit {
++ (NSString *)parseMyCollection:(NSMutableArray *)array {
     
+    NSMutableString *parsingString = [[NSMutableString alloc]init];
+    NSString *finalString;
     
-    NSString *__block parsedString = [[NSMutableString alloc]init];
-    NSString *__block newString = [[NSMutableString alloc]init];
-    
-    
-    //Sent as an attachment -> Note: this is all the data we need to send pertaining to a lodgement
-//    NSMutableArray *userArray = [NSMutableArray arrayWithContentsOfFile:[StringParserHelper getFilePathForName:@"usersCollection.plist"]];
-    
-    
-    
-    //ToDo add comma separated pairs to collection
-    [deposit enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+    if (array) {
         
-        for (NSArray *array in deposit) {
-            for (int i = 0; i < [array count]; i++) {
-                //retrieve each element
-                obj = [array objectAtIndex:i];
-                //cast and format
-                NSString *stringObj = (NSString *) [NSString stringWithFormat:@"%@,", obj];//@"\"%@\","
-                //add to collection
-                parsedString = [parsedString stringByAppendingString:stringObj];
-                newString = [parsedString stringByAppendingString:stringObj];
+        for (int i = 0; i < [array count]; i++) {
+            NSString *string;
+            //string
+            if ([array[i] isKindOfClass:[NSString class]]) {
+                string = [NSString stringWithFormat:@"%@,", array[i]];
+                parsingString = (NSMutableString *)[parsingString stringByAppendingString:string];
             }
+            else if ([array[i] isKindOfClass:[NSNumber class]]) {
+                //double
+                if ((strcmp([array[i] objCType], @encode(double)) == 0)) {
+                    string = [NSString stringWithFormat:@"€%.2f,", [array[i]doubleValue]];
+                    parsingString = (NSMutableString *)[parsingString stringByAppendingString:string];
+                }
+                //integer
+                else if ((strcmp([array[i] objCType], @encode(int)) == 0)) {
+                    string = [NSString stringWithFormat:@"%i,", [array[i]intValue]];
+                    parsingString = (NSMutableString *)[parsingString stringByAppendingString:string];
+                }
+            }//else if close
+            
+            finalString = parsingString;
         }
         
-        DLog(@"newString: %@", newString);
-    }];
-    
-    DLog(@"parsedString >>>>>: %@", parsedString);
-    
-    NSString *tabString = [NSString stringWithFormat:@"%@\t\t\t\t", newString];
-    DLog(@"tabString: %@", tabString);
-    return tabString; //newString
-    
+        DLog(@"finalString: %@", finalString);//correct
+        
+        //test building xml for csv file
+        //        NSString *XML= [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE en-note SYSTEM \"http://xml.evernote.com/pub/enml2.dtd\">\n<en-note>%@",finalString];
+        
+        
+    }
+    return finalString;
 }
 
 //parses the QR barcode string for external device and creates a dictionary

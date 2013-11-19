@@ -577,7 +577,7 @@
         
     }
     //else if in QR scan mode, its an ITF with valid bank bag details, but we have not scanned QR first
-    else if (_scanModeIsQR && [barcodeType isEqualToString:@"ITF"] && [barcodeString hasPrefix:@"190"])
+    else if (_scanModeIsQR && [barcodeType isEqualToString:@"ITF"] && [barcodeString hasPrefix:@"190"])//291
     {
         //Construct custom warning popup
         [picker stopScanning];

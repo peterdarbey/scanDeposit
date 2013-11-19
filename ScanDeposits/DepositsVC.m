@@ -13,6 +13,8 @@
 #import "QRBarcode.h"
 #import "EightBarcode.h"
 
+#import "StringParserHelper.h"
+
 @interface DepositsVC ()
 {
 //    Deposit *deposit;
@@ -202,23 +204,18 @@
 
     DLog(@"_usersDict: %@", _usersDict);
     //extract the logged in users details
-    if (_usersDict) {
+    if (_usersDict) { // --> a dict with 2 k / v pairs
         
-        for (id object in _usersDict) {
+        
             //extract the users Name and Email details for logged in users
-            if ([object isKindOfClass:[NSDictionary class]]) {
-                NSDictionary *dict = (NSDictionary *)object;
                 //userOne
-                NSDictionary *userOneDict = dict[@1];
+                NSDictionary *userOneDict = _usersDict[@1];
                 [_dataArray addObject:userOneDict[@"Name"]];
                 [_dataArray addObject:userOneDict[@"Email"]];
                 //userTwo
-                NSDictionary *userTwoDict = dict[@2];
+                NSDictionary *userTwoDict = _usersDict[@2];
                 [_dataArray addObject:userTwoDict[@"Name"]];
                 [_dataArray addObject:userTwoDict[@"Email"]];
-                
-            }//close if
-        }//close for
         
     }//close userDict
 
@@ -257,7 +254,7 @@
 //    NSArray *emailRecipArray = @[@"peterdarbey@gmail.com", @"david.h.roberts@aib.ie", @"eimear.e.ferguson@aib.ie", @"gavin.e.bennett@aib.ie"];
     
         //TEMP email assignees
-        NSArray *emailRecipArray = @[@"peterdarbey@gmail.com"];//, @"fintan.a.killoran@aib.ie"];
+        NSArray *emailRecipArray = @[@"peterdarbey@gmail.com", @"fintan.a.killoran@aib.ie"];//, @"fintan.a.killoran@aib.ie"];
     
     
         //send email to all the users stored on the device for now
@@ -279,27 +276,24 @@
         //data returned a dict for each user associated with the lodgement via log in
         NSDictionary *userOne = _usersDict[@1];//correct
         NSDictionary *userTwo = _usersDict[@2];
-//        DLog(@"userOne: %@ and UserTwo: %@", userOne, userTwo);
+
         NSString *userOneName = userOne[@"Name"];
         NSString *userOneEMail = userOne[@"Email"];
         NSString *userTwoName = userTwo[@"Name"];
         NSString *userTwoEMail = userTwo[@"Email"];
     
     
-        //data from the deposit lodgements
+        //data from the deposit lodgements --> OLD
         NSString *depositString = [self convertMyCollectionFromCollection:_depositsCollection];
-        //data from the barcode captured data
-//        NSString *finalString = [NSString stringWithFormat:@"%@,,,,,,,,,,", string];//correct
-//        DLog(@"finalString: %@", finalString);
     
+        //returns a string with as a csv format
         _dataArray = [self collectMyData];
         //Now need to parse my new data collection
-        [self parseMyCollection:_dataArray];
-    
+        NSString *finalString = [self parseMyCollection:_dataArray];
+//        finalString = [NSString stringWithFormat:@"%@,,,,,,,,,,", finalString];//correct
     
         //serialize and convert to data for webservice
-//        NSData *dataString = [finalString dataUsingEncoding:NSUTF8StringEncoding];
-        NSData *dataString = [depositString dataUsingEncoding:NSUTF8StringEncoding];
+        NSData *dataString = [finalString dataUsingEncoding:NSUTF8StringEncoding];
     
     
     
@@ -334,7 +328,7 @@
 
 - (NSString *)parseMyCollection:(NSMutableArray *)array {
     
-    NSString *parsingString;
+    NSMutableString *parsingString = [[NSMutableString alloc]init];
     NSString *finalString;
     
     if (_dataArray) {
@@ -344,25 +338,32 @@
             //string
             if ([_dataArray[i] isKindOfClass:[NSString class]]) {
                 string = [NSString stringWithFormat:@"%@,", _dataArray[i]];
-                parsingString = [parsingString stringByAppendingString:string];
+                parsingString = (NSMutableString *)[parsingString stringByAppendingString:string];
             }
-            //double
-            else if ([_dataArray[i] isKindOfClass:[NSNumber class]]) {//need to check if a double or int
-                
-                string = [NSString stringWithFormat:@"%f,", [_dataArray[i]doubleValue]];
-                parsingString = [string stringByAppendingString:string];
-            }
-            //integer
             else if ([_dataArray[i] isKindOfClass:[NSNumber class]]) {
-                string = [NSString stringWithFormat:@"%i,", [_dataArray[i]intValue]];
-                parsingString = [string stringByAppendingString:string];
-            }
+                //double
+                if ((strcmp([_dataArray[i] objCType], @encode(double)) == 0)) {
+                    string = [NSString stringWithFormat:@"€%.2f,", [_dataArray[i]doubleValue]];
+                    parsingString = (NSMutableString *)[parsingString stringByAppendingString:string];
+                }
+                //integer
+                else if ((strcmp([_dataArray[i] objCType], @encode(int)) == 0)) {
+                    string = [NSString stringWithFormat:@"%i,", [_dataArray[i]intValue]];
+                    parsingString = (NSMutableString *)[parsingString stringByAppendingString:string];
+                }
+            }//else if close
+            
             finalString = parsingString;
         }
         
-        DLog(@"finalString: %@", finalString);
+        DLog(@"finalString: %@", finalString);//works except for number issue
+        
+        //test building xml for csv file
+//        NSString *XML= [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE en-note SYSTEM \"http://xml.evernote.com/pub/enml2.dtd\">\n<en-note>%@",finalString];
+        
+        
     }
-    return nil;
+    return finalString;
 }
 
 #pragma mark - MFMailCompose delegate callbacks

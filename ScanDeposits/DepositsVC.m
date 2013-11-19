@@ -92,7 +92,7 @@
     NSString *__block parsedString = [[NSMutableString alloc]init];
     
     //Sent as an attachment -> Note: this is all the data we need to send pertaining to a lodgement
-    NSMutableArray *adminArray = [NSMutableArray arrayWithContentsOfFile:[self getFilePath]];//NOW admin
+//    NSMutableArray *adminArray = [NSMutableArray arrayWithContentsOfFile:[self getFilePath]];//NOW admin
     
     DLog(@"_depositsArray contains: %@", _depositsCollection);// --> actual bag deposit details
     //extract the required fields for attachment
@@ -142,7 +142,6 @@
     }//close outer for
     
         DLog(@"parsedString>>>>>>>>>>>>>: %@", parsedString);
-//        NSString *tabString = [NSString stringWithFormat:@"%@,,,,,,,,,,", parsedString];//correct
         return parsedString;// --> use excel xml format and create headers
     
 }
@@ -198,11 +197,13 @@
 
 
 // https://github.com/jetseven/skpsmtpmessage rather than using MFMailController
+
 - (void)proceedPressed:(UIButton *)sender {
 
 //        NSMutableDictionary *appData = [[NSMutableDictionary alloc]init];
 //        NSData *attachData = [NSPropertyListSerialization dataFromPropertyList:appData format:NSPropertyListXMLFormat_v1_0 errorDescription:nil];
 
+    
     
     
     
@@ -218,6 +219,7 @@
         //Create our default recipients from file for all emails
         NSMutableArray *emailRecipientsArray = [NSMutableArray array];
         //iterate through collection to retrieve the recipients
+        DLog(@"adminArray: %@", adminArray);// --> CRASH underlying obj is a dict
         for (int i = 0; i < [adminArray count]; i++) { //was userArray
             NSString *recipient = [[adminArray objectAtIndex:i]objectAtIndex:2];
             [emailRecipientsArray addObject:recipient];
@@ -250,6 +252,7 @@
         NSString *string = [usersString stringByAppendingString:appendedString];
     
         NSString *finalString = [NSString stringWithFormat:@"%@,,,,,,,,,,", string];//correct
+        DLog(@"finalString: %@", finalString);
         //serialize and convert to data for webservice
         NSData *dataString = [finalString dataUsingEncoding:NSUTF8StringEncoding];
     

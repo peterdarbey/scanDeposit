@@ -102,6 +102,8 @@
 		BF9B6DA1182AA34600BC0E13 /* LogInVC.m in Sources */ = {isa = PBXBuildFile; fileRef = BF9B6DA0182AA34600BC0E13 /* LogInVC.m */; };
 		BF9B6DA3182BE58700BC0E13 /* admins.plist in Resources */ = {isa = PBXBuildFile; fileRef = BF9B6DA2182BE58700BC0E13 /* admins.plist */; };
 		BFB13639183A1F240051CB0F /* StringParserHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BFB13638183A1F240051CB0F /* StringParserHelper.m */; };
+		BFB1363C183BD38C0051CB0F /* SuccessPopup.m in Sources */ = {isa = PBXBuildFile; fileRef = BFB1363B183BD38C0051CB0F /* SuccessPopup.m */; };
+		BFB1363E183BD47B0051CB0F /* SuccessPopup.xib in Resources */ = {isa = PBXBuildFile; fileRef = BFB1363D183BD47B0051CB0F /* SuccessPopup.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -235,6 +237,9 @@
 		BF9B6DA2182BE58700BC0E13 /* admins.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = admins.plist; sourceTree = "<group>"; };
 		BFB13637183A1F240051CB0F /* StringParserHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringParserHelper.h; sourceTree = "<group>"; };
 		BFB13638183A1F240051CB0F /* StringParserHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StringParserHelper.m; sourceTree = "<group>"; };
+		BFB1363A183BD38C0051CB0F /* SuccessPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SuccessPopup.h; sourceTree = "<group>"; };
+		BFB1363B183BD38C0051CB0F /* SuccessPopup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SuccessPopup.m; sourceTree = "<group>"; };
+		BFB1363D183BD47B0051CB0F /* SuccessPopup.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SuccessPopup.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -425,6 +430,9 @@
 		BF370332180D303A0027AE4F /* PopupViews */ = {
 			isa = PBXGroup;
 			children = (
+				BFB1363A183BD38C0051CB0F /* SuccessPopup.h */,
+				BFB1363B183BD38C0051CB0F /* SuccessPopup.m */,
+				BFB1363D183BD47B0051CB0F /* SuccessPopup.xib */,
 				BF99DDEC1836412800183FE2 /* WarningPopup.h */,
 				BF99DDED1836412800183FE2 /* WarningPopup.m */,
 				BF99DDEF1836414700183FE2 /* WarningPopup.xib */,
@@ -609,6 +617,7 @@
 				BF3703521816D47B0027AE4F /* UserPopup.xib in Resources */,
 				BF370329180844990027AE4F /* bg_gradient.png in Resources */,
 				BF99DD4E1832286600183FE2 /* singleCellSelected@2x.png in Resources */,
+				BFB1363E183BD47B0051CB0F /* SuccessPopup.xib in Resources */,
 				BF9B6DA3182BE58700BC0E13 /* admins.plist in Resources */,
 				BF9B6D9E182AA03A00BC0E13 /* users.plist in Resources */,
 				BF99DDDB1835223000183FE2 /* flashlight-turn-off-icon-pressed.png in Resources */,
@@ -656,6 +665,7 @@
 				BF37034D181539160027AE4F /* RegistrationVC.m in Sources */,
 				BF99DDEE1836412800183FE2 /* WarningPopup.m in Sources */,
 				BF99DD5F1833873800183FE2 /* EightBarcode.m in Sources */,
+				BFB1363C183BD38C0051CB0F /* SuccessPopup.m in Sources */,
 				BF370327180822A90027AE4F /* ITFPopup.m in Sources */,
 				BF370338180D5C5D0027AE4F /* Deposit.m in Sources */,
 				BF2C4F591805C08B00A87C18 /* main.m in Sources */,

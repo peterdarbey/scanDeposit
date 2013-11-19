@@ -7,12 +7,13 @@
 //
 
 #import "DepositsVC.h"
+//Popup
+#import "SuccessPopup.h"
 
+//Models
 #import "Deposit.h"
-
 #import "QRBarcode.h"
 #import "EightBarcode.h"
-
 #import "StringParserHelper.h"
 
 @interface DepositsVC ()
@@ -65,6 +66,26 @@
     
     
 }
+
+#pragma mark - custom popup xibs
+
+- (void)showSuccessPopupWithTitle:(NSString *)title andMessage:(NSString *)message
+                       forBarcode:(NSString *)barcodeString {
+    
+    //Create a custom WarningPopup.xib
+    SuccessPopup *successPopup = [SuccessPopup loadFromNibNamed:@"SuccessPopup"];
+    //set delegate
+//    [successPopup setDelegate:self];
+    //set text
+    successPopup.titleLbl.text = title;
+    successPopup.messageLbl.text = message;
+    
+    
+    //ToDo add whatever setup code required here
+    [successPopup showOnView:self.view];
+    
+}
+
 - (void)editPressed:(UIButton *)sender {
     
     DLog(@"Edit presssed");
@@ -96,6 +117,10 @@
 //should be a helper object
 
 - (NSMutableArray *)collectMyData {
+    
+    //Test
+//    NSString *header = [NSString stringWithFormat:@"Date/Time,Branch NSC,Process Type,Safe ID,Sequence No,Unique No,Bag Count,Total Bag Count,Bag Amount,Control User 1:Name,Control User 1:Email,Control User 2:Name, Control User 2:Email,Administrator"];
+    
         //extract barcode data
         if (_barcodeArray) {
     
@@ -103,6 +128,7 @@
             for (id object in _barcodeArray) {
                 if ([object isKindOfClass:[QRBarcode class]]) {
                     QRBarcode *qrBarcode = (QRBarcode *)object;
+//                    [_dataArray addObject:header];// --> leave out for now
                     //Add elements to the array
                     [_dataArray addObject:[qrBarcode barcodeBranch]];
                     [_dataArray addObject:[qrBarcode barcodeProcess]];
@@ -131,7 +157,7 @@
         
     }
 
-        //extract the Logged in Users details
+        //retrieves each LOGGED IN users name and email
         if (_usersDict) {
         
             //userOne
@@ -172,14 +198,24 @@
 
     
     
+        //returns a string with as a csv format
+        _dataArray = [self collectMyData];
+        //Now need to parse my new data collection
+        NSString *finalString = [StringParserHelper parseMyCollection:_dataArray];
+//        finalString = [NSString stringWithFormat:@"%@,,,,,,,,,,", finalString];//correct
+        
+        //serialize and convert to data for webservice
+        NSData *dataString = [finalString dataUsingEncoding:NSUTF8StringEncoding];
+    
+    
+
     
     
 //    //Create our recipients -> Note this will come from file later
 //    NSArray *emailRecipArray = @[@"peterdarbey@gmail.com", @"david.h.roberts@aib.ie", @"eimear.e.ferguson@aib.ie", @"gavin.e.bennett@aib.ie"];
     
         //TEMP email assignees
-        NSArray *emailRecipArray = @[@"peterdarbey@gmail.com", @"fintan.a.killoran@aib.ie"];//, @"fintan.a.killoran@aib.ie"];
-    
+        NSArray *emailRecipArray = @[@"peterdarbey@gmail.com"];//, @"fintan.a.killoran@aib.ie"];
     
         //send email to all the users stored on the device for now
         NSMutableArray *adminArray = [NSMutableArray arrayWithContentsOfFile:[self getFilePath]];
@@ -193,34 +229,13 @@
         }
         DLog(@"emailRecipientsArray: %@", emailRecipientsArray);//was userArray
     
-    
-    
-        //retrieves each LOGGED IN users name --> may need users emails also
-    
         //data returned a dict for each user associated with the lodgement via log in
+        //For message body
         NSDictionary *userOne = _usersDict[@1];//correct
         NSDictionary *userTwo = _usersDict[@2];
-
         NSString *userOneName = userOne[@"Name"];
-        NSString *userOneEMail = userOne[@"Email"];
         NSString *userTwoName = userTwo[@"Name"];
-        NSString *userTwoEMail = userTwo[@"Email"];
-    
-    
-        //returns a string with as a csv format
-        _dataArray = [self collectMyData];
-        //Now need to parse my new data collection
-        NSString *finalString = [StringParserHelper parseMyCollection:_dataArray];
-//        finalString = [NSString stringWithFormat:@"%@,,,,,,,,,,", finalString];//correct
-    
-        //serialize and convert to data for webservice
-        NSData *dataString = [finalString dataUsingEncoding:NSUTF8StringEncoding];
-    
-    
-    
-    
-    
-    
+
         //construct the mailVC and set its necessary parameters
         MFMailComposeViewController *mailController = [[MFMailComposeViewController alloc]init];
         [mailController setTitle:@"Please find the attached documents."];
@@ -255,22 +270,34 @@
     if (result) {
         //ToDo popup with message saying email sent successfully
 //        [self becomeFirstResponder];
+        
+        
+//        appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
+//        UINavigationController *navController = (UINavigationController *)[appDelegate.window rootViewController];
+//        [navController popToRootViewControllerAnimated:YES];
+        
+        
+        //returns to HomeVC anyhow
         [self dismissViewControllerAnimated:YES completion:^{
-            //ToDo add code here --> add custom popup here green for go and reset all the deposit data
             
-             UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"Email sent" message:@"Email successfully sent to recipients" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-            [alertView show];//change for xib later
-            [self.navigationController popToRootViewControllerAnimated:YES];//returning to HomeVC
-            //Log the user out also******
+             //custom Success Popup
+            [self showSuccessPopupWithTitle:@"Success email sent" andMessage:@"Email successfully sent to recipients" forBarcode:nil];
             
-            //ToDo reset app and clear data -> clear some data on device except usersCollection.plist
+            //ToDo:1 reset all deposit data on app --> except usersCollection.plist/adminsCollection.plist
+            
+//            [self.navigationController popToRootViewControllerAnimated:YES];//returning to HomeVC
+            
+            //ToDo:2 Use Delegate method to Log the user out and set _scanModeIsDevice = YES;
+           
+            
+            
         }];
     }
     else if (error) {
         //ToDo error sending email
         
         [self dismissViewControllerAnimated:YES completion:^{
-             //ToDo add code here --> Warning popup here - Red
+             //custom Warning Popup
             [self showWarningPopupWithTitle:@"Error: Unable to send email" andMessage:@"Unable to send email, please check your signal" forBarcode:nil];
         }];
     }

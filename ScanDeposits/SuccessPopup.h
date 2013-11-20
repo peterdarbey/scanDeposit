@@ -15,13 +15,6 @@
 
 @end
 
-//@protocol PresentRootViewDelegate <NSObject>
-//
-//- (void)presentHomeVC;
-//
-//@end
-
-
 @interface SuccessPopup : UIView
 {
     
@@ -33,8 +26,6 @@
 
 //custom delegate
 @property (weak, nonatomic) id <ResetAndPresentDelegate> delegate;
-
-//@property (weak, nonatomic) id <PresentRootViewDelegate> delegate;
 
 @property (strong, nonatomic) IBOutlet UILabel *titleLbl;
 @property (strong, nonatomic) IBOutlet UILabel *messageLbl;

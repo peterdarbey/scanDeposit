@@ -62,6 +62,7 @@
             //Log the user out and reset --> moved to SuccessPopup --> called
             if ([self.delegate respondsToSelector:@selector(resetDataAndPresentLogInVC)]) {
                 [self.delegate performSelector:@selector(resetDataAndPresentLogInVC)];
+//                [self.navigationController popToRootViewControllerAnimated:YES];
             }
             
         }//close if

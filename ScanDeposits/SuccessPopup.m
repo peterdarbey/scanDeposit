@@ -57,15 +57,14 @@
     } completion:^(BOOL finished) {
         [_backgroundView removeFromSuperview];
         
-        //only executed if user presses ok
-        
-//        if (_confirmed) {
-//            
-//            if ([self.delegate respondsToSelector:@selector(resumeScanning)]) {
-//                [self.delegate performSelector:@selector(resumeScanning)];
-//            }//close if
-//            
-//        }//close if
+        if (_confirmed) {
+
+            //Log the user out and reset --> moved to SuccessPopup --> called
+            if ([self.delegate respondsToSelector:@selector(resetDataAndPresentLogInVC)]) {
+                [self.delegate performSelector:@selector(resetDataAndPresentLogInVC)];
+            }
+            
+        }//close if
         
     }];
     

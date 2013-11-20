@@ -13,21 +13,14 @@
 #import "AppDelegate.h"
 #import "WarningPopup.h"
 //#import "HomeVC.h"
-@class HomeVC;
+@class HomeVC;//
 
 #define BAG_AMOUNT_TF 200
 #define BAG_AMOUNT 250
 #define BAG_NO_LBL 150
 
-@class Deposit;
+//@class Deposit;
 
-@class DepositsVC;
-
-@protocol ResetAndPresentDelegate <NSObject>
-
-- (void)resetDataAndPresentLogInVC;
-
-@end
 
 @interface DepositsVC : UIViewController <UITableViewDataSource, UITableViewDelegate,MFMailComposeViewControllerDelegate>
 {
@@ -35,8 +28,7 @@
     AppDelegate *appDelegate;
     UIButton *proceedBtn;
 }
-//custom delegate 
-@property (weak, nonatomic) id <ResetAndPresentDelegate> delegate;
+
 
 @property (strong, nonatomic) IBOutlet UITableView *depositsTV;
 @property (strong, nonatomic) NSMutableArray *depositsCollection;

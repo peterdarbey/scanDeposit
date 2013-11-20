@@ -7,6 +7,7 @@
 //
 
 #import "HomeVC.h"
+#import "DepositsVC.h"
 
 //models
 #import "Deposit.h"
@@ -55,7 +56,7 @@
     _isUser = NO;
     
     //set the picker into scan mode again
-    [picker startScanning];
+    [picker startScanning];//not yet
 }
 
 #pragma mark - Custom delegate method for LoginVC
@@ -158,7 +159,8 @@
             depositsVC.depositsCollection = _depositsArray;//bag/deposit data
             depositsVC.barcodeArray = _barcodeArray;//pass all barcode data to deposits
             //set delegate here
-            [depositsVC setDelegate:self];
+//            [depositsVC setDelegate:self];
+            
             
             
             //package off logged in users/admins data
@@ -401,7 +403,7 @@
         if (!_isAdmin && _isUser) {
             
             //user has Logged in so now dismiss LogInVC
-            DLog(@"User delegate protocol did dismiss LogInVC");
+//            DLog(@"User delegate protocol did dismiss LogInVC");
             //and present HomeVC to allow scanning by user
             DLog(@"Proceed and scan away");
         }

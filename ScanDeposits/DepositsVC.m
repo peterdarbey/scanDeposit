@@ -7,6 +7,8 @@
 //
 
 #import "DepositsVC.h"
+#import "HomeVC.h"//
+
 //Popup
 #import "SuccessPopup.h"
 
@@ -74,6 +76,14 @@
     SuccessPopup *successPopup = [SuccessPopup loadFromNibNamed:@"SuccessPopup"];
     //set delegate
 //    [successPopup setDelegate:self];
+    
+    for (UIViewController *viewController in self.navigationController.viewControllers) {
+        if ([viewController isKindOfClass:[HomeVC class]]) {
+            HomeVC *homeVC = (HomeVC *)viewController;
+            [successPopup setDelegate:homeVC];
+        }
+    }
+    
     //set text
     successPopup.titleLbl.text = title;
     successPopup.messageLbl.text = message;
@@ -276,19 +286,20 @@
         [self dismissViewControllerAnimated:YES completion:nil];
         
         //custom Success Popup may add a pause here
-        [self showSuccessPopupWithTitle:@"Success email sent" andMessage:@"Email successfully sent to recipients" forBarcode:nil];
+        [self showSuccessPopupWithTitle:@"Success email sent" andMessage:@"Email successfully sent to recipients" forBarcode:nil];//put in completion block above
         
-        //Log the user out and reset
-        if ([self.delegate respondsToSelector:@selector(resetDataAndPresentLogInVC)]) {
-            [self.delegate performSelector:@selector(resetDataAndPresentLogInVC)];
-        }
+//        //Log the user out and reset --> moved to SuccessPopup
+//        if ([self.delegate respondsToSelector:@selector(resetDataAndPresentLogInVC)]) {
+//            [self.delegate performSelector:@selector(resetDataAndPresentLogInVC)];
+//        }
+        
         //add delay to view message
-        double delayInSeconds = 2.0;
-        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-            //return to HomeVC
-            [self.navigationController popToRootViewControllerAnimated:YES];
-        });
+//        double delayInSeconds = 2.0;//wont need
+//        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+//        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+//            //return to HomeVC
+//            [self.navigationController popToRootViewControllerAnimated:YES];
+//        });
         
     }//close if
     

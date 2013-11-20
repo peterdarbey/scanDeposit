@@ -937,6 +937,11 @@
     //        NSMutableDictionary *appData = [[NSMutableDictionary alloc]init];
     //        NSData *attachData = [NSPropertyListSerialization dataFromPropertyList:appData format:NSPropertyListXMLFormat_v1_0 errorDescription:nil];
     
+    //        [mailController addAttachmentData:csvData
+    //                                 mimeType:@"text/csv" //@"application/pdf" or text/plain or @"mime"
+    //                                 fileName:@"usersCollection.plist"];//@"CSVFile.csv" -> works as plist fileName
+
+    
 }
 
 @end

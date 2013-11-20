@@ -7,7 +7,6 @@
 //
 
 #import "HomeVC.h"
-#import "DepositsVC.h"
 
 //models
 #import "Deposit.h"
@@ -41,6 +40,23 @@
 @end
 
 @implementation HomeVC
+
+#pragma mark - Custom delegate method for DepositsVC
+- (void)resetDataAndPresentLogInVC {
+    
+    DLog(@"Delegate method called to reset and present LoginVC");//called
+    
+    //ToDo:1 reset all deposit data on app --> except usersCollection.plist/adminsCollection.plist
+    
+    //QR required first before scanning bags commences
+    _scanModeIsQR = YES;
+    //reset isAdmin
+    _isAdmin = NO;
+    _isUser = NO;
+    
+    //set the picker into scan mode again
+    [picker startScanning];
+}
 
 #pragma mark - Custom delegate method for LoginVC
 - (void)dismissLoginVC:(NSMutableDictionary *)users isAdmin:(NSNumber *)admin {
@@ -141,7 +157,8 @@
             depositsVC.title = NSLocalizedString(@"Deposits", @"Deposits View");
             depositsVC.depositsCollection = _depositsArray;//bag/deposit data
             depositsVC.barcodeArray = _barcodeArray;//pass all barcode data to deposits
-            
+            //set delegate here
+            [depositsVC setDelegate:self];
             
             
             //package off logged in users/admins data
@@ -403,13 +420,15 @@
             //Once setup complete Always present LogInVC for all users/admins if not already LOGGED IN
             //Added delay to presentation of LogInVC in method below until HomeVC has appeared first
             
+            //disable scanBtn
+            [scanDeviceBtn setEnabled:NO];
+            
             double delayInSeconds = 0.75;
             dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
             dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
                 //added additional delay here as its required by dismissal event on Logout press but dont want in method below
                 [self presentLogInVC];//needs this duration
-                //disable scanBtn
-                [scanDeviceBtn setEnabled:NO];
+                
             });
         }
         

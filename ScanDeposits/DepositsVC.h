@@ -9,6 +9,11 @@
 #import <UIKit/UIKit.h>
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
+//local
+#import "AppDelegate.h"
+#import "WarningPopup.h"
+//#import "HomeVC.h"
+@class HomeVC;
 
 #define BAG_AMOUNT_TF 200
 #define BAG_AMOUNT 250
@@ -16,8 +21,13 @@
 
 @class Deposit;
 
-#import "AppDelegate.h"
-#import "WarningPopup.h"
+@class DepositsVC;
+
+@protocol ResetAndPresentDelegate <NSObject>
+
+- (void)resetDataAndPresentLogInVC;
+
+@end
 
 @interface DepositsVC : UIViewController <UITableViewDataSource, UITableViewDelegate,MFMailComposeViewControllerDelegate>
 {
@@ -25,6 +35,8 @@
     AppDelegate *appDelegate;
     UIButton *proceedBtn;
 }
+//custom delegate 
+@property (weak, nonatomic) id <ResetAndPresentDelegate> delegate;
 
 @property (strong, nonatomic) IBOutlet UITableView *depositsTV;
 @property (strong, nonatomic) NSMutableArray *depositsCollection;
@@ -33,13 +45,10 @@
 
 @property (strong, nonatomic) NSMutableDictionary *usersDict;
 @property (strong, nonatomic) NSMutableDictionary *adminsDict;
-//QRBarcode model can be added to the DepositVC straight away as its a 1 of scan
+//collection of all the data for attachment
 @property (strong, nonatomic) NSMutableArray *dataArray;
 
 @property (strong, nonatomic) NSMutableArray *barcodeArray;
 
-
-
-//@property int depositCount;
 
 @end

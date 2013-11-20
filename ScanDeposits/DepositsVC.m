@@ -18,11 +18,9 @@
 
 @interface DepositsVC ()
 {
-//    Deposit *deposit;
+
 }
 
-//private collection member
-//@property (strong, nonatomic) NSMutableArray *depositsArray;
 
 @end
 
@@ -174,12 +172,12 @@
     
     //Also need Administrators after --> use the adminsCollection.plist for this data
     NSMutableArray *adminArray = [NSMutableArray arrayWithContentsOfFile:[self getFilePath]];
-    DLog(@"adminArray: %@", adminArray);
+//    DLog(@"adminArray: %@", adminArray);
 
         if (adminArray) {
             for (int i = 0; i < [adminArray count]; i++) {
                 NSString *adminName = [[adminArray objectAtIndex:i]objectAtIndex:0];//name
-                [_dataArray addObject:adminName];//just name
+                [_dataArray addObject:adminName];
             }
         }//close if
     
@@ -195,6 +193,7 @@
 
 //        NSMutableDictionary *appData = [[NSMutableDictionary alloc]init];
 //        NSData *attachData = [NSPropertyListSerialization dataFromPropertyList:appData format:NSPropertyListXMLFormat_v1_0 errorDescription:nil];
+    
 
     
     
@@ -222,16 +221,15 @@
         //Create our default recipients from file for all emails
         NSMutableArray *emailRecipientsArray = [NSMutableArray array];
         //iterate through collection to retrieve the recipients
-        DLog(@"adminArray: %@", adminArray);// --> CRASH underlying obj is a dict
-        for (int i = 0; i < [adminArray count]; i++) { //was userArray
+        DLog(@"adminArray: %@", adminArray);
+        for (int i = 0; i < [adminArray count]; i++) {
             NSString *recipient = [[adminArray objectAtIndex:i]objectAtIndex:1];//now email
             [emailRecipientsArray addObject:recipient];
         }
-        DLog(@"emailRecipientsArray: %@", emailRecipientsArray);//was userArray
     
         //data returned a dict for each user associated with the lodgement via log in
         //For message body
-        NSDictionary *userOne = _usersDict[@1];//correct
+        NSDictionary *userOne = _usersDict[@1];
         NSDictionary *userTwo = _usersDict[@2];
         NSString *userOneName = userOne[@"Name"];
         NSString *userTwoName = userTwo[@"Name"];
@@ -241,25 +239,29 @@
         [mailController setTitle:@"Please find the attached documents."];
         [mailController setSubject:NSLocalizedString(@"Device Manager Report + Date/time ->Process", @"Device Manager Report")];
         [mailController setCcRecipients:emailRecipArray];
-        [mailController setToRecipients:emailRecipArray];//currently me
+        [mailController setToRecipients:emailRecipArray];//currently me will be --> emailRecipientsArray
         [mailController setMailComposeDelegate:self];
     
         //Email container settings
-        NSArray *contentArray = @[@"<number of bags>", @"<value of bags>"];
+//        NSArray *contentArray = @[@"<number of bags>", @"<value of bags>"];
+        NSArray *contentArray = @[@([Deposit totalBagCount]), @([Deposit totalBagsAmount])];
+    
         //disclaimer content
         NSString *disclaimerString = @"IMPORTANT - IF THE ABOVE CONFIRMATION IS IN ANY WAY INACCURATE, YOU SHOULD IMMEDIATELY ADVISE YOUR BRANCH MANAGER / HRQMO. OTHERWISE, YOU ARE CONFIRMING THAT YOU WERE A CONTROL USER AS DESCRIBED ABOVE AND THAT THE CONTENTS OF THIS CONFIRMING MAIL ARE ACCURATE.";
+        //for message body
+        QRBarcode *qrBarcode;
+        if ([_barcodeArray[0] isKindOfClass:[QRBarcode class]]) {
+            qrBarcode = _barcodeArray[0];
+        }
+    
         //Inline with draft
-        [mailController setMessageBody:[NSString stringWithFormat:@"This mail is your copy of the record that you\n <Control User 1: %@> and <Control User 2: %@> together opened and record the following contents of the <process> taken from <Safe ID> on <date><time>.\n\nContent Summary\n%@\n\n\n\n%@", userOneName, userTwoName, contentArray, disclaimerString] isHTML:NO];
+        [mailController setMessageBody:[NSString stringWithFormat:@"This mail is your copy of the record that you\n <Control User 1: %@> and <Control User 2: %@> together opened and record the following contents of the <process: %@> taken from <Safe ID: %i> on <date><time: %@>.\n\nContent Summary\n%@\n\n\n\n%@", userOneName, userTwoName, [qrBarcode barcodeProcess], [qrBarcode barcodeSafeID], [NSDate date],contentArray, disclaimerString] isHTML:NO];
+    
         //add attachment to email
-        [mailController addAttachmentData:dataString mimeType:@"text/csv" fileName:@"testData.csv"];//text/xml for plist content
+        [mailController addAttachmentData:dataString mimeType:@"text/csv" fileName:@"mailData.csv"];//text/xml for plist content
         //present the mail composer
         [self presentViewController:mailController animated:YES completion:nil];
     
-    
-//        [mailController addAttachmentData:csvData
-//                                 mimeType:@"text/csv" //@"application/pdf" or text/plain or @"mime"
-//                                 fileName:@"usersCollection.plist"];//@"CSVFile.csv" -> works as plist fileName
-   
 }
 
 
@@ -268,37 +270,35 @@
 - (void)mailComposeController:(MFMailComposeViewController*)mailController didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error
 {
     if (result) {
-        //ToDo popup with message saying email sent successfully
 //        [self becomeFirstResponder];
         
+        //dismiss mailComposer
+        [self dismissViewControllerAnimated:YES completion:nil];
         
-//        appDelegate = (AppDelegate *)[[UIApplication sharedApplication]delegate];
-//        UINavigationController *navController = (UINavigationController *)[appDelegate.window rootViewController];
-//        [navController popToRootViewControllerAnimated:YES];
+        //custom Success Popup may add a pause here
+        [self showSuccessPopupWithTitle:@"Success email sent" andMessage:@"Email successfully sent to recipients" forBarcode:nil];
         
+        //Log the user out and reset
+        if ([self.delegate respondsToSelector:@selector(resetDataAndPresentLogInVC)]) {
+            [self.delegate performSelector:@selector(resetDataAndPresentLogInVC)];
+        }
+        //add delay to view message
+        double delayInSeconds = 2.0;
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+            //return to HomeVC
+            [self.navigationController popToRootViewControllerAnimated:YES];
+        });
         
-        //returns to HomeVC anyhow
-        [self dismissViewControllerAnimated:YES completion:^{
-            
-             //custom Success Popup
-            [self showSuccessPopupWithTitle:@"Success email sent" andMessage:@"Email successfully sent to recipients" forBarcode:nil];
-            
-            //ToDo:1 reset all deposit data on app --> except usersCollection.plist/adminsCollection.plist
-            
-//            [self.navigationController popToRootViewControllerAnimated:YES];//returning to HomeVC
-            
-            //ToDo:2 Use Delegate method to Log the user out and set _scanModeIsDevice = YES;
-           
-            
-            
-        }];
-    }
+    }//close if
+    
     else if (error) {
         //ToDo error sending email
         
         [self dismissViewControllerAnimated:YES completion:^{
              //custom Warning Popup
             [self showWarningPopupWithTitle:@"Error: Unable to send email" andMessage:@"Unable to send email, please check your signal" forBarcode:nil];
+            //ToDo decide where to go from here if it fails can we send again
         }];
     }
     

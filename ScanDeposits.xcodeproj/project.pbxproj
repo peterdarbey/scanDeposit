@@ -104,6 +104,8 @@
 		BFB13639183A1F240051CB0F /* StringParserHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BFB13638183A1F240051CB0F /* StringParserHelper.m */; };
 		BFB1363C183BD38C0051CB0F /* SuccessPopup.m in Sources */ = {isa = PBXBuildFile; fileRef = BFB1363B183BD38C0051CB0F /* SuccessPopup.m */; };
 		BFB1363E183BD47B0051CB0F /* SuccessPopup.xib in Resources */ = {isa = PBXBuildFile; fileRef = BFB1363D183BD47B0051CB0F /* SuccessPopup.xib */; };
+		BFB13642183CF8AF0051CB0F /* SuccessPopupVC.m in Sources */ = {isa = PBXBuildFile; fileRef = BFB13640183CF8AF0051CB0F /* SuccessPopupVC.m */; };
+		BFB13643183CF8AF0051CB0F /* SuccessPopupVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = BFB13641183CF8AF0051CB0F /* SuccessPopupVC.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -240,6 +242,9 @@
 		BFB1363A183BD38C0051CB0F /* SuccessPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SuccessPopup.h; sourceTree = "<group>"; };
 		BFB1363B183BD38C0051CB0F /* SuccessPopup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SuccessPopup.m; sourceTree = "<group>"; };
 		BFB1363D183BD47B0051CB0F /* SuccessPopup.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SuccessPopup.xib; sourceTree = "<group>"; };
+		BFB1363F183CF8AF0051CB0F /* SuccessPopupVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SuccessPopupVC.h; sourceTree = "<group>"; };
+		BFB13640183CF8AF0051CB0F /* SuccessPopupVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SuccessPopupVC.m; sourceTree = "<group>"; };
+		BFB13641183CF8AF0051CB0F /* SuccessPopupVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SuccessPopupVC.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -433,6 +438,9 @@
 				BFB1363A183BD38C0051CB0F /* SuccessPopup.h */,
 				BFB1363B183BD38C0051CB0F /* SuccessPopup.m */,
 				BFB1363D183BD47B0051CB0F /* SuccessPopup.xib */,
+				BFB1363F183CF8AF0051CB0F /* SuccessPopupVC.h */,
+				BFB13640183CF8AF0051CB0F /* SuccessPopupVC.m */,
+				BFB13641183CF8AF0051CB0F /* SuccessPopupVC.xib */,
 				BF99DDEC1836412800183FE2 /* WarningPopup.h */,
 				BF99DDED1836412800183FE2 /* WarningPopup.m */,
 				BF99DDEF1836414700183FE2 /* WarningPopup.xib */,
@@ -572,6 +580,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BF370346180EAEF10027AE4F /* Icon.png in Resources */,
+				BFB13643183CF8AF0051CB0F /* SuccessPopupVC.xib in Resources */,
 				BF99DDE11835223000183FE2 /* flashlight-turn-on-icon.png in Resources */,
 				BF2C4FD01806FEB100A87C18 /* bluebuttonSelected.png in Resources */,
 				BF99DD4C1832286600183FE2 /* singleCell@2x.png in Resources */,
@@ -649,6 +658,7 @@
 			files = (
 				BF37033B180D5C820027AE4F /* Bag.m in Sources */,
 				BF2C4F861805C0E000A87C18 /* HomeVC.mm in Sources */,
+				BFB13642183CF8AF0051CB0F /* SuccessPopupVC.m in Sources */,
 				BF370350181674820027AE4F /* UserVC.m in Sources */,
 				BFB13639183A1F240051CB0F /* StringParserHelper.m in Sources */,
 				BF2C4FC41806C96400A87C18 /* Barcode.m in Sources */,

@@ -9,6 +9,8 @@
 #import "DepositsVC.h"
 #import "HomeVC.h"//
 
+#import "SuccessPopupVC.h"
+
 //Popup
 #import "SuccessPopup.h"
 
@@ -88,7 +90,7 @@
     successPopup.titleLbl.text = title;
     successPopup.messageLbl.text = message;
     
-    
+   
     //ToDo add whatever setup code required here
     [successPopup showOnView:self.view];
     
@@ -286,7 +288,12 @@
         [self dismissViewControllerAnimated:YES completion:nil];
         
         //custom Success Popup may add a pause here
-        [self showSuccessPopupWithTitle:@"Success email sent" andMessage:@"Email successfully sent to recipients" forBarcode:nil];//put in completion block above
+//        [self showSuccessPopupWithTitle:@"Success email sent" andMessage:@"Email successfully sent to recipients" forBarcode:nil];//put in completion block above
+        
+        SuccessPopupVC *successVC = [[SuccessPopupVC alloc]initWithNibName:@"SuccessPopupVC" bundle:nil];
+        DLog(@"SuccessPopupVC: %@", successVC);
+        [successVC showOnView:self.view];//test
+        
         
 //        //Log the user out and reset --> moved to SuccessPopup
 //        if ([self.delegate respondsToSelector:@selector(resetDataAndPresentLogInVC)]) {

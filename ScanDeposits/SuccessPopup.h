@@ -15,7 +15,7 @@
 
 @end
 
-@interface SuccessPopup : UIView
+@interface SuccessPopup : UIViewController
 {
     
 }
@@ -29,6 +29,7 @@
 
 @property (strong, nonatomic) IBOutlet UILabel *titleLbl;
 @property (strong, nonatomic) IBOutlet UILabel *messageLbl;
+@property (strong, nonatomic) IBOutlet UIView *bckGrdView;
 
 @property (strong, nonatomic) IBOutlet UIButton *okBtn;
 

@@ -21,7 +21,6 @@
     
 }
 
--(IBAction)okPressed:(UIButton *)sender;
 
 - (void)showOnView:(UIView*)view;
 
@@ -36,7 +35,6 @@
 @property (strong, nonatomic) IBOutlet UIView *bckGrdView;
 
 @property (strong, nonatomic) IBOutlet UIButton *okBtn;
-
 
 
 @property BOOL confirmed;

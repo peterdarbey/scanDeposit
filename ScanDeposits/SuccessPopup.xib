@@ -33,11 +33,11 @@
                             <color key="shadowColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                             <size key="shadowOffset" width="0.0" height="1"/>
                         </label>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="deB-Ts-tE8">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="v0s-h7-ZT6">
                             <rect key="frame" x="20" y="120" width="220" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                            <state key="normal" title="OK">
+                            <state key="normal" title="Button">
                                 <color key="titleColor" red="0.19607843137254902" green="0.30980392156862746" blue="0.52156862745098043" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
@@ -48,10 +48,10 @@
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <connections>
-                <outlet property="bckGrdView" destination="iii-qk-btX" id="hKU-06-1WV"/>
                 <outlet property="messageLbl" destination="Qqh-5g-cJP" id="ajF-vc-lrC"/>
+                <outlet property="okBtn" destination="v0s-h7-ZT6" id="wdh-Ar-iUI"/>
                 <outlet property="titleLbl" destination="ted-YO-NaF" id="rUE-yS-deC"/>
-                <outlet property="view" destination="iii-qk-btX" id="Dmy-d8-dj3"/>
+                <outlet property="view" destination="iii-qk-btX" id="6qw-G6-zKc"/>
             </connections>
         </view>
     </objects>

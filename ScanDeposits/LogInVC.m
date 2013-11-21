@@ -392,9 +392,9 @@
        
         adminLbl.textAlignment = NSTextAlignmentLeft;
         adminLbl.font = [UIFont fontWithName:@"Arial-BoldMT" size:17];
-        adminLbl.textColor = [UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0];//darkGray
-        
-        adminLbl.shadowColor = [UIColor grayColor];
+//        adminLbl.textColor = [UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0];//darkGray
+        [adminLbl setTextColor:[UIColor whiteColor]];
+        adminLbl.shadowColor = [UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0];//darkGray
         adminLbl.shadowOffset = CGSizeMake(1.0, 1.0);
         adminLbl.backgroundColor = [UIColor clearColor];
         [adminLbl setUserInteractionEnabled:NO];
@@ -414,8 +414,8 @@
         //
         adminLbl.textAlignment = NSTextAlignmentLeft;
         adminLbl.font = [UIFont fontWithName:@"Arial-BoldMT" size:17];
-        adminLbl.textColor = [UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0];//darkGray
-        adminLbl.shadowColor = [UIColor grayColor];
+        adminLbl.textColor = [UIColor whiteColor];//darkGray
+        adminLbl.shadowColor = [UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0];//darkGray
         adminLbl.shadowOffset = CGSizeMake(1.0, 1.0);
         adminLbl.backgroundColor = [UIColor clearColor];
         [adminLbl setUserInteractionEnabled:NO];

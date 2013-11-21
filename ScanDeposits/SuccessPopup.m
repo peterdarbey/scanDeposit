@@ -32,7 +32,7 @@
     return self;
 }
 
-- (void)okPressed:(UIButton *)sender {
+-(void)okPressed:(UIButton *)sender {
     
     _confirmed = YES;
     
@@ -83,15 +83,10 @@
     [_backgroundView setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:0.0]];
     DLog(@"_bckGrView in setupView: %@", _bckGrdView);//correct --> (0, 0, 260, 175) self.view is the _bckGrdView
     
-//    [self createButton];
-    
 //    //Button styling
     [self buttonStyle:self.okBtn WithImgName:@"blueButton.png" imgSelectedName:@"blueButtonSelected.png" withTitle:@"OK"];
-    [self.okBtn addTarget:self action:@selector(okPressed:) forControlEvents:UIControlEventTouchUpInside];
+//    [self.okBtn addTarget:self action:@selector(okPressed:) forControlEvents:UIControlEventTouchUpInside];
    
-    DLog(@"_okButton: %@", _okBtn);//(20, 120, 220, 44) --> looks wrong
-   
-    
 }
 
 

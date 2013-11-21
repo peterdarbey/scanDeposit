@@ -59,16 +59,6 @@
     
 }
 
-//- (void)createButton {
-//    
-//    myBtn = [[UIButton alloc]initWithFrame:CGRectMake(20, 125, 220, 44)];
-//    [myBtn setEnabled:YES];
-//    [self buttonStyle:myBtn WithImgName:@"blueButton.png" imgSelectedName:@"blueButtonSelected.png" withTitle:@"OK"];
-//    [myBtn addTarget:self action:@selector(okPressed:) forControlEvents:UIControlEventTouchUpInside];
-//    [_bckGrdView addSubview:myBtn];
-//    
-//}
-
 + (SuccessPopup *)loadFromNibNamed:(NSString*)nibName {
     NSArray *xib = [[NSBundle mainBundle] loadNibNamed:nibName owner:self options:nil];
     SuccessPopup *view = [xib objectAtIndex:0];
@@ -117,7 +107,6 @@
     self.view.layer.borderWidth = 1.0;
    
     [view addSubview:_backgroundView];
-//    [self.view addSubview:self.okBtn];//try this
     [_backgroundView addSubview:self.view];//Add self to _backgroundView --> (30, 156.5, 260, 175);correct
     
     

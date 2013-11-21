@@ -21,7 +21,7 @@
     
 }
 
--(void)okPressed:(UIButton *)sender;
+-(IBAction)okPressed:(UIButton *)sender;
 
 - (void)showOnView:(UIView*)view;
 

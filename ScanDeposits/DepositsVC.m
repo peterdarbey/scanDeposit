@@ -74,7 +74,7 @@
 - (void)showSuccessPopupWithTitle:(NSString *)title andMessage:(NSString *)message
                        forBarcode:(NSString *)barcodeString {
     
-    //Create a custom WarningPopup.xib
+    //Create a custom SuccessPopup.xib
     SuccessPopup *successPopup = [SuccessPopup loadFromNibNamed:@"SuccessPopup"];
     //set delegate
 //    [successPopup setDelegate:self];
@@ -82,7 +82,7 @@
     for (UIViewController *viewController in self.navigationController.viewControllers) {
         if ([viewController isKindOfClass:[HomeVC class]]) {
             HomeVC *homeVC = (HomeVC *)viewController;
-            [successPopup setDelegate:homeVC];
+            [successPopup setDelegate:homeVC];//sets here
         }
     }
     
@@ -284,15 +284,24 @@
     if (result) {
 //        [self becomeFirstResponder];
         
-        //dismiss mailComposer
+//        //dismiss mailComposer
         [self dismissViewControllerAnimated:YES completion:nil];
         
-        //custom Success Popup may add a pause here
-//        [self showSuccessPopupWithTitle:@"Success email sent" andMessage:@"Email successfully sent to recipients" forBarcode:nil];//put in completion block above
+        double delayInSeconds = 0.5;
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+            
+            //custom Success Popup may add a pause here
+            [self showSuccessPopupWithTitle:@"Success email sent" andMessage:@"Email successfully sent to recipients" forBarcode:nil];//put in completion block above
+        });
         
-        SuccessPopupVC *successVC = [[SuccessPopupVC alloc]initWithNibName:@"SuccessPopupVC" bundle:nil];
-        DLog(@"SuccessPopupVC: %@", successVC);
-        [successVC showOnView:self.view];//test
+        
+        
+        
+        
+//        SuccessPopupVC *successVC = [[SuccessPopupVC alloc]initWithNibName:@"SuccessPopupVC" bundle:nil];
+//        DLog(@"SuccessPopupVC: %@", successVC);
+//        [successVC showOnView:self.view];//test
         
         
 //        //Log the user out and reset --> moved to SuccessPopup

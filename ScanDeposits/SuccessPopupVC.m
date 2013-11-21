@@ -45,48 +45,31 @@
     //Button styling
     [self buttonStyle:_okBtn WithImgName:@"blueButton.png" imgSelectedName:@"blueButtonSelected.png" withTitle:@"OK"];
     [_okBtn addTarget:self action:@selector(okPressed:) forControlEvents:UIControlEventTouchUpInside];
-    
-    
-//    self.view = _bckGrView;
+    [_bckGrView addSubview:_okBtn];
     
     //Create semi-transparent background
     _backgroundView = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [_backgroundView setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:0.0]];
-    DLog(@"_backgroundView: %@", _backgroundView);//correct
-    
     
     _bckGrView.transform = CGAffineTransformMakeScale(0.5f, 0.5f);
-//    CGPoint offset = CGPointMake(view.center.x, view.center.y -22);
     DLog(@"offsetX: %f and Y: %f", offset.x, offset.y);//(160, 252)
-    //    self.center = view.center;//pass picker.view.center to view
     _bckGrView.center = offset;
     _bckGrView.layer.cornerRadius = 5.0;
     _bckGrView.layer.borderColor = [UIColor whiteColor].CGColor;
     _bckGrView.layer.borderWidth = 1.5;
-
-    [_bckGrView addSubview:_okBtn];
     
-    
-//    self.view = _bckGrView;
     [_backgroundView addSubview:_bckGrView];
     self.view = _backgroundView;
-    DLog(@"_bckGrView: %@", _bckGrView);//correct --> (0, 0, 260, 175);
+    DLog(@"_bckGrView in setupView: %@", _bckGrView);//correct --> (0, 0, 260, 175); (95, 208.25, 130, 87.5);
 
 }
 
 - (void)showOnView:(UIView*)view {
 //    [self setupView];
-    
-//    _bckGrView.transform = CGAffineTransformMakeScale(0.5f, 0.5f);
         offset = CGPointMake(view.center.x, view.center.y -22);
-//    DLog(@"offsetX: %f and Y: %f", offset.x, offset.y);//(160, 252)
-////    self.center = view.center;//pass picker.view.center to view
-//    _bckGrView.center = offset;
-//    _bckGrView.layer.cornerRadius = 5.0;
-//    _bckGrView.layer.borderColor = [UIColor whiteColor].CGColor;
-//    _bckGrView.layer.borderWidth = 1.5;
-    
-    [view addSubview:self.view];//Need to add self to background --> this calls viewDidLoad method when its added to view hierarchy
+        
+    //calls viewDidLoad when added to the view hierarchy
+    [view addSubview:self.view];//Add self to the DepositsVC view hierarchy
     
     [UIView animateWithDuration:0.2
                      animations:^{
@@ -101,8 +84,8 @@
 
 - (void)okPressed:(UIButton *)sender {
     
-//    _confirmed = YES;
-//    
+    _confirmed = YES;
+
 //    [self dismissPopupAndResumeScanning];
 }
 
@@ -110,7 +93,7 @@
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    
 }
 
 //Button styling

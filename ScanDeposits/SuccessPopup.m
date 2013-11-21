@@ -10,48 +10,26 @@
 
 @interface SuccessPopup ()
 {
-    
+//    CGPoint offset;
+    UIButton *myBtn;
 }
 
 //Private
 @property(nonatomic,strong) UIView *backgroundView;
 
+
 @end
 
 @implementation SuccessPopup
 
-//- (id)initWithFrame:(CGRect)frame
-//{
-//    self = [super initWithFrame:frame];
-//    if (self) {
-//        // Initialization code
-//    }
-//    return self;
-//}
 
--(void)setupView {
-    
-    
-    //Button styling
-    [self buttonStyle:_okBtn WithImgName:@"blueButton.png" imgSelectedName:@"blueButtonSelected.png" withTitle:@"OK"];
-    [_okBtn addTarget:self action:@selector(okPressed:) forControlEvents:UIControlEventTouchUpInside];
-    
-    [_bckGrdView addSubview:_okBtn];
-    self.view = _bckGrdView;
-    
-
-    //Create semi-transparent background
-    _backgroundView = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    [_backgroundView setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:0.0]];
-    
-    
-//    [self.view addSubview:_backgroundView];
-//    [self.view sendSubviewToBack:_backgroundView];
-    
-//    [self.view addSubview:_okBtn];
-    
-
-    
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        // Custom initialization
+    }
+    return self;
 }
 
 - (void)okPressed:(UIButton *)sender {
@@ -64,16 +42,15 @@
 -(void)dismissPopupAndResumeScanning {
     
     [UIView animateWithDuration:0.3 animations:^{
-//        _backgroundView.alpha = 0.0;
-          self.view.alpha = 0.0;
+        _backgroundView.alpha = 0.0;
     } completion:^(BOOL finished) {
         [_backgroundView removeFromSuperview];
         
         if (_confirmed) {
-
+            DLog(@"self.delegate: %@", self.delegate);
             //Log the user out and reset --> moved to SuccessPopup --> called
             if ([self.delegate respondsToSelector:@selector(resetDataAndPresentLogInVC)]) {
-                [self.delegate performSelector:@selector(resetDataAndPresentLogInVC)];
+                [self.delegate performSelector:@selector(resetDataAndPresentLogInVC)];//doesnt respond to delegate
             }
             [self.navigationController popToRootViewControllerAnimated:YES];//add delay perhaps
         }//close if
@@ -82,11 +59,81 @@
     
 }
 
+//- (void)createButton {
+//    
+//    myBtn = [[UIButton alloc]initWithFrame:CGRectMake(20, 125, 220, 44)];
+//    [myBtn setEnabled:YES];
+//    [self buttonStyle:myBtn WithImgName:@"blueButton.png" imgSelectedName:@"blueButtonSelected.png" withTitle:@"OK"];
+//    [myBtn addTarget:self action:@selector(okPressed:) forControlEvents:UIControlEventTouchUpInside];
+//    [_bckGrdView addSubview:myBtn];
+//    
+//}
+
 + (SuccessPopup *)loadFromNibNamed:(NSString*)nibName {
     NSArray *xib = [[NSBundle mainBundle] loadNibNamed:nibName owner:self options:nil];
     SuccessPopup *view = [xib objectAtIndex:0];
     return view;
 }
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    // Do any additional setup after loading the view from its nib.
+    
+    DLog(@"viewDidLoad");
+    
+    [self setupView];
+    
+}
+
+-(void)setupView {
+    
+    //Create semi-transparent background
+    _backgroundView = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    [_backgroundView setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:0.0]];
+    DLog(@"_bckGrView in setupView: %@", _bckGrdView);//correct --> (0, 0, 260, 175) self.view is the _bckGrdView
+    
+//    [self createButton];
+    
+//    //Button styling
+    [self buttonStyle:self.okBtn WithImgName:@"blueButton.png" imgSelectedName:@"blueButtonSelected.png" withTitle:@"OK"];
+    [self.okBtn addTarget:self action:@selector(okPressed:) forControlEvents:UIControlEventTouchUpInside];
+   
+    DLog(@"_okButton: %@", _okBtn);//(20, 120, 220, 44) --> looks wrong
+   
+    
+}
+
+
+- (void)showOnView:(UIView*)view {
+
+    DLog(@"showOnView");
+    
+//    self.view.transform = CGAffineTransformMakeScale(0.5f, 0.5f);
+    CGPoint offset = CGPointMake(view.center.x, view.center.y -10);
+    self.view.center = offset;//correct
+    self.view.layer.cornerRadius = 5.0;
+    self.view.layer.borderColor = [UIColor blackColor].CGColor;
+    self.view.layer.borderWidth = 1.0;
+   
+    [view addSubview:_backgroundView];
+//    [self.view addSubview:self.okBtn];//try this
+    [_backgroundView addSubview:self.view];//Add self to _backgroundView --> (30, 156.5, 260, 175);correct
+    
+    
+    
+    [UIView animateWithDuration:0.2
+                     animations:^{
+                         [_backgroundView setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:0.5]];
+                         self.view.transform = CGAffineTransformMakeScale(1.1f, 1.1f);
+                     } completion:^(BOOL finished) {
+                         [UIView animateWithDuration:0.1 animations:^{
+                             self.view.transform = CGAffineTransformMakeScale(1.0f, 1.0f);
+                         }];
+                     }];
+    
+}
+
 
 //Button styling
 - (void)buttonStyle:(UIButton *)button WithImgName:(NSString *)imgName imgSelectedName:(NSString *)selectedName withTitle:(NSString *)title
@@ -99,34 +146,6 @@
     [button setTitle:title forState:UIControlStateNormal];
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     
-}
-
-- (void)showOnView:(UIView*)view {
-    [self setupView];
-    
-    self.view.transform = CGAffineTransformMakeScale(0.5f, 0.5f);
-    CGPoint offset = CGPointMake(view.center.x, view.center.y -22);//nav bar
-    //    self.center = view.center;//pass picker.view.center to view
-    self.view.center = offset;
-    self.view.layer.cornerRadius = 5.0;
-    self.view.layer.borderColor = [UIColor whiteColor].CGColor;
-    self.view.layer.borderWidth = 1.5;
-    
-
-
-//    [_backgroundView addSubview:self.view];//Need to add self to background
-    
-    
-    
-    [UIView animateWithDuration:0.2
-                     animations:^{
-                         [self.view setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:0.5]];
-                         self.view.transform = CGAffineTransformMakeScale(1.1f, 1.1f);
-                     } completion:^(BOOL finished) {
-                         [UIView animateWithDuration:0.1 animations:^{
-                             self.view.transform = CGAffineTransformMakeScale(1.0f, 1.0f);
-                         }];
-                     }];
 }
 
 @end

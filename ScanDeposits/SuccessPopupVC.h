@@ -13,16 +13,18 @@
     
 }
 
-@property (strong, nonatomic) IBOutlet UIView *bckGrView;
-
-@property (strong, nonatomic) IBOutlet UILabel *titleLbl;
-
-@property (strong, nonatomic) IBOutlet UIButton *okBtn;
 
 
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil;
 -(void)setupView;
 - (void)showOnView:(UIView*)view;
+
+
+@property (strong, nonatomic) IBOutlet UIView *bckGrView;
+@property (strong, nonatomic) IBOutlet UILabel *titleLbl;
+@property (strong, nonatomic) IBOutlet UIButton *okBtn;
+@property BOOL confirmed;
+
 
 @end

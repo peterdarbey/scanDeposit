@@ -7,10 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SuccessPopupVC">
             <connections>
-                <outlet property="bckGrView" destination="BRY-KS-3Zc" id="oJC-2T-nrt"/>
-                <outlet property="okBtn" destination="fPb-ps-cT6" id="syd-oG-giF"/>
-                <outlet property="titleLbl" destination="iOl-GL-ClZ" id="DsG-pF-vew"/>
-                <outlet property="view" destination="BRY-KS-3Zc" id="RTd-x5-zl4"/>
+                <outlet property="bckGrView" destination="1" id="kdF-2E-0lp"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -23,7 +20,7 @@
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="fPb-ps-cT6">
-                            <rect key="frame" x="20" y="126" width="220" height="44"/>
+                            <rect key="frame" x="20" y="117" width="220" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                             <state key="normal" title="OK">

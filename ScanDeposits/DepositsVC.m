@@ -75,12 +75,9 @@
                        forBarcode:(NSString *)barcodeString {
     
     //Create a custom SuccessPopup.xib
-    //Now gobal which resloved the issue
+    //Now gobal which resolved the issue
     successPopup = [SuccessPopup loadFromNibNamed:@"SuccessPopup"];
     
-    //set delegate
-//    [successPopup setDelegate:self];
-  
     for (UIViewController *viewController in self.navigationController.viewControllers) {
         if ([viewController isKindOfClass:[HomeVC class]]) {
             HomeVC *homeVC = (HomeVC *)viewController;
@@ -288,7 +285,7 @@
 //        //dismiss mailComposer
         [self dismissViewControllerAnimated:YES completion:nil];
         
-        double delayInSeconds = 0.75;
+        double delayInSeconds = 1.0;
         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
         dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
             

@@ -54,22 +54,18 @@
             DLog(@"self.delegate: %@", self.delegate);// --> HomeVC
             //Log the user out and reset --> moved to SuccessPopup --> called
             if ([self.delegate respondsToSelector:@selector(resetDataAndPresentLogInVC)]) {
-                [self.delegate performSelector:@selector(resetDataAndPresentLogInVC)];//calls
-                DLog(@"Print");
+                [self.delegate performSelector:@selector(resetDataAndPresentLogInVC)];//called
+//                [self.navigationController popToRootViewControllerAnimated:YES];
             }
-            [self.navigationController popToRootViewControllerAnimated:YES];//add delay perhaps
         }//close if
+        
         
     }];
     
 }
 
 + (SuccessPopup *)loadFromNibNamed:(NSString*)nibName {
-    /*
-    NSArray *xib = [[NSBundle mainBundle] loadNibNamed:nibName owner:self options:nil];
-    SuccessPopup *view = [xib objectAtIndex:0];
-    return view;
-     */
+    
     return [[SuccessPopup alloc] initWithNibName:nibName bundle:nil];//@"SuccessPopup"
 }
 
@@ -77,8 +73,6 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    
-    DLog(@"viewDidLoad");
     
     [self setupView];
     
@@ -90,7 +84,7 @@
     _backgroundView = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [_backgroundView setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:0.0]];
     
-//    //Button styling
+    //Button styling
     [self buttonStyle:self.okayBtn WithImgName:@"blueButton.png" imgSelectedName:@"blueButtonSelected.png" withTitle:@"OK"];
     
    [self.okayBtn addTarget:self action:@selector(okPressed:) forControlEvents:UIControlEventTouchUpInside];

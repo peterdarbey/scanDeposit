@@ -576,10 +576,7 @@
         
         DLog(@"barcodeType: %@", barcodeType);//QR - correct if execution enters here we have a valid QR for app
         
-        _scanModeIsQR = NO; // --> NOTE BOOL to say scanned QR already
-        
-        
-//        barcode = [self parseQRBarcodeFromString:barcodeString];//Note: replaced by helper
+        _scanModeIsQR = NO; // --> NOTE flag to say scanned QR already
         
         //parses a barcode string and creates a dictionary
         barcode = [StringParserHelper parseQRBarcodeFromString:barcodeString];// --> changed to class Helper method

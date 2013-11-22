@@ -571,6 +571,17 @@
     //declare the dictionary to hold the parsed dict model object
     NSDictionary *__block barcode;
     
+    int minCount = 12;
+    //no point in continuing if the barcode is only partially scanned
+    if ([barcodeString length] < minCount) {
+        
+        NSString *title = @"Warning: unrecognised QR code!";
+        NSString *message = @"Perhaps only parially scanned try again!";
+        [self showWarningPopupWithTitle:title andMessage:message forBarcode:barcodeString];
+        [picker stopScanning];
+    }
+    else
+    {
     //if in QR scan mode, its a QR and a valid bank QR code
     if (_scanModeIsQR && [barcodeType isEqualToString:@"QR"] && [barcodeString hasPrefix:@"Branch NSC"]) {
         
@@ -588,7 +599,6 @@
             [_barcodeArray addObject:_qrBarcode];
         
          [picker stopScanning];
-//        [picker setItfEnabled:YES];
         
         //present the QR popup
         [self showQRPopup:barcodeString];
@@ -675,6 +685,8 @@
         NSString *message = @"Please scan another item";
         [self showWarningPopupWithTitle:title andMessage:message forBarcode:barcodeString];
     }
+        
+    }//close outer barcode length check
 
 }
 

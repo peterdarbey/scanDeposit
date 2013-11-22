@@ -168,5 +168,9 @@
 //    
 //}//close if
 
+//        +(void)showAlertFromNibName:(NSString*)nibName OnView:(UIView*)view {
+//            [[AlertTableView loadFromNibNamed:nibName] showOnView:view];
+//        }
+
 
 @end

@@ -942,6 +942,26 @@
     //                                 fileName:@"usersCollection.plist"];//@"CSVFile.csv" -> works as plist fileName
 
     
+    
+    //        SuccessPopupVC *successVC = [[SuccessPopupVC alloc]initWithNibName:@"SuccessPopupVC" bundle:nil];
+    //        DLog(@"SuccessPopupVC: %@", successVC);
+    //        [successVC showOnView:self.view];//test
+    
+    
+    //        //Log the user out and reset --> moved to SuccessPopup
+    //        if ([self.delegate respondsToSelector:@selector(resetDataAndPresentLogInVC)]) {
+    //            [self.delegate performSelector:@selector(resetDataAndPresentLogInVC)];
+    //        }
+    
+    //add delay to view message
+    //        double delayInSeconds = 2.0;//wont need
+    //        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    //        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+    //            //return to HomeVC
+    //            [self.navigationController popToRootViewControllerAnimated:YES];
+    //        });
+
+    
 }
 
 @end

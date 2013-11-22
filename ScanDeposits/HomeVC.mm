@@ -43,7 +43,8 @@
 @implementation HomeVC
 
 #pragma mark - Custom delegate method for DepositsVC
-- (void)resetDataAndPresentLogInVC {
+//- (void)resetDataAndPresentLogInVC {
+- (void)resetDataAndPresentWithFlag:(NSNumber *)shouldDismiss {
     
     DLog(@"Delegate method called to reset and present LoginVC");//called
     
@@ -54,6 +55,9 @@
     //reset isAdmin
     _isAdmin = NO;
     _isUser = NO;
+    
+    //test
+    _shouldDismiss = shouldDismiss.boolValue;
     
     //set the picker into scan mode again
     [picker startScanning];//not yet
@@ -160,8 +164,6 @@
             depositsVC.barcodeArray = _barcodeArray;//pass all barcode data to deposits
             //set delegate here
 //            [depositsVC setDelegate:self];
-            
-            
             
             //package off logged in users/admins data
             if (_validUsersDict) {
@@ -281,18 +283,26 @@
     [self buttonStyle:scanDeviceBtn WithImgName:@"blueButton.png" imgSelectedName:@"bluebuttonSelected.png" withTitle:@"Scan Device Barcode"];
 //    scanBtn.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:18.0];
     scanDeviceBtn.titleLabel.font = [UIFont systemFontOfSize:17.0];
-    [scanDeviceBtn setFrame:CGRectMake(20, self.view.frame.size.height -60, 280, 44)];
+    [scanDeviceBtn setFrame:CGRectMake(20, self.view.frame.size.height -124, 280, 44)];
     [scanDeviceBtn addTarget:self action:@selector(scanBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
     //see condition below
 //    [self.view addSubview:scanDeviceBtn];
     
     //Construct new scan device button for BAG -> 128
     scanBagBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self buttonStyle:scanBagBtn WithImgName:@"greenButton.png" imgSelectedName:@"greenbuttonSelected.png" withTitle:@"Scan Bag Barcode"];
+    [self buttonStyle:scanBagBtn WithImgName:@"blueButton.png" imgSelectedName:@"bluebuttonSelected.png" withTitle:@"Scan Bag Barcode"];
     scanBagBtn.titleLabel.font = [UIFont systemFontOfSize:17.0];
-    [scanBagBtn setFrame:CGRectMake(20, self.view.frame.size.height -60, 280, 44)];
+    [scanBagBtn setFrame:CGRectMake(20, self.view.frame.size.height -124, 280, 44)];
     [scanBagBtn addTarget:self action:@selector(scanBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
     
+    //construct a logOut button
+    logOutBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self buttonStyle:logOutBtn WithImgName:@"greenButton.png" imgSelectedName:@"greenbuttonSelected.png" withTitle:@"LOGOUT"];
+    logOutBtn.titleLabel.font = [UIFont systemFontOfSize:17.0];
+    [logOutBtn setFrame:CGRectMake(20, self.view.frame.size.height -60, 280, 44)];
+    [logOutBtn addTarget:self action:@selector(logOutPressed:) forControlEvents:UIControlEventTouchUpInside];
+    //add to viewHierarchy
+    [self.view addSubview:logOutBtn];
     
     /*if the admin setup is completed then RegisrationVC (Users not included in that BOOL) has 
      occurred so only show the RegisrationVC when admin has logged in so always show LogInVC
@@ -309,6 +319,19 @@
     
     [self.view addSubview:aibImgV];
     
+}
+//test
+- (void)logOutPressed:(UIButton *)sender {
+    
+    DLog(@"LogOutPressed");
+    _isLoggedOut = YES;
+    _isAdmin = NO;
+    _isUser = NO;
+    _scanModeIsQR = YES;
+    //dont need to do any of that the LogInVC dismiss will call viewWillAppear again
+    
+    //present LogInVC as viewWillAppear is not called here on button press
+    [self presentLogInVC];//test
 }
 
 - (void)presentLogInVC {
@@ -416,6 +439,12 @@
                 [self presentRegistrationVC];//correct
             
         }//close else if
+        //only occurs when the successPopup is dismissed by user on email success
+        else if (_shouldDismiss) {
+            //reset to NO
+            _shouldDismiss = NO;
+            [self presentLogInVC];
+        }
 
         else
         {
@@ -572,11 +601,11 @@
     NSDictionary *__block barcode;
     
     int minCount = 12;
-    //no point in continuing if the barcode is only partially scanned
+    //no point in continuing if the barcode is only partially scanned --> works
     if ([barcodeString length] < minCount) {
         
-        NSString *title = @"Warning: unrecognised QR code!";
-        NSString *message = @"Perhaps only parially scanned try again!";
+        NSString *title = @"Warning: Unrecognised barcode!";
+        NSString *message = @"Only partially scanned try again";
         [self showWarningPopupWithTitle:title andMessage:message forBarcode:barcodeString];
         [picker stopScanning];
     }

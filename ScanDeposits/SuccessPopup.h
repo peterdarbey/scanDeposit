@@ -12,9 +12,11 @@
 
 @protocol ResetAndPresentDelegate <NSObject>
 
-- (void)resetDataAndPresentLogInVC;
+//- (void)resetDataAndPresentLogInVC;
+- (void)resetDataAndPresentWithFlag:(NSNumber *)shouldDismiss;
 
 @end
+
 
 @interface SuccessPopup : UIViewController
 {

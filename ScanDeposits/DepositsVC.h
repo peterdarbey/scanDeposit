@@ -13,6 +13,9 @@
 #import "AppDelegate.h"
 #import "WarningPopup.h"
 //#import "HomeVC.h"
+
+#import "SuccessPopup.h"
+
 @class HomeVC;//
 
 #define BAG_AMOUNT_TF 200
@@ -41,6 +44,8 @@
 @property (strong, nonatomic) NSMutableArray *dataArray;
 
 @property (strong, nonatomic) NSMutableArray *barcodeArray;
+
+//@property BOOL shouldDismiss;
 
 
 @end

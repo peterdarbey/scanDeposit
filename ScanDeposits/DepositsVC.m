@@ -9,10 +9,9 @@
 #import "DepositsVC.h"
 #import "HomeVC.h"//
 
-#import "SuccessPopupVC.h"
 
 //Popup
-#import "SuccessPopup.h"
+//#import "SuccessPopup.h"
 
 //Models
 #import "Deposit.h"
@@ -65,6 +64,13 @@
     _dataArray = [NSMutableArray array];
     
     
+    //Moved here from viewWillAppear
+    //if we can email enable the proceed button
+    if([MFMailComposeViewController canSendMail]) {
+        
+        [proceedBtn setEnabled:YES];
+    }
+
     
     
 }
@@ -105,13 +111,14 @@
     //Refresh data when required
 //    [_depositsTV reloadData];
     
-    //if we can email enable the proceed button
-    if([MFMailComposeViewController canSendMail]) {
-        
-        [proceedBtn setEnabled:YES];
-    }
-    
+//    //if we can email enable the proceed button
+//    if([MFMailComposeViewController canSendMail]) {
+//        
+//        [proceedBtn setEnabled:YES];
+//    }
+
 }
+
 - (NSString *)getFilePath
 {
     NSString *documentsDirectoryPath = [NSSearchPathForDirectoriesInDomains( NSDocumentDirectory,
@@ -281,6 +288,8 @@
 {
     if (result) {
 //        [self becomeFirstResponder];
+        //disable the send email button on succces
+        [proceedBtn setEnabled:NO];
         
 //        //dismiss mailComposer
         [self dismissViewControllerAnimated:YES completion:nil];
@@ -288,35 +297,19 @@
         double delayInSeconds = 1.0;
         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
         dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-            
-            //custom Success Popup may add a pause here
+//
+//            //custom Success Popup may add a pause here
             [self showSuccessPopupWithTitle:@"Success email sent" andMessage:@"Email successfully sent to recipients" forBarcode:nil];//put in completion block above
         });
         
-//        +(void)showAlertFromNibName:(NSString*)nibName OnView:(UIView*)view {
-//            [[AlertTableView loadFromNibNamed:nibName] showOnView:view];
-//        }
-        
-        
-        
-//        SuccessPopupVC *successVC = [[SuccessPopupVC alloc]initWithNibName:@"SuccessPopupVC" bundle:nil];
-//        DLog(@"SuccessPopupVC: %@", successVC);
-//        [successVC showOnView:self.view];//test
-        
-        
-//        //Log the user out and reset --> moved to SuccessPopup
-//        if ([self.delegate respondsToSelector:@selector(resetDataAndPresentLogInVC)]) {
-//            [self.delegate performSelector:@selector(resetDataAndPresentLogInVC)];
-//        }
-        
-        //add delay to view message
-//        double delayInSeconds = 2.0;//wont need
+//        double delayInSeconds = 2.0;
 //        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
 //        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-//            //return to HomeVC
-//            [self.navigationController popToRootViewControllerAnimated:YES];
+//            [self.navigationController popToRootViewControllerAnimated:YES];//works but delegate doesnt get called as button event doesnt happen on xib
+////            [self showSuccessPopupWithTitle:@"Success email sent" andMessage:@"Email successfully sent to recipients" forBarcode:nil];//put in completion block above
 //        });
         
+                
     }//close if
     
     else if (error) {
@@ -326,6 +319,7 @@
              //custom Warning Popup
             [self showWarningPopupWithTitle:@"Error: Unable to send email" andMessage:@"Unable to send email, please check your signal" forBarcode:nil];
             //ToDo decide where to go from here if it fails can we send again
+            [proceedBtn setEnabled:YES];//maybe
         }];
     }
     

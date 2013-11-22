@@ -40,10 +40,12 @@
     _confirmed = YES;
 
     [self dismissPopupAndResumeScanning];
+
 }
 
 
 -(void)dismissPopupAndResumeScanning {
+    
     
     [UIView animateWithDuration:0.3 animations:^{
         _backgroundView.alpha = 0.0;
@@ -51,23 +53,32 @@
         [_backgroundView removeFromSuperview];
         
         if (_confirmed) {
-            DLog(@"self.delegate: %@", self.delegate);// --> HomeVC
             //Log the user out and reset --> moved to SuccessPopup --> called
-            if ([self.delegate respondsToSelector:@selector(resetDataAndPresentLogInVC)]) {
-                [self.delegate performSelector:@selector(resetDataAndPresentLogInVC)];//called
-//                [self.navigationController popToRootViewControllerAnimated:YES];
+            if ([self.delegate respondsToSelector:@selector(resetDataAndPresentWithFlag:)]) {
+                [self.delegate performSelector:@selector(resetDataAndPresentWithFlag:) withObject:@(YES)];
             }
         }//close if
+        [self.navigationController popToRootViewControllerAnimated:YES];
+        //probably has to be NSNotification here
         
+//        [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
         
     }];
-    
+
 }
+
+//works also
+//+(void)showAlertFromNibName:(NSString*)nibName OnView:(UIView*)view {
+//    
+//    [[SuccessPopup loadFromNibNamed:nibName] showOnView:view];
+//}
 
 + (SuccessPopup *)loadFromNibNamed:(NSString*)nibName {
     
     return [[SuccessPopup alloc] initWithNibName:nibName bundle:nil];//@"SuccessPopup"
+    
 }
+
 
 - (void)viewDidLoad
 {

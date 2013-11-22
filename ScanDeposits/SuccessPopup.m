@@ -32,11 +32,14 @@
     return self;
 }
 
--(void)okPressed:(UIButton *)sender {
+-(id)okPressed:(id)sender {
+    NSLog(@"----");
     
     _confirmed = YES;
     
     [self dismissPopupAndResumeScanning];
+    
+    return sender;
 }
 
 -(void)dismissPopupAndResumeScanning {
@@ -60,9 +63,12 @@
 }
 
 + (SuccessPopup *)loadFromNibNamed:(NSString*)nibName {
+    /*
     NSArray *xib = [[NSBundle mainBundle] loadNibNamed:nibName owner:self options:nil];
     SuccessPopup *view = [xib objectAtIndex:0];
     return view;
+     */
+    return [[SuccessPopup alloc] initWithNibName:@"SuccessPopup" bundle:nil];
 }
 
 - (void)viewDidLoad

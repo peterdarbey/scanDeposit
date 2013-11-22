@@ -85,7 +85,8 @@
     
 //    //Button styling
     [self buttonStyle:self.okBtn WithImgName:@"blueButton.png" imgSelectedName:@"blueButtonSelected.png" withTitle:@"OK"];
-//    [self.okBtn addTarget:self action:@selector(okPressed:) forControlEvents:UIControlEventTouchUpInside];
+    //problem here with the target object causing crash ???
+    [self.okBtn addTarget:self action:@selector(okPressed:) forControlEvents:UIControlEventTouchUpInside];
    
 }
 

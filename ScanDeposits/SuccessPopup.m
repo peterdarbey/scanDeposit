@@ -11,7 +11,7 @@
 @interface SuccessPopup ()
 {
 //    CGPoint offset;
-    UIButton *myBtn;
+   
 }
 
 //Private
@@ -32,15 +32,16 @@
     return self;
 }
 
--(id)okPressed:(id)sender {
-    NSLog(@"----");
+
+- (void)okPressed:(id)sender {
     
+    NSLog(@"okPressed");
+
     _confirmed = YES;
-    
+
     [self dismissPopupAndResumeScanning];
-    
-    return sender;
 }
+
 
 -(void)dismissPopupAndResumeScanning {
     
@@ -50,10 +51,11 @@
         [_backgroundView removeFromSuperview];
         
         if (_confirmed) {
-            DLog(@"self.delegate: %@", self.delegate);
+            DLog(@"self.delegate: %@", self.delegate);// --> HomeVC
             //Log the user out and reset --> moved to SuccessPopup --> called
             if ([self.delegate respondsToSelector:@selector(resetDataAndPresentLogInVC)]) {
-                [self.delegate performSelector:@selector(resetDataAndPresentLogInVC)];//doesnt respond to delegate
+                [self.delegate performSelector:@selector(resetDataAndPresentLogInVC)];//calls
+                DLog(@"Print");
             }
             [self.navigationController popToRootViewControllerAnimated:YES];//add delay perhaps
         }//close if
@@ -68,7 +70,7 @@
     SuccessPopup *view = [xib objectAtIndex:0];
     return view;
      */
-    return [[SuccessPopup alloc] initWithNibName:@"SuccessPopup" bundle:nil];
+    return [[SuccessPopup alloc] initWithNibName:nibName bundle:nil];//@"SuccessPopup"
 }
 
 - (void)viewDidLoad
@@ -87,32 +89,27 @@
     //Create semi-transparent background
     _backgroundView = [[UIView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [_backgroundView setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:0.0]];
-    DLog(@"_bckGrView in setupView: %@", _bckGrdView);//correct --> (0, 0, 260, 175) self.view is the _bckGrdView
     
 //    //Button styling
-    [self buttonStyle:self.okBtn WithImgName:@"blueButton.png" imgSelectedName:@"blueButtonSelected.png" withTitle:@"OK"];
-    //problem here with the target object causing crash ???
-    [self.okBtn addTarget:self action:@selector(okPressed:) forControlEvents:UIControlEventTouchUpInside];
+    [self buttonStyle:self.okayBtn WithImgName:@"blueButton.png" imgSelectedName:@"blueButtonSelected.png" withTitle:@"OK"];
+    
+   [self.okayBtn addTarget:self action:@selector(okPressed:) forControlEvents:UIControlEventTouchUpInside];
    
 }
 
-
+//calls viewDidLoad
 - (void)showOnView:(UIView*)view {
-
-    DLog(@"showOnView");
     
 //    self.view.transform = CGAffineTransformMakeScale(0.5f, 0.5f);
     CGPoint offset = CGPointMake(view.center.x, view.center.y -10);
-    self.view.center = offset;//correct
+    self.view.center = offset;
     self.view.layer.cornerRadius = 5.0;
     self.view.layer.borderColor = [UIColor blackColor].CGColor;
     self.view.layer.borderWidth = 1.0;
-   
+   //Add view hierarchy
     [view addSubview:_backgroundView];
-    [_backgroundView addSubview:self.view];//Add self to _backgroundView --> (30, 156.5, 260, 175);correct
-    
-    
-    
+    [_backgroundView addSubview:self.view];
+    //custom anim
     [UIView animateWithDuration:0.2
                      animations:^{
                          [_backgroundView setBackgroundColor:[[UIColor blackColor] colorWithAlphaComponent:0.5]];

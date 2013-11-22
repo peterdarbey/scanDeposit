@@ -22,7 +22,7 @@
 
 @interface DepositsVC ()
 {
-
+    SuccessPopup *successPopup;
 }
 
 
@@ -75,10 +75,12 @@
                        forBarcode:(NSString *)barcodeString {
     
     //Create a custom SuccessPopup.xib
-    SuccessPopup *successPopup = [SuccessPopup loadFromNibNamed:@"SuccessPopup"];
+    //Now gobal which resloved the issue
+    successPopup = [SuccessPopup loadFromNibNamed:@"SuccessPopup"];
+    
     //set delegate
 //    [successPopup setDelegate:self];
-    
+  
     for (UIViewController *viewController in self.navigationController.viewControllers) {
         if ([viewController isKindOfClass:[HomeVC class]]) {
             HomeVC *homeVC = (HomeVC *)viewController;
@@ -89,11 +91,9 @@
     //set text
     successPopup.titleLbl.text = title;
     successPopup.messageLbl.text = message;
-    
    
     //ToDo add whatever setup code required here
     [successPopup showOnView:self.view];
-
     
 }
 

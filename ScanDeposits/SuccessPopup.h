@@ -25,6 +25,7 @@
 - (void)showOnView:(UIView*)view;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil;
+
 + (SuccessPopup *)loadFromNibNamed:(NSString*)nibName;
 
 //custom delegate
@@ -32,10 +33,8 @@
 
 @property (strong, nonatomic) IBOutlet UILabel *titleLbl;
 @property (strong, nonatomic) IBOutlet UILabel *messageLbl;
-@property (strong, nonatomic) IBOutlet UIView *bckGrdView;
 
-@property (strong, nonatomic) IBOutlet UIButton *okBtn;
-
+@property (strong, nonatomic) IBOutlet UIButton *okayBtn;
 
 @property BOOL confirmed;
 

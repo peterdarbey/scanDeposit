@@ -8,7 +8,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SuccessPopup">
             <connections>
                 <outlet property="messageLbl" destination="Qqh-5g-cJP" id="aEI-5M-6Sh"/>
-                <outlet property="okBtn" destination="v0s-h7-ZT6" id="8cN-NU-lc2"/>
+                <outlet property="okayBtn" destination="v0s-h7-ZT6" id="6jh-JU-Ntj"/>
                 <outlet property="titleLbl" destination="ted-YO-NaF" id="oPB-98-U7J"/>
                 <outlet property="view" destination="1" id="MTr-BP-IJ3"/>
             </connections>

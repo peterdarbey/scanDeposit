@@ -438,9 +438,6 @@
 				BFB1363A183BD38C0051CB0F /* SuccessPopup.h */,
 				BFB1363B183BD38C0051CB0F /* SuccessPopup.m */,
 				BFB1363D183BD47B0051CB0F /* SuccessPopup.xib */,
-				BFB1363F183CF8AF0051CB0F /* SuccessPopupVC.h */,
-				BFB13640183CF8AF0051CB0F /* SuccessPopupVC.m */,
-				BFB13641183CF8AF0051CB0F /* SuccessPopupVC.xib */,
 				BF99DDEC1836412800183FE2 /* WarningPopup.h */,
 				BF99DDED1836412800183FE2 /* WarningPopup.m */,
 				BF99DDEF1836414700183FE2 /* WarningPopup.xib */,
@@ -455,6 +452,9 @@
 				BF3703511816D47B0027AE4F /* UserPopup.xib */,
 				BF3703581816E1870027AE4F /* PopupTV.h */,
 				BF3703591816E1880027AE4F /* PopupTV.m */,
+				BFB1363F183CF8AF0051CB0F /* SuccessPopupVC.h */,
+				BFB13640183CF8AF0051CB0F /* SuccessPopupVC.m */,
+				BFB13641183CF8AF0051CB0F /* SuccessPopupVC.xib */,
 			);
 			name = PopupViews;
 			sourceTree = "<group>";

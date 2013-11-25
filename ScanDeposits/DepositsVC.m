@@ -25,6 +25,8 @@
     UIBarButtonItem *editBBtn, *doneBtn;
 }
 
+@property double editedBagAmount;
+@property int editedBagCount;
 
 @end
 
@@ -134,6 +136,11 @@
         //set this first to update the conditional in numberOfSections
         _valueRemoved = YES;
         [_depositsTV deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        
+        //extract the bagAmount and bagtotal in order to subtract from total amount ect..
+        Deposit *tempDeposit = [_depositsCollection objectAtIndex:indexPath.section];
+        _editedBagCount = (int)[tempDeposit bagCount];
+        _editedBagAmount = (double)[tempDeposit bagAmount];
         
         //remove the data from our deposits collection
         [_depositsCollection removeObjectAtIndex:indexPath.section];//works
@@ -443,14 +450,9 @@
         bagLbl.textColor = [UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0];//blue
         bagLbl.shadowColor = [UIColor grayColor];
         bagLbl.shadowOffset = CGSizeMake(1.0, 1.0);
-
-//        [bagLbl setText:[NSString stringWithFormat:@"Total bags: %i", [Deposit totalNumberOfBags]]];
-        DLog(@"BAG COUNT: %i", [Deposit totalBagCount]);
-        
-        [bagLbl setText:[NSString stringWithFormat:@"Total bags: %i",[Deposit totalBagCount]]];
-//        DLog(@"BAG COUNT: %i", appDelegate.totalBagCount);
-        
         [bagLbl setUserInteractionEnabled:NO];
+//        [bagLbl setText:[NSString stringWithFormat:@"Total bags: %i",[Deposit totalBagCount]]];
+        
         //add to view
         [innerView addSubview:bagLbl];
         
@@ -465,7 +467,28 @@
         bagAmountLbl.backgroundColor = [UIColor clearColor];
         [bagAmountLbl setUserInteractionEnabled:NO];
         //retrieve the total bag amount from the class method here
-        [bagAmountLbl setText:[NSString stringWithFormat:@"€%.2f", [Deposit totalBagsAmount]]];
+//        [bagAmountLbl setText:[NSString stringWithFormat:@"€%.2f", [Deposit totalBagsAmount]]];
+        
+        DLog(@"BEORE BAG COUNT: %i", [Deposit totalBagCount]);
+        
+        DLog(@"BEFORE valueChanged: %f", [Deposit totalBagsAmount]);
+        
+        if (_valueRemoved) {
+            //ToDo change the deposit total and bag total
+            [bagAmountLbl setText:[NSString stringWithFormat:@"€%.2f", [Deposit totalBagsAmount] - _editedBagAmount]];
+            [bagLbl setText:[NSString stringWithFormat:@"Total bags: %i",[Deposit totalBagCount] - _editedBagCount]];
+            
+        }
+        else
+        {
+            //retrieve the total bag amount from the class method here
+            [bagAmountLbl setText:[NSString stringWithFormat:@"€%.2f", [Deposit totalBagsAmount]]];
+            [bagLbl setText:[NSString stringWithFormat:@"Total bags: %i",[Deposit totalBagCount]]];
+        }
+       
+        DLog(@"AFTER valueChanged: %f", [Deposit totalBagsAmount]);
+        DLog(@"AFTER BAG COUNT: %i", [Deposit totalBagCount]);
+        
         //add to innerView
         [innerView addSubview:bagAmountLbl];
 

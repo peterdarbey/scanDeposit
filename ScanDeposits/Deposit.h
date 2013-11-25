@@ -14,7 +14,7 @@
     
 }
 
-//@property (nonatomic) double bagAmount;
+@property (nonatomic) double bagAmount;
 
 //class methods
 + (NSInteger)totalBagCount;
@@ -31,7 +31,6 @@
 - (NSString *)bagBarcode;
 - (NSString *)timeStamp;
 
-- (NSInteger)count;
 
 @end
 

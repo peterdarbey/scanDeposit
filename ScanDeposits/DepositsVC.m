@@ -512,26 +512,9 @@
     UILabel *bagAmountLbl;
     UILabel *bagNumberLbl;
     
-    //assign here but not dependent on instance state here so also displayed in view so dont need the specified index
-//        _totalDepositAmount = [Deposit totalBagsAmount];
-   
-    
     //1st time thru cell doesnt exist so create else dequeue
     if (cell == nil) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:myIdentifier];
-        //Construct textField
-//        bagAmountTF = [[UITextField alloc]initWithFrame:CGRectMake(130, cell.bounds.size.height/4, 160, 25)];
-//        bagAmountTF.tag = BAG_AMOUNT_TF;
-//        bagAmountTF.textAlignment = NSTextAlignmentLeft;
-////        bagAmountTF.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
-//        bagAmountTF.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-//        bagAmountTF.font = [UIFont systemFontOfSize:17];
-//        bagAmountTF.textColor = [UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0];//darkGray
-//        [bagAmountTF setUserInteractionEnabled:NO];
-//        
-//        bagAmountTF.backgroundColor = [UIColor redColor];
-
-        
         
         //Construct another label for amount
         bagAmountLbl = [[UILabel alloc]initWithFrame:CGRectMake(210, cell.bounds.size.height/4, 80 , 25)];

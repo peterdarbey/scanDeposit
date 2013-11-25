@@ -136,7 +136,10 @@
         [_depositsTV deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
         
         //remove the data from our deposits collection
-        [_depositsCollection removeObjectAtIndex:indexPath.section];//test this feature
+        [_depositsCollection removeObjectAtIndex:indexPath.section];//works
+        //Once removed here the proceed button will iterate this collection so up to date data intact
+        //ToDo
+        //Update the total bag count and amount in view
        
     }
 }
@@ -516,7 +519,7 @@
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    DLog(@"count in sections: %i", [_depositsCollection count]);//currently 1 on load then 0 right
+    DLog(@"count in sections: %i", [_depositsCollection count]);//1 before update
     return [_depositsCollection count];
 }
 
@@ -524,6 +527,8 @@
     
         //crash because model doesnt have a count method
 //        return [[_depositsCollection objectAtIndex:section]count];//will always be one except on deletion
+    
+    //before _valueRemoved was put first it was calling numOfSects twice as it thought 2 rows so 2 calls to numbOfS
     if (_valueRemoved) {
         return 0;
     }

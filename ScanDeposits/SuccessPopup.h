@@ -22,7 +22,7 @@
 //test
 @protocol NotificationDelegate <NSObject>
 
-- (void)NotificationOfButtonPressed:(NSNotification *)notification;
+- (void)DismissUnderlyingVC;
 
 @end
 

@@ -61,7 +61,7 @@
         _backgroundView.alpha = 0.0;
     } completion:^(BOOL finished) {
         [_backgroundView removeFromSuperview];
-        [self notifiyViewControllerWithNotification:nil];//works
+        [self notifiyViewController];//works
     }];
 
 }
@@ -109,10 +109,11 @@
 
 }
 
-- (void)notifiyViewControllerWithNotification:(NSNotification *)notification {
+- (void)notifiyViewController {
     
-    if ([self.notDelegate respondsToSelector:@selector(NotificationOfButtonPressed:)]) {
-        [self.notDelegate performSelector:@selector(NotificationOfButtonPressed:) withObject:notification];//works
+    //custom delegate method
+    if ([self.notDelegate respondsToSelector:@selector(DismissUnderlyingVC)]) {
+        [self.notDelegate performSelector:@selector(DismissUnderlyingVC)];
         
     }
     

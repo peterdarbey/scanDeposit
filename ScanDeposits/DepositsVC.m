@@ -121,11 +121,12 @@
 
 #pragma mark - Custom delegate method
 //make a delegate method
-- (void)NotificationOfButtonPressed:(NSNotification *)notification {
+- (void)DismissUnderlyingVC {
 
         //dismiss the viewController and logOut
        [self.navigationController popToRootViewControllerAnimated:YES];
     //ToDo reset here perhaps -->wipe deposits etc...
+    
 }
 
 

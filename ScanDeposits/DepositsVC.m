@@ -123,10 +123,29 @@
 //make a delegate method
 - (void)DismissUnderlyingVC {
 
-        //dismiss the viewController and logOut
+        //dismiss the viewController and wipe data
        [self.navigationController popToRootViewControllerAnimated:YES];
-    //ToDo reset here perhaps -->wipe deposits etc...
     
+        //Reset all barcode data, logged in users and the recorded deposits
+        [self wipeAndResetData];
+}
+
+- (void)wipeAndResetData {
+    
+    DLog(@"DepositsCollection: %@", _depositsCollection);
+    //wipe recorded deposits
+    _depositsCollection = nil;
+    
+    DLog(@"_barcodeArray: %@", _barcodeArray);
+    DLog(@"_usersDict: %@", _usersDict);
+    //wipe recorded QR and ITF barcode data
+    _barcodeArray = nil;
+    //wipe recorded logged in users of the app
+    _usersDict = nil;
+    
+    //reset bag data types also
+    _totalDepositAmount = 0.0;
+    _bagCount = 0;
 }
 
 

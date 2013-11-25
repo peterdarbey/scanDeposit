@@ -21,7 +21,8 @@
 
 @interface DepositsVC ()
 {
-    SuccessPopup *successPopup;
+//    SuccessPopup *successPopup;
+    NSNotificationCenter *defaultCenter;
 }
 
 
@@ -80,23 +81,23 @@
 - (void)showSuccessPopupWithTitle:(NSString *)title andMessage:(NSString *)message
                        forBarcode:(NSString *)barcodeString {
     
-    //Create a custom SuccessPopup.xib
-    //Now gobal which resolved the issue
-    successPopup = [SuccessPopup loadFromNibNamed:@"SuccessPopup"];
+//    //Create a custom SuccessPopup.xib
+//    //Now gobal which resolved the issue
+    _successPopup = [SuccessPopup loadFromNibNamed:@"SuccessPopup"];
     
     for (UIViewController *viewController in self.navigationController.viewControllers) {
         if ([viewController isKindOfClass:[HomeVC class]]) {
             HomeVC *homeVC = (HomeVC *)viewController;
-            [successPopup setDelegate:homeVC];//sets here
+            [_successPopup setDelegate:homeVC];//sets here
         }
     }
     
     //set text
-    successPopup.titleLbl.text = title;
-    successPopup.messageLbl.text = message;
+    _successPopup.titleLbl.text = title;
+    _successPopup.messageLbl.text = message;
    
     //ToDo add whatever setup code required here
-    [successPopup showOnView:self.view];
+    [_successPopup showOnView:self.view];
     
 }
 
@@ -105,19 +106,55 @@
     DLog(@"Edit presssed");
 }
 
+//Unregister for notifications
+- (void)viewDidDisappear:(BOOL)animated{
+    //remove observer
+    [defaultCenter removeObserver:self];
+    [super viewDidDisappear:YES];
+}
+
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
-    
-    //Refresh data when required
-//    [_depositsTV reloadData];
     
 //    //if we can email enable the proceed button
 //    if([MFMailComposeViewController canSendMail]) {
 //        
 //        [proceedBtn setEnabled:YES];
 //    }
+    
+    
+    defaultCenter = [NSNotificationCenter defaultCenter];
+    [defaultCenter addObserver:self selector:@selector(popupDismissed:) name:@"okPressed" object:nil];
+    
+    //setup the userInfo dict with the key value we require
+    [self dispatchEventOnTouch];
+    
 
 }
+
+-(void)dispatchEventOnTouch
+{
+    
+    //register the control object and associated key with a notification
+    NSDictionary *userInfo = @{@"okPressed" : _successPopup.okayBtn};//nil currently
+    [defaultCenter postNotificationName: @"okPressed" object:nil userInfo:userInfo];
+    DLog(@"EVENT DISPATCHED");
+}
+#pragma mark - Custom delegate method
+//make a delegate method
+- (void)popupDismissed:(NSNotification *)notification {
+    
+    
+    NSDictionary *userInfo = notification.userInfo;
+    DLog(@"userInfo: %@", userInfo.description);
+    
+    DLog(@"Test this notification: %@", notification.name);
+    if ([notification.name isEqualToString:@"okPressed"]) {
+        DLog(@"Notified");//works
+    }
+    
+}
+
 
 - (NSString *)getFilePath
 {
@@ -301,14 +338,6 @@
 //            //custom Success Popup may add a pause here
             [self showSuccessPopupWithTitle:@"Success email sent" andMessage:@"Email successfully sent to recipients" forBarcode:nil];//put in completion block above
         });
-        
-//        double delayInSeconds = 2.0;
-//        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-//        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-//            [self.navigationController popToRootViewControllerAnimated:YES];//works but delegate doesnt get called as button event doesnt happen on xib
-////            [self showSuccessPopupWithTitle:@"Success email sent" andMessage:@"Email successfully sent to recipients" forBarcode:nil];//put in completion block above
-//        });
-        
                 
     }//close if
     

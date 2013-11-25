@@ -33,6 +33,8 @@
 }
 
 
+- (void)popupDismissed:(NSNotification *)notification;
+
 @property (strong, nonatomic) IBOutlet UITableView *depositsTV;
 @property (strong, nonatomic) NSMutableArray *depositsCollection;
 @property int bagCount;
@@ -46,6 +48,8 @@
 @property (strong, nonatomic) NSMutableArray *barcodeArray;
 
 //@property BOOL shouldDismiss;
+//test
+@property (strong, nonatomic)SuccessPopup *successPopup;
 
 
 @end

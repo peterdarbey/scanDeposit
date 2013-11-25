@@ -657,7 +657,7 @@
         
         //if the collection already has that barcode subString then it has already been scanned
         if ([uniqueBagArray containsObject:uniqueSubString]) { //note -> not stored on device so valid but launch
-            
+            //add conditional for the logout button ie --> _shouldDismiss BOOL
             //Display warning popup and dont allow scanning
             NSString *title = @"Warning this bag has already been scanned";
             NSString *message = @"Please scan a different bag to continue";

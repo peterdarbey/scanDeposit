@@ -99,6 +99,18 @@
     [self buttonStyle:self.okayBtn WithImgName:@"blueButton.png" imgSelectedName:@"blueButtonSelected.png" withTitle:@"OK"];
     
    [self.okayBtn addTarget:self action:@selector(okPressed:) forControlEvents:UIControlEventTouchUpInside];
+    
+    
+    defaultCenter = [NSNotificationCenter defaultCenter];
+    DepositsVC *depositsVC;
+    for (UIViewController *viewController in self.navigationController.viewControllers) {
+        if ([viewController isKindOfClass:[DepositsVC class]]) {
+            depositsVC = (DepositsVC *)viewController;
+        }
+    }
+    
+    [defaultCenter addObserver:depositsVC selector:@selector() name:@"okPressed" object:nil];
+   
    
 }
 

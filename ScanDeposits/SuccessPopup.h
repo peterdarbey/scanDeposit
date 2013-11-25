@@ -8,19 +8,22 @@
 
 #import <UIKit/UIKit.h>
 
+#import "DepositsVC.h"
+
 @class SuccessPopup;
 
 @protocol ResetAndPresentDelegate <NSObject>
 
-//- (void)resetDataAndPresentLogInVC;
 - (void)resetDataAndPresentWithFlag:(NSNumber *)shouldDismiss;
 
 @end
 
 
+
+
 @interface SuccessPopup : UIViewController
 {
-    
+    NSNotificationCenter *defaultCenter;
 }
 
 

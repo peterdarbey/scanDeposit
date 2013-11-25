@@ -17,11 +17,13 @@
 //Private members
 @property (strong, nonatomic) NSString *bagNumber;
 @property (nonatomic)  int bagCount;
-@property (nonatomic)  double bagAmount;
+@property (nonatomic) double bagAmount;
 @property (strong, nonatomic) NSString *bagBarcode;
 @property (strong, nonatomic) NSString *timeStamp;
 
 @property (strong, nonatomic) NSDictionary *internalDict;
+//private
+//- (void)setBagAmount:(double)bagAmount;
 
 @end
 
@@ -94,5 +96,11 @@ static double _totalBagsAmount;
     return _timeStamp;
 }
 
+//- (void)setBagAmount:(double)bagAmount {
+//    _bagAmount = bagAmount;
+//}
+- (NSInteger)count {
+    return _bagCount;
+}
 
 @end

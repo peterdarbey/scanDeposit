@@ -22,6 +22,7 @@
 @interface DepositsVC ()
 {
     SuccessPopup *successPopup;
+    UIBarButtonItem *editBBtn, *doneBtn;
 }
 
 
@@ -54,24 +55,23 @@
     [_depositsTV setBackgroundView:[[UIImageView alloc]initWithImage:
                                                  [UIImage imageNamed:@"Default-568h.png"]]];
     
-    //TODO
     //Add editable code for fields
-    UIBarButtonItem *editBBtn = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editPressed:)];
+    editBBtn = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editPressed:)];
     
-    [self.navigationController.navigationItem setRightBarButtonItem:editBBtn];
+    [self.navigationItem setRightBarButtonItem:editBBtn];
     
     //init our email array
     _dataArray = [NSMutableArray array];
     
+    _valueRemoved = NO;
     
-    //Moved here from viewWillAppear
-    //if we can email enable the proceed button
-    if([MFMailComposeViewController canSendMail]) {
-        
-        [proceedBtn setEnabled:YES];
-    }
-
     
+//    //Moved here from viewWillAppear
+//    //if we can email enable the proceed button
+//    if([MFMailComposeViewController canSendMail]) {
+//        
+//        [proceedBtn setEnabled:YES];
+//    }
     
 }
 
@@ -105,18 +105,52 @@
 
 - (void)editPressed:(UIButton *)sender {
     
-    DLog(@"Edit presssed");
+    DLog(@"Edit presssed");//works
+    
+    _allowEdit = YES;
+    [_depositsTV reloadData];
+    
+    doneBtn = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneBtnPressed:)];
+    //set the done button as the current barButton
+    [self.navigationItem setRightBarButtonItem:doneBtn];
+    
+}
+
+- (void)doneBtnPressed:(UIButton *)sender {
+    
+    DLog(@"DoneBtnPressed");
+    
+    [_depositsTV reloadData];
+    
+    //set the edit button as the current barButton
+    [self.navigationItem setRightBarButtonItem:editBBtn];
+    
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        DLog(@"Remove item at index here");
+        //set this first to update the conditional in numberOfSections
+        _valueRemoved = YES;
+        [_depositsTV deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        
+        //remove the data from our deposits collection
+        [_depositsCollection removeObjectAtIndex:indexPath.section];//test this feature
+       
+    }
 }
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:YES];
     
-//    //if we can email enable the proceed button
-//    if([MFMailComposeViewController canSendMail]) {
-//        
-//        [proceedBtn setEnabled:YES];
-//    }
+    //if we can email enable the proceed button
+    if([MFMailComposeViewController canSendMail]) {
+        
+        [proceedBtn setEnabled:YES];
+    }
     
+    _allowEdit = NO;
 }
 
 #pragma mark - Custom delegate method
@@ -254,8 +288,6 @@
         NSData *dataString = [finalString dataUsingEncoding:NSUTF8StringEncoding];
     
     
-
-    
     
 //    //Create our recipients -> Note this will come from file later
 //    NSArray *emailRecipArray = @[@"peterdarbey@gmail.com", @"david.h.roberts@aib.ie", @"eimear.e.ferguson@aib.ie", @"gavin.e.bennett@aib.ie"];
@@ -317,25 +349,24 @@
 - (void)mailComposeController:(MFMailComposeViewController*)mailController didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error
 {
     if (result) {
-//        [self becomeFirstResponder];
+
         //disable the send email button on succces
         [proceedBtn setEnabled:NO];
         
-//        //dismiss mailComposer
+        //dismiss mailComposer
         [self dismissViewControllerAnimated:YES completion:nil];
         
         double delayInSeconds = 1.0;
         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
         dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-//
-//            //custom Success Popup may add a pause here
+
+            //custom Success Popup may add a pause here
             [self showSuccessPopupWithTitle:@"Success email sent" andMessage:@"Email successfully sent to recipients" forBarcode:nil];//put in completion block above
         });
                 
     }//close if
     
     else if (error) {
-        //ToDo error sending email
         
         [self dismissViewControllerAnimated:YES completion:^{
              //custom Warning Popup
@@ -360,7 +391,6 @@
     //set text
     warningPopup.titleLbl.text = title;
     warningPopup.messageLbl.text = message;
-    
     
     //ToDo add whatever setup code required here
     [warningPopup showOnView:self.view];
@@ -388,7 +418,6 @@
         [aView setBackgroundColor:[UIColor clearColor]];
         //construct an innerView to hole placeHolders
         UIView *innerView = [[UIView alloc]initWithFrame:CGRectMake(10, 20, self.view.frame.size.width -20, 45)];
-//        [innerView setBackgroundColor:[UIColor lightGrayColor]];//was whiteColor
         [innerView setBackgroundColor:[UIColor colorWithRed:200.0/255.0 green:200.0/255.0 blue:200.0/255.0 alpha:1.0]];
         innerView.layer.cornerRadius = 5.0;
         
@@ -413,9 +442,7 @@
         bagLbl.shadowOffset = CGSizeMake(1.0, 1.0);
 
 //        [bagLbl setText:[NSString stringWithFormat:@"Total bags: %i", [Deposit totalNumberOfBags]]];
-        DLog(@"BAG COUNT: %i", [Deposit totalBagCount]);//appDelegate.totalBagCount
-        //TEST
-//        [bagLbl setText:[NSString stringWithFormat:@"Total bags: %i",appDelegate.totalBagCount]];
+        DLog(@"BAG COUNT: %i", [Deposit totalBagCount]);
         
         [bagLbl setText:[NSString stringWithFormat:@"Total bags: %i",[Deposit totalBagCount]]];
 //        DLog(@"BAG COUNT: %i", appDelegate.totalBagCount);
@@ -489,13 +516,22 @@
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-//    return  numberOfBags;//bag count
+    DLog(@"count in sections: %i", [_depositsCollection count]);//currently 1 on load then 0 right
     return [_depositsCollection count];
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return 1;//will always be one
+        //crash because model doesnt have a count method
+//        return [[_depositsCollection objectAtIndex:section]count];//will always be one except on deletion
+    if (_valueRemoved) {
+        return 0;
+    }
+    else
+    {
+         return 1;//will always be one
+    }
+    
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -509,7 +545,8 @@
     static NSString *myIdentifier = @"depositCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:myIdentifier];
     
-    UILabel *bagAmountLbl;
+//    UILabel *bagAmountLbl;
+    UITextField *bagAmountTF;
     UILabel *bagNumberLbl;
     
     //1st time thru cell doesnt exist so create else dequeue
@@ -517,16 +554,20 @@
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:myIdentifier];
         
         //Construct another label for amount
-        bagAmountLbl = [[UILabel alloc]initWithFrame:CGRectMake(210, cell.bounds.size.height/4, 80 , 25)];
-        bagAmountLbl.tag = BAG_AMOUNT;
-        bagAmountLbl.textAlignment = NSTextAlignmentRight;
-        bagAmountLbl.font = [UIFont fontWithName:@"Arial-BoldMT" size:15];
-        bagAmountLbl.textColor = [UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0];//blue
-        bagAmountLbl.shadowColor = [UIColor grayColor];
-        bagAmountLbl.shadowOffset = CGSizeMake(1.0, 1.0);
-        bagAmountLbl.backgroundColor = [UIColor clearColor];
-        [bagAmountLbl setUserInteractionEnabled:NO];
-        [cell.contentView addSubview:bagAmountLbl];
+        bagAmountTF = [[UITextField alloc]initWithFrame:CGRectMake(210, cell.bounds.size.height/4, 80 , 25)];
+        bagAmountTF.tag = BAG_AMOUNT;
+        bagAmountTF.textAlignment = NSTextAlignmentRight;
+        bagAmountTF.font = [UIFont fontWithName:@"Arial-BoldMT" size:15];
+        bagAmountTF.textColor = [UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0];//blue
+//        bagAmountTF.shadowColor = [UIColor grayColor];
+//        bagAmountTF.shadowOffset = CGSizeMake(1.0, 1.0);
+        bagAmountTF.backgroundColor = [UIColor clearColor];
+        [bagAmountTF setUserInteractionEnabled:NO];
+        [bagAmountTF setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
+        //set delegate
+        [bagAmountTF setDelegate:self];
+        //add to view
+        [cell.contentView addSubview:bagAmountTF];
         
         //Construct Label
         bagNumberLbl = [[UILabel alloc]initWithFrame:CGRectMake(10, cell.bounds.size.height/4, 190 , 25)];
@@ -543,22 +584,63 @@
     }
     else
     {
-        bagAmountLbl = (UILabel *)[cell.contentView viewWithTag:BAG_AMOUNT];
+        bagAmountTF = (UITextField *)[cell.contentView viewWithTag:BAG_AMOUNT];
         bagNumberLbl = (UILabel *)[cell.contentView viewWithTag:BAG_NO_LBL];
     }
     
         Deposit *deposit = [_depositsCollection objectAtIndex:indexPath.section];
     
         DLog(@"_totalDepositAmount>>>: %f", _totalDepositAmount);
-        DLog(@"_depositsCollection contains: %@", _depositsCollection);
+        DLog(@"_depositsCollection contains: %@", _depositsCollection);//1
         //need getter here for these private ivars
         DLog(@"countOfBagAmount: %f", [deposit bagAmount]);
     
-        bagAmountLbl.text = [NSString stringWithFormat:@"€%.2f", [deposit bagAmount]];
+        bagAmountTF.text = [NSString stringWithFormat:@"€%.2f", [deposit bagAmount]];
     
         bagNumberLbl.text = [NSString stringWithFormat:@"Bag No: %@", [deposit bagBarcode]];//unique bag number
     
+    if (_allowEdit) {
+        DLog(@"Allow editing here");
+        [bagAmountTF setUserInteractionEnabled:YES];//test
+        
+        
+        
+    }
+    
+    
         return cell;
+}
+#pragma mark - UITextField delegate methods
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    
+    [textField resignFirstResponder];
+    
+    return YES;
+    
+}
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+    
+    UITableViewCell *cell = (UITableViewCell *)[textField.superview superview];
+    NSIndexPath *indexPath = [_depositsTV indexPathForCell:cell];
+    
+    if (_allowEdit && [textField.text length] > 0) {
+        
+        //retrieve the deposit model for the TF index
+        Deposit *deposit = [_depositsCollection objectAtIndex:indexPath.section];
+        
+        double newAmount = textField.text.doubleValue;
+        DLog(@"newAmount: %f", newAmount);
+//        [deposit setBagAmount:newAmount];//not working says undeclared variable
+        
+        DLog(@"deposit current amount: %f", deposit.bagAmount);
+        //resign the 1st responder
+        [textField resignFirstResponder];
+        //reset the editing values
+        [self doneBtnPressed:nil];
+    }
+    
+    
+    
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath

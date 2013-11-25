@@ -25,7 +25,7 @@
 //@class Deposit;
 
 
-@interface DepositsVC : UIViewController <UITableViewDataSource, UITableViewDelegate,MFMailComposeViewControllerDelegate, NotificationDelegate>
+@interface DepositsVC : UIViewController <UITableViewDataSource, UITableViewDelegate,MFMailComposeViewControllerDelegate, NotificationDelegate, UITextFieldDelegate>
 {
     NSIndexPath *selectedIndexPath;
     AppDelegate *appDelegate;
@@ -47,7 +47,9 @@
 
 @property (strong, nonatomic) NSMutableArray *barcodeArray;
 
-//@property BOOL shouldDismiss;
+@property BOOL allowEdit;
+
+@property BOOL valueRemoved;
 
 
 @end

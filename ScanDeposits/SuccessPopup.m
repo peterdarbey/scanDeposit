@@ -12,7 +12,6 @@
 @interface SuccessPopup ()
 {
 //    CGPoint offset;
-    NSDictionary *userInfo;
    
 }
 
@@ -36,20 +35,17 @@
 
 
 - (void)okPressed:(id)sender {
-    
-    NSLog(@"okPressed");
 
     _confirmed = YES;
 
     [self dismissPopupAndResumeScanning];
 
-    _buttonPressed = YES;
-    
 }
 
 
 -(void)dismissPopupAndResumeScanning {
     
+    //complete this first to set HomeVC values for viewWillAppear
     if (_confirmed) {
         //Log the user out and reset --> moved to SuccessPopup --> called
         if ([self.delegate respondsToSelector:@selector(resetDataAndPresentWithFlag:)]) {
@@ -59,20 +55,13 @@
 
     
     //probably has to be NSNotification here
-    [self notifiyViewControllerWithNotification:nil];
+//    [self notifiyViewControllerWithNotification:nil];
     
     [UIView animateWithDuration:0.3 animations:^{
         _backgroundView.alpha = 0.0;
     } completion:^(BOOL finished) {
         [_backgroundView removeFromSuperview];
-        
-//        if (_confirmed) {
-//            //Log the user out and reset --> moved to SuccessPopup --> called
-//            if ([self.delegate respondsToSelector:@selector(resetDataAndPresentWithFlag:)]) {
-//                [self.delegate performSelector:@selector(resetDataAndPresentWithFlag:) withObject:@(YES)];
-//            }
-//        }//close if
-        
+        [self notifiyViewControllerWithNotification:nil];//works
     }];
 
 }
@@ -97,14 +86,11 @@
     
     [self setupView];
     
-    _buttonPressed = NO;
-    
 }
 
 //Unregister for notifications
 - (void)viewDidDisappear:(BOOL)animated{
-    //remove observer
-    [defaultCenter removeObserver:self];
+    
     [super viewDidDisappear:YES];
     //could just call the method here
 }
@@ -120,14 +106,7 @@
     
    [self.okayBtn addTarget:self action:@selector(okPressed:) forControlEvents:UIControlEventTouchUpInside];
     
-    
-    
-    defaultCenter = [NSNotificationCenter defaultCenter];
-    //register for notifications and call this selector
-    [defaultCenter addObserver:self selector:@selector(notifiyViewControllerWithNotification:) name:@"okPressed" object:nil];//okPressed
-        
-   //setup notification params
-    [self dispatchEventOnTouch];
+
 }
 
 - (void)notifiyViewControllerWithNotification:(NSNotification *)notification {
@@ -137,15 +116,6 @@
         
     }
     
-}
--(void)dispatchEventOnTouch
-{
-    
-    //register the control object and associated key with a notification
-    //userInfo = @{@"okPressed" : @(_buttonPressed)};
-    userInfo = @{@"okPressed" : _okayBtn};//nil currently
-    [defaultCenter postNotificationName: @"okPressed" object:nil userInfo:userInfo];//was nil
-    DLog(@"EVENT DISPATCHED");
 }
 
 //calls viewDidLoad

@@ -123,16 +123,9 @@
 //make a delegate method
 - (void)NotificationOfButtonPressed:(NSNotification *)notification {
 
-    
-    NSDictionary *userInfo = notification.userInfo;
-    DLog(@"userInfo: %@", userInfo.description);//has entry
-    
-    DLog(@"Test this notification: %@", notification.name);
-    if ([notification.name isEqualToString:@"okPressed"]) {
-        DLog(@"Notified");//works
-         [self.navigationController popToRootViewControllerAnimated:YES];
-    }
-    
+        //dismiss the viewController and logOut
+       [self.navigationController popToRootViewControllerAnimated:YES];
+    //ToDo reset here perhaps -->wipe deposits etc...
 }
 
 

@@ -173,4 +173,32 @@
 //        }
 
 
+//defaultCenter = [NSNotificationCenter defaultCenter];
+////register for notifications and call this selector
+////    [defaultCenter addObserver:self selector:@selector(notifiyViewControllerWithNotification:) name:@"okPressed" object:nil];//okPressed
+//
+////setup notification params
+////    [self dispatchEventOnTouch];
+//}
+//
+//- (void)notifiyViewControllerWithNotification:(NSNotification *)notification {
+//    
+//    if ([self.notDelegate respondsToSelector:@selector(NotificationOfButtonPressed:)]) {
+//        [self.notDelegate performSelector:@selector(NotificationOfButtonPressed:) withObject:notification];//works
+//        
+//    }
+//    
+//}
+//-(void)dispatchEventOnTouch
+//{
+//    
+//    //register the control object and associated key with a notification
+//    //userInfo = @{@"okPressed" : @(_buttonPressed)};
+//    userInfo = @{@"okPressed" : _okayBtn};//nil currently
+//    [defaultCenter postNotificationName: @"okPressed" object:nil userInfo:userInfo];//was nil
+//    DLog(@"EVENT DISPATCHED");
+//}
+
+
+
 @end

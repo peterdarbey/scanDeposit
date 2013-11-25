@@ -29,7 +29,7 @@
 
 @interface SuccessPopup : UIViewController
 {
-    NSNotificationCenter *defaultCenter;
+
 }
 
 
@@ -52,6 +52,5 @@
 @property (strong, nonatomic) IBOutlet UIButton *okayBtn;
 
 @property BOOL confirmed;
-@property BOOL buttonPressed;
 
 @end

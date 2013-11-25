@@ -32,7 +32,7 @@
 #import "LogInVC.h"
 #import "RegistrationVC.h"
 #import "DepositsVC.h"
-@class DepositsVC;
+//@class DepositsVC;
 
 //#define kScanditSDKAppKey @"4w8vXjD2EeOZw8u2pkkjQH4S+hfplxDDtzKnte2lX4s"//current community version
 

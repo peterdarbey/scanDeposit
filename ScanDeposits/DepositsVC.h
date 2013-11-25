@@ -14,9 +14,9 @@
 #import "WarningPopup.h"
 //#import "HomeVC.h"
 
-#import "SuccessPopup.h"
+@class SuccessPopup;
 
-@class HomeVC;//
+@class HomeVC;
 
 #define BAG_AMOUNT_TF 200
 #define BAG_AMOUNT 250
@@ -25,7 +25,7 @@
 //@class Deposit;
 
 
-@interface DepositsVC : UIViewController <UITableViewDataSource, UITableViewDelegate,MFMailComposeViewControllerDelegate>
+@interface DepositsVC : UIViewController <UITableViewDataSource, UITableViewDelegate,MFMailComposeViewControllerDelegate, NotificationDelegate>
 {
     NSIndexPath *selectedIndexPath;
     AppDelegate *appDelegate;
@@ -33,7 +33,7 @@
 }
 
 
-- (void)popupDismissed:(NSNotification *)notification;
+//- (void)NotificationOfButtonPressed:(NSNotification *)notification;
 
 @property (strong, nonatomic) IBOutlet UITableView *depositsTV;
 @property (strong, nonatomic) NSMutableArray *depositsCollection;
@@ -48,8 +48,6 @@
 @property (strong, nonatomic) NSMutableArray *barcodeArray;
 
 //@property BOOL shouldDismiss;
-//test
-@property (strong, nonatomic)SuccessPopup *successPopup;
 
 
 @end

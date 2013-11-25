@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-#import "DepositsVC.h"
+@class DepositsVC;
 
 @class SuccessPopup;
 
@@ -19,6 +19,12 @@
 @end
 
 
+//test
+@protocol NotificationDelegate <NSObject>
+
+- (void)NotificationOfButtonPressed:(NSNotification *)notification;
+
+@end
 
 
 @interface SuccessPopup : UIViewController
@@ -26,6 +32,8 @@
     NSNotificationCenter *defaultCenter;
 }
 
+
+- (void)okPressed:(id)sender;
 
 - (void)showOnView:(UIView*)view;
 
@@ -35,6 +43,8 @@
 
 //custom delegate
 @property (weak, nonatomic) id <ResetAndPresentDelegate> delegate;
+//test
+@property (weak, nonatomic) id <NotificationDelegate> notDelegate;
 
 @property (strong, nonatomic) IBOutlet UILabel *titleLbl;
 @property (strong, nonatomic) IBOutlet UILabel *messageLbl;
@@ -42,5 +52,6 @@
 @property (strong, nonatomic) IBOutlet UIButton *okayBtn;
 
 @property BOOL confirmed;
+@property BOOL buttonPressed;
 
 @end

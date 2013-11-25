@@ -7,10 +7,12 @@
 //
 
 #import "SuccessPopup.h"
+#import "DepositsVC.h"
 
 @interface SuccessPopup ()
 {
 //    CGPoint offset;
+    NSDictionary *userInfo;
    
 }
 
@@ -41,27 +43,35 @@
 
     [self dismissPopupAndResumeScanning];
 
+    _buttonPressed = YES;
+    
 }
 
 
 -(void)dismissPopupAndResumeScanning {
     
+    if (_confirmed) {
+        //Log the user out and reset --> moved to SuccessPopup --> called
+        if ([self.delegate respondsToSelector:@selector(resetDataAndPresentWithFlag:)]) {
+            [self.delegate performSelector:@selector(resetDataAndPresentWithFlag:) withObject:@(YES)];
+        }
+    }//close if
+
+    
+    //probably has to be NSNotification here
+    [self notifiyViewControllerWithNotification:nil];
     
     [UIView animateWithDuration:0.3 animations:^{
         _backgroundView.alpha = 0.0;
     } completion:^(BOOL finished) {
         [_backgroundView removeFromSuperview];
         
-        if (_confirmed) {
-            //Log the user out and reset --> moved to SuccessPopup --> called
-            if ([self.delegate respondsToSelector:@selector(resetDataAndPresentWithFlag:)]) {
-                [self.delegate performSelector:@selector(resetDataAndPresentWithFlag:) withObject:@(YES)];
-            }
-        }//close if
-        [self.navigationController popToRootViewControllerAnimated:YES];
-        //probably has to be NSNotification here
-        
-//        [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
+//        if (_confirmed) {
+//            //Log the user out and reset --> moved to SuccessPopup --> called
+//            if ([self.delegate respondsToSelector:@selector(resetDataAndPresentWithFlag:)]) {
+//                [self.delegate performSelector:@selector(resetDataAndPresentWithFlag:) withObject:@(YES)];
+//            }
+//        }//close if
         
     }];
 
@@ -87,6 +97,16 @@
     
     [self setupView];
     
+    _buttonPressed = NO;
+    
+}
+
+//Unregister for notifications
+- (void)viewDidDisappear:(BOOL)animated{
+    //remove observer
+    [defaultCenter removeObserver:self];
+    [super viewDidDisappear:YES];
+    //could just call the method here
 }
 
 -(void)setupView {
@@ -101,17 +121,31 @@
    [self.okayBtn addTarget:self action:@selector(okPressed:) forControlEvents:UIControlEventTouchUpInside];
     
     
+    
     defaultCenter = [NSNotificationCenter defaultCenter];
-    DepositsVC *depositsVC;
-    for (UIViewController *viewController in self.navigationController.viewControllers) {
-        if ([viewController isKindOfClass:[DepositsVC class]]) {
-            depositsVC = (DepositsVC *)viewController;
-        }
+    //register for notifications and call this selector
+    [defaultCenter addObserver:self selector:@selector(notifiyViewControllerWithNotification:) name:@"okPressed" object:nil];//okPressed
+        
+   //setup notification params
+    [self dispatchEventOnTouch];
+}
+
+- (void)notifiyViewControllerWithNotification:(NSNotification *)notification {
+    
+    if ([self.notDelegate respondsToSelector:@selector(NotificationOfButtonPressed:)]) {
+        [self.notDelegate performSelector:@selector(NotificationOfButtonPressed:) withObject:notification];//works
+        
     }
     
-    [defaultCenter addObserver:depositsVC selector:@selector() name:@"okPressed" object:nil];
-   
-   
+}
+-(void)dispatchEventOnTouch
+{
+    
+    //register the control object and associated key with a notification
+    //userInfo = @{@"okPressed" : @(_buttonPressed)};
+    userInfo = @{@"okPressed" : _okayBtn};//nil currently
+    [defaultCenter postNotificationName: @"okPressed" object:nil userInfo:userInfo];//was nil
+    DLog(@"EVENT DISPATCHED");
 }
 
 //calls viewDidLoad

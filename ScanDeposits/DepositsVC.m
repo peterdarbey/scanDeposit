@@ -6,12 +6,12 @@
 //  Copyright (c) 2013 AIB. All rights reserved.
 //
 
-#import "DepositsVC.h"
-#import "HomeVC.h"//
 
+#import "HomeVC.h"
 
 //Popup
-//#import "SuccessPopup.h"
+#import "SuccessPopup.h"
+#import "DepositsVC.h"
 
 //Models
 #import "Deposit.h"
@@ -21,8 +21,7 @@
 
 @interface DepositsVC ()
 {
-//    SuccessPopup *successPopup;
-    NSNotificationCenter *defaultCenter;
+    SuccessPopup *successPopup;
 }
 
 
@@ -83,34 +82,30 @@
     
 //    //Create a custom SuccessPopup.xib
 //    //Now gobal which resolved the issue
-    _successPopup = [SuccessPopup loadFromNibNamed:@"SuccessPopup"];
+    successPopup = [SuccessPopup loadFromNibNamed:@"SuccessPopup"];
     
     for (UIViewController *viewController in self.navigationController.viewControllers) {
         if ([viewController isKindOfClass:[HomeVC class]]) {
             HomeVC *homeVC = (HomeVC *)viewController;
-            [_successPopup setDelegate:homeVC];//sets here
+            [successPopup setDelegate:homeVC];//sets here
         }
     }
     
+    //test this delegate method
+    [successPopup setNotDelegate:self];
+    
     //set text
-    _successPopup.titleLbl.text = title;
-    _successPopup.messageLbl.text = message;
+    successPopup.titleLbl.text = title;
+    successPopup.messageLbl.text = message;
    
     //ToDo add whatever setup code required here
-    [_successPopup showOnView:self.view];
+    [successPopup showOnView:self.view];
     
 }
 
 - (void)editPressed:(UIButton *)sender {
     
     DLog(@"Edit presssed");
-}
-
-//Unregister for notifications
-- (void)viewDidDisappear:(BOOL)animated{
-    //remove observer
-    [defaultCenter removeObserver:self];
-    [super viewDidDisappear:YES];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -122,35 +117,20 @@
 //        [proceedBtn setEnabled:YES];
 //    }
     
-    
-    defaultCenter = [NSNotificationCenter defaultCenter];
-    [defaultCenter addObserver:self selector:@selector(popupDismissed:) name:@"okPressed" object:nil];
-    
-    //setup the userInfo dict with the key value we require
-    [self dispatchEventOnTouch];
-    
-
 }
 
--(void)dispatchEventOnTouch
-{
-    
-    //register the control object and associated key with a notification
-    NSDictionary *userInfo = @{@"okPressed" : _successPopup.okayBtn};//nil currently
-    [defaultCenter postNotificationName: @"okPressed" object:nil userInfo:userInfo];
-    DLog(@"EVENT DISPATCHED");
-}
 #pragma mark - Custom delegate method
 //make a delegate method
-- (void)popupDismissed:(NSNotification *)notification {
-    
+- (void)NotificationOfButtonPressed:(NSNotification *)notification {
+
     
     NSDictionary *userInfo = notification.userInfo;
-    DLog(@"userInfo: %@", userInfo.description);
+    DLog(@"userInfo: %@", userInfo.description);//has entry
     
     DLog(@"Test this notification: %@", notification.name);
     if ([notification.name isEqualToString:@"okPressed"]) {
         DLog(@"Notified");//works
+         [self.navigationController popToRootViewControllerAnimated:YES];
     }
     
 }

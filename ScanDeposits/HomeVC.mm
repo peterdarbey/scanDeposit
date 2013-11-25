@@ -7,7 +7,7 @@
 //
 
 #import "HomeVC.h"
-#import "DepositsVC.h"
+//#import "DepositsVC.h"
 
 //models
 #import "Deposit.h"
@@ -164,6 +164,8 @@
             depositsVC.barcodeArray = _barcodeArray;//pass all barcode data to deposits
             //set delegate here
 //            [depositsVC setDelegate:self];
+            
+           
             
             //package off logged in users/admins data
             if (_validUsersDict) {

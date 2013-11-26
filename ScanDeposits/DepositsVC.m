@@ -134,24 +134,27 @@
     DLog(@"selectedIP in commit: %@", selectedIndexPath);//should always have the right value
     
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-       
-        //set this first to update the conditional in numberOfSections
-        _valueRemoved = YES;
-        [_depositsTV deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-        
-        //extract the bagAmount and bagtotal in order to subtract from total amount ect..
+
+        //extract the bagAmount and bagtotal in order to subtract from total amount etc...
         Deposit *tempDeposit = [_depositsCollection objectAtIndex:indexPath.section];
         _editedBagCount = (int)[tempDeposit bagCount];
         _editedBagAmount = (double)[tempDeposit bagAmount];
         
-        //remove the data from our deposits collection
-        [_depositsCollection removeObjectAtIndex:indexPath.section];//should be first
+        //set this first to update the conditional in numberOfSections
+        _valueRemoved = YES;
         
-        //Once removed here the proceed button will iterate this collection so up to date data intact
-        //Update the total bag count and amount in view
-        [_depositsTV reloadData];//this causes a problem, as no sections after update viewForFooter disappears
+//        [_depositsTV beginUpdates];
+        
+        //this is the update
+        [_depositsTV deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        //remove the data from our deposits collection
+        [_depositsCollection removeObjectAtIndex:indexPath.section];//should be first -> doesnt call any tblView del
+//        [_depositsTV reloadData];//re added
+
+//        [_depositsTV endUpdates];
        
-    }
+    }//close if
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -552,13 +555,14 @@
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    DLog(@"count in sections: %i", [_depositsCollection count]);//thinks there are still more sects than there are?
+    
+    DLog(@"count in sections: %i", [_depositsCollection count]);//3
     return [_depositsCollection count];//CORRECT
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    DLog(@"selectedIP in numOfSects: %@", selectedIndexPath); //not set yet its 0 //[1, 0]
+    DLog(@"selectedIP in numOfSects: %@", selectedIndexPath);
     
     //item has been removed and its the selected item section
     if (_valueRemoved && selectedIndexPath.section == section) {
@@ -569,6 +573,8 @@
     {
          return 1;
     }
+    
+//    return 1;
     
 }
 

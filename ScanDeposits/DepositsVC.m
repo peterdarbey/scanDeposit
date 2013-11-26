@@ -128,9 +128,10 @@
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
     //assign here
     selectedIndexPath = indexPath;
-    DLog(@"selectedIP: %@", selectedIndexPath);//should always have the right value
+    DLog(@"selectedIP in commit: %@", selectedIndexPath);//should always have the right value
     
     if (editingStyle == UITableViewCellEditingStyleDelete) {
        
@@ -144,10 +145,9 @@
         _editedBagAmount = (double)[tempDeposit bagAmount];
         
         //remove the data from our deposits collection
-        [_depositsCollection removeObjectAtIndex:indexPath.section];
+        [_depositsCollection removeObjectAtIndex:indexPath.section];//should be first
         
         //Once removed here the proceed button will iterate this collection so up to date data intact
-        //ToDo
         //Update the total bag count and amount in view
         [_depositsTV reloadData];//this causes a problem, as no sections after update viewForFooter disappears
        
@@ -193,6 +193,9 @@
     //reset bag data types also
     _totalDepositAmount = 0.0;
     _bagCount = 0;
+    
+    //Note wipe the uniqueBagArray containing barcodes that prexist
+    
 }
 
 
@@ -484,6 +487,8 @@
             //ToDo change the deposit total and bag total
             [bagAmountLbl setText:[NSString stringWithFormat:@"€%.2f", [Deposit totalBagsAmount] - _editedBagAmount]];
             [bagLbl setText:[NSString stringWithFormat:@"Total bags: %i",[Deposit totalBagCount] - _editedBagCount]];
+            //test --> didnt take
+            [_depositsTV reloadData];//to refresh the viewForFooter values
         }
         else
         {
@@ -509,7 +514,6 @@
         amountTF.textColor = [UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0];//darkGray
         [amountTF setUserInteractionEnabled:NO];
         
-//        [amountTF setText:[NSString stringWithFormat:@"Total: €%.2f", _totalDepositAmount]];
         [amountTF setText:[NSString stringWithFormat:@"Total:"]];
 
         //add to view
@@ -548,16 +552,16 @@
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    DLog(@"count in sections: %i", [_depositsCollection count]);//1 before update
-    return [_depositsCollection count];
+    DLog(@"count in sections: %i", [_depositsCollection count]);//thinks there are still more sects than there are?
+    return [_depositsCollection count];//CORRECT
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    DLog(@"selectedIndexPath: %@", selectedIndexPath); //not set yet its 0 //[2,0]
+    DLog(@"selectedIP in numOfSects: %@", selectedIndexPath); //not set yet its 0 //[1, 0]
     
     //item has been removed and its the selected item section
-    if (_valueRemoved && selectedIndexPath.section == section) {//works i think
+    if (_valueRemoved && selectedIndexPath.section == section) {
     
         return 0;
     }
@@ -570,7 +574,6 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    selectedIndexPath = indexPath;
     [_depositsTV deselectRowAtIndexPath:indexPath animated:YES];
 }
 
@@ -624,7 +627,7 @@
     
         Deposit *deposit = [_depositsCollection objectAtIndex:indexPath.section];
     
-        DLog(@"_totalDepositAmount>>>: %f", _totalDepositAmount);
+//        DLog(@"_totalDepositAmount>>>: %f", _totalDepositAmount);//redunant
         DLog(@"_depositsCollection contains: %@", _depositsCollection);//1
         //need getter here for these private ivars
         DLog(@"countOfBagAmount: %f", [deposit bagAmount]);
@@ -666,7 +669,10 @@
         double newAmount = textField.text.doubleValue;
         DLog(@"newAmount: %f", newAmount);
         
-//       [deposit setBagAmount:newAmount];//not working says undeclared variable
+       [deposit setBagAmount:newAmount];//ivar not property
+//        [deposit setBagCount: ]-1 --> doesnt change in fact just edited
+        //then replace the retrieved deposit with the edited deposit in the collection
+        [_depositsCollection replaceObjectAtIndex:indexPath.section withObject:deposit];
         
         DLog(@"deposit current amount: %f", deposit.bagAmount);
         //resign the 1st responder

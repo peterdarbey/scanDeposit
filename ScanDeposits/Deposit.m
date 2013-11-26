@@ -10,21 +10,17 @@
 
 @interface Deposit ()
 {
-   
+    double bagAmount;
 }
 
 
 //Private members
 @property (strong, nonatomic) NSString *bagNumber;
 @property (nonatomic)  int bagCount;
-@property (nonatomic) double bagAmount;
+//@property (nonatomic) double bagAmount;
 @property (strong, nonatomic) NSString *bagBarcode;
 @property (strong, nonatomic) NSString *timeStamp;
-
 @property (strong, nonatomic) NSDictionary *internalDict;
-//private
-- (void)setBagAmount:(double)amount;
-
 
 @end
 
@@ -42,7 +38,7 @@ static double _totalBagsAmount;
     
     _bagNumber = dict[@"BagNumber"];//string
     _bagBarcode = dict[@"Barcode"];//process a coin bag
-    _bagAmount = (double)[dict[@"BagAmount"]doubleValue];
+    bagAmount = (double)[dict[@"BagAmount"]doubleValue];//not a property anymore
     _bagCount = [dict[@"BagCount"]intValue];
     _timeStamp = dict[@"Time"];//string
     _internalDict = dict;
@@ -72,7 +68,7 @@ static double _totalBagsAmount;
 //public getters members
 + (NSInteger)totalBagCount {
     
-    return _totalBagCount;
+    return _totalBagCount;//need a setter here
 }
 + (double)totalBagsAmount {
     
@@ -80,7 +76,7 @@ static double _totalBagsAmount;
 }
 
 - (double)bagAmount {
-    return _bagAmount;
+    return bagAmount;
 }
 - (int)bagCount {
     return _bagCount;
@@ -97,8 +93,8 @@ static double _totalBagsAmount;
     return _timeStamp;
 }
 
-//- (void)setBagAmount:(double)amount {
-//    [dict setValue:amount Forkey:@"BagAmount"];
-//}
+- (void)setBagAmount:(double)amount {
+        bagAmount = amount;
+}
 
 @end

@@ -74,6 +74,15 @@ static double _totalBagsAmount;
     
     return _totalBagsAmount;
 }
+//class setters
++ (void)setTotalBagsAmount:(double)amount {
+    
+    _totalBagsAmount = amount;
+}
++ (void)setTotalbagCount:(int)count {
+    
+    _totalBagCount = count;
+}
 
 - (double)bagAmount {
     return bagAmount;
@@ -93,6 +102,7 @@ static double _totalBagsAmount;
     return _timeStamp;
 }
 
+//setter
 - (void)setBagAmount:(double)amount {
         bagAmount = amount;
 }

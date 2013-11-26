@@ -25,8 +25,6 @@
     UIBarButtonItem *editBBtn, *doneBtn;
 }
 
-@property double editedBagAmount;
-@property int editedBagCount;
 
 @end
 
@@ -145,8 +143,16 @@
 
         //extract the bagAmount and bagtotal in order to subtract from total amount etc...
         Deposit *tempDeposit = [_depositsCollection objectAtIndex:indexPath.section];
-        _editedBagCount = (int)[tempDeposit bagCount];
-        _editedBagAmount = (double)[tempDeposit bagAmount];
+
+        //retrieve the total bag count and then decrement by 1 and set
+        [Deposit setTotalbagCount:[Deposit totalBagCount] - 1];
+        
+        //retrieve the deposit cash amount and subtract from the class total and then add the new edited amount
+        double oldTotalAmount = [Deposit totalBagsAmount];
+        double newTotalAmount = oldTotalAmount - [tempDeposit bagAmount];
+        //update class state for total amount
+        [Deposit setTotalBagsAmount:newTotalAmount];
+        
         
         //set this first to update the conditional in numberOfSections
         _valueRemoved = YES;
@@ -178,37 +184,53 @@
     }
     
     _allowEdit = NO;
+    
+     DLog(@"DepositsCollection in viewWillAppear: %@", _depositsCollection);
+
 }
 
 #pragma mark - Custom delegate method
 //make a delegate method
 - (void)DismissUnderlyingVC {
 
-        //dismiss the viewController and wipe data
+        //Reset all barcode data, logged in users and the recorded deposits
+        [self wipeAndResetData];//TODO.... need to reset the class totalBagCount/ amount values
+    
+        //dismiss the viewController and wipe data --> pops to HomeVC
        [self.navigationController popToRootViewControllerAnimated:YES];
     
-        //Reset all barcode data, logged in users and the recorded deposits
-        [self wipeAndResetData];
+    
 }
 
 - (void)wipeAndResetData {
     
     DLog(@"DepositsCollection: %@", _depositsCollection);
     //wipe recorded deposits
-    _depositsCollection = nil;
+    [_depositsCollection removeAllObjects];//dont nil just remove entries
     
     DLog(@"_barcodeArray: %@", _barcodeArray);
     DLog(@"_usersDict: %@", _usersDict);
     //wipe recorded QR and ITF barcode data
-    _barcodeArray = nil;
+    [_barcodeArray removeAllObjects];//dont nil just remove entries --> nil
     //wipe recorded logged in users of the app
     _usersDict = nil;
     
     //reset bag data types also
-    _totalDepositAmount = 0.0;
+    _totalDepositAmount = 0.0;//what are these
     _bagCount = 0;
     
     //Note wipe the uniqueBagArray containing barcodes that prexist
+    for (UIViewController *vc in self.navigationController.viewControllers) {
+        if ([vc isKindOfClass:[HomeVC class]]) {
+            HomeVC *homeVC = (HomeVC *)vc;
+            [homeVC.uniqueBagArray removeAllObjects];
+            [homeVC.depositsArray removeAllObjects];//was passing values to DepositsVC
+            
+            //remove all objects dont nil as its not init in HomeVC
+//            [homeVC.depositsArray removeAllObjects];//was passing values to DepositsVC
+            DLog(@"uniqueArray: %@", homeVC.uniqueBagArray);//null -> works
+        }
+    }
     
 }
 
@@ -345,6 +367,7 @@
 
         //construct the mailVC and set its necessary parameters
         MFMailComposeViewController *mailController = [[MFMailComposeViewController alloc]init];
+    
         [mailController setTitle:@"Please find the attached documents."];
         [mailController setSubject:NSLocalizedString(@"Device Manager Report + Date/time ->Process", @"Device Manager Report")];
         [mailController setCcRecipients:emailRecipArray];
@@ -353,11 +376,7 @@
     
         //Email container settings
         //need to remove from here when deleted and edited
-        //hack
-        double editedAmount = [Deposit totalBagsAmount] - _editedBagAmount;
-        int editedCount = [Deposit totalBagCount] - _editedBagCount;
-        NSArray *contentArray = @[@(editedAmount), @(editedCount)];
-//        NSArray *contentArray = @[@([Deposit totalBagCount]), @([Deposit totalBagsAmount])];
+        NSArray *contentArray = @[@([Deposit totalBagCount]), @([Deposit totalBagsAmount])];
     
         //disclaimer content
         NSString *disclaimerString = @"IMPORTANT - IF THE ABOVE CONFIRMATION IS IN ANY WAY INACCURATE, YOU SHOULD IMMEDIATELY ADVISE YOUR BRANCH MANAGER / HRQMO. OTHERWISE, YOU ARE CONFIRMING THAT YOU WERE A CONTROL USER AS DESCRIBED ABOVE AND THAT THE CONTENTS OF THIS CONFIRMING MAIL ARE ACCURATE.";
@@ -476,6 +495,7 @@
         bagLbl.shadowOffset = CGSizeMake(1.0, 1.0);
         [bagLbl setUserInteractionEnabled:NO];
 //        [bagLbl setText:[NSString stringWithFormat:@"Total bags: %i",[Deposit totalBagCount]]];
+    
         
         //add to view
         [innerView addSubview:bagLbl];
@@ -495,19 +515,15 @@
         
         DLog(@"BEFORE valueChanged: %f", [Deposit totalBagsAmount]);
         
-        if (_valueRemoved || _valueEdited) {
-            
-            [bagAmountLbl setText:[NSString stringWithFormat:@"€%.2f", [Deposit totalBagsAmount]-_editedBagAmount]];
-            [bagLbl setText:[NSString stringWithFormat:@"Total bags: %i", [Deposit totalBagCount]-_editedBagCount]];
-            //reset to NO
-            _valueEdited = NO;
-        }
-        else
-        {
-            //retrieve the total bag amount from the class method here
-            [bagAmountLbl setText:[NSString stringWithFormat:@"€%.2f", [Deposit totalBagsAmount]]];
-            [bagLbl setText:[NSString stringWithFormat:@"Total bags: %i",[Deposit totalBagCount]]];
-        }
+        //retrieve the total bag amount from the class method here
+        [bagAmountLbl setText:[NSString stringWithFormat:@"€%.2f", [Deposit totalBagsAmount]]];//should be always right cause using class method
+        
+        [bagLbl setText:[NSString stringWithFormat:@"Total bags: %i",[Deposit totalBagCount]]];
+        
+//        if (_valueRemoved) {
+//            //reset to NO
+//            _valueEdited = NO;
+//        }
        
         DLog(@"AFTER valueChanged: %f", [Deposit totalBagsAmount]);
         DLog(@"AFTER BAG COUNT: %i", [Deposit totalBagCount]);
@@ -679,15 +695,18 @@
     if (_allowEdit && [textField.text length] > 0) {
         
         _valueEdited = YES;
-        //retrieve the deposit model for the TF index
-        Deposit *deposit = [_depositsCollection objectAtIndex:indexPath.section];
-        //retrieve the deposit cash amount
-        _editedBagAmount = [deposit bagAmount];
-        //and subtract from the class total and then add the new edited amount
-        
         
         double newAmount = textField.text.doubleValue;
-        DLog(@"newAmount: %f", newAmount);//correct
+        
+        
+        //retrieve the deposit model for the TF index
+        Deposit *deposit = [_depositsCollection objectAtIndex:indexPath.section];
+        
+        //retrieve the deposit cash amount and subtract from the class total and then add the new edited amount
+        double oldTotalAmount = [Deposit totalBagsAmount];
+        double newTotalAmount = oldTotalAmount - [deposit bagAmount];
+        //update class state for total amount
+        [Deposit setTotalBagsAmount:newTotalAmount + newAmount];
         
        [deposit setBagAmount:newAmount];//ivar not property
         //then replace the retrieved deposit with the edited deposit in the collection

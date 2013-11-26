@@ -26,13 +26,14 @@
 @interface HomeVC ()
 {
     ScanditSDKBarcodePicker *picker;
-    NSMutableArray *uniqueBagArray;
+//    NSMutableArray *uniqueBagArray;
     UITextView *helpTV;
 }
 
 
 @property (strong, nonatomic) NSMutableDictionary *validUsersDict;
 @property (strong, nonatomic) NSMutableDictionary *validAdminsDict;
+
 //QR barcode model
 @property (strong, nonatomic) QRBarcode *qrBarcode;
 //2/5 interleaved barcode model
@@ -165,6 +166,8 @@
             //set delegate here
 //            [depositsVC setDelegate:self];
             
+            DLog(@"_depositsArray in picker dismiss: %@", _depositsArray);//empty
+            
            
             
             //package off logged in users/admins data
@@ -249,7 +252,7 @@
     
     _depositsArray = [NSMutableArray array];
     
-    uniqueBagArray = [NSMutableArray array];
+    _uniqueBagArray = [NSMutableArray array];
     
     barBtnFinished.enabled = NO;
     
@@ -389,7 +392,8 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    
+    //moved here because wipeData sets to nil and not created again as in viewDidLoad
+//     _depositsArray = [NSMutableArray array];
     
     //if scan QR barcode
     if (_scanModeIsQR) {
@@ -536,7 +540,7 @@
     DLog(@"dataArray: %@", deposit);
     
     //Pass the deposits data back to self and add to collection
-    [_depositsArray addObject:deposit];
+    [_depositsArray addObject:deposit];//has value
     
     //enable finishedScans button now as a scanned deposit
     barBtnFinished.enabled = YES;
@@ -658,7 +662,7 @@
         //if barcodeString length < 12 dont allow display a warning message insufficient barcode data
         
         //if the collection already has that barcode subString then it has already been scanned
-        if ([uniqueBagArray containsObject:uniqueSubString]) { //note -> not stored on device so valid but launch
+        if ([_uniqueBagArray containsObject:uniqueSubString]) { //note -> not stored on device so valid but launch
             //add conditional for the logout button ie --> _shouldDismiss BOOL
             //Display warning popup and dont allow scanning
             NSString *title = @"Warning this bag has already been scanned";
@@ -669,7 +673,7 @@
         else //-> Note dont need gobal ivar as never reaches Deposits class withoput this else ITFPopup
         {
             //need to addObj after 1st check
-            [uniqueBagArray addObject:uniqueSubString];//possibly from file as may save
+            [_uniqueBagArray addObject:uniqueSubString];//possibly from file as may save
             
             //Note: replaced by helper
 //            barcode = [self parseILBarcodeFromString:barcodeString withBarcodeType:barcodeResult[@"symbology"]];

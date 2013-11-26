@@ -50,6 +50,9 @@
 
 @property (strong, nonatomic) NSMutableArray *array;
 
+//internal collection for existing barcodes
+@property(strong, nonatomic) NSMutableArray *uniqueBagArray;
+
 @property (strong, nonatomic) NSMutableArray *barcodeArray;
 @property (strong, nonatomic) NSMutableArray *depositsArray;
 @property BOOL isAdmin;

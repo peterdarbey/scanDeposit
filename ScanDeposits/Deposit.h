@@ -33,6 +33,10 @@
 
 - (void)setBagAmount:(double)amount;
 
+//class setters
++ (void)setTotalBagsAmount:(double)amount;
++ (void)setTotalbagCount:(int)count;
+
 
 @end
 

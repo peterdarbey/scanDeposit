@@ -194,6 +194,8 @@
     NSIndexPath *indexPath = [_loginTV indexPathForCell:cell];
     UITextField *nextTF;
     
+    [loginBtn setEnabled:NO];
+    
     //ADMIN ONLY
     if (indexPath.section == 0) {
         DLog(@"<< Administrator section >>");

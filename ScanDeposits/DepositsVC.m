@@ -107,8 +107,6 @@
 
 - (void)editPressed:(UIButton *)sender {
     
-    DLog(@"Edit presssed");//works
-    
     _allowEdit = YES;
     [_depositsTV reloadData];
     
@@ -120,7 +118,7 @@
 
 - (void)doneBtnPressed:(UIButton *)sender {
     
-    DLog(@"DoneBtnPressed");
+    _allowEdit = NO;
     
     [_depositsTV reloadData];
     
@@ -130,9 +128,12 @@
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    //assign here
+    selectedIndexPath = indexPath;
+    DLog(@"selectedIP: %@", selectedIndexPath);//should always have the right value
     
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        DLog(@"Remove item at index here");
+       
         //set this first to update the conditional in numberOfSections
         _valueRemoved = YES;
         [_depositsTV deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
@@ -143,7 +144,8 @@
         _editedBagAmount = (double)[tempDeposit bagAmount];
         
         //remove the data from our deposits collection
-        [_depositsCollection removeObjectAtIndex:indexPath.section];//works
+        [_depositsCollection removeObjectAtIndex:indexPath.section];
+        
         //Once removed here the proceed button will iterate this collection so up to date data intact
         //ToDo
         //Update the total bag count and amount in view
@@ -333,8 +335,12 @@
         [mailController setMailComposeDelegate:self];
     
         //Email container settings
-//        NSArray *contentArray = @[@"<number of bags>", @"<value of bags>"];
-        NSArray *contentArray = @[@([Deposit totalBagCount]), @([Deposit totalBagsAmount])];
+        //need to remove from here when deleted and edited
+        //hack
+        double editedAmount = [Deposit totalBagsAmount] - _editedBagAmount;
+        int editedCount = [Deposit totalBagCount] - _editedBagCount;
+        NSArray *contentArray = @[@(editedAmount), @(editedCount)];
+//        NSArray *contentArray = @[@([Deposit totalBagCount]), @([Deposit totalBagsAmount])];
     
         //disclaimer content
         NSString *disclaimerString = @"IMPORTANT - IF THE ABOVE CONFIRMATION IS IN ANY WAY INACCURATE, YOU SHOULD IMMEDIATELY ADVISE YOUR BRANCH MANAGER / HRQMO. OTHERWISE, YOU ARE CONFIRMING THAT YOU WERE A CONTROL USER AS DESCRIBED ABOVE AND THAT THE CONTENTS OF THIS CONFIRMING MAIL ARE ACCURATE.";
@@ -474,11 +480,10 @@
         
         DLog(@"BEFORE valueChanged: %f", [Deposit totalBagsAmount]);
         
-        if (_valueRemoved) {//damn
+        if (_valueRemoved) {//not present when no sections
             //ToDo change the deposit total and bag total
             [bagAmountLbl setText:[NSString stringWithFormat:@"€%.2f", [Deposit totalBagsAmount] - _editedBagAmount]];
             [bagLbl setText:[NSString stringWithFormat:@"Total bags: %i",[Deposit totalBagCount] - _editedBagCount]];
-            
         }
         else
         {
@@ -549,23 +554,23 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-        //crash because model doesnt have a count method
-//        return [[_depositsCollection objectAtIndex:section]count];//will always be one except on deletion
+    DLog(@"selectedIndexPath: %@", selectedIndexPath); //not set yet its 0 //[2,0]
     
-    //before _valueRemoved was put first it was calling numOfSects twice as it thought 2 rows so 2 calls to numbOfS
-    if (_valueRemoved) {
+    //item has been removed and its the selected item section
+    if (_valueRemoved && selectedIndexPath.section == section) {//works i think
+    
         return 0;
     }
     else
     {
-         return 1;//will always be one
+         return 1;
     }
     
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    selectedIndexPath = indexPath;
+//    selectedIndexPath = indexPath;
     [_depositsTV deselectRowAtIndexPath:indexPath animated:YES];
 }
 
@@ -574,7 +579,6 @@
     static NSString *myIdentifier = @"depositCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:myIdentifier];
     
-//    UILabel *bagAmountLbl;
     UITextField *bagAmountTF;
     UILabel *bagNumberLbl;
     
@@ -592,7 +596,8 @@
 //        bagAmountTF.shadowOffset = CGSizeMake(1.0, 1.0);
         bagAmountTF.backgroundColor = [UIColor clearColor];
         [bagAmountTF setUserInteractionEnabled:NO];
-        [bagAmountTF setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
+        [bagAmountTF setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];//center
+        [bagAmountTF setClearsOnBeginEditing:YES];
         //set delegate
         [bagAmountTF setDelegate:self];
         //add to view
@@ -628,14 +633,15 @@
     
         bagNumberLbl.text = [NSString stringWithFormat:@"Bag No: %@", [deposit bagBarcode]];//unique bag number
     
+    //enable user editing
     if (_allowEdit) {
         DLog(@"Allow editing here");
-        [bagAmountTF setUserInteractionEnabled:YES];//test
-        
-        
-        
+        [bagAmountTF setUserInteractionEnabled:YES];
     }
-    
+    else
+    {
+        [bagAmountTF setUserInteractionEnabled:NO];
+    }
     
         return cell;
 }
@@ -659,7 +665,8 @@
         
         double newAmount = textField.text.doubleValue;
         DLog(@"newAmount: %f", newAmount);
-//        [deposit setBagAmount:newAmount];//not working says undeclared variable
+        
+//       [deposit setBagAmount:newAmount];//not working says undeclared variable
         
         DLog(@"deposit current amount: %f", deposit.bagAmount);
         //resign the 1st responder

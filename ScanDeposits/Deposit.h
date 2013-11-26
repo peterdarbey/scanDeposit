@@ -32,6 +32,8 @@
 - (NSString *)timeStamp;
 
 
+//- (void)setBagAmount:(double)bagAmount;
+
 @end
 
 //extern  NSInteger totalBagCount;//static

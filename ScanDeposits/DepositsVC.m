@@ -147,6 +147,7 @@
         //Once removed here the proceed button will iterate this collection so up to date data intact
         //ToDo
         //Update the total bag count and amount in view
+        [_depositsTV reloadData];//this causes a problem, as no sections after update viewForFooter disappears
        
     }
 }
@@ -473,7 +474,7 @@
         
         DLog(@"BEFORE valueChanged: %f", [Deposit totalBagsAmount]);
         
-        if (_valueRemoved) {
+        if (_valueRemoved) {//damn
             //ToDo change the deposit total and bag total
             [bagAmountLbl setText:[NSString stringWithFormat:@"€%.2f", [Deposit totalBagsAmount] - _editedBagAmount]];
             [bagLbl setText:[NSString stringWithFormat:@"Total bags: %i",[Deposit totalBagCount] - _editedBagCount]];

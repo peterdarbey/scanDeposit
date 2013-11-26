@@ -106,7 +106,10 @@
 }
 
 - (void)editPressed:(UIButton *)sender {
+    //edit pressed disable proceedBtn
+    [proceedBtn setEnabled:NO];
     
+//    [_depositsTV setEditing:YES animated:YES];//test
     _allowEdit = YES;
     [_depositsTV reloadData];
     
@@ -117,6 +120,11 @@
 }
 
 - (void)doneBtnPressed:(UIButton *)sender {
+    
+    //done pressed re-enable proccedBtn
+    [proceedBtn setEnabled:YES];
+    
+    //    [_depositsTV endEditing:YES];//test
     
     _allowEdit = NO;
     
@@ -131,7 +139,7 @@
     
     //assign here
     selectedIndexPath = indexPath;
-    DLog(@"selectedIP in commit: %@", selectedIndexPath);//should always have the right value
+    DLog(@"selectedIP in commit: %@", selectedIndexPath);
     
     if (editingStyle == UITableViewCellEditingStyleDelete) {
 
@@ -143,15 +151,18 @@
         //set this first to update the conditional in numberOfSections
         _valueRemoved = YES;
         
-//        [_depositsTV beginUpdates];
+        //remove the data from our deposits collection
+//        [_depositsCollection removeObjectAtIndex:indexPath.section];//should be 1st -> doesnt call any tblView del
         
         //this is the update
         [_depositsTV deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-        //remove the data from our deposits collection
-        [_depositsCollection removeObjectAtIndex:indexPath.section];//should be first -> doesnt call any tblView del
-//        [_depositsTV reloadData];//re added
-
-//        [_depositsTV endUpdates];
+         //remove the data from our deposits collection and update the total amopunt/count
+         [_depositsCollection removeObjectAtIndex:indexPath.section];//should be 1st -> doesnt call any tblView del
+        
+//        [_depositsTV deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationRight];
+        
+//        [_depositsTV reloadData];
+//        [_depositsTV endEditing:YES];
        
     }//close if
     
@@ -479,19 +490,17 @@
         bagAmountLbl.shadowOffset = CGSizeMake(1.0, 1.0);//better
         bagAmountLbl.backgroundColor = [UIColor clearColor];
         [bagAmountLbl setUserInteractionEnabled:NO];
-        //retrieve the total bag amount from the class method here
-//        [bagAmountLbl setText:[NSString stringWithFormat:@"€%.2f", [Deposit totalBagsAmount]]];
         
         DLog(@"BEORE BAG COUNT: %i", [Deposit totalBagCount]);
         
         DLog(@"BEFORE valueChanged: %f", [Deposit totalBagsAmount]);
         
-        if (_valueRemoved) {//not present when no sections
-            //ToDo change the deposit total and bag total
-            [bagAmountLbl setText:[NSString stringWithFormat:@"€%.2f", [Deposit totalBagsAmount] - _editedBagAmount]];
-            [bagLbl setText:[NSString stringWithFormat:@"Total bags: %i",[Deposit totalBagCount] - _editedBagCount]];
-            //test --> didnt take
-            [_depositsTV reloadData];//to refresh the viewForFooter values
+        if (_valueRemoved || _valueEdited) {
+            
+            [bagAmountLbl setText:[NSString stringWithFormat:@"€%.2f", [Deposit totalBagsAmount]-_editedBagAmount]];
+            [bagLbl setText:[NSString stringWithFormat:@"Total bags: %i", [Deposit totalBagCount]-_editedBagCount]];
+            //reset to NO
+            _valueEdited = NO;
         }
         else
         {
@@ -669,14 +678,18 @@
     
     if (_allowEdit && [textField.text length] > 0) {
         
+        _valueEdited = YES;
         //retrieve the deposit model for the TF index
         Deposit *deposit = [_depositsCollection objectAtIndex:indexPath.section];
+        //retrieve the deposit cash amount
+        _editedBagAmount = [deposit bagAmount];
+        //and subtract from the class total and then add the new edited amount
+        
         
         double newAmount = textField.text.doubleValue;
-        DLog(@"newAmount: %f", newAmount);
+        DLog(@"newAmount: %f", newAmount);//correct
         
        [deposit setBagAmount:newAmount];//ivar not property
-//        [deposit setBagCount: ]-1 --> doesnt change in fact just edited
         //then replace the retrieved deposit with the edited deposit in the collection
         [_depositsCollection replaceObjectAtIndex:indexPath.section withObject:deposit];
         

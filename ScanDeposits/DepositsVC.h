@@ -50,6 +50,7 @@
 @property BOOL allowEdit;
 
 @property BOOL valueRemoved;
+@property BOOL valueEdited;
 
 
 @end

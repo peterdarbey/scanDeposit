@@ -258,16 +258,6 @@
 
 - (NSMutableArray *)createXMLSSFromCollection:(NSMutableArray *)array {
     
-    //array construct for new xml collection
-    NSMutableArray *xmlArray = [NSMutableArray array];
-    
-    //example of necessary structure
-    //<ss:Row>
-    //<ss:Cell>
-    //<ss:Data ss:Type="Key">Value</ss:Data>
-    //</ss:Cell>
-    //</ss:Row>
-    
     //Test construction of excel xml structure --> xmlss format
     NSString *xmlDTD = @"<?xml version=\"1.0\"?>";
     NSString *xmlWBOpen = @"<ss:Workbook xmlns:ss=\"urn:schemas-microsoft-com:office:spreadsheet\">";
@@ -281,8 +271,31 @@
     NSString *xmlRowOpen = @"<ss:Row>";
     NSString *xmlRowClose = @"</ss:Row>";
     NSString *xmlCellOpen = @"<ss:Cell>";
-    NSString *xmlCellData = @"<ss:Data ss:Type=\"%@\">First Name</ss:Data>";
+//    NSString *xmlCellData = @"<ss:Data ss:Type=\"%@\">First Name</ss:Data>";
     NSString *xmlCellClose = @"</ss:Cell>";
+    
+    //array construct for new xml collection
+    NSMutableArray *xmlArray = [NSMutableArray array];
+    
+    //add the necessary headers and DTD metaData to the collection first
+    [xmlArray addObject:xmlDTD];//docType
+    [xmlArray addObject:xmlWBOpen];//WorkBook
+    [xmlArray addObject:xmlWSOpen];//WorkSheet
+    [xmlArray addObject:xmlTblOpen];//Table
+    [xmlArray addObject:xmlColumn];//Column
+    [xmlArray addObject:xmlColumn];//Column
+    [xmlArray addObject:xmlColumn];//Column [_dataArray count];
+    [xmlArray addObject:xmlRowOpen];//Row Open
+
+    
+    //example of necessary structure
+    //<ss:Row>
+    //<ss:Cell>
+    //<ss:Data ss:Type="Key">Value</ss:Data>
+    //</ss:Cell>
+    //</ss:Row>
+    
+    
     
     //key construct for xml creation method
     NSArray *keysArray = @[@"Branch NSC", @"Process No", @"Safe ID", @"Device Type", @"Sequence No:"
@@ -291,6 +304,7 @@
     //new data structure for xml spreadsheet intergration
     NSMutableDictionary *dataDict = [NSMutableDictionary dictionaryWithObjects:array forKeys:keysArray];
     DLog(@"dataDict for xml construct*******: %@", dataDict);
+
     
     [dataDict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         NSString *keyStr = (NSString *)key;
@@ -405,6 +419,11 @@
         
     }];
     
+        //then add the closing format types
+        [xmlArray addObject:xmlRowClose];//Row Close
+        [xmlArray addObject:xmlTblClose];//Table Close
+        [xmlArray addObject:xmlWSClose];//WorkSheet Close
+        [xmlArray addObject:xmlWBClose];//WorkBook Close
     
     
     DLog(@"xmlArray -------->: %@", xmlArray);
@@ -416,23 +435,6 @@
 //should be a helper object
 - (NSMutableArray *)collectMyData {
     
-    //Test construction of excel xml structure --> xmlss format
-//    NSString *xmlDTD = @"<?xml version=\"1.0\"?>";
-//    NSString *xmlWBOpen = @"<ss:Workbook xmlns:ss=\"urn:schemas-microsoft-com:office:spreadsheet\">";
-//    NSString *xmlWBClose = @"</ss:Workbook>";
-//    NSString *xmlWSOpen = @"<ss:Worksheet ss:Name=\"AppData\">";
-//    NSString *xmlWSClose = @"</ss:Worksheet>";
-//    NSString *xmlTblOpen = @"<ss:Table>";
-//    NSString *xmlTblClose = @"</ss:Table>";
-//    NSString *xmlColumn = @"<ss:Column ss:Width=\"80\"/>";
-//    //row contruction
-//    NSString *xmlRowOpen = @"<ss:Row>";
-//    NSString *xmlRowClose = @"</ss:Row>";
-//    NSString *xmlCellOpen = @"<ss:Cell>";
-//    NSString *xmlCellData = @"<ss:Data ss:Type=\"%@\">First Name</ss:Data>";
-//    NSString *xmlCellClose = @"</ss:Cell>";
-    
-    
         //extract barcode data
         if (_barcodeArray) {
     
@@ -440,14 +442,6 @@
             for (id object in _barcodeArray) {
                 if ([object isKindOfClass:[QRBarcode class]]) {
                     QRBarcode *qrBarcode = (QRBarcode *)object;
-//                    [_dataArray addObject:xmlDTD];//test
-//                    [_dataArray addObject:xmlWBOpen];//test
-//                    [_dataArray addObject:xmlWSOpen];//test
-//                    [_dataArray addObject:xmlTblOpen];//test
-//                    [_dataArray addObject:xmlColumn];//test
-//                    [_dataArray addObject:xmlColumn];//test set to [_dataArray count];
-//                    [_dataArray addObject:xmlRowOpen];//test
-//                    [_dataArray addObject:xmlCellOpen];//test
                     
                     //Add elements to the array
                     [_dataArray addObject:[qrBarcode barcodeBranch]];
@@ -489,15 +483,7 @@
             NSDictionary *userTwoDict = _usersDict[@2];
             [_dataArray addObject:userTwoDict[@"Name"]];
             [_dataArray addObject:userTwoDict[@"Email"]];
-            
-            //test data
-//            [_dataArray addObject:xmlCellClose];//test
-//            [_dataArray addObject:xmlRowClose];//test
-//            [_dataArray addObject:xmlWBClose];//test
-//            [_dataArray addObject:xmlWSClose];//test
-//            [_dataArray addObject:xmlTblClose];//test
-            
-        
+    
         }//close userDict
 
     
@@ -532,8 +518,8 @@
         _dataArray = [self collectMyData];
     
         //new parse rules
-        NSArray *xmlArray = [self createXMLSSFromCollection:_dataArray];
-        DLog(@"xmlArray is: %@", xmlArray);
+//        NSArray *xmlArray = [self createXMLSSFromCollection:_dataArray];
+//        DLog(@"xmlArray is: %@", xmlArray);
     
         //Now need to parse my new data collection
         NSString *finalString = [StringParserHelper parseMyCollection:_dataArray];
@@ -593,7 +579,47 @@
         [mailController setMessageBody:[NSString stringWithFormat:@"This mail is your copy of the record that you\n <Control User 1: %@> and <Control User 2: %@> together opened and record the following contents of the <process: %@> taken from <Safe ID: %i> on <date><time: %@>.\n\nContent Summary\n%@\n\n\n\n%@", userOneName, userTwoName, [qrBarcode barcodeProcess], [qrBarcode barcodeSafeID], [NSDate date],contentArray, disclaimerString] isHTML:NO];
     
         //add attachment to email
-        [mailController addAttachmentData:dataString mimeType:@"text/csv" fileName:@"mailData.csv"];//text/xml for plist content
+        [mailController addAttachmentData:dataString mimeType:@"text/csv" fileName:@"mailData.csv"];
+    
+        //test xls format
+    
+        dataString = [@"<?xml version=\"1.0\"?>\
+    <ss:Workbook xmlns:ss=\"urn:schemas-microsoft-com:office:spreadsheet\">\
+    <ss:Worksheet ss:Name=\"AppData\">\
+    <ss:Table>\
+    <ss:Column ss:Width=\"80\"/>\
+    <ss:Column ss:Width=\"80\"/>\
+    <ss:Column ss:Width=\"80\"/>\
+    <ss:Row>\
+    <ss:Cell>\
+    <ss:Data ss:Type=\"Process Type\">A Coin Only Dropsafe</ss:Data>\
+    </ss:Cell>\
+    <ss:Cell>\
+    <ss:Data ss:Type=\"String\">Last Name</ss:Data>\
+    </ss:Cell>\
+    <ss:Cell>\
+    <ss:Data ss:Type=\"String\">Phone Number</ss:Data>\
+    </ss:Cell>\
+    </ss:Row>\
+    <ss:Row>\
+    <ss:Cell>\
+    <ss:Data ss:Type=\"String\">Nancy</ss:Data>\
+    </ss:Cell>\
+    <ss:Cell>\
+    <ss:Data ss:Type=\"String\">Davolio</ss:Data>\
+    </ss:Cell>\
+    <ss:Cell>\
+    <ss:Data ss:Type=\"String\">(206)555 9857</ss:Data>\
+    </ss:Cell>\
+    </ss:Row>\
+    <ss:Row>\
+    ...\
+    </ss:Row>\
+    </ss:Table>\
+    </ss:Worksheet>\
+    </ss:Workbook>" dataUsingEncoding:NSUTF8StringEncoding];
+    
+        [mailController addAttachmentData:dataString mimeType:@"application/vnd.ms-excel" fileName:@"mailData.xls"];//text/xml for plist content
         //present the mail composer
         [self presentViewController:mailController animated:YES completion:nil];
     

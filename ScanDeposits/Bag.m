@@ -960,6 +960,25 @@
     //            //return to HomeVC
     //            [self.navigationController popToRootViewControllerAnimated:YES];
     //        });
+    
+    
+    
+//    -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+//        
+//        DLog(@"selectedIP in numOfSects: %@", selectedIndexPath);
+//        
+//        //item has been removed and its the selected item section
+//        //    if (_valueRemoved && selectedIndexPath.section == section) {
+//        //        return 0;
+//        //    }
+//        //    else
+//        //    {
+//        //        return 1;
+//        //    }
+//        
+//        return 1;//should always be one
+//    }
+
 
     
 }

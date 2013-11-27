@@ -329,33 +329,41 @@
     
 }
 #pragma tableView presentation methods
-//- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
 
-//        UIView *topView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, _registerTV.frame.size.width, 25)];
-//        [topView setBackgroundColor:[UIColor clearColor]];
-//
-//        //construct a UILabel for the Admin section
-//        UILabel *adminLbl = [[UILabel alloc]initWithFrame:CGRectMake(20, 0, 180, 25)];
-//        [adminLbl setText:@"Administrator 2"];
-//
-//        [adminLbl setFont:[UIFont fontWithName:@"Arial-BoldMT" size:17]];
-//        [adminLbl setTextColor:[UIColor whiteColor];
-//        [adminLbl setTextAlignment:NSTextAlignmentLeft];
-//        [adminLbl setBackgroundColor:[UIColor clearColor]];
-//        adminLbl.shadowColor = [UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0];//darkGray
-//        adminLbl.shadowOffset = CGSizeMake(0.0, 1.0);
-//        [topView addSubview:adminLbl];
-//        return topView;
-
-//}
-
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    if (section == 0) {
     
-    //increment the control user by 1
-    NSString *titleName = [NSString stringWithFormat:@"Control User: %i", section +1];//[UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0];//darkGray
-    return titleName;
-    
+        UIView *topView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, _userTV.frame.size.width, 25)];
+        [topView setBackgroundColor:[UIColor clearColor]];
+
+        //construct a UILabel for the contorl user section
+        UILabel *userLbl = [[UILabel alloc]initWithFrame:CGRectMake(20, 0, 180, 25)];
+        [userLbl setText:[NSString stringWithFormat:@"Control User: %i", section +1]];
+
+        [userLbl setFont:[UIFont fontWithName:@"Arial-BoldMT" size:17]];
+        [userLbl setTextColor:[UIColor whiteColor]];
+        [userLbl setTextAlignment:NSTextAlignmentLeft];
+        [userLbl setBackgroundColor:[UIColor clearColor]];
+        userLbl.shadowColor = [UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0];//darkGray
+        userLbl.shadowOffset = CGSizeMake(0.0, 1.0);
+        [topView addSubview:userLbl];
+        
+        return topView;
+    }
+    else
+    {
+        return nil;
+    }
+
 }
+
+//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+//    
+//    //increment the control user by 1
+//    NSString *titleName = [NSString stringWithFormat:@"Control User: %i", section +1];
+//    return titleName;
+//    
+//}
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     
     if (section == 0) {

@@ -98,9 +98,10 @@
     //test this delegate method
     [successPopup setNotDelegate:self];
     
+    DLog(@"title in SuccessPopup: %@", title);
     //set text
     successPopup.titleLbl.text = title;
-    successPopup.messageLbl.text = message;
+    successPopup.messageLbl.text = @"Email successfully sent to recipients";//message
    
     //ToDo add whatever setup code required here
     [successPopup showOnView:self.view];
@@ -165,13 +166,20 @@
       //[_depositsTV deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
         
          //remove the data from our deposits collection and update the total amopunt/count
-         [_depositsCollection removeObjectAtIndex:indexPath.section];//should be 1st -> doesnt call any tblView del
+         [_depositsCollection removeObjectAtIndex:indexPath.section];//always 1st ->doesnt call any tblView delegate
         
-        [_depositsTV deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationRight];//change to fade
+        [_depositsTV deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationRight];//change to fade --> but works lovely
         
-//        [_depositsTV reloadData];
+        
+        //if not the last section refresh data --> as it auto refreshes the viewInfooter
+//        if (indexPath.section != [_depositsTV numberOfSections]-1) {
+            double delayInSeconds = 0.3;
+            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                    [_depositsTV reloadData];//tricky
+            });
+//        }//close if
 
-       
     }//close if
     
 }
@@ -186,8 +194,6 @@
     }
     
     _allowEdit = NO;
-    
-     DLog(@"DepositsCollection in viewWillAppear: %@", _depositsCollection);
 
 }
 
@@ -196,7 +202,7 @@
 - (void)DismissUnderlyingVC {
 
         //Reset all barcode data, logged in users and the recorded deposits
-        [self wipeAndResetData];//TODO.... need to reset the class totalBagCount/ amount values
+        [self wipeAndResetData];
     
         //dismiss the viewController and wipe data --> pops to HomeVC
        [self.navigationController popToRootViewControllerAnimated:YES];
@@ -213,6 +219,7 @@
     DLog(@"_usersDict: %@", _usersDict);
     //wipe recorded QR and ITF barcode data
     [_barcodeArray removeAllObjects];//dont nil just remove entries --> nil
+    
     //wipe recorded logged in users of the app
     _usersDict = nil;
     
@@ -221,7 +228,7 @@
     [Deposit setTotalbagCount:0];
     
     //reset bag data types also
-    _totalDepositAmount = 0.0;//what are these
+//    _totalDepositAmount = 0.0;//what are these
     _bagCount = 0;
     
     //Note wipe the uniqueBagArray containing barcodes that prexist
@@ -229,8 +236,8 @@
         if ([vc isKindOfClass:[HomeVC class]]) {
             HomeVC *homeVC = (HomeVC *)vc;
             [homeVC.uniqueBagArray removeAllObjects];
+            DLog(@" <<< homeVC.uniqueBagArray >>>: %@", homeVC.uniqueBagArray);
             [homeVC.depositsArray removeAllObjects];//was passing values to DepositsVC
-            DLog(@"uniqueArray: %@", homeVC.uniqueBagArray);
         }
     }
     
@@ -425,7 +432,7 @@
         
         [self dismissViewControllerAnimated:YES completion:^{
              //custom Warning Popup
-            [self showWarningPopupWithTitle:@"Error: Unable to send email" andMessage:@"Unable to send email, please check your signal" forBarcode:nil];
+            [self showWarningPopupWithTitle:@"Error: Unable to send email" andMessage:@"Please check you have coverage" forBarcode:nil];
             //ToDo decide where to go from here if it fails can we send again
             [proceedBtn setEnabled:YES];//maybe
         }];
@@ -482,7 +489,6 @@
         [proceedBtn setUserInteractionEnabled:YES];
         [proceedBtn addTarget:self action:@selector(proceedPressed:) forControlEvents:UIControlEventTouchUpInside];
         [self buttonStyle:proceedBtn WithImgName:@"blueButton.png" imgSelectedName:@"blueButtonSelected.png" withTitle:@"SEND EMAIL"];
-        
         //add to parent view
         [aView addSubview:proceedBtn];
         
@@ -496,9 +502,6 @@
         bagLbl.shadowColor = [UIColor grayColor];
         bagLbl.shadowOffset = CGSizeMake(1.0, 1.0);
         [bagLbl setUserInteractionEnabled:NO];
-//        [bagLbl setText:[NSString stringWithFormat:@"Total bags: %i",[Deposit totalBagCount]]];
-    
-        
         //add to view
         [innerView addSubview:bagLbl];
         
@@ -534,7 +537,6 @@
         [innerView addSubview:bagAmountLbl];
 
         
-        
         //construct a UILabel for total amount
         UITextField *amountTF = [[UITextField alloc]initWithFrame:CGRectMake(130, 10, 160, 25)];
         [amountTF setBackgroundColor:[UIColor clearColor]];
@@ -562,7 +564,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
     
     if (section== [_depositsTV numberOfSections]-1) {
-        return 145.0;//was 85.0 which was correct but now need a button
+        return 145.0;
     }
     else
     {
@@ -589,20 +591,7 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    DLog(@"selectedIP in numOfSects: %@", selectedIndexPath);
-    
-    //item has been removed and its the selected item section
-//    if (_valueRemoved && selectedIndexPath.section == section) {
-//    
-//        return 0;
-//    }
-//    else
-//    {
-//        return 1;
-//    }
-    
         return 1;//should always be one
-    
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -628,8 +617,6 @@
         bagAmountTF.textAlignment = NSTextAlignmentRight;
         bagAmountTF.font = [UIFont fontWithName:@"Arial-BoldMT" size:15];
         bagAmountTF.textColor = [UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0];//blue
-//        bagAmountTF.shadowColor = [UIColor grayColor];
-//        bagAmountTF.shadowOffset = CGSizeMake(1.0, 1.0);
         bagAmountTF.backgroundColor = [UIColor clearColor];
         [bagAmountTF setUserInteractionEnabled:NO];
         [bagAmountTF setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];//center
@@ -660,13 +647,8 @@
     
         Deposit *deposit = [_depositsCollection objectAtIndex:indexPath.section];
     
-//        DLog(@"_totalDepositAmount>>>: %f", _totalDepositAmount);//redunant
-        DLog(@"_depositsCollection contains: %@", _depositsCollection);//1
-        //need getter here for these private ivars
-        DLog(@"countOfBagAmount: %f", [deposit bagAmount]);
-    
+        //populate the cell text
         bagAmountTF.text = [NSString stringWithFormat:@"€%.2f", [deposit bagAmount]];
-    
         bagNumberLbl.text = [NSString stringWithFormat:@"Bag No: %@", [deposit bagBarcode]];//unique bag number
     
     //enable user editing
@@ -681,6 +663,7 @@
     
         return cell;
 }
+
 #pragma mark - UITextField delegate methods
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     

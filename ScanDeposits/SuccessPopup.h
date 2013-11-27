@@ -35,7 +35,8 @@
 
 - (void)okPressed:(id)sender;
 
-- (void)showOnView:(UIView*)view;
+//- (void)showOnView:(UIView*)view;
+- (void)showOnView:(UIView*)view withTitle:(NSString *)title andMessage:(NSString *)message;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil;
 

@@ -119,14 +119,21 @@
 }
 
 //calls viewDidLoad
-- (void)showOnView:(UIView*)view {
-    
+//- (void)showOnView:(UIView*)view {
+- (void)showOnView:(UIView*)view withTitle:(NSString *)title andMessage:(NSString *)message {
+
 //    self.view.transform = CGAffineTransformMakeScale(0.5f, 0.5f);
+    
+    //moved here as nil in Deposits as not init
+    self.titleLbl.text = title;
+    self.messageLbl.text = message;
+    DLog(@"message in showOnView init: %@ and messageLbl.text: %@", message, self.messageLbl.text);
+    
     CGPoint offset = CGPointMake(view.center.x, view.center.y -10);
     self.view.center = offset;
     self.view.layer.cornerRadius = 5.0;
-    self.view.layer.borderColor = [UIColor blackColor].CGColor;
-    self.view.layer.borderWidth = 1.0;
+    self.view.layer.borderColor = [UIColor whiteColor].CGColor;
+    self.view.layer.borderWidth = 1.5;
    //Add view hierarchy
     [view addSubview:_backgroundView];
     [_backgroundView addSubview:self.view];

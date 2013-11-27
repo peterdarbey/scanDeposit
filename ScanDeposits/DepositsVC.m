@@ -98,13 +98,15 @@
     //test this delegate method
     [successPopup setNotDelegate:self];
     
-    DLog(@"title in SuccessPopup: %@", title);
+   
     //set text
-    successPopup.titleLbl.text = title;
-    successPopup.messageLbl.text = @"Email successfully sent to recipients";//message
+//    successPopup.titleLbl.text = title;//the whole property is nil ???
+//    successPopup.messageLbl.text = message; //nil too even with string ???
    
     //ToDo add whatever setup code required here
-    [successPopup showOnView:self.view];
+//    [successPopup showOnView:self.view];
+    //updated and set in class
+    [successPopup showOnView:self.view withTitle:title andMessage:message];//nope
     
 }
 
@@ -254,12 +256,182 @@
     return fullPath;
 }
 
-//should be a helper object
+- (NSMutableArray *)createXMLSSFromCollection:(NSMutableArray *)array {
+    
+    //array construct for new xml collection
+    NSMutableArray *xmlArray = [NSMutableArray array];
+    
+    //example of necessary structure
+    //<ss:Row>
+    //<ss:Cell>
+    //<ss:Data ss:Type="Key">Value</ss:Data>
+    //</ss:Cell>
+    //</ss:Row>
+    
+    //Test construction of excel xml structure --> xmlss format
+    NSString *xmlDTD = @"<?xml version=\"1.0\"?>";
+    NSString *xmlWBOpen = @"<ss:Workbook xmlns:ss=\"urn:schemas-microsoft-com:office:spreadsheet\">";
+    NSString *xmlWBClose = @"</ss:Workbook>";
+    NSString *xmlWSOpen = @"<ss:Worksheet ss:Name=\"AppData\">";
+    NSString *xmlWSClose = @"</ss:Worksheet>";
+    NSString *xmlTblOpen = @"<ss:Table>";
+    NSString *xmlTblClose = @"</ss:Table>";
+    NSString *xmlColumn = @"<ss:Column ss:Width=\"80\"/>";
+    //row contruction
+    NSString *xmlRowOpen = @"<ss:Row>";
+    NSString *xmlRowClose = @"</ss:Row>";
+    NSString *xmlCellOpen = @"<ss:Cell>";
+    NSString *xmlCellData = @"<ss:Data ss:Type=\"%@\">First Name</ss:Data>";
+    NSString *xmlCellClose = @"</ss:Cell>";
+    
+    //key construct for xml creation method
+    NSArray *keysArray = @[@"Branch NSC", @"Process No", @"Safe ID", @"Device Type", @"Sequence No:"
+                           , @"Unique Bag No:", @"Bag Count", @"Bag Value", @"Date/Time", @"Total Count", @"Total Value", @"User:1 Name", @"User:1 Email", @"User:2 Name", @"User:2 Email", @"Administrator"];
+    
+    //new data structure for xml spreadsheet intergration
+    NSMutableDictionary *dataDict = [NSMutableDictionary dictionaryWithObjects:array forKeys:keysArray];
+    DLog(@"dataDict for xml construct*******: %@", dataDict);
+    
+    [dataDict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        NSString *keyStr = (NSString *)key;
+        //string class
+        if ([obj isKindOfClass:[NSString class]]) {
+            
+            if ([keyStr isEqualToString:@"Branch NSC"]) {
+                NSString *string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"%@\">%@</ss:Data>", keyStr, obj];
+                [xmlArray addObject:xmlCellOpen];
+                [xmlArray addObject:string];//\n above
+                [xmlArray addObject:xmlCellClose];
+            }
+            else if ([keyStr isEqualToString:@"Process No"]) {
+                NSString *string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"%@\">%@</ss:Data>", keyStr, obj];
+                [xmlArray addObject:xmlCellOpen];
+                [xmlArray addObject:string];//\n above
+                [xmlArray addObject:xmlCellClose];
+            }
+            else if ([keyStr isEqualToString:@"Device Type"]) {
+                NSString *string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"%@\">%@</ss:Data>", keyStr, obj];
+                [xmlArray addObject:xmlCellOpen];
+                [xmlArray addObject:string];//\n above
+                [xmlArray addObject:xmlCellClose];
+            }
+            else if ([keyStr isEqualToString:@"Sequence No"]) {
+                NSString *string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"%@\">%@</ss:Data>", keyStr, obj];
+                [xmlArray addObject:xmlCellOpen];
+                [xmlArray addObject:string];//\n above
+                [xmlArray addObject:xmlCellClose];
+            }
+            else if ([keyStr isEqualToString:@"Unique Bag No:"]) {
+                NSString *string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"%@\">%@</ss:Data>", keyStr, obj];
+                [xmlArray addObject:xmlCellOpen];
+                [xmlArray addObject:string];//\n above
+                [xmlArray addObject:xmlCellClose];
+            }
+            else if ([keyStr isEqualToString:@"Date/Time"]) {
+                NSString *string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"%@\">%@</ss:Data>", keyStr, obj];
+                [xmlArray addObject:xmlCellOpen];
+                [xmlArray addObject:string];//\n above
+                [xmlArray addObject:xmlCellClose];
+            }
+            else if ([keyStr isEqualToString:@"User:1 Name"]) {
+                NSString *string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"%@\">%@</ss:Data>", keyStr, obj];
+                [xmlArray addObject:xmlCellOpen];
+                [xmlArray addObject:string];//\n above
+                [xmlArray addObject:xmlCellClose];
+            }
+            else if ([keyStr isEqualToString:@"User:1 Email"]) {
+                NSString *string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"%@\">%@</ss:Data>", keyStr, obj];
+                [xmlArray addObject:xmlCellOpen];
+                [xmlArray addObject:string];//\n above
+                [xmlArray addObject:xmlCellClose];
+            }
+            else if ([keyStr isEqualToString:@"User:2 Name"]) {
+                NSString *string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"%@\">%@</ss:Data>", keyStr, obj];
+                [xmlArray addObject:xmlCellOpen];
+                [xmlArray addObject:string];//\n above
+                [xmlArray addObject:xmlCellClose];
+            }
+            else if ([keyStr isEqualToString:@"User:2 Email"]) {
+                NSString *string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"%@\">%@</ss:Data>", keyStr, obj];
+                [xmlArray addObject:xmlCellOpen];
+                [xmlArray addObject:string];//\n above
+                [xmlArray addObject:xmlCellClose];
+            }
+            else if ([keyStr isEqualToString:@"Administrator"]) {
+                NSString *string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"%@\">%@</ss:Data>", keyStr, obj];
+                [xmlArray addObject:xmlCellOpen];
+                [xmlArray addObject:string];//\n above
+                [xmlArray addObject:xmlCellClose];
+            }
 
+            
+        }
+        //number class
+        else if ([obj isKindOfClass:[NSNumber class]]) {
+            
+            //int
+            if ((strcmp([key objCType], @encode(int)) == 0)) {
+                int valueInt = (int)[obj intValue];
+                
+                if ([keyStr isEqualToString:@"Safe ID"]) {
+                    NSString *string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"%@\">%i</ss:Data>", keyStr, valueInt];
+                    [xmlArray addObject:string];
+                }
+                else if ([keyStr isEqualToString:@"Bag Count"]) {
+                    NSString *string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"%@\">%i</ss:Data>", keyStr, valueInt];
+                    [xmlArray addObject:string];
+                }
+                else if ([keyStr isEqualToString:@"Total Count"]) {
+                    NSString *string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"%@\">%i</ss:Data>", keyStr, valueInt];
+                    [xmlArray addObject:string];
+                }
+                
+            }
+            //double
+            else if ((strcmp([key objCType], @encode(double)) == 0)) {
+                double valueDouble = (double)[obj doubleValue];
+                
+                if ([keyStr isEqualToString:@"Bag Value"]) {
+                    NSString *string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"%@\">€%.2f</ss:Data>", keyStr, valueDouble];
+                    [xmlArray addObject:string];
+                }
+                else if ([keyStr isEqualToString:@"Total Value"]) {
+                    NSString *string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"%@\">€%.2f</ss:Data>", keyStr, valueDouble];
+                    [xmlArray addObject:string];
+                }
+                
+            }
+        }//close number class check
+        
+    }];
+    
+    
+    
+    DLog(@"xmlArray -------->: %@", xmlArray);
+    
+    return xmlArray;
+}
+
+
+//should be a helper object
 - (NSMutableArray *)collectMyData {
     
-    //Test
-//    NSString *header = [NSString stringWithFormat:@"Date/Time,Branch NSC,Process Type,Safe ID,Sequence No,Unique No,Bag Count,Total Bag Count,Bag Amount,Control User 1:Name,Control User 1:Email,Control User 2:Name, Control User 2:Email,Administrator"];
+    //Test construction of excel xml structure --> xmlss format
+//    NSString *xmlDTD = @"<?xml version=\"1.0\"?>";
+//    NSString *xmlWBOpen = @"<ss:Workbook xmlns:ss=\"urn:schemas-microsoft-com:office:spreadsheet\">";
+//    NSString *xmlWBClose = @"</ss:Workbook>";
+//    NSString *xmlWSOpen = @"<ss:Worksheet ss:Name=\"AppData\">";
+//    NSString *xmlWSClose = @"</ss:Worksheet>";
+//    NSString *xmlTblOpen = @"<ss:Table>";
+//    NSString *xmlTblClose = @"</ss:Table>";
+//    NSString *xmlColumn = @"<ss:Column ss:Width=\"80\"/>";
+//    //row contruction
+//    NSString *xmlRowOpen = @"<ss:Row>";
+//    NSString *xmlRowClose = @"</ss:Row>";
+//    NSString *xmlCellOpen = @"<ss:Cell>";
+//    NSString *xmlCellData = @"<ss:Data ss:Type=\"%@\">First Name</ss:Data>";
+//    NSString *xmlCellClose = @"</ss:Cell>";
+    
     
         //extract barcode data
         if (_barcodeArray) {
@@ -268,11 +440,19 @@
             for (id object in _barcodeArray) {
                 if ([object isKindOfClass:[QRBarcode class]]) {
                     QRBarcode *qrBarcode = (QRBarcode *)object;
-//                    [_dataArray addObject:header];// --> leave out for now
+//                    [_dataArray addObject:xmlDTD];//test
+//                    [_dataArray addObject:xmlWBOpen];//test
+//                    [_dataArray addObject:xmlWSOpen];//test
+//                    [_dataArray addObject:xmlTblOpen];//test
+//                    [_dataArray addObject:xmlColumn];//test
+//                    [_dataArray addObject:xmlColumn];//test set to [_dataArray count];
+//                    [_dataArray addObject:xmlRowOpen];//test
+//                    [_dataArray addObject:xmlCellOpen];//test
+                    
                     //Add elements to the array
                     [_dataArray addObject:[qrBarcode barcodeBranch]];
                     [_dataArray addObject:[qrBarcode barcodeProcess]];
-                    [_dataArray addObject:@([qrBarcode barcodeSafeID])];//Device
+                    [_dataArray addObject:@([qrBarcode barcodeSafeID])];//Safe
                 }
             }//close for
         }
@@ -284,7 +464,8 @@
             if ([object isKindOfClass:[Deposit class]]) {
                 Deposit *deposit = (Deposit *)object;
                 //added last 6digits --> Sequence Number
-                [_dataArray addObject:[[deposit bagBarcode]substringFromIndex:6]];
+                [_dataArray addObject:[[deposit bagBarcode]substringFromIndex:6]];//Device Type
+                [_dataArray addObject:[[deposit bagBarcode]substringFromIndex:3]];//Sequence No ->not intergrate yet
                 [_dataArray addObject:[deposit bagBarcode]];//has ITF --> barcodeUniqueBagNumber
                 [_dataArray addObject:@([deposit bagCount])];//int
                 [_dataArray addObject:@([deposit bagAmount])];//double
@@ -308,6 +489,14 @@
             NSDictionary *userTwoDict = _usersDict[@2];
             [_dataArray addObject:userTwoDict[@"Name"]];
             [_dataArray addObject:userTwoDict[@"Email"]];
+            
+            //test data
+//            [_dataArray addObject:xmlCellClose];//test
+//            [_dataArray addObject:xmlRowClose];//test
+//            [_dataArray addObject:xmlWBClose];//test
+//            [_dataArray addObject:xmlWSClose];//test
+//            [_dataArray addObject:xmlTblClose];//test
+            
         
         }//close userDict
 
@@ -341,6 +530,11 @@
     
         //returns a string with as a csv format
         _dataArray = [self collectMyData];
+    
+        //new parse rules
+        NSArray *xmlArray = [self createXMLSSFromCollection:_dataArray];
+        DLog(@"xmlArray is: %@", xmlArray);
+    
         //Now need to parse my new data collection
         NSString *finalString = [StringParserHelper parseMyCollection:_dataArray];
 //        finalString = [NSString stringWithFormat:@"%@,,,,,,,,,,", finalString];//correct

@@ -65,6 +65,10 @@
     
     _valueRemoved = NO;
     
+    if ([_depositsTV numberOfSections] <= 0) {
+        [editBBtn setEnabled:NO];
+    }
+    
     
 //    //Moved here from viewWillAppear
 //    //if we can email enable the proceed button
@@ -157,18 +161,16 @@
         //set this first to update the conditional in numberOfSections
         _valueRemoved = YES;
         
-        //remove the data from our deposits collection
-//        [_depositsCollection removeObjectAtIndex:indexPath.section];//should be 1st -> doesnt call any tblView del
-        
         //this is the update
-        [_depositsTV deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+      //[_depositsTV deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        
          //remove the data from our deposits collection and update the total amopunt/count
          [_depositsCollection removeObjectAtIndex:indexPath.section];//should be 1st -> doesnt call any tblView del
         
-//        [_depositsTV deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationRight];
+        [_depositsTV deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationRight];//change to fade
         
 //        [_depositsTV reloadData];
-//        [_depositsTV endEditing:YES];
+
        
     }//close if
     
@@ -204,9 +206,8 @@
 
 - (void)wipeAndResetData {
     
-    DLog(@"DepositsCollection: %@", _depositsCollection);
     //wipe recorded deposits
-    [_depositsCollection removeAllObjects];//dont nil just remove entries
+    [_depositsCollection removeAllObjects];
     
     DLog(@"_barcodeArray: %@", _barcodeArray);
     DLog(@"_usersDict: %@", _usersDict);
@@ -214,6 +215,10 @@
     [_barcodeArray removeAllObjects];//dont nil just remove entries --> nil
     //wipe recorded logged in users of the app
     _usersDict = nil;
+    
+    //reset the class Deposit static methods
+    [Deposit setTotalBagsAmount:0.0];
+    [Deposit setTotalbagCount:0];
     
     //reset bag data types also
     _totalDepositAmount = 0.0;//what are these
@@ -225,10 +230,7 @@
             HomeVC *homeVC = (HomeVC *)vc;
             [homeVC.uniqueBagArray removeAllObjects];
             [homeVC.depositsArray removeAllObjects];//was passing values to DepositsVC
-            
-            //remove all objects dont nil as its not init in HomeVC
-//            [homeVC.depositsArray removeAllObjects];//was passing values to DepositsVC
-            DLog(@"uniqueArray: %@", homeVC.uniqueBagArray);//null -> works
+            DLog(@"uniqueArray: %@", homeVC.uniqueBagArray);
         }
     }
     
@@ -581,8 +583,8 @@
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     
-    DLog(@"count in sections: %i", [_depositsCollection count]);//3
-    return [_depositsCollection count];//CORRECT
+    DLog(@"count in sections: %i", [_depositsCollection count]);//[2,0]
+    return [_depositsCollection count];
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -590,16 +592,16 @@
     DLog(@"selectedIP in numOfSects: %@", selectedIndexPath);
     
     //item has been removed and its the selected item section
-    if (_valueRemoved && selectedIndexPath.section == section) {
+//    if (_valueRemoved && selectedIndexPath.section == section) {
+//    
+//        return 0;
+//    }
+//    else
+//    {
+//        return 1;
+//    }
     
-        return 0;
-    }
-    else
-    {
-         return 1;
-    }
-    
-//    return 1;
+        return 1;//should always be one
     
 }
 

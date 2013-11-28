@@ -315,9 +315,8 @@
         }//close userDict
 
     
-    //Also need Administrators after --> use the adminsCollection.plist for this data
+    //each Administrator associated with device --> use the adminsCollection.plist for this data
     NSMutableArray *adminArray = [NSMutableArray arrayWithContentsOfFile:[self getFilePath]];
-//    DLog(@"adminArray: %@", adminArray);
 
         if (adminArray) {
             for (int i = 0; i < [adminArray count]; i++) {
@@ -336,28 +335,21 @@
 
 - (void)proceedPressed:(UIButton *)sender {
 
-//        NSMutableDictionary *appData = [[NSMutableDictionary alloc]init];
-//        NSData *attachData = [NSPropertyListSerialization dataFromPropertyList:appData format:NSPropertyListXMLFormat_v1_0 errorDescription:nil];
-    
-
-    
-    
-        //returns a string with as a csv format
+        //returns the complete ordered app data required for the XML structure
         _dataArray = [self collectMyData];
     
-        //new parse rules
-        NSMutableArray *xmlArray = [StringParserHelper createXMLSSFromCollection:_dataArray];//for now scan 1 bag
+        //convert collection into an excel XMLSS format
+        NSMutableArray *xmlArray = [StringParserHelper createXMLSSFromCollection:_dataArray];
         DLog(@"xmlArray is: %@", xmlArray);
-        
-        //this is why comma separated pairs
+        //then parse into an appended string --> non csv format
         NSString *xmlString = [StringParserHelper parseMyCollection:xmlArray];
+        //serialize and convert to data for webservice XMLSS format xls
+        NSData *xmlDataString = [xmlString dataUsingEncoding:NSUTF8StringEncoding];
     
     
-        //Now need to parse my new data collection --> OLD
-        NSString *finalString = [StringParserHelper parseMyCollection:_dataArray];
-//        finalString = [NSString stringWithFormat:@"%@,,,,,,,,,,", finalString];//correct
-        
-        //serialize and convert to data for webservice
+        //parse into appended string with commas separated values for CSV format
+        NSString *finalString = [StringParserHelper parseMyCollectionWithCommas:_dataArray];
+        //serialize and convert to data for webservice as CSV format
         NSData *dataString = [finalString dataUsingEncoding:NSUTF8StringEncoding];
     
     
@@ -408,18 +400,14 @@
         }
     
         //Inline with draft
-        [mailController setMessageBody:[NSString stringWithFormat:@"This mail is your copy of the record that you\n <Control User 1: %@> and <Control User 2: %@> together opened and record the following contents of the <process: %@> taken from <Safe ID: %i> on <date><time: %@>.\n\nContent Summary\n%@\n\n\n\n%@", userOneName, userTwoName, [qrBarcode barcodeProcess], [qrBarcode barcodeSafeID], [NSDate date],contentArray, disclaimerString] isHTML:NO];
+        [mailController setMessageBody:[NSString stringWithFormat:@"This mail is your copy of the record that you\n <Control User 1: %@> and <Control User 2: %@> together opened and record the following contents of the <process: %@> taken from <Safe ID: %i> on <date><time: %@>.\n\nContent Summary\n%@\n\n\n\n%@", userOneName, userTwoName, [qrBarcode barcodeProcess], [qrBarcode barcodeSafeID], [NSDate date],contentArray, disclaimerString] isHTML:NO];//current date
     
-        //add attachment to email
+        //add attachment to email as CSV format
         [mailController addAttachmentData:dataString mimeType:@"text/csv" fileName:@"mailData.csv"];
 
+        //add attachment to email as Excel SpreadSheet xls format
+        [mailController addAttachmentData:xmlDataString mimeType:@"application/vnd.ms-excel" fileName:@"mailData.xls"];
     
-    
-        NSData *xmlDataString = [xmlString dataUsingEncoding:NSUTF8StringEncoding];
-    
-//        [mailController addAttachmentData:dataString mimeType:@"application/vnd.ms-excel" fileName:@"mailData.xls"];//text/xml for plist content
-    
-        [mailController addAttachmentData:xmlDataString mimeType:@"application/vnd.ms-excel" fileName:@"mailDataOne.xls"];//text/xml for plist content
         //present the mail composer
         [self presentViewController:mailController animated:YES completion:nil];
     

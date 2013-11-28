@@ -29,7 +29,6 @@
     //Test construction of excel xml structure --> xmlss format
     //DTD import
     NSString *xmlDTD = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-    //    NSString *xmlWBOpen = @"<ss:Workbook xmlns:ss=\"urn:schemas-microsoft-com:office:spreadsheet\">";
     NSString *xmlWBOpen = @"<Workbook";
     //schemas
     NSString *xmlSchemas = @" xmlns=\"urn:schemas-microsoft-com:office:spreadsheet\" xmlns:ss=\"urn:schemas-microsoft-com:office:spreadsheet\" xmlns:x=\"urn:schemas-microsoft-com:office:excel\">";
@@ -55,17 +54,14 @@
     
     //array construct for new xml collection
     NSMutableArray *__block xmlArray = [NSMutableArray array];
-    
+    //construct the header and various imports with view hierarchy structure
     //add the necessary headers and DTD metaData to the collection first
     [xmlArray addObject:xmlDTD];//docType
     [xmlArray addObject:xmlWBOpen];//WorkBook
     [xmlArray addObject:xmlSchemas];//add all necessary schemas
-    [xmlArray addObject:xmlStyles];
+    [xmlArray addObject:xmlStyles];//style rules
     [xmlArray addObject:xmlWSOpen];//WorkSheet
     [xmlArray addObject:xmlTblOpen];//Table
-    
-    //    [xmlArray addObject:xmlRowOpen];//Row Open and Close after each entry -> 1
-    
     [xmlArray addObject:xmlColumn];//Column test
     [xmlArray addObject:xmlColumnSpan];//add the span
     [xmlArray addObject:xmlBoldStyle];//test this entry
@@ -108,7 +104,6 @@
     
     //close the first row
     [xmlArray addObject:xmlRowClose];
-    
     //then add the closing format types
     [xmlArray addObject:xmlTblClose];//Table Close
     [xmlArray addObject:xmlWSClose];//WorkSheet Close
@@ -178,8 +173,46 @@
     return array;
     
 }
-
-
+//creates comma serparate pairs
++ (NSString *)parseMyCollectionWithCommas:(NSMutableArray *)array {
+    
+    //        NSMutableDictionary *appData = [[NSMutableDictionary alloc]init];
+    //        NSData *attachData = [NSPropertyListSerialization dataFromPropertyList:appData format:NSPropertyListXMLFormat_v1_0 errorDescription:nil];
+    
+    
+    NSMutableString *parsingString = [[NSMutableString alloc]init];
+    NSString *finalString;
+    
+    if (array) {
+        
+        for (int i = 0; i < [array count]; i++) {
+            NSString *string;
+            //string
+            if ([array[i] isKindOfClass:[NSString class]]) {
+                string = [NSString stringWithFormat:@"%@,", array[i]];
+                parsingString = (NSMutableString *)[parsingString stringByAppendingString:string];
+            }
+            else if ([array[i] isKindOfClass:[NSNumber class]]) {
+                //double
+                if ((strcmp([array[i] objCType], @encode(double)) == 0)) {
+                    string = [NSString stringWithFormat:@"€%.2f,", [array[i]doubleValue]];
+                    parsingString = (NSMutableString *)[parsingString stringByAppendingString:string];
+                }
+                //integer
+                else if ((strcmp([array[i] objCType], @encode(int)) == 0)) {
+                    string = [NSString stringWithFormat:@"%i,", [array[i]intValue]];
+                    parsingString = (NSMutableString *)[parsingString stringByAppendingString:string];
+                }
+            }//else if close
+            
+            finalString = parsingString;
+        }
+        
+        DLog(@"finalString: %@", finalString);//correct
+        
+    }
+    return finalString;
+}
 + (NSString *)parseMyCollection:(NSMutableArray *)array {
     
     NSMutableString *parsingString = [[NSMutableString alloc]init];

@@ -22,8 +22,13 @@
 //parse by appending string
 + (NSString *)parseMyCollection:(NSMutableArray *)array;
 
+//test
++ (NSMutableArray *)createXMLSSFromCollection:(NSMutableArray *)array;
 //new
 + (NSMutableArray *)createXMLSSFromArray:(NSMutableArray *)array andDictionary:(NSMutableDictionary *)dict;
 + (NSMutableArray *)parseValue:(id)obj forKey:(NSString *)key addToCollection:(NSMutableArray *)array;
+
+//new test
++ (NSMutableArray *)parseValue:(id)obj addToCollection:(NSMutableArray *)array;
 
 @end

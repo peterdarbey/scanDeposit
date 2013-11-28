@@ -23,7 +23,7 @@
 + (NSString *)parseMyCollection:(NSMutableArray *)array;
 
 //new
-+ (NSMutableArray *)createXMLSSFromCollection:(NSMutableArray *)array;
++ (NSMutableArray *)createXMLSSFromArray:(NSMutableArray *)array andDictionary:(NSMutableDictionary *)dict;
 + (NSMutableArray *)parseValue:(id)obj forKey:(NSString *)key addToCollection:(NSMutableArray *)array;
 
 @end

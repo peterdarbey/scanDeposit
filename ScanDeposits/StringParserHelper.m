@@ -47,8 +47,8 @@
     return xmlDict;
 }
 
-+ (NSMutableArray *)createXMLSSFromCollection:(NSMutableArray *)array {
-    DLog(@"ARRAY -> _dataArray contents: %@", array);//_dataArray contents
++ (NSMutableArray *)createXMLSSFromArray:(NSMutableArray *)array andDictionary:(NSMutableDictionary *)dict {
+//    DLog(@"ARRAY -> _dataArray contents: %@", array);//_dataArray contents
     
     //Construction of excel xmlss structure --> xls format
     //DTD import
@@ -113,18 +113,28 @@
     NSMutableDictionary *xmlDict = [self iterateWithKeySetsFromCollection:array];//StringParserHelper method
     DLog(@"<< xmlDict construct >>: %@", xmlDict);
     
+    
     //OLD
     NSMutableDictionary *dataDict = [NSMutableDictionary dictionaryWithObjects:array forKeys:keysArray];
     DLog(@"dataDict construct: %@", dataDict);//old
     
     //enumerate the collection and add xml structure and content
-    [dataDict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+//    [dataDict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+//        NSString *keyStr = (NSString *)key;
+//        
+//        //dont need conditionals as Im only taking the values now so 1 iteration
+//        xmlArray = [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
+//        
+//    }];
+    
+    [dict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
         NSString *keyStr = (NSString *)key;
         
         //dont need conditionals as Im only taking the values now so 1 iteration
         xmlArray = [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
         
     }];
+
     
     //close the first row
     [xmlArray addObject:xmlRowClose];

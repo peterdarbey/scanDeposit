@@ -256,6 +256,7 @@
     return fullPath;
 }
 
+
 - (NSMutableArray *)createXMLSSFromCollection:(NSMutableArray *)array {
     
     //Test construction of excel xml structure --> xmlss format
@@ -274,7 +275,7 @@
     NSString *xmlCellClose = @"</ss:Cell>";
     
     //array construct for new xml collection
-    NSMutableArray *xmlArray = [NSMutableArray array];
+    NSMutableArray *__block xmlArray = [NSMutableArray array];
     
     //add the necessary headers and DTD metaData to the collection first
     [xmlArray addObject:xmlDTD];//docType
@@ -309,6 +310,7 @@
     
     [xmlArray addObject:xmlRowClose];
     
+    //Need to add array aka _dataArray with matching count of keysArray
     
     //new data structure for xml spreadsheet intergration
     NSMutableDictionary *dataDict = [NSMutableDictionary dictionaryWithObjects:array forKeys:keysArray];
@@ -321,80 +323,49 @@
         if ([obj isKindOfClass:[NSString class]]) {
             //dont need conditionals as Im only taking the values now so 1 iteration
             if ([keyStr isEqualToString:@"Branch NSC"]) {//just for ordering all entries
-                NSString *string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"String\">%@</ss:Data>", obj];
-                //Open another row
-                [xmlArray addObject:xmlRowOpen];
-                [xmlArray addObject:xmlCellOpen];
-                [xmlArray addObject:string];//\n above
-                [xmlArray addObject:xmlCellClose];
+//                NSString *string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"String\">%@</ss:Data>", obj];
+//                //Open another row
+//                [xmlArray addObject:xmlRowOpen];
+//                [xmlArray addObject:xmlCellOpen];
+//                [xmlArray addObject:string];
+//                [xmlArray addObject:xmlCellClose];
+                
+                xmlArray = [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
             }
             else if ([keyStr isEqualToString:@"Process No"]) {
-                NSString *string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"String\">%@</ss:Data>", obj];
-                [xmlArray addObject:xmlCellOpen];
-                [xmlArray addObject:string];//\n above
-                [xmlArray addObject:xmlCellClose];
-            }
+                //Helper class
+                [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
+                
+            }//need these for maintaining specific ordering
             else if ([keyStr isEqualToString:@"Device Type"]) {
-                NSString *string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"String\">%@</ss:Data>", obj];
-                [xmlArray addObject:xmlCellOpen];
-                [xmlArray addObject:string];//\n above
-                [xmlArray addObject:xmlCellClose];
+                [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
             }
             else if ([keyStr isEqualToString:@"Sequence No"]) {
-                NSString *string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"String\">%@</ss:Data>", obj];
-                [xmlArray addObject:xmlCellOpen];
-                [xmlArray addObject:string];//\n above
-                [xmlArray addObject:xmlCellClose];
+                [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
             }
             else if ([keyStr isEqualToString:@"Unique Bag No:"]) {
-                NSString *string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"String\">%@</ss:Data>", obj];
-                [xmlArray addObject:xmlCellOpen];
-                [xmlArray addObject:string];//\n above
-                [xmlArray addObject:xmlCellClose];
+               [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
             }
             else if ([keyStr isEqualToString:@"Date/Time"]) {
-                NSString *string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"String\">%@</ss:Data>", obj];
-                [xmlArray addObject:xmlCellOpen];
-                [xmlArray addObject:string];//\n above
-                [xmlArray addObject:xmlCellClose];
+                [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
             }
             else if ([keyStr isEqualToString:@"User:1 Name"]) {
-                NSString *string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"String\">%@</ss:Data>", obj];
-                [xmlArray addObject:xmlCellOpen];
-                [xmlArray addObject:string];//\n above
-                [xmlArray addObject:xmlCellClose];
+                [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
             }
             else if ([keyStr isEqualToString:@"User:1 Email"]) {
-                NSString *string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"String\">%@</ss:Data>", obj];
-                [xmlArray addObject:xmlCellOpen];
-                [xmlArray addObject:string];//\n above
-                [xmlArray addObject:xmlCellClose];
+               [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
             }
             else if ([keyStr isEqualToString:@"User:2 Name"]) {
-                NSString *string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"String\">%@</ss:Data>", obj];
-                [xmlArray addObject:xmlCellOpen];
-                [xmlArray addObject:string];//\n above
-                [xmlArray addObject:xmlCellClose];
+               [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
             }
             else if ([keyStr isEqualToString:@"User:2 Email"]) {
-                NSString *string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"String\">%@</ss:Data>", obj];
-                [xmlArray addObject:xmlCellOpen];
-                [xmlArray addObject:string];//\n above
-                [xmlArray addObject:xmlCellClose];
+                [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
             }
             else if ([keyStr isEqualToString:@"Administrator:1"]) {
-                NSString *string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"String\">%@</ss:Data>", obj];
-                [xmlArray addObject:xmlCellOpen];
-                [xmlArray addObject:string];//\n above
-                [xmlArray addObject:xmlCellClose];
+                [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
             }
             else if ([keyStr isEqualToString:@"Administrator:2"]) {
-                NSString *string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"String\">%@</ss:Data>", obj];
-                [xmlArray addObject:xmlCellOpen];
-                [xmlArray addObject:string];//\n above
-                [xmlArray addObject:xmlCellClose];
-                //test
-                [xmlArray addObject:xmlRowClose];//Row Close
+                [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
             }
 
             
@@ -404,43 +375,26 @@
             
             //int
             if ((strcmp([obj objCType], @encode(int)) == 0)) {
-                int valueInt = (int)[obj intValue];
                 
                 if ([keyStr isEqualToString:@"Safe ID"]) {
-                    NSString *string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"Number\">%i</ss:Data>",valueInt];
-                    [xmlArray addObject:xmlCellOpen];
-                    [xmlArray addObject:string];//\n above
-                    [xmlArray addObject:xmlCellClose];
+                    [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
                 }
                 else if ([keyStr isEqualToString:@"Bag Count"]) {
-                    NSString *string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"Number\">%i</ss:Data>", valueInt];
-                    [xmlArray addObject:xmlCellOpen];
-                    [xmlArray addObject:string];//\n above
-                    [xmlArray addObject:xmlCellClose];
+                    [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
                 }
                 else if ([keyStr isEqualToString:@"Total Count"]) {
-                    NSString *string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"Number\">%i</ss:Data>",  valueInt];
-                    [xmlArray addObject:xmlCellOpen];
-                    [xmlArray addObject:string];//\n above
-                    [xmlArray addObject:xmlCellClose];//close on last entry
+                    [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
                 }
                 
             }
             //double
             else if ((strcmp([obj objCType], @encode(double)) == 0)) {
-                double valueDouble = (double)[obj doubleValue];
                 
                 if ([keyStr isEqualToString:@"Bag Value"]) {
-                    NSString *string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"Number\">€%.2f</ss:Data>", valueDouble];
-                    [xmlArray addObject:xmlCellOpen];
-                    [xmlArray addObject:string];//\n above
-                    [xmlArray addObject:xmlCellClose];
+                    [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
                 }
                 else if ([keyStr isEqualToString:@"Total Value"]) {
-                    NSString *string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"Number\">€%.2f</ss:Data>", valueDouble];
-                    [xmlArray addObject:xmlCellOpen];
-                    [xmlArray addObject:string];//\n above
-                    [xmlArray addObject:xmlCellClose];
+                    [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
                 }
                 
             }

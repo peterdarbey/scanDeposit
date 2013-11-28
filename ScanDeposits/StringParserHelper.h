@@ -17,4 +17,7 @@
 
 + (NSString *)parseMyCollection:(NSMutableArray *)array;
 
+//new
++ (NSMutableArray *)parseValue:(id)obj forKey:(NSString *)key addToCollection:(NSMutableArray *)array;
+
 @end

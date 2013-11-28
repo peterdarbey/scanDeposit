@@ -32,9 +32,9 @@
     //    NSString *xmlWBOpen = @"<ss:Workbook xmlns:ss=\"urn:schemas-microsoft-com:office:spreadsheet\">";
     NSString *xmlWBOpen = @"<Workbook";
     //schemas
-    NSString *xmlSchemas = @"xmlns=\"urn:schemas-microsoft-com:office:spreadsheet\" xmlns:ss=\"urn:schemas-microsoft-com:office:spreadsheet\" xmlns:x=\"urn:schemas-microsoft-com:office:excel\">";
+    NSString *xmlSchemas = @" xmlns=\"urn:schemas-microsoft-com:office:spreadsheet\" xmlns:ss=\"urn:schemas-microsoft-com:office:spreadsheet\" xmlns:x=\"urn:schemas-microsoft-com:office:excel\">";
     
-    NSString *xmlWBClose = @"</ss:Workbook>";
+    NSString *xmlWBClose = @"</Workbook>";
     NSString *xmlWSOpen = @"<ss:Worksheet ss:Name=\"AppData\">";
     NSString *xmlWSClose = @"</ss:Worksheet>";
     NSString *xmlTblOpen = @"<ss:Table>";
@@ -103,7 +103,6 @@
         
         //dont need conditionals as Im only taking the values now so 1 iteration
         xmlArray = [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
-        DLog(@"xmlArray: %@", xmlArray);//should work correctly
         
     }];
     
@@ -152,7 +151,7 @@
         }
         //else its just a regular entry
         else
-        {
+        {   //actually only need these
             [array addObject:xmlCellOpen];
             [array addObject:string];
             [array addObject:xmlCellClose];
@@ -164,18 +163,15 @@
         if ((strcmp([obj objCType], @encode(int)) == 0)) {
             int valueInt = (int)[obj intValue];
             string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"Number\">%i</ss:Data>",valueInt];
-            [array addObject:xmlCellOpen];
-            [array addObject:string];
-            [array addObject:xmlCellClose];
         }
         //double
         else if ((strcmp([obj objCType], @encode(double)) == 0)) {
             double valueDouble = (double)[obj doubleValue];
-            string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"Number\">€%.2f</ss:Data>", valueDouble];
+            string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"Number\">%.2f</ss:Data>", valueDouble];//€%.2f
+        }
             [array addObject:xmlCellOpen];
             [array addObject:string];
             [array addObject:xmlCellClose];
-        }
     }//close else if
     
     DLog(@"ARRAY: %@", array);
@@ -201,7 +197,7 @@
             else if ([array[i] isKindOfClass:[NSNumber class]]) {
                 //double
                 if ((strcmp([array[i] objCType], @encode(double)) == 0)) {
-                    string = [NSString stringWithFormat:@"€%.2f", [array[i]doubleValue]];//@"€%.2f,"
+                    string = [NSString stringWithFormat:@"%.2f", [array[i]doubleValue]];//@"€%.2f,"
                     parsingString = (NSMutableString *)[parsingString stringByAppendingString:string];
                 }
                 //integer

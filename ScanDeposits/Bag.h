@@ -301,4 +301,100 @@
 
 
 
+
+
+//- (NSMutableArray *)collectMyData {
+//    
+//    //    xmlDataDict = [NSMutableDictionary dictionary];
+//    
+//    //extract barcode data
+//    if (_barcodeArray) {
+//        
+//        //extract the barcode objects required values
+//        for (id object in _barcodeArray) {
+//            if ([object isKindOfClass:[QRBarcode class]]) {
+//                QRBarcode *qrBarcode = (QRBarcode *)object;
+//                
+//                //Add elements to the array
+//                [_dataArray addObject:[qrBarcode barcodeBranch]];
+//                //                    [xmlDataDict setValue:[qrBarcode barcodeBranch] forKey:@"Branch NSC"];
+//                [_dataArray addObject:[qrBarcode barcodeProcess]];
+//                //                    [xmlDataDict setValue:[qrBarcode barcodeProcess] forKey:@"Process No"];
+//                [_dataArray addObject:@([qrBarcode barcodeSafeID])];//Safe
+//                //                    [xmlDataDict setValue:@([qrBarcode barcodeSafeID]) forKey:@"Safe ID"];
+//            }
+//        }//close for
+//    }
+//    
+//    //extract all the deposit data
+//    if (_depositsCollection) {
+//        
+//        for (id object in _depositsCollection) {
+//            if ([object isKindOfClass:[Deposit class]]) {
+//                Deposit *deposit = (Deposit *)object;
+//                //added last 6digits --> Sequence Number
+//                [_dataArray addObject:[[deposit bagBarcode]substringFromIndex:6]];//Device Type
+//                //                [xmlDataDict setValue:[[deposit bagBarcode]substringFromIndex:6] forKey:@"Device Type"];
+//                [_dataArray addObject:[[deposit bagBarcode]substringFromIndex:3]];//Sequence No ->not intergrate yet
+//                //                [xmlDataDict setValue:[[deposit bagBarcode]substringFromIndex:3] forKey:@"Sequence No:"];
+//                [_dataArray addObject:[deposit bagBarcode]];//has ITF --> barcodeUniqueBagNumber
+//                //                [xmlDataDict setValue:[deposit bagBarcode] forKey:@"Unique Bag No:"];
+//                [_dataArray addObject:@([deposit bagCount])];//int
+//                //                [xmlDataDict setValue:@([deposit bagCount]) forKey:@"Bag Count"];
+//                [_dataArray addObject:@([deposit bagAmount])];//double
+//                //                [xmlDataDict setValue:@([deposit bagAmount]) forKey:@"Bag Value"];
+//                [_dataArray addObject:[deposit timeStamp]];//add date/time
+//                //                [xmlDataDict setValue:[deposit timeStamp] forKey:@"Date/Time"];
+//                
+//                //test dict is overwriting values in here
+//                
+//            }
+//        }//close for
+//        //dont forget static methods ie count and amount total
+//        [_dataArray addObject:@([Deposit totalBagCount])];//should be right
+//        //        [xmlDataDict setValue:@([Deposit totalBagCount]) forKey:@"Total Count"];
+//        [_dataArray addObject:@([Deposit totalBagsAmount])];
+//        //        [xmlDataDict setValue:@([Deposit totalBagsAmount]) forKey:@"Total Value"];
+//        
+//    }
+//    
+//    //retrieves each LOGGED IN users name and email
+//    if (_usersDict) {
+//        
+//        //userOne
+//        NSDictionary *userOneDict = _usersDict[@1];//--> yeah didnt work
+//        [_dataArray addObject:userOneDict[@"Name"]];
+//        //            [xmlDataDict setValue:userOneDict[@"Name"] forKey:@"User:1 Name"];//these may overwrite each other
+//        [_dataArray addObject:userOneDict[@"Email"]];
+//        //            [xmlDataDict setValue:userOneDict[@"Email"] forKey:@"User:1 Email"];//these may overwrite each other
+//        //userTwo
+//        NSDictionary *userTwoDict = _usersDict[@2];
+//        [_dataArray addObject:userTwoDict[@"Name"]];
+//        //            [xmlDataDict setValue:userOneDict[@"Name"] forKey:@"User:2 Name"];//these may overwrite each other
+//        [_dataArray addObject:userTwoDict[@"Email"]];
+//        //            [xmlDataDict setValue:userOneDict[@"Email"] forKey:@"User:2 Email"];//these may overwrite each other
+//        
+//    }//close userDict
+//    
+//    
+//    //each Administrator associated with device --> use the adminsCollection.plist for this data
+//    NSMutableArray *adminArray = [NSMutableArray arrayWithContentsOfFile:[self getFilePath]];
+//    
+//    if (adminArray) {
+//        for (int i = 0; i < [adminArray count]; i++) {
+//            NSString *adminName = [[adminArray objectAtIndex:i]objectAtIndex:0];//name
+//            [_dataArray addObject:adminName];
+//            //                [xmlDataDict setValue:adminName forKey:[NSString stringWithFormat:@"Administrator:%i", i+1]];
+//        }
+//    }//close if
+//    
+//    DLog(@"<<<<<<<< _dataArray contents >>>>>>>>>>: %@", _dataArray);//23 at moment
+//    //    DLog(@"<< xmlDataDict contents >>: %@", xmlDataDict);//crash 29 values verses 34 keys
+//    
+//    return _dataArray;
+//}
+
+
+
+
 @end

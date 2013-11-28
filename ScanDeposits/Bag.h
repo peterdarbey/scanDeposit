@@ -201,4 +201,104 @@
 
 
 
+
+//- (NSMutableArray *)createXMLSSFromCollection:(NSMutableArray *)array {
+//
+//    //Test construction of excel xml structure --> xmlss format
+//    //DTD import
+//    NSString *xmlDTD = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+////    NSString *xmlWBOpen = @"<ss:Workbook xmlns:ss=\"urn:schemas-microsoft-com:office:spreadsheet\">";
+//    NSString *xmlWBOpen = @"<Workbook>";
+//    //schemas
+//    NSString *xmlSchemas = @"xmlns=\"urn:schemas-microsoft-com:office:spreadsheet\" xmlns:ss=\"urn:schemas-microsoft-com:office:spreadsheet\" xmlns:x=\"urn:schemas-microsoft-com:office:excel\">";
+//
+//    NSString *xmlWBClose = @"</ss:Workbook>";
+//    NSString *xmlWSOpen = @"<ss:Worksheet ss:Name=\"AppData\">";
+//    NSString *xmlWSClose = @"</ss:Worksheet>";
+//    NSString *xmlTblOpen = @"<ss:Table>";
+//    NSString *xmlTblClose = @"</ss:Table>";
+//    NSString *xmlColumn = @"<ss:Column ss:Width=\"80\"/>";
+//    NSString *xmlColumnSpan = @"<Column ss:Span=\"15\" ss:Width=\"80\"/>";
+//    //styles
+//    NSString *xmlStyles = @"<Styles><Style ss:ID=\"s1\"><Interior ss:Color=\"#800008\" ss:Pattern=\"Solid\"/></Style></Styles>";
+//
+//    //row contruction
+//    NSString *xmlRowOpen = @"<ss:Row>";
+//    NSString *xmlRowClose = @"</ss:Row>";
+//    NSString *xmlCellOpen = @"<ss:Cell>";
+//    NSString *xmlCellClose = @"</ss:Cell>";
+//
+//    //Bold style
+//    NSString *xmlBoldStyle = @"<Row ss:Index=\"1\" ss:Height=\"14\"><Cell><ss:Data xmlns=\"http://www.w3.org/TR/REC-html40\" ss:Type=\"String\">Branch NSC <Font html:Color=\"#ff0000\"><I><U>UnderLine</U></I></Font> askd<B>Bold</B>This is working</ss:Data></Cell><Cell ss:StyleID=\"s1\"><Data ss:Type=\"String\">Process No</Data></Cell></Row>";
+//
+//    //array construct for new xml collection
+//    NSMutableArray *__block xmlArray = [NSMutableArray array];
+//
+//    //add the necessary headers and DTD metaData to the collection first
+//    [xmlArray addObject:xmlDTD];//docType
+//    [xmlArray addObject:xmlWBOpen];//WorkBook
+//    [xmlArray addObject:xmlSchemas];//add all necessary schemas
+//    [xmlArray addObject:xmlStyles];
+//    [xmlArray addObject:xmlWSOpen];//WorkSheet
+//    [xmlArray addObject:xmlTblOpen];//Table
+//
+////    [xmlArray addObject:xmlRowOpen];//Row Open and Close after each entry -> 1
+//
+//    [xmlArray addObject:xmlColumn];//Column test
+//    [xmlArray addObject:xmlColumnSpan];//add the span
+//    [xmlArray addObject:xmlBoldStyle];//test this entry
+////    //add the first row
+////    [xmlArray addObject:xmlRowOpen];
+//
+//    //key construct for xml creation method
+//    NSArray *keysArray = @[@"Branch NSC", @"Process No", @"Safe ID", @"Device Type", @"Sequence No:"
+//                           , @"Unique Bag No:", @"Bag Count", @"Bag Value", @"Date/Time", @"Total Count", @"Total Value", @"User:1 Name", @"User:1 Email", @"User:2 Name", @"User:2 Email", @"Administrator:1", @"Administrator:2"];
+//
+//    //enumerate and add to the xmlArray all the heading --> all 16
+//    [keysArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+//        if ([obj isKindOfClass:[NSString class]]) {
+//            //construct the heading first with titles
+//            NSString *string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"String\">%@</ss:Data>", obj];
+//            [xmlArray addObject:xmlCellOpen];
+//            [xmlArray addObject:string];
+//            [xmlArray addObject:xmlCellClose];
+//        }
+//    }];
+////    //close the first row
+////    [xmlArray addObject:xmlRowClose];
+//
+//    //add the first row
+//    [xmlArray addObject:xmlRowOpen];
+//    //Need to add array aka _dataArray with matching count of keysArray
+//
+//    //new data structure for xml spreadsheet intergration
+//    NSMutableDictionary *dataDict = [NSMutableDictionary dictionaryWithObjects:array forKeys:keysArray];
+//    DLog(@"dataDict for xml construct*******: %@", dataDict);
+//
+//    //enumerate the collection and add xml structure and content
+//    [dataDict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+//        NSString *keyStr = (NSString *)key;
+//
+//            //dont need conditionals as Im only taking the values now so 1 iteration
+//            xmlArray = [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
+//            DLog(@"xmlArray: %@", xmlArray);//should work correctly
+//
+//    }];
+//
+//    //close the first row
+//    [xmlArray addObject:xmlRowClose];
+//
+//    //then add the closing format types
+//    [xmlArray addObject:xmlTblClose];//Table Close
+//    [xmlArray addObject:xmlWSClose];//WorkSheet Close
+//    [xmlArray addObject:xmlWBClose];//WorkBook Close
+//
+//
+//    DLog(@"xmlArray -------->: %@", xmlArray);
+//
+//    return xmlArray;
+//}
+
+
+
 @end

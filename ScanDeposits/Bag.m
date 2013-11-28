@@ -978,6 +978,168 @@
 //        
 //        return 1;//should always be one
 //    }
+    
+    
+    
+    
+    
+//    - (NSMutableArray *)createXMLSSFromCollection:(NSMutableArray *)array {
+//        
+//        //Test construction of excel xml structure --> xmlss format
+//        NSString *xmlDTD = @"<?xml version=\"1.0\"?>";
+//        NSString *xmlWBOpen = @"<ss:Workbook xmlns:ss=\"urn:schemas-microsoft-com:office:spreadsheet\">";
+//        NSString *xmlWBClose = @"</ss:Workbook>";
+//        NSString *xmlWSOpen = @"<ss:Worksheet ss:Name=\"AppData\">";
+//        NSString *xmlWSClose = @"</ss:Worksheet>";
+//        NSString *xmlTblOpen = @"<ss:Table>";
+//        NSString *xmlTblClose = @"</ss:Table>";
+//        NSString *xmlColumn = @"<ss:Column ss:Width=\"80\"/>";
+//        //row contruction
+//        NSString *xmlRowOpen = @"<ss:Row>";
+//        NSString *xmlRowClose = @"</ss:Row>";
+//        NSString *xmlCellOpen = @"<ss:Cell>";
+//        NSString *xmlCellClose = @"</ss:Cell>";
+//        
+//        //array construct for new xml collection
+//        NSMutableArray *__block xmlArray = [NSMutableArray array];
+//        
+//        //add the necessary headers and DTD metaData to the collection first
+//        [xmlArray addObject:xmlDTD];//docType
+//        [xmlArray addObject:xmlWBOpen];//WorkBook
+//        [xmlArray addObject:xmlWSOpen];//WorkSheet
+//        [xmlArray addObject:xmlTblOpen];//Table
+//        
+//        //    [xmlArray addObject:xmlColumn];//Column [_dataArray count];
+//        //    [xmlArray addObject:xmlRowOpen];//Row Open and Close after each entry -> 16
+//        
+//        //key construct for xml creation method
+//        NSArray *keysArray = @[@"Branch NSC", @"Process No", @"Safe ID", @"Device Type", @"Sequence No:"
+//                               , @"Unique Bag No:", @"Bag Count", @"Bag Value", @"Date/Time", @"Total Count", @"Total Value", @"User:1 Name", @"User:1 Email", @"User:2 Name", @"User:2 Email", @"Administrator:1", @"Administrator:2"];
+//        
+//        for (int i = 0; i < [keysArray count]; i++) {
+//            [xmlArray addObject:xmlColumn];//Column test
+//        }
+//        
+//        [xmlArray addObject:xmlRowOpen];
+//        
+//        //enumerate and add to the xmlArray all the heading --> all 16
+//        [keysArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+//            if ([obj isKindOfClass:[NSString class]]) {
+//                //construct the heading first
+//                NSString *string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"String\">%@</ss:Data>", obj];
+//                //            [xmlArray addObject:xmlColumn];//Column test
+//                [xmlArray addObject:xmlCellOpen];
+//                [xmlArray addObject:string];//\n above
+//                [xmlArray addObject:xmlCellClose];
+//            }
+//        }];
+//        
+//        [xmlArray addObject:xmlRowClose];
+//        
+//        //Need to add array aka _dataArray with matching count of keysArray
+//        
+//        //new data structure for xml spreadsheet intergration
+//        NSMutableDictionary *dataDict = [NSMutableDictionary dictionaryWithObjects:array forKeys:keysArray];
+//        DLog(@"dataDict for xml construct*******: %@", dataDict);
+//        
+//        
+//        [dataDict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+//            NSString *keyStr = (NSString *)key;
+//            //string class
+//            if ([obj isKindOfClass:[NSString class]]) {
+//                //dont need conditionals as Im only taking the values now so 1 iteration
+//                if ([keyStr isEqualToString:@"Branch NSC"]) {//just for ordering all entries
+//                    //                NSString *string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"String\">%@</ss:Data>", obj];
+//                    //                //Open another row
+//                    //                [xmlArray addObject:xmlRowOpen];
+//                    //                [xmlArray addObject:xmlCellOpen];
+//                    //                [xmlArray addObject:string];
+//                    //                [xmlArray addObject:xmlCellClose];
+//                    
+//                    xmlArray = [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
+//                }
+//                else if ([keyStr isEqualToString:@"Process No"]) {
+//                    //Helper class
+//                    [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
+//                    
+//                }//need these for maintaining specific ordering
+//                else if ([keyStr isEqualToString:@"Device Type"]) {
+//                    [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
+//                }
+//                else if ([keyStr isEqualToString:@"Sequence No"]) {
+//                    [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
+//                }
+//                else if ([keyStr isEqualToString:@"Unique Bag No:"]) {
+//                    [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
+//                }
+//                else if ([keyStr isEqualToString:@"Date/Time"]) {
+//                    [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
+//                }
+//                else if ([keyStr isEqualToString:@"User:1 Name"]) {
+//                    [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
+//                }
+//                else if ([keyStr isEqualToString:@"User:1 Email"]) {
+//                    [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
+//                }
+//                else if ([keyStr isEqualToString:@"User:2 Name"]) {
+//                    [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
+//                }
+//                else if ([keyStr isEqualToString:@"User:2 Email"]) {
+//                    [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
+//                }
+//                else if ([keyStr isEqualToString:@"Administrator:1"]) {
+//                    [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
+//                }
+//                else if ([keyStr isEqualToString:@"Administrator:2"]) {
+//                    [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
+//                }
+//                
+//                
+//            }
+//            //number class
+//            else if ([obj isKindOfClass:[NSNumber class]]) {
+//                
+//                //int
+//                if ((strcmp([obj objCType], @encode(int)) == 0)) {
+//                    
+//                    if ([keyStr isEqualToString:@"Safe ID"]) {
+//                        [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
+//                    }
+//                    else if ([keyStr isEqualToString:@"Bag Count"]) {
+//                        [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
+//                    }
+//                    else if ([keyStr isEqualToString:@"Total Count"]) {
+//                        [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
+//                    }
+//                    
+//                }
+//                //double
+//                else if ((strcmp([obj objCType], @encode(double)) == 0)) {
+//                    
+//                    if ([keyStr isEqualToString:@"Bag Value"]) {
+//                        [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
+//                    }
+//                    else if ([keyStr isEqualToString:@"Total Value"]) {
+//                        [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
+//                    }
+//                    
+//                }
+//            }//close number class check
+//            
+//        }];
+//        
+//        //then add the closing format types
+//        //        [xmlArray addObject:xmlRowClose];//Row Close
+//        [xmlArray addObject:xmlTblClose];//Table Close
+//        [xmlArray addObject:xmlWSClose];//WorkSheet Close
+//        [xmlArray addObject:xmlWBClose];//WorkBook Close
+//        
+//        
+//        DLog(@"xmlArray -------->: %@", xmlArray);
+//        
+//        return xmlArray;
+//    }
+
 
 
     

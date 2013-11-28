@@ -257,162 +257,7 @@
 }
 
 
-- (NSMutableArray *)createXMLSSFromCollection:(NSMutableArray *)array {
-    
-    //Test construction of excel xml structure --> xmlss format
-    NSString *xmlDTD = @"<?xml version=\"1.0\"?>";
-    NSString *xmlWBOpen = @"<ss:Workbook xmlns:ss=\"urn:schemas-microsoft-com:office:spreadsheet\">";
-    NSString *xmlWBClose = @"</ss:Workbook>";
-    NSString *xmlWSOpen = @"<ss:Worksheet ss:Name=\"AppData\">";
-    NSString *xmlWSClose = @"</ss:Worksheet>";
-    NSString *xmlTblOpen = @"<ss:Table>";
-    NSString *xmlTblClose = @"</ss:Table>";
-    NSString *xmlColumn = @"<ss:Column ss:Width=\"80\"/>";
-    //row contruction
-    NSString *xmlRowOpen = @"<ss:Row>";
-    NSString *xmlRowClose = @"</ss:Row>";
-    NSString *xmlCellOpen = @"<ss:Cell>";
-    NSString *xmlCellClose = @"</ss:Cell>";
-    
-    //array construct for new xml collection
-    NSMutableArray *__block xmlArray = [NSMutableArray array];
-    
-    //add the necessary headers and DTD metaData to the collection first
-    [xmlArray addObject:xmlDTD];//docType
-    [xmlArray addObject:xmlWBOpen];//WorkBook
-    [xmlArray addObject:xmlWSOpen];//WorkSheet
-    [xmlArray addObject:xmlTblOpen];//Table
-    
-//    [xmlArray addObject:xmlColumn];//Column [_dataArray count];
-//    [xmlArray addObject:xmlRowOpen];//Row Open and Close after each entry -> 16
-
-    //key construct for xml creation method
-    NSArray *keysArray = @[@"Branch NSC", @"Process No", @"Safe ID", @"Device Type", @"Sequence No:"
-                           , @"Unique Bag No:", @"Bag Count", @"Bag Value", @"Date/Time", @"Total Count", @"Total Value", @"User:1 Name", @"User:1 Email", @"User:2 Name", @"User:2 Email", @"Administrator:1", @"Administrator:2"];
-    
-    for (int i = 0; i < [keysArray count]; i++) {
-        [xmlArray addObject:xmlColumn];//Column test
-    }
-    
-    [xmlArray addObject:xmlRowOpen];
-    
-    //enumerate and add to the xmlArray all the heading --> all 16
-    [keysArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if ([obj isKindOfClass:[NSString class]]) {
-            //construct the heading first
-            NSString *string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"String\">%@</ss:Data>", obj];
-//            [xmlArray addObject:xmlColumn];//Column test
-            [xmlArray addObject:xmlCellOpen];
-            [xmlArray addObject:string];//\n above
-            [xmlArray addObject:xmlCellClose];
-        }
-    }];
-    
-    [xmlArray addObject:xmlRowClose];
-    
-    //Need to add array aka _dataArray with matching count of keysArray
-    
-    //new data structure for xml spreadsheet intergration
-    NSMutableDictionary *dataDict = [NSMutableDictionary dictionaryWithObjects:array forKeys:keysArray];
-    DLog(@"dataDict for xml construct*******: %@", dataDict);
-    
-    
-    [dataDict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-        NSString *keyStr = (NSString *)key;
-        //string class
-        if ([obj isKindOfClass:[NSString class]]) {
-            //dont need conditionals as Im only taking the values now so 1 iteration
-            if ([keyStr isEqualToString:@"Branch NSC"]) {//just for ordering all entries
-//                NSString *string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"String\">%@</ss:Data>", obj];
-//                //Open another row
-//                [xmlArray addObject:xmlRowOpen];
-//                [xmlArray addObject:xmlCellOpen];
-//                [xmlArray addObject:string];
-//                [xmlArray addObject:xmlCellClose];
-                
-                xmlArray = [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
-            }
-            else if ([keyStr isEqualToString:@"Process No"]) {
-                //Helper class
-                [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
-                
-            }//need these for maintaining specific ordering
-            else if ([keyStr isEqualToString:@"Device Type"]) {
-                [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
-            }
-            else if ([keyStr isEqualToString:@"Sequence No"]) {
-                [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
-            }
-            else if ([keyStr isEqualToString:@"Unique Bag No:"]) {
-               [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
-            }
-            else if ([keyStr isEqualToString:@"Date/Time"]) {
-                [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
-            }
-            else if ([keyStr isEqualToString:@"User:1 Name"]) {
-                [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
-            }
-            else if ([keyStr isEqualToString:@"User:1 Email"]) {
-               [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
-            }
-            else if ([keyStr isEqualToString:@"User:2 Name"]) {
-               [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
-            }
-            else if ([keyStr isEqualToString:@"User:2 Email"]) {
-                [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
-            }
-            else if ([keyStr isEqualToString:@"Administrator:1"]) {
-                [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
-            }
-            else if ([keyStr isEqualToString:@"Administrator:2"]) {
-                [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
-            }
-
-            
-        }
-        //number class
-        else if ([obj isKindOfClass:[NSNumber class]]) {
-            
-            //int
-            if ((strcmp([obj objCType], @encode(int)) == 0)) {
-                
-                if ([keyStr isEqualToString:@"Safe ID"]) {
-                    [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
-                }
-                else if ([keyStr isEqualToString:@"Bag Count"]) {
-                    [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
-                }
-                else if ([keyStr isEqualToString:@"Total Count"]) {
-                    [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
-                }
-                
-            }
-            //double
-            else if ((strcmp([obj objCType], @encode(double)) == 0)) {
-                
-                if ([keyStr isEqualToString:@"Bag Value"]) {
-                    [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
-                }
-                else if ([keyStr isEqualToString:@"Total Value"]) {
-                    [StringParserHelper parseValue:obj forKey: keyStr addToCollection:xmlArray];
-                }
-                
-            }
-        }//close number class check
-        
-    }];
-    
-        //then add the closing format types
-//        [xmlArray addObject:xmlRowClose];//Row Close
-        [xmlArray addObject:xmlTblClose];//Table Close
-        [xmlArray addObject:xmlWSClose];//WorkSheet Close
-        [xmlArray addObject:xmlWBClose];//WorkBook Close
-    
-    
-    DLog(@"xmlArray -------->: %@", xmlArray);
-    
-    return xmlArray;
-}
+//Note: removed createXMLSSFromCollection method to the class helper
 
 
 //should be a helper object
@@ -501,12 +346,14 @@
         _dataArray = [self collectMyData];
     
         //new parse rules
-        NSMutableArray *xmlArray = [self createXMLSSFromCollection:_dataArray];//for now scan 1 bag
+        NSMutableArray *xmlArray = [StringParserHelper createXMLSSFromCollection:_dataArray];//for now scan 1 bag
         DLog(@"xmlArray is: %@", xmlArray);
+        
+        //this is why comma separated pairs
         NSString *xmlString = [StringParserHelper parseMyCollection:xmlArray];
     
     
-        //Now need to parse my new data collection
+        //Now need to parse my new data collection --> OLD
         NSString *finalString = [StringParserHelper parseMyCollection:_dataArray];
 //        finalString = [NSString stringWithFormat:@"%@,,,,,,,,,,", finalString];//correct
         
@@ -519,7 +366,7 @@
 //    NSArray *emailRecipArray = @[@"peterdarbey@gmail.com", @"david.h.roberts@aib.ie", @"eimear.e.ferguson@aib.ie", @"gavin.e.bennett@aib.ie"];
     
         //TEMP email assignees
-        NSArray *emailRecipArray = @[@"peterdarbey@gmail.com"];//, @"fintan.a.killoran@aib.ie"];
+        NSArray *emailRecipArray = @[@"peterdarbey@gmail.com", @"fintan.a.killoran@aib.ie"];
     
         //send email to all the users stored on the device for now
         NSMutableArray *adminArray = [NSMutableArray arrayWithContentsOfFile:[self getFilePath]];
@@ -565,48 +412,12 @@
     
         //add attachment to email
         [mailController addAttachmentData:dataString mimeType:@"text/csv" fileName:@"mailData.csv"];
+
     
-        //test xls format
-    
-        dataString = [@"<?xml version=\"1.0\"?>\
-    <ss:Workbook xmlns:ss=\"urn:schemas-microsoft-com:office:spreadsheet\">\
-    <ss:Worksheet ss:Name=\"AppData\">\
-    <ss:Table>\
-    <ss:Column ss:Width=\"80\"/>\
-    <ss:Column ss:Width=\"80\"/>\
-    <ss:Column ss:Width=\"80\"/>\
-    <ss:Row>\
-    <ss:Cell>\
-    <ss:Data ss:Type=\"Process Type\">A Coin Only Dropsafe</ss:Data>\
-    </ss:Cell>\
-    <ss:Cell>\
-    <ss:Data ss:Type=\"String\">Last Name</ss:Data>\
-    </ss:Cell>\
-    <ss:Cell>\
-    <ss:Data ss:Type=\"String\">Phone Number</ss:Data>\
-    </ss:Cell>\
-    </ss:Row>\
-    <ss:Row>\
-    <ss:Cell>\
-    <ss:Data ss:Type=\"String\">Nancy</ss:Data>\
-    </ss:Cell>\
-    <ss:Cell>\
-    <ss:Data ss:Type=\"String\">Davolio</ss:Data>\
-    </ss:Cell>\
-    <ss:Cell>\
-    <ss:Data ss:Type=\"String\">(206)555 9857</ss:Data>\
-    </ss:Cell>\
-    </ss:Row>\
-    <ss:Row>\
-    ...\
-    </ss:Row>\
-    </ss:Table>\
-    </ss:Worksheet>\
-    </ss:Workbook>" dataUsingEncoding:NSUTF8StringEncoding];
     
         NSData *xmlDataString = [xmlString dataUsingEncoding:NSUTF8StringEncoding];
     
-        [mailController addAttachmentData:dataString mimeType:@"application/vnd.ms-excel" fileName:@"mailData.xls"];//text/xml for plist content
+//        [mailController addAttachmentData:dataString mimeType:@"application/vnd.ms-excel" fileName:@"mailData.xls"];//text/xml for plist content
     
         [mailController addAttachmentData:xmlDataString mimeType:@"application/vnd.ms-excel" fileName:@"mailDataOne.xls"];//text/xml for plist content
         //present the mail composer

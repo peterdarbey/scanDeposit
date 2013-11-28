@@ -23,6 +23,7 @@
 {
     SuccessPopup *successPopup;
     UIBarButtonItem *editBBtn, *doneBtn;
+    NSMutableDictionary *xmlDataDict;
 }
 
 
@@ -263,6 +264,7 @@
 //should be a helper object
 - (NSMutableArray *)collectMyData {
     
+    xmlDataDict = [NSMutableDictionary dictionary];
         //extract barcode data
         if (_barcodeArray) {
     
@@ -351,7 +353,6 @@
         NSString *finalString = [StringParserHelper parseMyCollectionWithCommas:_dataArray];
         //serialize and convert to data for webservice as CSV format
         NSData *dataString = [finalString dataUsingEncoding:NSUTF8StringEncoding];
-    
     
     
 //    //Create our recipients -> Note this will come from file later

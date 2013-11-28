@@ -15,6 +15,8 @@
 + (NSDictionary *)parseQRBarcodeFromString:(NSString *)barcodeString;
 + (NSDictionary *)parseILBarcodeFromString:(NSString *)barcodeString withBarcodeType:(NSString *)barcodeType;
 
++ (NSMutableDictionary *)iterateWithKeySetsFromCollection:(NSArray *)keysArray;
+
 //parse by appending string and adding commas
 + (NSString *)parseMyCollectionWithCommas:(NSMutableArray *)array;
 //parse by appending string

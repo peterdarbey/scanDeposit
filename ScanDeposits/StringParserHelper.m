@@ -23,10 +23,34 @@
     
     return fullPath;
 }
+//iterate through the collection and add new keySets when applicable with _dataArray passed in
++ (NSMutableDictionary *)iterateWithKeySetsFromCollection:(NSArray *)array {
+    
+    //key construct for xml creation method
+    NSArray *keysArray = @[@"Branch NSC", @"Process No", @"Safe ID", @"Device Type", @"Sequence No:"
+                           , @"Unique Bag No:", @"Bag Count", @"Bag Value", @"Date/Time", @"Total Count", @"Total Value", @"User:1 Name", @"User:1 Email", @"User:2 Name", @"User:2 Email", @"Administrator:1", @"Administrator:2"];
+    //make a mutable copy
+    NSMutableArray *keysMArray = (NSMutableArray *)[keysArray mutableCopy];
+    
+    NSArray *keysSet = @[@"Device Type", @"Sequence No:", @"Unique Bag No:", @"Bag Count", @"Bag Value", @"Date/Time", @"Total Count", @"Total Value", @"User:1 Name", @"User:1 Email", @"User:2 Name", @"User:2 Email", @"Administrator:1", @"Administrator:2"];
+    
+    //for entries in the _dataArray that exceed on entry add the keys again
+    //need right conditional for this
+    for (int i = 0; i < [keysArray count]; i++) {
+        
+        [keysMArray addObject:keysSet];//all keys
+    }
+    //finally add _dataArray with all extra count keys and construct the dicitionary
+    NSMutableDictionary *xmlDict = [NSMutableDictionary dictionaryWithObjects:array forKeys:keysMArray];
+    
+    
+    return xmlDict;
+}
 
 + (NSMutableArray *)createXMLSSFromCollection:(NSMutableArray *)array {
+    DLog(@"ARRAY -> _dataArray contents: %@", array);//_dataArray contents
     
-    //Test construction of excel xml structure --> xmlss format
+    //Construction of excel xmlss structure --> xls format
     //DTD import
     NSString *xmlDTD = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
     NSString *xmlWBOpen = @"<Workbook";
@@ -42,20 +66,17 @@
     NSString *xmlColumnSpan = @"<Column ss:Span=\"15\" ss:Width=\"80\"/>";
     //styles
     NSString *xmlStyles = @"<Styles><Style ss:ID=\"s1\"><Interior ss:Color=\"#800008\" ss:Pattern=\"Solid\"/></Style></Styles>";
-    
     //row contruction
     NSString *xmlRowOpen = @"<ss:Row>";
     NSString *xmlRowClose = @"</ss:Row>";
     NSString *xmlCellOpen = @"<ss:Cell>";
     NSString *xmlCellClose = @"</ss:Cell>";
-    
     //Bold style
     NSString *xmlBoldStyle = @"<Row ss:Index=\"1\" ss:Height=\"14\"><Cell><ss:Data xmlns=\"http://www.w3.org/TR/REC-html40\" ss:Type=\"String\">Branch NSC <Font html:Color=\"#ff0000\"><I><U>UnderLine</U></I></Font> askd<B>Bold</B>This is working</ss:Data></Cell><Cell ss:StyleID=\"s1\"><Data ss:Type=\"String\">Process No</Data></Cell></Row>";
     
     //array construct for new xml collection
     NSMutableArray *__block xmlArray = [NSMutableArray array];
-    //construct the header and various imports with view hierarchy structure
-    //add the necessary headers and DTD metaData to the collection first
+    //construct the header and various imports with view hierarchy structure including metaData
     [xmlArray addObject:xmlDTD];//docType
     [xmlArray addObject:xmlWBOpen];//WorkBook
     [xmlArray addObject:xmlSchemas];//add all necessary schemas
@@ -87,11 +108,14 @@
     
     //add the first row
     [xmlArray addObject:xmlRowOpen];
-    //Need to add array aka _dataArray with matching count of keysArray
+   
+    //new data structure for xml spreadsheet intergration -> keysArray and _dataArray count need to match
+    NSMutableDictionary *xmlDict = [self iterateWithKeySetsFromCollection:array];//StringParserHelper method
+    DLog(@"<< xmlDict construct >>: %@", xmlDict);
     
-    //new data structure for xml spreadsheet intergration
+    //OLD
     NSMutableDictionary *dataDict = [NSMutableDictionary dictionaryWithObjects:array forKeys:keysArray];
-    DLog(@"dataDict for xml construct*******: %@", dataDict);
+    DLog(@"dataDict construct: %@", dataDict);//old
     
     //enumerate the collection and add xml structure and content
     [dataDict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {

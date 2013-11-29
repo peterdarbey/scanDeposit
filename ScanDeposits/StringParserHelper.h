@@ -24,6 +24,10 @@
 
 //test
 + (NSMutableArray *)createXMLSSFromCollection:(NSMutableArray *)array;
+
+//Fintan
++ (NSMutableArray *)createXMLFromCollectionFin:(NSMutableArray *)array;
+
 //new
 + (NSMutableArray *)createXMLSSFromArray:(NSMutableArray *)array andDictionary:(NSMutableDictionary *)dict;
 + (NSMutableArray *)parseValue:(id)obj forKey:(NSString *)key addToCollection:(NSMutableArray *)array;

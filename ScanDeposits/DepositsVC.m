@@ -290,9 +290,10 @@
         for (id object in _depositsCollection) {
             if ([object isKindOfClass:[Deposit class]]) {
                 Deposit *deposit = (Deposit *)object;
-                //added last 6digits --> Sequence Number
-                [_dataArray addObject:[[deposit bagBarcode]substringFromIndex:6]];//Device Type
-                [_dataArray addObject:[[deposit bagBarcode]substringFromIndex:3]];//Sequence No ->not intergrate yet
+                //Device Type: --> creates a string from 0 to the specified range (3) (Process Type)
+                [_dataArray addObject:[[deposit bagBarcode]substringToIndex:3]];
+                //Sequence No --> creates a string from specified range (3) to end of string
+                [_dataArray addObject:[[deposit bagBarcode]substringFromIndex:3]];
                 [_dataArray addObject:[deposit bagBarcode]];//has ITF --> barcodeUniqueBagNumber
                 [_dataArray addObject:@([deposit bagCount])];//int
                 [_dataArray addObject:@([deposit bagAmount])];//double
@@ -346,12 +347,13 @@
     
         //convert collection into an excel XMLSS format
         NSMutableArray *xmlArray;
-//        if ([xmlDataDict count] > 0) {
-//            xmlArray = [StringParserHelper createXMLSSFromArray:_dataArray andDictionary:xmlDataDict];
-//        }
-        //new test method
-        xmlArray = [StringParserHelper createXMLSSFromCollection:_dataArray];
-        DLog(@"xmlArray is: %@", xmlArray);//break after date and time key
+    
+        //old way didnt work correctly with offset
+        //        xmlArray = [StringParserHelper createXMLSSFromCollection:_dataArray];
+
+        //new method breaks after date/time key --> offset correct
+        xmlArray = [StringParserHelper createXMLFromCollectionFin:_dataArray];
+        DLog(@"xmlArray is: %@", xmlArray);
     
         //then parse into an appended string --> non csv format
         NSString *xmlString = [StringParserHelper parseMyCollection:xmlArray];
@@ -369,7 +371,7 @@
 //    NSArray *emailRecipArray = @[@"peterdarbey@gmail.com", @"david.h.roberts@aib.ie", @"eimear.e.ferguson@aib.ie", @"gavin.e.bennett@aib.ie"];
     
         //TEMP email assignees
-        NSArray *emailRecipArray = @[@"peterdarbey@gmail.com", @"fintan.a.killoran@aib.ie"];
+        NSArray *emailRecipArray = @[@"peterdarbey@gmail.com"];//, @"fintan.a.killoran@aib.ie"];
     
         //send email to all the users stored on the device for now
         NSMutableArray *adminArray = [NSMutableArray arrayWithContentsOfFile:[self getFilePath]];
@@ -417,10 +419,13 @@
         [mailController addAttachmentData:dataString mimeType:@"text/csv" fileName:@"mailData.csv"];
 
         //add attachment to email as Excel SpreadSheet xls format
-        [mailController addAttachmentData:xmlDataString mimeType:@"application/vnd.ms-excel" fileName:@"mailData.xls"];
+        [mailController addAttachmentData:xmlDataString mimeType:@"application/vnd.ms-excel" fileName:@"processReport.xls"];
     
         //present the mail composer
         [self presentViewController:mailController animated:YES completion:nil];
+        //if mail isnt setup return
+        if (mailController == nil)
+        return;
     
 }
 

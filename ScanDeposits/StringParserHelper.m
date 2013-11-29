@@ -455,7 +455,7 @@
     
     //key construct for xml creation method
     NSArray *keysArray = @[@"Branch NSC", @"Process No", @"Safe ID", @"Device Type", @"Sequence No:"
-                           , @"Unique Bag No:", @"Bag Count", @"Bag Value", @"Date/Time", @"Total Count", @"Total Value", @"User:1 Name", @"User:1 Email", @"User:2 Name", @"User:2 Email", @"Administrator:1", @"Administrator:2"];
+                           , @"Unique Bag No:", @"Bag Count", @"Bag Value", @"Date/Time", @"Total Count", @"Total Value", @"User:1 Name", @"User:1 Email", @"User:2 Name", @"User:2 Email", @"Administrator:1", @"Administrator:2"];//17items --> [keysArray count] -> 16
     
     //enumerate and add to the xmlArray all the heading --> all 16
     [keysArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -468,27 +468,12 @@
         }
     }];
     
-    //close the first row
+    //close the Heading row
     [xmlArray addObject:xmlRowClose];
-    //add the first row
+    
+    //add the first row of the deposit entries
+    //insert an empty row here
     [xmlArray addObject:xmlRowOpen];
-    
-    //new data structure for xml spreadsheet intergration -> keysArray and _dataArray count need to match
-//    NSMutableDictionary *xmlDict = [self iterateWithKeySetsFromCollection:array];//StringParserHelper method
-
-     //OLD
-//    NSMutableDictionary *dataDict = [NSMutableDictionary dictionaryWithObjects:array forKeys:keysArray];
-//    DLog(@"dataDict construct: %@", dataDict);//old
-//    
-//    //enumerate the collection and add xml structure and content
-//    [dataDict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-//        NSString *keyStr = (NSString *)key;
-//        
-//        //dont need conditionals as Im only taking the values now so 1 iteration
-//        xmlArray = [StringParserHelper parseValue:obj forKey:keyStr addToCollection:xmlArray];
-//        
-//    }];
-    
     
     //enumerate _dataArray and add to the xmlArray all entries
     [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
@@ -518,7 +503,7 @@
         if ([array count] > 16) { //--> is _dataArray object
 
             //if the index is equal to the last index in the keysArray close the cell and row
-            if (idx == [keysArray count]) {
+            if (idx == [keysArray count] -1) {
                 [xmlArray addObject:xmlCellOpen];
                 [xmlArray addObject:string];
                 [xmlArray addObject:xmlCellClose];
@@ -558,6 +543,26 @@
     DLog(@"xmlArray -------->: %@", xmlArray);
     
     return xmlArray;
+    
+    
+    
+    //new data structure for xml spreadsheet intergration -> keysArray and _dataArray count need to match
+    //    NSMutableDictionary *xmlDict = [self iterateWithKeySetsFromCollection:array];//StringParserHelper method
+    
+    //OLD
+    //    NSMutableDictionary *dataDict = [NSMutableDictionary dictionaryWithObjects:array forKeys:keysArray];
+    //    DLog(@"dataDict construct: %@", dataDict);//old
+    //
+    //    //enumerate the collection and add xml structure and content
+    //    [dataDict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+    //        NSString *keyStr = (NSString *)key;
+    //
+    //        //dont need conditionals as Im only taking the values now so 1 iteration
+    //        xmlArray = [StringParserHelper parseValue:obj forKey:keyStr addToCollection:xmlArray];
+    //        
+    //    }];
+    
+
 }
 
 

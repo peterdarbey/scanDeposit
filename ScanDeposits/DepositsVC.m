@@ -309,7 +309,7 @@
         if (_usersDict) {
         
             //userOne
-            NSDictionary *userOneDict = _usersDict[@1];//--> yeah didnt work
+            NSDictionary *userOneDict = _usersDict[@1];
             [_dataArray addObject:userOneDict[@"Name"]];
             [_dataArray addObject:userOneDict[@"Email"]];
             //userTwo
@@ -347,7 +347,7 @@
         //convert collection into an excel XMLSS format
         NSMutableArray *xmlArray;
 //        if ([xmlDataDict count] > 0) {
-//            xmlArray = [StringParserHelper createXMLSSFromArray:_dataArray andDictionary:xmlDataDict];//nil for dict
+//            xmlArray = [StringParserHelper createXMLSSFromArray:_dataArray andDictionary:xmlDataDict];
 //        }
         //new test method
         xmlArray = [StringParserHelper createXMLSSFromCollection:_dataArray];

@@ -157,20 +157,12 @@
     NSString *xmlCellOpen = @"<ss:Cell>";
     NSString *xmlCellClose = @"</ss:Cell>";
     NSString *string;
-
-    
     //I dont need key once heading are in place
     
     //if NSString
     if ([obj isKindOfClass:[NSString class]]) {
         NSString *objString = (NSString *)obj;
         string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"String\">%@</ss:Data>", objString];
-        
-            //actually only need these
-            [array addObject:xmlCellOpen];
-            [array addObject:string];
-            [array addObject:xmlCellClose];
-        
     }//close if
     
     //else if NSNumber
@@ -185,15 +177,16 @@
             double valueDouble = (double)[obj doubleValue];
             string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"Number\">%.2f</ss:Data>", valueDouble];//€%.2f
         }
-        [array addObject:xmlCellOpen];
-        [array addObject:string];
-        [array addObject:xmlCellClose];
     }//close else if
+    
+    //actually only need these
+    [array addObject:xmlCellOpen];
+    [array addObject:string];
+    [array addObject:xmlCellClose];
     
     DLog(@"ARRAY: %@", array);
     
     return array;
-
     
 }
 
@@ -420,8 +413,7 @@
 
 //Test this new approach
 + (NSMutableArray *)createXMLSSFromCollection:(NSMutableArray *)array {
-    //    DLog(@"ARRAY -> _dataArray contents: %@", array);//_dataArray contents
-    
+
     //Construction of excel xmlss structure --> xls format
     //DTD import
     NSString *xmlDTD = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
@@ -478,15 +470,13 @@
     
     //close the first row
     [xmlArray addObject:xmlRowClose];
-    
     //add the first row
     [xmlArray addObject:xmlRowOpen];
     
     //new data structure for xml spreadsheet intergration -> keysArray and _dataArray count need to match
 //    NSMutableDictionary *xmlDict = [self iterateWithKeySetsFromCollection:array];//StringParserHelper method
-//    DLog(@"<< xmlDict construct >>: %@", xmlDict);
-//    
-//    //OLD
+
+     //OLD
 //    NSMutableDictionary *dataDict = [NSMutableDictionary dictionaryWithObjects:array forKeys:keysArray];
 //    DLog(@"dataDict construct: %@", dataDict);//old
 //    
@@ -502,9 +492,60 @@
     
     //enumerate _dataArray and add to the xmlArray all entries
     [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        //construct the values now
+        NSString *string;
+            //if NSString
+            if ([obj isKindOfClass:[NSString class]]) {
+                NSString *objString = (NSString *)obj;
+                string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"String\">%@</ss:Data>", objString];
+            }
+            //else if NSNumber
+            else if ([obj isKindOfClass:[NSNumber class]]) {
+                //int
+                if ((strcmp([obj objCType], @encode(int)) == 0)) {
+                    int valueInt = (int)[obj intValue];
+                    string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"Number\">%i</ss:Data>",valueInt];
+                }
+                //double
+                else if ((strcmp([obj objCType], @encode(double)) == 0)) {
+                    double valueDouble = (double)[obj doubleValue];
+                    string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"Number\">%.2f</ss:Data>", valueDouble];//€%.2f
+                }
+                
+            }//close else if
+        
+        //if the _dataArray has more than one entry of deposit data inject new row rules
+        if ([array count] > 16) { //--> is _dataArray object
+
+            //if the index is equal to the last index in the keysArray close the cell and row
+            if (idx == [keysArray count]) {
+                [xmlArray addObject:xmlCellOpen];
+                [xmlArray addObject:string];
+                [xmlArray addObject:xmlCellClose];
+                [xmlArray addObject:xmlRowClose];
+            }
+            else if (idx == ([keysArray count] +1)) { //index 17
+                //may not need this value
+                [xmlArray addObject:xmlRowOpen];
+            }
+            else
+            {
+                [xmlArray addObject:xmlCellOpen];
+                [xmlArray addObject:string];
+                [xmlArray addObject:xmlCellClose];
+            }
+            
+        }//close if
+        else //keep adding cells
+        {
+            [xmlArray addObject:xmlCellOpen];
+            [xmlArray addObject:string];
+            [xmlArray addObject:xmlCellClose];
+        }
+        
         //dont need conditionals as Im only taking the values now so 1 iteration
-        xmlArray = [StringParserHelper parseValue:obj addToCollection:xmlArray];
-    }];
+//        xmlArray = [StringParserHelper parseValue:obj addToCollection:xmlArray];
+    }];//close enumeration
     
     //close the first row
     [xmlArray addObject:xmlRowClose];

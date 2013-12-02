@@ -344,19 +344,14 @@
     
         //convert collection into an excel XMLSS format
         NSMutableArray *xmlArray;
-    
-        //old way didnt work correctly with offset
-        //        xmlArray = [StringParserHelper createXMLSSFromCollection:_dataArray];
-
         //new method breaks after date/time key --> offset correct
-    xmlArray = [StringParserHelper createXMLFromCollectionFin:_dataArray andDeposits:_depositsCollection];//add _depositsArray
+        xmlArray = [StringParserHelper createXMLFromCollectionFin:_dataArray andDeposits:_depositsCollection];//add _depositsArray
         DLog(@"xmlArray is: %@", xmlArray);
     
         //then parse into an appended string --> non csv format
         NSString *xmlString = [StringParserHelper parseMyCollection:xmlArray];
         //serialize and convert to data for webservice XMLSS format xls
         NSData *xmlDataString = [xmlString dataUsingEncoding:NSUTF8StringEncoding];
-    
     
         //parse into appended string with commas separated values for CSV format
         NSString *finalString = [StringParserHelper parseMyCollectionWithCommas:_dataArray];
@@ -368,7 +363,7 @@
 //    NSArray *emailRecipArray = @[@"peterdarbey@gmail.com", @"david.h.roberts@aib.ie", @"eimear.e.ferguson@aib.ie", @"gavin.e.bennett@aib.ie"];
     
         //TEMP email assignees
-    NSArray *emailRecipArray = @[@"peterdarbey@gmail.com"];//, @"fintan.a.killoran@aib.ie"];
+        NSArray *emailRecipArray = @[@"peterdarbey@gmail.com", @"fintan.a.killoran@aib.ie"];
     
         //send email to all the users stored on the device for now
         NSMutableArray *adminArray = [NSMutableArray arrayWithContentsOfFile:[self getFilePath]];
@@ -418,11 +413,12 @@
         //add attachment to email as Excel SpreadSheet xls format
         [mailController addAttachmentData:xmlDataString mimeType:@"application/vnd.ms-excel" fileName:@"processReport.xls"];
     
-        //present the mail composer
-        [self presentViewController:mailController animated:YES completion:nil];
         //if mail isnt setup return
         if (mailController == nil)
         return;
+        //else present the mail composer
+        else
+            [self presentViewController:mailController animated:YES completion:nil];
     
 }
 

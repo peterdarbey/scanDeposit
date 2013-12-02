@@ -573,15 +573,13 @@
     NSString *xmlCellOpen = @"<ss:Cell>";
     NSString *xmlCellOpenWithIndex = @"<ss:Cell ss:Index=\"INDEX\">";
     NSString *xmlCellClose = @"</ss:Cell>";
+    //New row style
+    NSString *xmlHeadingStyleRowOpen = @"<ss:Row ss:Index=\"2\" ss:Height=\"18\" ss:StyleID=\"s1\">";
     
     //Bold style
 //    NSString *xmlBoldStyle = @"<ss:Row ss:Index=\"1\" ss:Height=\"18\"><ss:Cell><ss:Data xmlns=\"http://www.w3.org/TR/REC-html40\" ss:Type=\"String\">Branch NSC<Font html:Color=\"#ff0000\"><I></I></Font><B><I>Bold Branch NSC</I></B>This is working</ss:Data></ss:Cell><ss:Cell ss:StyleID=\"s1\"><ss:Data ss:Type=\"String\">Process No</ss:Data></ss:Cell></ss:Row>";//correct
     
 //    NSString *xmlFontStyle = @"<ss:Row ss:Index=\"1\" ss:Height=\"18\"><ss:Cell><ss:Data xmlns=\"http://www.w3.org/TR/REC-html40\" ss:Type=\"String\">Branch NSC<Font html:Color=\"#ff0000\"></Font><B>Bold Branch NSC</B>This is working</ss:Data></ss:Cell><ss:Cell ss:StyleID=\"s1\"><ss:Data ss:Type=\"String\">Process No</ss:Data></ss:Cell></ss:Row>";//correct
-    
-    //New row style
-    NSString *xmlHeadingStyleRowOpen = @"<ss:Row ss:Index=\"2\" ss:Height=\"18\" ss:StyleID=\"s1\">";
-    
     
     //array construct for new xml collection
     NSMutableArray *__block xmlArray = [NSMutableArray array];
@@ -595,7 +593,6 @@
     [xmlArray addObject:xmlColumn];//Column test
     [xmlArray addObject:xmlColumnSpan];//add the span
 //    [xmlArray addObject:xmlBoldStyle];//test this entry
-//    [xmlArray addObject:xmlFontStyle];//nope
     //add the first row
     [xmlArray addObject:xmlHeadingStyleRowOpen];//was xmlRowOpen
     
@@ -603,12 +600,9 @@
     NSArray *keysArray = @[@"Branch NSC", @"Process No", @"Safe ID", @"Device Type", @"Sequence No:"
                            , @"Unique Bag No:", @"Bag Count", @"Bag Value", @"Date/Time", @"Total Count", @"Total Value", @"User:1 Name", @"User:1 Email", @"User:2 Name", @"User:2 Email", @"Administrator:1", @"Administrator:2"];
   
-    
     __block int row = 0;
     __block int column = 0;
     __block int rowCount = ([array count] - 3 - 8) / 6;
-    
-    NSLog(@"row count = %i", rowCount);
     
     [keysArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         //key
@@ -672,11 +666,11 @@
 			[xmlArray addObject:[NSString stringWithFormat:@"<ss:Data ss:Type=\"Number\">%i</ss:Data>", row]];
 			[xmlArray addObject:xmlCellClose];
 			[xmlArray addObject:xmlCellOpen];
-//			[xmlArray addObject:[NSString stringWithFormat:@"<ss:Data ss:Type=\"Number\">%.2f</ss:Data>", [Deposit totalBagsAmount]]];//totals
             
             //bagIdx starts at 6
             totals += [array [bagIdx]doubleValue];//assign to totals
             DLog(@"<< totals >>: %f", totals);//correct
+            //[Deposit totalBagsAmount] -> class method
             [xmlArray addObject:[NSString stringWithFormat:@"<ss:Data ss:Type=\"Number\">%.2f</ss:Data>", totals]];
 			[xmlArray addObject:xmlCellClose];
             //incremnet bagIdx by 6

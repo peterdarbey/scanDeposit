@@ -72,7 +72,7 @@
     NSString *xmlCellOpen = @"<ss:Cell>";
     NSString *xmlCellClose = @"</ss:Cell>";
     //Bold style
-    NSString *xmlBoldStyle = @"<Row ss:Index=\"1\" ss:Height=\"14\"><Cell><ss:Data xmlns=\"http://www.w3.org/TR/REC-html40\" ss:Type=\"String\">Branch NSC <Font html:Color=\"#ff0000\"><I><U>UnderLine</U></I></Font> askd<B>Bold</B>This is working</ss:Data></Cell><Cell ss:StyleID=\"s1\"><Data ss:Type=\"String\">Process No</Data></Cell></Row>";
+    NSString *xmlBoldStyle = @"<ss:Row ss:Index=\"1\" ss:Height=\"14\"><Cell><ss:Data xmlns=\"http://www.w3.org/TR/REC-html40\" ss:Type=\"String\">Branch NSC <Font html:Color=\"#ff0000\"><I><U>UnderLine</U></I></Font> askd<B>Bold</B>This is working</ss:Data></Cell><Cell ss:StyleID=\"s1\"><Data ss:Type=\"String\">Process No</Data></Cell></ss:Row>";
     
     //array construct for new xml collection
     NSMutableArray *__block xmlArray = [NSMutableArray array];
@@ -544,25 +544,6 @@
     DLog(@"xmlArray -------->: %@", xmlArray);
     
     return xmlArray;
-    
-    
-    
-    //new data structure for xml spreadsheet intergration -> keysArray and _dataArray count need to match
-    //    NSMutableDictionary *xmlDict = [self iterateWithKeySetsFromCollection:array];//StringParserHelper method
-    
-    //OLD
-    //    NSMutableDictionary *dataDict = [NSMutableDictionary dictionaryWithObjects:array forKeys:keysArray];
-    //    DLog(@"dataDict construct: %@", dataDict);//old
-    //
-    //    //enumerate the collection and add xml structure and content
-    //    [dataDict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-    //        NSString *keyStr = (NSString *)key;
-    //
-    //        //dont need conditionals as Im only taking the values now so 1 iteration
-    //        xmlArray = [StringParserHelper parseValue:obj forKey:keyStr addToCollection:xmlArray];
-    //        
-    //    }];
-    
 
 }
 
@@ -577,12 +558,12 @@
     NSString *xmlSchemas = @" xmlns=\"urn:schemas-microsoft-com:office:spreadsheet\" xmlns:ss=\"urn:schemas-microsoft-com:office:spreadsheet\" xmlns:x=\"urn:schemas-microsoft-com:office:excel\">";
     
     NSString *xmlWBClose = @"</Workbook>";
-    NSString *xmlWSOpen = @"<ss:Worksheet ss:Name=\"AppData\">";
+    NSString *xmlWSOpen = @"<ss:Worksheet ss:Name=\"ProcessReport\">";
     NSString *xmlWSClose = @"</ss:Worksheet>";
     NSString *xmlTblOpen = @"<ss:Table>";
     NSString *xmlTblClose = @"</ss:Table>";
     NSString *xmlColumn = @"<ss:Column ss:Width=\"80\"/>";
-    NSString *xmlColumnSpan = @"<Column ss:Span=\"15\" ss:Width=\"80\"/>";
+    NSString *xmlColumnSpan = @"<Column ss:Span=\"16\" ss:Width=\"80\"/>";
     //styles
     NSString *xmlStyles = @"<Styles><Style ss:ID=\"s1\"><Interior ss:Color=\"#800008\" ss:Pattern=\"Solid\"/></Style></Styles>";
     //row contruction
@@ -591,8 +572,13 @@
     NSString *xmlCellOpen = @"<ss:Cell>";
     NSString *xmlCellOpenWithIndex = @"<ss:Cell ss:Index=\"INDEX\">";
     NSString *xmlCellClose = @"</ss:Cell>";
+    
     //Bold style
-    NSString *xmlBoldStyle = @"<Row ss:Index=\"1\" ss:Height=\"14\"><Cell><ss:Data xmlns=\"http://www.w3.org/TR/REC-html40\" ss:Type=\"String\">Branch NSC <Font html:Color=\"#ff0000\"><I><U>UnderLine</U></I></Font> askd<B>Bold</B>This is working</ss:Data></Cell><Cell ss:StyleID=\"s1\"><Data ss:Type=\"String\">Process No</Data></Cell></ss:Row>";//was </Row>
+//    NSString *xmlBoldStyle = @"<ss:Row ss:Index=\"1\" ss:Height=\"18\"><ss:Cell><ss:Data xmlns=\"http://www.w3.org/TR/REC-html40\" ss:Type=\"String\">Branch NSC<Font html:Color=\"#ff0000\"><I></I></Font>askd<B><I>Bold Branch NSC</I></B>This is working</ss:Data></ss:Cell><ss:Cell ss:StyleID=\"s1\"><ss:Data ss:Type=\"String\">Process No</ss:Data></ss:Cell></ss:Row>";//correct
+    
+    //New row style
+    NSString *xmlHeadingStyleRowOpen = @"<ss:Row ss:Index=\"1\" ss:Height=\"18\" ss:StyleID=\"s1\">";
+    
     
     //array construct for new xml collection
     NSMutableArray *__block xmlArray = [NSMutableArray array];
@@ -605,17 +591,14 @@
     [xmlArray addObject:xmlTblOpen];//Table
     [xmlArray addObject:xmlColumn];//Column test
     [xmlArray addObject:xmlColumnSpan];//add the span
-    [xmlArray addObject:xmlBoldStyle];//test this entry
+//    [xmlArray addObject:xmlBoldStyle];//test this entry
     //add the first row
-    [xmlArray addObject:xmlRowOpen];
+    [xmlArray addObject:xmlHeadingStyleRowOpen];//was xmlRowOpen
     
     //key construct for xml creation method
     NSArray *keysArray = @[@"Branch NSC", @"Process No", @"Safe ID", @"Device Type", @"Sequence No:"
                            , @"Unique Bag No:", @"Bag Count", @"Bag Value", @"Date/Time", @"Total Count", @"Total Value", @"User:1 Name", @"User:1 Email", @"User:2 Name", @"User:2 Email", @"Administrator:1", @"Administrator:2"];
-    
-    
-    
-    //    NSLog(@"-- array = %@", array);
+  
     
     __block int row = 0;
     __block int column = 0;
@@ -666,16 +649,15 @@
 				[xmlArray addObject:string];
 				[xmlArray addObject:xmlCellClose];
 			}
-			else {
-                
-				[xmlArray addObject:xmlRowClose];
-				[xmlArray addObject:@"<Row ss:Index=\"1\" ss:Height=\"14\">"];
-//                [xmlArray addObject:[NSString stringWithFormat:@"<Row ss:Index=\"%i\" ss:Height=\"14\">", idx +1]];
-				[xmlArray addObject:[xmlCellOpenWithIndex stringByReplacingOccurrencesOfString:@"INDEX" withString:[NSString stringWithFormat:@"%i", 12]]];
-				[xmlArray addObject:[NSString stringWithFormat:@"<ss:Data ss:Type=\"Number\">%.2f</ss:Data>", 8882.2]];
-				[xmlArray addObject:xmlCellClose];
-                
-			}
+//			else {
+//                
+//				[xmlArray addObject:xmlRowClose];
+//				[xmlArray addObject:@"<ss:Row ss:Index=\"1\" ss:Height=\"14\">"];//works now
+//				[xmlArray addObject:[xmlCellOpenWithIndex stringByReplacingOccurrencesOfString:@"INDEX" withString:[NSString stringWithFormat:@"%i", 11]]];//12
+//				[xmlArray addObject:[NSString stringWithFormat:@"<ss:Data ss:Type=\"Number\">%.2f</ss:Data>", 882.2]];
+//				[xmlArray addObject:xmlCellClose];
+//                
+//			}
             
 			return;
 		}
@@ -692,6 +674,19 @@
 			[xmlArray addObject:xmlCellOpen];
 			[xmlArray addObject:[NSString stringWithFormat:@"<ss:Data ss:Type=\"Number\">%.2f</ss:Data>", 2.2]];
 			[xmlArray addObject:xmlCellClose];
+//    		[xmlArray addObject:xmlRowClose];
+//    		[xmlArray addObject:xmlRowOpen];
+            
+            if(row == 0) {
+				int i;
+				for(i = 0; i < 6; i++) {
+					string = [array objectAtIndex:i + 2 + 3 + rowCount * 6];
+					[xmlArray addObject:xmlCellOpen];
+					[xmlArray addObject:[NSString stringWithFormat:@"<ss:Data ss:Type=\"String\">%@</ss:Data>", string]];
+					[xmlArray addObject:xmlCellClose];
+				}
+			}
+            
     		[xmlArray addObject:xmlRowClose];
     		[xmlArray addObject:xmlRowOpen];
             

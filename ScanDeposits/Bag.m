@@ -1140,6 +1140,169 @@
 //        return xmlArray;
 //    }
 
+//    + (NSMutableArray *)createXMLFromCollectionFin:(NSMutableArray *)array {
+//        
+//        
+//        //Construction of excel xmlss structure --> xls format
+//        //DTD import
+//        NSString *xmlDTD = @"<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+//        NSString *xmlWBOpen = @"<Workbook";
+//        //schemas
+//        NSString *xmlSchemas = @" xmlns=\"urn:schemas-microsoft-com:office:spreadsheet\" xmlns:ss=\"urn:schemas-microsoft-com:office:spreadsheet\" xmlns:x=\"urn:schemas-microsoft-com:office:excel\">";
+//        
+//        NSString *xmlWBClose = @"</Workbook>";
+//        NSString *xmlWSOpen = @"<ss:Worksheet ss:Name=\"ProcessReport\">";
+//        NSString *xmlWSClose = @"</ss:Worksheet>";
+//        NSString *xmlTblOpen = @"<ss:Table>";
+//        NSString *xmlTblClose = @"</ss:Table>";
+//        NSString *xmlColumn = @"<ss:Column ss:Width=\"80\"/>";
+//        NSString *xmlColumnSpan = @"<Column ss:Span=\"16\" ss:Width=\"80\"/>";
+//        //styles
+//        NSString *xmlStyles = @"<Styles><Style ss:ID=\"s1\"><Interior ss:Color=\"#800008\" ss:Pattern=\"Solid\"/></Style></Styles>";
+//        //row contruction
+//        NSString *xmlRowOpen = @"<ss:Row>";
+//        NSString *xmlRowClose = @"</ss:Row>";
+//        NSString *xmlCellOpen = @"<ss:Cell>";
+//        NSString *xmlCellOpenWithIndex = @"<ss:Cell ss:Index=\"INDEX\">";
+//        NSString *xmlCellClose = @"</ss:Cell>";
+//        
+//        //Bold style
+//        //    NSString *xmlBoldStyle = @"<ss:Row ss:Index=\"1\" ss:Height=\"18\"><ss:Cell><ss:Data xmlns=\"http://www.w3.org/TR/REC-html40\" ss:Type=\"String\">Branch NSC<Font html:Color=\"#ff0000\"><I></I></Font><B><I>Bold Branch NSC</I></B>This is working</ss:Data></ss:Cell><ss:Cell ss:StyleID=\"s1\"><ss:Data ss:Type=\"String\">Process No</ss:Data></ss:Cell></ss:Row>";//correct
+//        
+//        //New row style
+//        NSString *xmlHeadingStyleRowOpen = @"<ss:Row ss:Index=\"1\" ss:Height=\"18\" ss:StyleID=\"s1\">";
+//        
+//        
+//        //array construct for new xml collection
+//        NSMutableArray *__block xmlArray = [NSMutableArray array];
+//        //construct the header and various imports with view hierarchy structure including metaData
+//        [xmlArray addObject:xmlDTD];//docType
+//        [xmlArray addObject:xmlWBOpen];//WorkBook
+//        [xmlArray addObject:xmlSchemas];//add all necessary schemas
+//        [xmlArray addObject:xmlStyles];//style rules
+//        [xmlArray addObject:xmlWSOpen];//WorkSheet
+//        [xmlArray addObject:xmlTblOpen];//Table
+//        [xmlArray addObject:xmlColumn];//Column test
+//        [xmlArray addObject:xmlColumnSpan];//add the span
+//        //    [xmlArray addObject:xmlBoldStyle];//test this entry
+//        //add the first row
+//        [xmlArray addObject:xmlHeadingStyleRowOpen];//was xmlRowOpen
+//        
+//        //key construct for xml creation method
+//        NSArray *keysArray = @[@"Branch NSC", @"Process No", @"Safe ID", @"Device Type", @"Sequence No:"
+//                               , @"Unique Bag No:", @"Bag Count", @"Bag Value", @"Date/Time", @"Total Count", @"Total Value", @"User:1 Name", @"User:1 Email", @"User:2 Name", @"User:2 Email", @"Administrator:1", @"Administrator:2"];
+//        
+//        
+//        __block int row = 0;
+//        __block int column = 0;
+//        __block int rowCount = ([array count] - 3 - 8) / 6;
+//        
+//        NSLog(@"row count = %i", rowCount);
+//        
+//        [keysArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+//            //key
+//            NSString *objString = (NSString *)obj;
+//            //construct the keys
+//            NSString *string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"String\">%@</ss:Data>", objString];
+//            [xmlArray addObject:xmlCellOpen];
+//            [xmlArray addObject:string];
+//            [xmlArray addObject:xmlCellClose];
+//        }];
+//        //close the Heading
+//        [xmlArray addObject:xmlRowClose];
+//        //Create a new row
+//        [xmlArray addObject:xmlRowOpen];
+//        
+//        [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+//            //construct the values now
+//            NSString *string;
+//            //if NSString
+//            if ([obj isKindOfClass:[NSString class]]) {
+//                NSString *objString = (NSString *)obj;
+//                string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"String\">%@</ss:Data>", objString];
+//            }
+//            //else if NSNumber
+//            else if ([obj isKindOfClass:[NSNumber class]]) {
+//                //int
+//                if ((strcmp([obj objCType], @encode(int)) == 0)) {
+//                    int valueInt = (int)[obj intValue];
+//                    string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"Number\">%i</ss:Data>",valueInt];
+//                }
+//                //double
+//                else if ((strcmp([obj objCType], @encode(double)) == 0)) {
+//                    double valueDouble = (double)[obj doubleValue];
+//                    string = [NSString stringWithFormat:@"<ss:Data ss:Type=\"Number\">%.2f</ss:Data>", valueDouble];//€%.2f
+//                }
+//            }//close else if
+//            
+//            if(idx < 3 || idx > 6 * rowCount + 2) {
+//                
+//                if(idx < 3) {
+//                    [xmlArray addObject:[xmlCellOpenWithIndex stringByReplacingOccurrencesOfString:@"INDEX" withString:[NSString stringWithFormat:@"%i", idx + 1]]];
+//                    [xmlArray addObject:string];
+//                    [xmlArray addObject:xmlCellClose];
+//                }
+//                //			else {
+//                //
+//                //				[xmlArray addObject:xmlRowClose];
+//                //				[xmlArray addObject:@"<ss:Row ss:Index=\"1\" ss:Height=\"14\">"];//works now
+//                //				[xmlArray addObject:[xmlCellOpenWithIndex stringByReplacingOccurrencesOfString:@"INDEX" withString:[NSString stringWithFormat:@"%i", 11]]];//12
+//                //				[xmlArray addObject:[NSString stringWithFormat:@"<ss:Data ss:Type=\"Number\">%.2f</ss:Data>", 882.2]];
+//                //				[xmlArray addObject:xmlCellClose];
+//                //
+//                //			}
+//                
+//                return;
+//            }
+//            
+//            
+//            [xmlArray addObject:[xmlCellOpenWithIndex stringByReplacingOccurrencesOfString:@"INDEX" withString:[NSString stringWithFormat:@"%i", column + 4]]];
+//            [xmlArray addObject:string];
+//            [xmlArray addObject:xmlCellClose];
+//            
+//            if(!((column + 1) % 6)) {
+//                [xmlArray addObject:xmlCellOpen];
+//                [xmlArray addObject:[NSString stringWithFormat:@"<ss:Data ss:Type=\"Number\">%i</ss:Data>", row]];
+//                [xmlArray addObject:xmlCellClose];
+//                [xmlArray addObject:xmlCellOpen];
+//                [xmlArray addObject:[NSString stringWithFormat:@"<ss:Data ss:Type=\"Number\">%.2f</ss:Data>", 2.2]];
+//                [xmlArray addObject:xmlCellClose];
+//                //    		[xmlArray addObject:xmlRowClose];
+//                //    		[xmlArray addObject:xmlRowOpen];
+//                
+//                if(row == 0) {
+//                    int i;
+//                    for(i = 0; i < 6; i++) {
+//                        string = [array objectAtIndex:i + 2 + 3 + rowCount * 6];
+//                        [xmlArray addObject:xmlCellOpen];
+//                        [xmlArray addObject:[NSString stringWithFormat:@"<ss:Data ss:Type=\"String\">%@</ss:Data>", string]];
+//                        [xmlArray addObject:xmlCellClose];
+//                    }
+//                }
+//                
+//                [xmlArray addObject:xmlRowClose];
+//                [xmlArray addObject:xmlRowOpen];
+//                
+//                row++;
+//                column = 0;
+//            }
+//            else
+//                column++;
+//            
+//        }];//close enumeration
+//        
+//        //close the first row
+//        [xmlArray addObject:xmlRowClose];
+//        //then add the closing format types
+//        [xmlArray addObject:xmlTblClose];//Table Close
+//        [xmlArray addObject:xmlWSClose];//WorkSheet Close
+//        [xmlArray addObject:xmlWBClose];//WorkBook Close
+//        
+//        NSLog(@"%@", xmlArray);
+//        
+//        return xmlArray;
+//        
+//    }
 
 
     

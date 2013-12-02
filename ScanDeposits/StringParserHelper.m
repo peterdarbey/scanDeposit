@@ -574,7 +574,9 @@
     NSString *xmlCellClose = @"</ss:Cell>";
     
     //Bold style
-//    NSString *xmlBoldStyle = @"<ss:Row ss:Index=\"1\" ss:Height=\"18\"><ss:Cell><ss:Data xmlns=\"http://www.w3.org/TR/REC-html40\" ss:Type=\"String\">Branch NSC<Font html:Color=\"#ff0000\"><I></I></Font>askd<B><I>Bold Branch NSC</I></B>This is working</ss:Data></ss:Cell><ss:Cell ss:StyleID=\"s1\"><ss:Data ss:Type=\"String\">Process No</ss:Data></ss:Cell></ss:Row>";//correct
+//    NSString *xmlBoldStyle = @"<ss:Row ss:Index=\"1\" ss:Height=\"18\"><ss:Cell><ss:Data xmlns=\"http://www.w3.org/TR/REC-html40\" ss:Type=\"String\">Branch NSC<Font html:Color=\"#ff0000\"><I></I></Font><B><I>Bold Branch NSC</I></B>This is working</ss:Data></ss:Cell><ss:Cell ss:StyleID=\"s1\"><ss:Data ss:Type=\"String\">Process No</ss:Data></ss:Cell></ss:Row>";//correct
+    
+//    NSString *xmlFontStyle = @"<ss:Row ss:Index=\"1\" ss:Height=\"18\"><ss:Cell><ss:Data xmlns=\"http://www.w3.org/TR/REC-html40\" ss:Type=\"String\">Branch NSC<Font html:Color=\"#ff0000\"></Font><B>Bold Branch NSC</B>This is working</ss:Data></ss:Cell><ss:Cell ss:StyleID=\"s1\"><ss:Data ss:Type=\"String\">Process No</ss:Data></ss:Cell></ss:Row>";//correct
     
     //New row style
     NSString *xmlHeadingStyleRowOpen = @"<ss:Row ss:Index=\"1\" ss:Height=\"18\" ss:StyleID=\"s1\">";
@@ -592,6 +594,7 @@
     [xmlArray addObject:xmlColumn];//Column test
     [xmlArray addObject:xmlColumnSpan];//add the span
 //    [xmlArray addObject:xmlBoldStyle];//test this entry
+//    [xmlArray addObject:xmlFontStyle];//nope
     //add the first row
     [xmlArray addObject:xmlHeadingStyleRowOpen];//was xmlRowOpen
     
@@ -648,17 +651,7 @@
 				[xmlArray addObject:[xmlCellOpenWithIndex stringByReplacingOccurrencesOfString:@"INDEX" withString:[NSString stringWithFormat:@"%i", idx + 1]]];
 				[xmlArray addObject:string];
 				[xmlArray addObject:xmlCellClose];
-			}
-//			else {
-//                
-//				[xmlArray addObject:xmlRowClose];
-//				[xmlArray addObject:@"<ss:Row ss:Index=\"1\" ss:Height=\"14\">"];//works now
-//				[xmlArray addObject:[xmlCellOpenWithIndex stringByReplacingOccurrencesOfString:@"INDEX" withString:[NSString stringWithFormat:@"%i", 11]]];//12
-//				[xmlArray addObject:[NSString stringWithFormat:@"<ss:Data ss:Type=\"Number\">%.2f</ss:Data>", 882.2]];
-//				[xmlArray addObject:xmlCellClose];
-//                
-//			}
-            
+			}            
 			return;
 		}
         
@@ -674,8 +667,6 @@
 			[xmlArray addObject:xmlCellOpen];
 			[xmlArray addObject:[NSString stringWithFormat:@"<ss:Data ss:Type=\"Number\">%.2f</ss:Data>", 2.2]];
 			[xmlArray addObject:xmlCellClose];
-//    		[xmlArray addObject:xmlRowClose];
-//    		[xmlArray addObject:xmlRowOpen];
             
             if(row == 0) {
 				int i;

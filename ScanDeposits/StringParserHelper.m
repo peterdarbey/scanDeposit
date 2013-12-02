@@ -624,18 +624,9 @@
     //Create a new row
     [xmlArray addObject:xmlRowOpen];
     
-    //construct an array for the deposits bag values
-    NSMutableArray *__block bagValuesArray = [NSMutableArray array];
-    for (id object in deposits) {
-        if ([object isKindOfClass:[Deposit class]]) {
-            Deposit *deposit = (Deposit *)object;
-            //add all bag values to the collection
-            [bagValuesArray addObject:@([deposit bagAmount])];
-        }
-    }//close for
-    
-    //construct a variable to hold class amount increments
-    double __block totals = 0.00;
+    //construct a variable to hold bag Values and increment
+    double __block totals = 0.0;
+    NSInteger __block bagIdx = 7;
     
     [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         
@@ -680,18 +671,16 @@
 			[xmlArray addObject:xmlCellOpen];
 			[xmlArray addObject:[NSString stringWithFormat:@"<ss:Data ss:Type=\"Number\">%i</ss:Data>", row]];
 			[xmlArray addObject:xmlCellClose];
-            //construct a variable to hold class amount increments
-//            double totals = 0.00;
-            int i = 0;
-            while (i < [bagValuesArray count]) {
-                totals += [bagValuesArray[i]doubleValue];
-                DLog(@"totals: %f", totals);
-                i++;
-            }
-
 			[xmlArray addObject:xmlCellOpen];
-			[xmlArray addObject:[NSString stringWithFormat:@"<ss:Data ss:Type=\"Number\">%.2f</ss:Data>", [Deposit totalBagsAmount]]];//totals
+//			[xmlArray addObject:[NSString stringWithFormat:@"<ss:Data ss:Type=\"Number\">%.2f</ss:Data>", [Deposit totalBagsAmount]]];//totals
+            
+            //bagIdx starts at 6
+            totals += [array [bagIdx]doubleValue];//assign to totals
+            DLog(@"<< totals >>: %f", totals);//correct
+            [xmlArray addObject:[NSString stringWithFormat:@"<ss:Data ss:Type=\"Number\">%.2f</ss:Data>", totals]];
 			[xmlArray addObject:xmlCellClose];
+            //incremnet bagIdx by 6
+            bagIdx +=6;
             
             if(row == 0) {
 				int i;

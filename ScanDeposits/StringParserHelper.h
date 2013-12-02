@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+@class Deposit;
 
 @interface StringParserHelper : NSObject
 
@@ -26,7 +27,7 @@
 + (NSMutableArray *)createXMLSSFromCollection:(NSMutableArray *)array;
 
 //Fintan
-+ (NSMutableArray *)createXMLFromCollectionFin:(NSMutableArray *)array;
++ (NSMutableArray *)createXMLFromCollectionFin:(NSMutableArray *)array andDeposits:(NSMutableArray *)deposits;
 
 //new
 + (NSMutableArray *)createXMLSSFromArray:(NSMutableArray *)array andDictionary:(NSMutableDictionary *)dict;

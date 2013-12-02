@@ -349,7 +349,7 @@
         //        xmlArray = [StringParserHelper createXMLSSFromCollection:_dataArray];
 
         //new method breaks after date/time key --> offset correct
-        xmlArray = [StringParserHelper createXMLFromCollectionFin:_dataArray];
+    xmlArray = [StringParserHelper createXMLFromCollectionFin:_dataArray andDeposits:_depositsCollection];//add _depositsArray
         DLog(@"xmlArray is: %@", xmlArray);
     
         //then parse into an appended string --> non csv format

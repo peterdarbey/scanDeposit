@@ -7,6 +7,7 @@
 //
 
 #import "StringParserHelper.h"
+#import "Deposit.h"
 
 @implementation StringParserHelper
 {
@@ -547,7 +548,7 @@
 
 }
 
-+ (NSMutableArray *)createXMLFromCollectionFin:(NSMutableArray *)array {
++ (NSMutableArray *)createXMLFromCollectionFin:(NSMutableArray *)array andDeposits:(NSMutableArray *)deposits {
     
     
     //Construction of excel xmlss structure --> xls format
@@ -579,7 +580,7 @@
 //    NSString *xmlFontStyle = @"<ss:Row ss:Index=\"1\" ss:Height=\"18\"><ss:Cell><ss:Data xmlns=\"http://www.w3.org/TR/REC-html40\" ss:Type=\"String\">Branch NSC<Font html:Color=\"#ff0000\"></Font><B>Bold Branch NSC</B>This is working</ss:Data></ss:Cell><ss:Cell ss:StyleID=\"s1\"><ss:Data ss:Type=\"String\">Process No</ss:Data></ss:Cell></ss:Row>";//correct
     
     //New row style
-    NSString *xmlHeadingStyleRowOpen = @"<ss:Row ss:Index=\"1\" ss:Height=\"18\" ss:StyleID=\"s1\">";
+    NSString *xmlHeadingStyleRowOpen = @"<ss:Row ss:Index=\"2\" ss:Height=\"18\" ss:StyleID=\"s1\">";
     
     
     //array construct for new xml collection
@@ -623,7 +624,21 @@
     //Create a new row
     [xmlArray addObject:xmlRowOpen];
     
+    //construct an array for the deposits bag values
+    NSMutableArray *__block bagValuesArray = [NSMutableArray array];
+    for (id object in deposits) {
+        if ([object isKindOfClass:[Deposit class]]) {
+            Deposit *deposit = (Deposit *)object;
+            //add all bag values to the collection
+            [bagValuesArray addObject:@([deposit bagAmount])];
+        }
+    }//close for
+    
+    //construct a variable to hold class amount increments
+    double __block totals = 0.00;
+    
     [array enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        
         //construct the values now
         NSString *string;
         //if NSString
@@ -660,12 +675,22 @@
 		[xmlArray addObject:string];
 		[xmlArray addObject:xmlCellClose];
         
+        //totals section
         if(!((column + 1) % 6)) {
 			[xmlArray addObject:xmlCellOpen];
 			[xmlArray addObject:[NSString stringWithFormat:@"<ss:Data ss:Type=\"Number\">%i</ss:Data>", row]];
 			[xmlArray addObject:xmlCellClose];
+            //construct a variable to hold class amount increments
+//            double totals = 0.00;
+            int i = 0;
+            while (i < [bagValuesArray count]) {
+                totals += [bagValuesArray[i]doubleValue];
+                DLog(@"totals: %f", totals);
+                i++;
+            }
+
 			[xmlArray addObject:xmlCellOpen];
-			[xmlArray addObject:[NSString stringWithFormat:@"<ss:Data ss:Type=\"Number\">%.2f</ss:Data>", 2.2]];
+			[xmlArray addObject:[NSString stringWithFormat:@"<ss:Data ss:Type=\"Number\">%.2f</ss:Data>", [Deposit totalBagsAmount]]];//totals
 			[xmlArray addObject:xmlCellClose];
             
             if(row == 0) {

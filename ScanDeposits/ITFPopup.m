@@ -136,64 +136,77 @@
     return newString;
 }
 
-
+//asks delegate if the textField contents should change to allow new char just typed (replace string
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    
+    //if its in the control set char range allow the change in the specified text
     if([[string stringByTrimmingCharactersInSet:[NSCharacterSet controlCharacterSet]]
         isEqualToString:@""])
         return YES;
+    //ass
+    NSString *previousValue = [[[textField.text stringByTrimmingCharactersInSet:[[NSCharacterSet decimalDigitCharacterSet] invertedSet]] stringByReplacingOccurrencesOfString:@"." withString:@""] stringByReplacingOccurrencesOfString:@"," withString:@""];//empty until after 1st entry becomes 002 strips out . ,
+    DLog(@"previousValue>>>>>: %@", previousValue);//on 0.25 -> 025 remove dec
     
-    NSString *previousValue = [[[textField.text stringByTrimmingCharactersInSet:[[NSCharacterSet decimalDigitCharacterSet] invertedSet]] stringByReplacingOccurrencesOfString:@"." withString:@""] stringByReplacingOccurrencesOfString:@"," withString:@""];
-    DLog(@"previousValue>>>>>: %@", previousValue);//all without the decimal 1st entery not here until 2nd entered then all entries
     string = [string stringByTrimmingCharactersInSet:[[NSCharacterSet decimalDigitCharacterSet] invertedSet]];
     DLog(@"string>>>>>: %@", string);//single current char
     NSString *modifiedValue = [NSString stringWithFormat:@"%@%@", previousValue, string];
-    DLog(@"modifiedValue>>>>>: %@", modifiedValue);//adds together
+    DLog(@"modifiedValue>>>>>: %@", modifiedValue);//adds together accepts the 0 -> ie 0250
     if ([modifiedValue length] == 1) {
         
-        modifiedValue = [NSString stringWithFormat:@"0.0%@", string];
+        modifiedValue = [NSString stringWithFormat:@"0.0%@", string];//ie 2 becomes 0.02
         
     }
     
     else if ([modifiedValue length] == 2) {
-        
+        //shift the prev value over 1
         modifiedValue = [NSString stringWithFormat:@"0.%@%@", previousValue, string];
         
     }
     
     else if ([modifiedValue length] > 2) {
         
-        modifiedValue = [NSString stringWithFormat:@"%@.%@",[modifiedValue substringToIndex: modifiedValue.length-2],[modifiedValue substringFromIndex:modifiedValue.length-2]];
+        modifiedValue = [NSString stringWithFormat:@"%@.%@",[modifiedValue substringToIndex: modifiedValue.length-2],[modifiedValue substringFromIndex:modifiedValue.length-2]];//on 0025 -> 00.25 -> 02.50
         
     }
     
     
-    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
-    [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
-    NSDecimalNumber *decimal = [NSDecimalNumber decimalNumberWithString:modifiedValue];
-    modifiedValue = [formatter stringFromNumber:decimal];
-
-    if ([string isEqualToString:@"0"] && modifiedValue.length < 5) {
+//    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+//    [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+//    NSDecimalNumber *decimal = [NSDecimalNumber decimalNumberWithString:modifiedValue];
+//    modifiedValue = [formatter stringFromNumber:decimal];//typed digit ->2
+    
+    //if last entry is a 0 enter
+    if ([string isEqualToString:@"0"] && modifiedValue.length < 6) {//was <5 ->00250
         DLog(@"Allow 0 entry");//goes in but not allowed by decimal
-        textField.text = modifiedValue;
+//        textField.text = modifiedValue;
+        textField.text = [modifiedValue stringByAppendingString:string];
+        DLog(@"modifiedValue: %@", modifiedValue);//0.25
+//        return YES;
     }
+    //else last entry isnt a 0 and less than 6 chars
     else if (![string isEqualToString:@"0"] && modifiedValue.length <= 6) {
         textField.text = modifiedValue;
         DLog(@"Do not allow 0 entry");
     }
     
-//    if (modifiedValue.length > 7) {
-//        DLog(@"Sorry value to big");
-//        //NOTE: problem with the 0 entry
-//        //show alert here
-//    }
+    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+    [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+    NSDecimalNumber *decimal = [NSDecimalNumber decimalNumberWithString:modifiedValue];
+    modifiedValue = [formatter stringFromNumber:decimal];//typed digit ->2
+    //unhidden
+    if (modifiedValue.length > 7) {
+        DLog(@"Sorry value to big");
+        //NOTE: problem with the 0 entry
+        //show alert here
+        return NO;
+    }
 //    else
 //    {
 //        textField.text = modifiedValue;
 //    }
 //    textField.text = modifiedValue;
     
-    return NO;
+    
+        return NO;
     
 }
 

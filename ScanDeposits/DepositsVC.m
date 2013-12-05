@@ -122,6 +122,7 @@
     [proceedBtn setEnabled:NO];
     
 //    [_depositsTV setEditing:YES animated:YES];//test
+    
     _allowEdit = YES;
     [_depositsTV reloadData];
     
@@ -141,9 +142,10 @@
     
     //    [_depositsTV endEditing:YES];//test
     
+    [_depositsTV reloadData];
     _allowEdit = NO;
     
-    [_depositsTV reloadData];
+//    [_depositsTV reloadData];
     
     //set the edit button as the current barButton
     [self.navigationItem setRightBarButtonItem:editBBtn];
@@ -705,9 +707,10 @@
     
     //    [_depositsTV endEditing:YES];//test
     
+    [_depositsTV reloadData];
     _allowEdit = NO;
     
-    [_depositsTV reloadData];
+//    [_depositsTV reloadData];
     
     //set the edit button as the current barButton
     [self.navigationItem setRightBarButtonItem:editBBtn];
@@ -783,6 +786,7 @@
     }
     textField.text = [NSString stringWithFormat:@"%03ld.%02ld", n, d];
     newAmount = (double)textField.text.doubleValue;//assign to iVar here not in didEndEditing
+    DLog(@"newAmount: %f", newAmount);
     return NO;
 }
 

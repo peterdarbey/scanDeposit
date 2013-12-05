@@ -547,16 +547,23 @@
     _didCancelDeposit = didCancel.boolValue;
     
     if (_didCancelDeposit) {
-        DLog(@"Wipe barcode history in this delegate callback");
         //ToDO wipe barcodeArray for stored history of scans
-        if (_uniqueBagArray) {
-            DLog(@"UniqueBagArray before removal: %@", _uniqueBagArray);
+        if (_uniqueBagArray && _barcodeArray) {
             //Dont need to check if it contains the barcodeString as its an ordered collection
             //So remove lastObject will work fine
             [_uniqueBagArray removeLastObject];
             DLog(@"UniqueBagArray after removal: %@", _uniqueBagArray);
             
-        }
+            //remove the EightBarcode object from the barcodeArray
+            [_barcodeArray removeLastObject];// correct i think
+            //dont need to remove from _depositsCollection as it never gets there until finishedScans is pressed
+            
+            //disable finishedScans button again
+             barBtnFinished.enabled = NO;//correct
+            //ToDo: Note need to scan QR code again --> look at in the morning
+            
+        }//close if
+        
     }
     
 }
@@ -711,6 +718,7 @@
             _eightBarcode = [[EightBarcode alloc]initBarcodeWithSymbology:barcode[@"Symbology"] processType:barcode[@"Process Type"] uniqueBagNumber:barcode[@"Unique Bag Number"]];
             DLog(@"_eightBarcode: %@", _eightBarcode);
             //Add to collection -> we have a key value pair here to ID the type of barcode object so add to same array as QRBarcode
+            //leave this wrong place for didResetBarcode bool
             [_barcodeArray addObject:_eightBarcode];
             
             if (_eightBarcode) {
@@ -799,7 +807,7 @@
     //pass the time
     itfPopup.timeString = dateString;//not very OO -> passing to the Deposit model via the popup xib
     //pass the barcode data
-    itfPopup.barcodeArray = _barcodeArray;
+    itfPopup.barcodeArray = _barcodeArray;//we dont know at this point if user wants to cancel so leave as is
     
     //Add another Prefix test from the 2/5 interleaved barcode
     if ([barcodeString hasPrefix:@"190"]) {

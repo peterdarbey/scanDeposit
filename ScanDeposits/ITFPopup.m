@@ -38,6 +38,7 @@
 }
 - (void)cancelKBPressed:(UIButton *)sender {
 
+    //_bagAmount = 000.00;
     [_inputAmountTF resignFirstResponder];
 }
 - (void)doneKBPressed:(UIButton *)sender {

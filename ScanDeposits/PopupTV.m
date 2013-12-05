@@ -57,6 +57,7 @@
 - (UITextField *)returnNextTextField:(UITextField *)textField {
     //retrieve the cell that contains the textField
     UITableViewCell *cell = (UITableViewCell *)textField.superview.superview;
+	while(![cell isKindOfClass:[UITableViewCell class]]) cell = (UITableViewCell *)[cell superview]; // iOS 7 fix
     NSIndexPath *indexPath = [self indexPathForCell:cell];
     
     //increment the indexPath.row to retrieve the next cell which contains the next textField
@@ -157,6 +158,7 @@
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     //for conditional
     UITableViewCell *cell = (UITableViewCell *)textField.superview.superview;
+	while(![cell isKindOfClass:[UITableViewCell class]]) cell = (UITableViewCell *)[cell superview]; // iOS 7 fix
     NSIndexPath *indexPath = [self indexPathForCell:cell];
     
     UITextField *nextTF;
@@ -183,6 +185,7 @@
         }//close inner if
         else
         {
+			[[[UIAlertView alloc] initWithTitle:@"Error" message:@"This must be longer than 1 character long" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
             //possibly display error message
             [textField becomeFirstResponder];
         }
@@ -190,7 +193,7 @@
     }
     else if (indexPath.row == 1) {
         //if TF is not empty resign/assign
-        if (![textField.text isEqualToString:@""] && [textField.text length] > 1) {
+        if (![textField.text isEqualToString:@""] && [textField.text length] > 4) {
             //resign previous responder status
             [textField resignFirstResponder];
             
@@ -204,6 +207,7 @@
         }//close inner if
         else
         {
+			[[[UIAlertView alloc] initWithTitle:@"Error" message:@"This must be longer than 4 characters long" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
             [textField becomeFirstResponder];
         }
         
@@ -221,6 +225,7 @@
         }//close inner if
         else
         {
+			[[[UIAlertView alloc] initWithTitle:@"Error" message:@"This must be longer than 5 characters long" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
             [textField becomeFirstResponder];
         }
     }
@@ -300,7 +305,7 @@
         [userNameTF setKeyboardType:UIKeyboardTypeDefault];
         [userNameTF setReturnKeyType:UIReturnKeyNext];
         [userNameTF enablesReturnKeyAutomatically];
-        [userNameTF setClearsOnBeginEditing:YES];
+        //[userNameTF setClearsOnBeginEditing:YES];
         [userNameTF setAutocapitalizationType:UITextAutocapitalizationTypeWords];
         [userNameTF setAutocorrectionType:UITextAutocorrectionTypeNo];
         
@@ -312,7 +317,7 @@
         [userNameTF setKeyboardType:UIKeyboardTypeEmailAddress];
         [userNameTF setReturnKeyType:UIReturnKeyNext];
         [userNameTF enablesReturnKeyAutomatically];
-        [userNameTF setClearsOnBeginEditing:YES];
+        //[userNameTF setClearsOnBeginEditing:YES];
         [userNameTF setAutocapitalizationType:UITextAutocapitalizationTypeNone];
         [userNameTF setAutocorrectionType:UITextAutocorrectionTypeNo];
     }
@@ -324,7 +329,7 @@
         [userNameTF setKeyboardType:UIKeyboardTypeNumbersAndPunctuation];
         [userNameTF setReturnKeyType:UIReturnKeyDone];
         [userNameTF enablesReturnKeyAutomatically];
-        [userNameTF setClearsOnBeginEditing:YES];
+        //[userNameTF setClearsOnBeginEditing:YES];
         [userNameTF setAutocapitalizationType:UITextAutocapitalizationTypeNone];
         [userNameTF setAutocorrectionType:UITextAutocorrectionTypeNo];
         

@@ -24,6 +24,7 @@
     SuccessPopup *successPopup;
     UIBarButtonItem *editBBtn, *doneBtn;
     NSMutableDictionary *xmlDataDict;
+    double newAmount;//shouldChangeChars
 }
 
 
@@ -359,11 +360,11 @@
         NSData *dataString = [finalString dataUsingEncoding:NSUTF8StringEncoding];
     
     
-//    //Create our recipients -> Note this will come from file later
-//    NSArray *emailRecipArray = @[@"peterdarbey@gmail.com", @"david.h.roberts@aib.ie", @"eimear.e.ferguson@aib.ie", @"gavin.e.bennett@aib.ie"];
+    //Create our recipients -> Note this will come from file later
+    NSArray *emailRecipArray = @[@"peterdarbey@gmail.com", @"david.h.roberts@aib.ie", @"eimear.e.ferguson@aib.ie", @"gavin.e.bennett@aib.ie"];
     
         //TEMP email assignees
-        NSArray *emailRecipArray = @[@"peterdarbey@gmail.com", @"fintan.a.killoran@aib.ie"];
+//        NSArray *emailRecipArray = @[@"peterdarbey@gmail.com", @"fintan.a.killoran@aib.ie"];
     
         //send email to all the users stored on the device for now
         NSMutableArray *adminArray = [NSMutableArray arrayWithContentsOfFile:[self getFilePath]];
@@ -516,8 +517,9 @@
         [bagLbl setFont:[UIFont fontWithName:@"Arial-BoldMT" size:15]];
         bagLbl.textAlignment = NSTextAlignmentLeft;
         bagLbl.textColor = [UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0];//blue
-        bagLbl.shadowColor = [UIColor grayColor];
-        bagLbl.shadowOffset = CGSizeMake(1.0, 1.0);
+        //remove shadows
+//        bagLbl.shadowColor = [UIColor grayColor];
+//        bagLbl.shadowOffset = CGSizeMake(1.0, 1.0);
         [bagLbl setUserInteractionEnabled:NO];
         //add to view
         [innerView addSubview:bagLbl];
@@ -528,8 +530,9 @@
         bagAmountLbl.textAlignment = NSTextAlignmentRight;
         bagAmountLbl.font = [UIFont fontWithName:@"Arial-BoldMT" size:15];
         bagAmountLbl.textColor = [UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0];//blue
-        bagAmountLbl.shadowColor = [UIColor grayColor];
-        bagAmountLbl.shadowOffset = CGSizeMake(1.0, 1.0);//better
+        //remove shadows
+//        bagAmountLbl.shadowColor = [UIColor grayColor];
+//        bagAmountLbl.shadowOffset = CGSizeMake(1.0, 1.0);//shame
         bagAmountLbl.backgroundColor = [UIColor clearColor];
         [bagAmountLbl setUserInteractionEnabled:NO];
         
@@ -649,8 +652,9 @@
         bagNumberLbl.textAlignment = NSTextAlignmentLeft;
         bagNumberLbl.font = [UIFont fontWithName:@"Arial-BoldMT" size:15];//17
         bagNumberLbl.textColor = [UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0];//blue
-        bagNumberLbl.shadowColor = [UIColor grayColor];
-        bagNumberLbl.shadowOffset = CGSizeMake(1.0, 1.0);
+        //remove shadows
+//        bagNumberLbl.shadowColor = [UIColor grayColor];
+//        bagNumberLbl.shadowOffset = CGSizeMake(1.0, 1.0);
         bagNumberLbl.backgroundColor = [UIColor clearColor];
         [bagNumberLbl setUserInteractionEnabled:NO];
         [cell.contentView addSubview:bagNumberLbl];
@@ -689,17 +693,50 @@
     return YES;
     
 }
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    
+    NSMutableString* s = [NSMutableString stringWithString:textField.text];
+    NSLog(@"s length = %i", s.length);
+    if(range.location + range.length > textField.text.length) {
+        [s appendString:string];
+    }
+    else {
+        [s replaceCharactersInRange:range withString:string];
+    }
+    NSString* t = [s  stringByReplacingOccurrencesOfString:@"." withString:@""];
+    
+    long v = [t integerValue];
+    long n = v / 100;
+    long d = v % 100;
+    
+    if(v >= 100000) {
+        return NO;
+    }
+    
+    if(v > 0) {
+//        barBtnFinished.enabled = YES;
+    }
+    else {
+//        barBtnFinished.enabled = NO;
+    }
+    textField.text = [NSString stringWithFormat:@"%03ld.%02ld", n, d];
+    newAmount = (double)textField.text.doubleValue;//assign to iVar here not in didEndEditing
+    return NO;
+}
+
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     
     UITableViewCell *cell = (UITableViewCell *)[textField.superview superview];
+    while(![cell isKindOfClass:[UITableViewCell class]]) cell = (UITableViewCell *)[cell superview]; // iOS 7 fix
     NSIndexPath *indexPath = [_depositsTV indexPathForCell:cell];
     
-    if (_allowEdit && [textField.text length] > 0) {
+    if (_allowEdit && [textField.text length] > 0 && [textField.text length] <= 6) {
         
         _valueEdited = YES;
         
-        double newAmount = textField.text.doubleValue;
-        
+//        double newAmount = (double)textField.text.doubleValue;
+        DLog(@"newAmount in didEndEd: %f", newAmount);//should have value
         
         //retrieve the deposit model for the TF index
         Deposit *deposit = [_depositsCollection objectAtIndex:indexPath.section];
@@ -720,8 +757,6 @@
         //reset the editing values
         [self doneBtnPressed:nil];
     }
-    
-    
     
 }
 

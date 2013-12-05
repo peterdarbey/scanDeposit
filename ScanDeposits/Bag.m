@@ -1303,6 +1303,69 @@
 //        return xmlArray;
 //        
 //    }
+    
+//- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+//    //if its in the control set char range allow the change in the specified text
+//    if([[string stringByTrimmingCharactersInSet:[NSCharacterSet controlCharacterSet]]
+//        isEqualToString:@""])
+//        return YES;
+//    
+//    NSString *previousValue = [[[textField.text stringByTrimmingCharactersInSet:[[NSCharacterSet decimalDigitCharacterSet] invertedSet]] stringByReplacingOccurrencesOfString:@"." withString:@""] stringByReplacingOccurrencesOfString:@"," withString:@""];//empty until after 1st entry becomes 002 strips out . ,
+//    DLog(@"previousValue>>>>>: %@", previousValue);
+//    
+//    string = [string stringByTrimmingCharactersInSet:[[NSCharacterSet decimalDigitCharacterSet] invertedSet]];
+//    DLog(@"string>>>>>: %@", string);//single current char
+//    NSString *modifiedValue = [NSString stringWithFormat:@"%@%@", previousValue, string];
+//    DLog(@"modifiedValue>>>>>: %@", modifiedValue);//adds together
+//    
+//    if ([modifiedValue length] == 1) {
+//        
+//        modifiedValue = [NSString stringWithFormat:@"0.0%@", string];//ie 2 becomes 0.02
+//        
+//    }
+//    
+//    else if ([modifiedValue length] == 2) {
+//        
+//        modifiedValue = [NSString stringWithFormat:@"0.%@%@", previousValue, string];
+//        
+//    }
+//    
+//    else if ([modifiedValue length] > 2) {
+//        
+//        modifiedValue = [NSString stringWithFormat:@"%@.%@",[modifiedValue substringToIndex: modifiedValue.length-2],[modifiedValue substringFromIndex:modifiedValue.length-2]];
+//        
+//    }
+//    
+//    //convert after string operands
+//    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+//    [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+//    NSDecimalNumber *decimal = [NSDecimalNumber decimalNumberWithString:modifiedValue];
+//    modifiedValue = [formatter stringFromNumber:decimal];//typed digit ->2
+//    
+//    if ([string isEqualToString:@"0"] && modifiedValue.length < 5) {
+//        DLog(@"Allow 0 entry");//goes in but not allowed by decimal
+//        textField.text = modifiedValue;
+//        //        return YES;
+//    }
+//    else if (![string isEqualToString:@"0"] && modifiedValue.length <= 6) {
+//        textField.text = modifiedValue;
+//        DLog(@"Do not allow 0 entry");
+//    }
+//    
+//    if (modifiedValue.length > 7) {
+//        DLog(@"Sorry value to big");
+//        return NO;
+//    }
+//    //    else
+//    //    {
+//    //        textField.text = modifiedValue;
+//    //    }
+//    //    textField.text = modifiedValue;
+//    
+//    
+//    return NO;
+//    
+//}
 
 
     

@@ -179,6 +179,7 @@
 - (UITextField *)returnNextTextField:(UITextField *)textField {
     //retrieve the cell that contains the textField
     UITableViewCell *cell = (UITableViewCell *)textField.superview.superview;
+    while(![cell isKindOfClass:[UITableViewCell class]]) cell = (UITableViewCell *)[cell superview];// iOS 7 fix
     NSIndexPath *indexPath = [_loginTV indexPathForCell:cell];
     
     //increment the indexPath.row to retrieve the next cell which contains the next textField
@@ -188,12 +189,46 @@
     return nextTF;
 }
 
+- (void)textFieldDidBeginEditing:(UITextField *)textField
+{
+    UITableViewCell *cell = (UITableViewCell *)[textField.superview superview];
+	while(![cell isKindOfClass:[UITableViewCell class]]) cell = (UITableViewCell *)[cell superview];// iOS 7 fix
+
+    CGRect rect = self.view.frame;
+    CGSize windowSize = [[UIScreen mainScreen] bounds].size;
+	if(rect.origin.y < 0)
+		[self setViewMovedUp:NO];
+	if(rect.origin.y >= 0) {
+/*
+		if(20 + 55 + cell.frame.origin.y > windowSize.height / 2)
+			[self setViewMovedUp:YES];
+*/
+
+		double origY = origY = [textField convertPoint:CGPointMake(0, 0) toView:self.loginTV].y;
+		double offY = self.loginTV.contentOffset.y + 64;
+//NSLog(@"textFieldDidBeginEditing    orig %f   off %f", origY, offY);
+		if(offY + windowSize.height / 2 < origY) {
+			[self setViewMovedUp:YES];
+		}
+	}
+}
+
 - (void)textFieldDidEndEditing:(UITextField *)textField {
+    CGRect rect = self.view.frame;
+	if(rect.origin.y < 0)
+		[self setViewMovedUp:NO];
+
     //retrieve the cell for which the textField was entered
     UITableViewCell *cell = (UITableViewCell *)[textField.superview superview];
+    while(![cell isKindOfClass:[UITableViewCell class]]) cell = (UITableViewCell *)[cell superview];// iOS 7 fix
     NSIndexPath *indexPath = [_loginTV indexPathForCell:cell];
     UITextField *nextTF;
     
+//	CGSize windowSize = [[UIScreen mainScreen] bounds].size;
+	if(self.view.frame.origin.y < 0) {
+		[self setViewMovedUp:NO];
+	}
+
     [loginBtn setEnabled:NO];
     
     //ADMIN ONLY
@@ -606,6 +641,45 @@
     [button setTitle:title forState:UIControlStateNormal];
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     
+}
+
+#define kOFFSET_FOR_KEYBOARD 80.0 + 44.0
+
+-(void)keyboardWillShow {
+    if (self.view.frame.origin.y >= 0)
+    {
+        [self setViewMovedUp:YES];
+    }
+    else if (self.view.frame.origin.y < 0)
+    {
+        [self setViewMovedUp:NO];
+    }
+}
+
+-(void)keyboardWillHide {
+    if (self.view.frame.origin.y >= 0)
+    {
+        [self setViewMovedUp:NO];
+    }
+    else if (self.view.frame.origin.y < 0)
+    {
+        [self setViewMovedUp:YES];
+    }
+}
+
+-(void)setViewMovedUp:(BOOL)movedUp {
+    CGRect rect = self.view.frame;
+    if (movedUp)
+    {
+        rect.origin.y -= kOFFSET_FOR_KEYBOARD;
+        rect.size.height += kOFFSET_FOR_KEYBOARD;
+    }
+    else
+    {
+        rect.origin.y += kOFFSET_FOR_KEYBOARD;
+        rect.size.height -= kOFFSET_FOR_KEYBOARD;
+    }
+    self.view.frame = rect;
 }
 
 

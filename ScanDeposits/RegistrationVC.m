@@ -261,6 +261,7 @@
 - (UITextField *)returnNextTextField:(UITextField *)textField {
     //retrieve the cell that contains the textField
     UITableViewCell *cell = (UITableViewCell *)textField.superview.superview;
+	while(![cell isKindOfClass:[UITableViewCell class]]) cell = (UITableViewCell *)[cell superview]; // iOS 7 fix
     NSIndexPath *indexPath = [_registerTV indexPathForCell:cell];
     
     //increment the indexPath.row to retrieve the next cell which contains the next textField
@@ -273,6 +274,7 @@
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
     UITableViewCell *cell = (UITableViewCell *)[textField.superview superview];
+	while(![cell isKindOfClass:[UITableViewCell class]]) cell = (UITableViewCell *)[cell superview]; // iOS 7 fix
     NSIndexPath *indexPath = [_registerTV indexPathForCell:cell];
     
     //added to a specific cell
@@ -291,6 +293,7 @@
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     //for conditional -> retrieve the cell and use its index
     UITableViewCell *cell = (UITableViewCell *)textField.superview.superview;
+	while(![cell isKindOfClass:[UITableViewCell class]]) cell = (UITableViewCell *)[cell superview]; // iOS 7 fix
     NSIndexPath *indexPath = [_registerTV indexPathForCell:cell];
     
     UITextField *nextTF;
@@ -316,6 +319,7 @@
         }//close inner if
         else
         {
+			[[[UIAlertView alloc] initWithTitle:@"Error" message:@"This must be longer than 6 characters long" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
             //possibly display error message
             [textField becomeFirstResponder];
         }
@@ -335,6 +339,7 @@
         }//close inner if
         else
         {
+			[[[UIAlertView alloc] initWithTitle:@"Error" message:@"This must be longer than 4 characters long" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
             [textField becomeFirstResponder];
         }
         
@@ -342,12 +347,11 @@
     //Staff ID then generate Adminstrator password
     else if (indexPath.row == 2)
     {
-        
         if (![textField.text isEqualToString:@""] && [textField.text length] >= 6) {
             //resign previous responder status
             [textField resignFirstResponder];
             //assign text to user ivar
-            _staffID = textField.text;
+	        _staffID = textField.text;
             
             //if these ivars are set then we have enough data to proceed
             if (_name && _eMail && _staffID && _initials) {
@@ -370,6 +374,7 @@
         }//close inner if
         else
         {
+			[[[UIAlertView alloc] initWithTitle:@"Error" message:@"This must be longer than 5 characters long" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
             [textField becomeFirstResponder];
         }
     }//close else
@@ -888,7 +893,7 @@
         [nameTF setKeyboardType:UIKeyboardTypeDefault];
         [nameTF setReturnKeyType:UIReturnKeyNext];
         [nameTF enablesReturnKeyAutomatically];
-        [nameTF setClearsOnBeginEditing:YES];
+        //[nameTF setClearsOnBeginEditing:YES];
         [nameTF setAutocapitalizationType:UITextAutocapitalizationTypeWords];
         [nameTF setAutocorrectionType:UITextAutocorrectionTypeNo];
     }
@@ -899,7 +904,7 @@
         [nameTF setKeyboardType:UIKeyboardTypeEmailAddress];
         [nameTF setReturnKeyType:UIReturnKeyNext];
         [nameTF enablesReturnKeyAutomatically];
-        [nameTF setClearsOnBeginEditing:YES];
+        //[nameTF setClearsOnBeginEditing:YES];
         [nameTF setAutocapitalizationType:UITextAutocapitalizationTypeNone];
         [nameTF setAutocorrectionType:UITextAutocorrectionTypeNo];
     }
@@ -910,7 +915,7 @@
         [nameTF setKeyboardType:UIKeyboardTypeNumbersAndPunctuation];
         [nameTF setReturnKeyType:UIReturnKeyDone];
         [nameTF enablesReturnKeyAutomatically];
-        [nameTF setClearsOnBeginEditing:YES];
+        //[nameTF setClearsOnBeginEditing:YES];
         [nameTF setAutocapitalizationType:UITextAutocapitalizationTypeNone];
         [nameTF setAutocorrectionType:UITextAutocorrectionTypeNo];
     }

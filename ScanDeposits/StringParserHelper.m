@@ -563,8 +563,8 @@
     NSString *xmlWSClose = @"</ss:Worksheet>";
     NSString *xmlTblOpen = @"<ss:Table>";
     NSString *xmlTblClose = @"</ss:Table>";
-    NSString *xmlColumn = @"<ss:Column ss:Width=\"80\"/>";
-    NSString *xmlColumnSpan = @"<Column ss:Span=\"16\" ss:Width=\"80\"/>";
+    NSString *xmlColumn = @"<ss:Column ss:Width=\"90\"/>";//donmt need I reckon
+    NSString *xmlColumnSpan = @"<Column ss:Span=\"16\" ss:Width=\"90\"/>";
     //styles
     NSString *xmlStyles = @"<Styles><Style ss:ID=\"s1\"><Interior ss:Color=\"#800008\" ss:Pattern=\"Solid\"/></Style></Styles>";
     //row contruction

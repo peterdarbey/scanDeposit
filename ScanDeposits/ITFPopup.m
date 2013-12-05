@@ -11,7 +11,7 @@
 
 @interface ITFPopup ()
 {
-    
+    UIBarButtonItem *barBtnFinished;
 }
 //Private
 @property(nonatomic,strong) UIView *backgroundView;
@@ -51,8 +51,9 @@
     UIBarButtonItem *barBtnCancel = [[UIBarButtonItem alloc]initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(cancelKBPressed:)];
     [barBtnCancel setTintColor:[UIColor blackColor]];
     
-    UIBarButtonItem *barBtnFinished = [[UIBarButtonItem alloc]initWithTitle:@"Done" style:UIBarButtonItemStyleBordered target:self action:@selector(doneKBPressed:)];
+    barBtnFinished = [[UIBarButtonItem alloc]initWithTitle:@"Done" style:UIBarButtonItemStyleBordered target:self action:@selector(doneKBPressed:)];
     [barBtnFinished setTintColor:[UIColor blueColor]];
+    barBtnFinished.enabled = NO;
     
     //Add a divider for the toolBar barButtonItems
     UIBarButtonItem *flexible = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
@@ -105,16 +106,11 @@
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     
-    if ([textField.text length] > 1) {
-        //enable the button only if the chars dont exceed 5 without decimal
-        //user can only enter 5 numbers without . and 3 on left with .
-        //option: 1 could remove the decmial equation by changing the KB
-        //option: 2 condtionals in shouldChange method
-        
+    if ([textField.text length]) {// > 1 && [textField.text length] <= 6) {
         //leave this as is
         _saveBtn.enabled = YES;
    
-        _bagAmount = (double)textField.text.doubleValue;
+//        _bagAmount = (double)textField.text.doubleValue;
         _bagCount += 1;
         DLog(@"_bagAmount: %f", _bagAmount);
         
@@ -136,66 +132,62 @@
     return newString;
 }
 
-
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     
-    if([[string stringByTrimmingCharactersInSet:[NSCharacterSet controlCharacterSet]]
-        isEqualToString:@""])
-        return YES;
+//    NSLog(@"-- range.location = %i", range.location);
+//    NSLog(@"-- range.length = %i", range.length);
     
-    NSString *previousValue = [[[textField.text stringByTrimmingCharactersInSet:[[NSCharacterSet decimalDigitCharacterSet] invertedSet]] stringByReplacingOccurrencesOfString:@"." withString:@""] stringByReplacingOccurrencesOfString:@"," withString:@""];
-    DLog(@"previousValue>>>>>: %@", previousValue);//all without the decimal 1st entery not here until 2nd entered then all entries
-    string = [string stringByTrimmingCharactersInSet:[[NSCharacterSet decimalDigitCharacterSet] invertedSet]];
-    DLog(@"string>>>>>: %@", string);//single current char
-    NSString *modifiedValue = [NSString stringWithFormat:@"%@%@", previousValue, string];
-    DLog(@"modifiedValue>>>>>: %@", modifiedValue);//adds together
-    if ([modifiedValue length] == 1) {
-        
-        modifiedValue = [NSString stringWithFormat:@"0.0%@", string];
-        
+    NSMutableString* s = [NSMutableString stringWithString:textField.text];
+    NSLog(@"s length = %i", s.length);
+    if(range.location + range.length > textField.text.length) {
+        [s appendString:string];
+    }
+    else {
+        [s replaceCharactersInRange:range withString:string];
+    }
+    NSString* t = [s  stringByReplacingOccurrencesOfString:@"." withString:@""];
+    
+    long v = [t integerValue];
+    long n = v / 100;
+    long d = v % 100;
+    NSLog(@"==;;  %ld", n);
+    
+    
+    if(v >= 100000) {
+       // barBtnFinished.enabled = NO;
+        return NO;
     }
     
-    else if ([modifiedValue length] == 2) {
-        
-        modifiedValue = [NSString stringWithFormat:@"0.%@%@", previousValue, string];
-        
+    if(v > 0) {
+        barBtnFinished.enabled = YES;
     }
-    
-    else if ([modifiedValue length] > 2) {
-        
-        modifiedValue = [NSString stringWithFormat:@"%@.%@",[modifiedValue substringToIndex: modifiedValue.length-2],[modifiedValue substringFromIndex:modifiedValue.length-2]];
-        
+    else {
+        barBtnFinished.enabled = NO;
     }
-    
-    
-    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
-    [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
-    NSDecimalNumber *decimal = [NSDecimalNumber decimalNumberWithString:modifiedValue];
-    modifiedValue = [formatter stringFromNumber:decimal];
-
-    if ([string isEqualToString:@"0"] && modifiedValue.length < 5) {
-        DLog(@"Allow 0 entry");//goes in but not allowed by decimal
-        textField.text = modifiedValue;
-    }
-    else if (![string isEqualToString:@"0"] && modifiedValue.length <= 6) {
-        textField.text = modifiedValue;
-        DLog(@"Do not allow 0 entry");
-    }
-    
-//    if (modifiedValue.length > 7) {
-//        DLog(@"Sorry value to big");
-//        //NOTE: problem with the 0 entry
-//        //show alert here
-//    }
-//    else
-//    {
-//        textField.text = modifiedValue;
-//    }
-//    textField.text = modifiedValue;
-    
+    textField.text = [NSString stringWithFormat:@"%03ld.%02ld", n, d];
+    _bagAmount = (double)textField.text.doubleValue;//assign to iVar here not in didEndEditing
+//    _bagCount += 1;
     return NO;
     
 }
+
+
+//-(NSString*)formatCurrencyDecimal:(NSDecimalNumber*)v {
+//    NSNumberFormatter* formatter;
+//    formatter = [[NSNumberFormatter alloc] init];
+//    [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+//
+//    NSString* r = [formatter stringFromNumber:v];
+//    NSRange range = [r rangeOfString:@"."];
+//    if(range.location == NSNotFound)
+//        r = [NSString stringWithFormat:@"%@.00", r];
+//    else if(range.location == ([r length] - 1))
+//        r = [NSString stringWithFormat:@"%@00", r];
+//    else if(range.location == ([r length] - 2))
+//        r = [NSString stringWithFormat:@"%@0", r];
+//    return r;
+//}
+
 
 //better approach
 //-(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {

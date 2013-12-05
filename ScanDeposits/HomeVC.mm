@@ -160,7 +160,7 @@
             //needs the deposits data from the AlertView
             //now pass the deposits data to DepositsVC to pop its tblView
             DepositsVC *depositsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"DepositsVC"];
-            depositsVC.title = NSLocalizedString(@"Deposits", @"Deposits View");
+            depositsVC.title = NSLocalizedString(@"Contents Listing", @"Contents Listing");
             depositsVC.depositsCollection = _depositsArray;//bag/deposit data
             depositsVC.barcodeArray = _barcodeArray;//pass all barcode data to deposits
             //set delegate here

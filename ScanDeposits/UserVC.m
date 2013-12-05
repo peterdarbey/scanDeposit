@@ -55,6 +55,7 @@
 - (UITextField *)returnNextTextField:(UITextField *)textField {
     //retrieve the cell that contains the textField
     UITableViewCell *cell = (UITableViewCell *)textField.superview.superview;
+    while(![cell isKindOfClass:[UITableViewCell class]]) cell = (UITableViewCell *)[cell superview];// iOS 7 fix
     NSIndexPath *indexPath = [_userTV indexPathForCell:cell];
     
     //increment the indexPath.row to retrieve the next cell which contains the next textField
@@ -67,6 +68,7 @@
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     //for conditional
     UITableViewCell *cell = (UITableViewCell *)textField.superview.superview;
+    while(![cell isKindOfClass:[UITableViewCell class]]) cell = (UITableViewCell *)[cell superview];// iOS 7 fix
     NSIndexPath *indexPath = [_userTV indexPathForCell:cell];
     
     UITextField *nextTF;
@@ -85,6 +87,7 @@
         }//close inner if
         else
         {
+			[[[UIAlertView alloc] initWithTitle:@"Error" message:@"This must be longer than 1 character long" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
             //possibly display error message
             [textField becomeFirstResponder];
         }
@@ -100,6 +103,7 @@
         }//close inner if
         else
         {
+			[[[UIAlertView alloc] initWithTitle:@"Error" message:@"This must be longer than 1 character long" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
             [textField becomeFirstResponder];
         }
             
@@ -112,6 +116,7 @@
         }//close inner if
         else
         {
+			[[[UIAlertView alloc] initWithTitle:@"Error" message:@"This must be longer than 5 character long" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil] show];
             [textField becomeFirstResponder];
         }
     }

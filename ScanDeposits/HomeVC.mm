@@ -398,21 +398,29 @@
     //if scan QR barcode
     if (_scanModeIsQR) {
         
-        [self.view addSubview:scanDeviceBtn];//correct
-        //Add other behaviour here
-        
-        [helpTV setText:@"How to use this app\n\nPlease scan the barcode on the Device/Process..."];
-        
-        [self.view addSubview:helpTV];
+        //if first time using app dont show txt and buttons on HomeVC
+        if (_isSetup) {
+            
+            [self.view addSubview:scanDeviceBtn];//correct
+            //Add other behaviour here
+            [helpTV setText:@"How to use this app\n\nPlease scan the barcode on the Device/Process..."];
+            [self.view addSubview:helpTV];
+        }
+//        [self.view addSubview:scanDeviceBtn];//correct
+//        //Add other behaviour here
+//        [self.view addSubview:helpTV];
         
     }
     else //else 2/5 interleaved barcode
     {
-        [self.view addSubview:scanBagBtn];//correct
-        
-        //Add other behaviour here
-        [helpTV setText:@"Now scan the bag barcode and enter the amount for each deposit.\n\nFinally press proceed to send email"];
-        [self.view addSubview:helpTV];
+        if (_isSetup) {
+            
+            [self.view addSubview:scanBagBtn];//correct
+            
+            //Add other behaviour here
+            [helpTV setText:@"Now scan the bag barcode and enter the amount for each deposit.\n\nFinally press proceed to send email"];
+            [self.view addSubview:helpTV];
+        }
         
     }
 

@@ -217,15 +217,17 @@
     if (!_isExpanded) {
         //set the editing to YES
         [_userTV setEditing:YES animated:YES];
-
+        
      UIBarButtonItem *doneBtn = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneEditingPressed:)];
     
     [self.navigationItem setRightBarButtonItem:doneBtn animated:YES];
         
     }//close if
-    
-    //    //set the editing to YES
-    //    [_userTV setEditing:YES animated:YES];
+    //esle expanded dont allow editing
+    else
+    {
+        [_userTV setEditing:NO animated:NO];//should stop crash
+    }
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {

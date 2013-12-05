@@ -228,8 +228,6 @@
 	if(self.view.frame.origin.y < 0) {
 		[self setViewMovedUp:NO];
 	}
-
-    [loginBtn setEnabled:NO];
     
     //ADMIN ONLY
     if (indexPath.section == 0) {
@@ -524,6 +522,8 @@
         loginBtn.titleLabel.font = [UIFont systemFontOfSize:17.0];
         [loginBtn setFrame:CGRectMake(10, 23, 300, 44)];
         [loginBtn addTarget:self action:@selector(loginPressed:) forControlEvents:UIControlEventTouchUpInside];
+        //disable on construct
+        [loginBtn setEnabled:NO];
         //add to view
         [aView addSubview:loginBtn];
         

@@ -230,6 +230,13 @@
             }
             
         }//close if
+        else
+        {
+            //ToDo allow rescanning of the scanned bag again
+            if ([self.delegate respondsToSelector:@selector(resetBarcodeHistoryWithStatus:)]) {
+                [self.delegate performSelector:@selector(resetBarcodeHistoryWithStatus:) withObject:@(YES)];
+            }
+        }
         
         //dismissed popup and resume scanning mode and save barcode data if applicable
         if ([self.delegate respondsToSelector:@selector(startScanning)]) {
@@ -240,6 +247,9 @@
 
 }
 -(void)cancelPressed:(UIButton *)sender {
+    
+    _confirmed = NO;//explictly set to NO
+    
     //Cancel does NOT create a deposit model object just dismisses picker 
     [self dismissPopupAndResumeScanning];
     

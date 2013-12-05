@@ -12,6 +12,9 @@
 - (void)startScanning;
 - (void)presentDepositsViewController:(NSMutableArray *)array;
 - (void)passScannedData:(NSMutableArray *)dataArray;
+//for cancel
+@optional
+- (void)resetBarcodeHistoryWithStatus:(NSNumber *)didCancel;
 
 @end
 

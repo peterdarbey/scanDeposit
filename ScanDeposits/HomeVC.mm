@@ -417,8 +417,8 @@
             
             [self.view addSubview:scanBagBtn];//correct
             
-            //Add other behaviour here
-            [helpTV setText:@"Now scan the bag barcode and enter the amount for each deposit.\n\nFinally press proceed to send email"];
+            //Add other behaviour here 
+            [helpTV setText:@"Now scan the barcode on each bag and enter a € value for each bag.\n\nNB - Any bag barcode can only be scanned once during a session"];
             [self.view addSubview:helpTV];
         }
         
@@ -543,6 +543,23 @@
 
 
 #pragma mark - Custom delegate method
+- (void)resetBarcodeHistoryWithStatus:(NSNumber *)didCancel {
+    _didCancelDeposit = didCancel.boolValue;
+    
+    if (_didCancelDeposit) {
+        DLog(@"Wipe barcode history in this delegate callback");
+        //ToDO wipe barcodeArray for stored history of scans
+        if (_uniqueBagArray) {
+            DLog(@"UniqueBagArray before removal: %@", _uniqueBagArray);
+            //Dont need to check if it contains the barcodeString as its an ordered collection
+            //So remove lastObject will work fine
+            [_uniqueBagArray removeLastObject];
+            DLog(@"UniqueBagArray after removal: %@", _uniqueBagArray);
+            
+        }
+    }
+    
+}
 - (void)passScannedData:(Deposit *)deposit {
     
     DLog(@"dataArray: %@", deposit);

@@ -64,5 +64,6 @@
 @property BOOL scanModeIsQR;
 //new BOOL for dismissOfSuccessPopup
 @property BOOL shouldDismiss;
+@property BOOL didCancelDeposit;
 
 @end

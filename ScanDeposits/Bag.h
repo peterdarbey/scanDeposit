@@ -303,6 +303,25 @@
 
 
 
+//-(NSString*)formatCurrencyDecimal:(NSDecimalNumber*)v {
+//    NSNumberFormatter* formatter;
+//    formatter = [[NSNumberFormatter alloc] init];
+//    [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+//
+//    NSString* r = [formatter stringFromNumber:v];
+//    NSRange range = [r rangeOfString:@"."];
+//    if(range.location == NSNotFound)
+//        r = [NSString stringWithFormat:@"%@.00", r];
+//    else if(range.location == ([r length] - 1))
+//        r = [NSString stringWithFormat:@"%@00", r];
+//    else if(range.location == ([r length] - 2))
+//        r = [NSString stringWithFormat:@"%@0", r];
+//    return r;
+//}
+
+
+
+
 //- (NSMutableArray *)collectMyData {
 //    
 //    //    xmlDataDict = [NSMutableDictionary dictionary];

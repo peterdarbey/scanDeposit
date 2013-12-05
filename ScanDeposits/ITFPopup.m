@@ -97,12 +97,12 @@
     
     return YES;
 }
-- (void)textFieldDidBeginEditing:(UITextField *)textField {
-    
-    if ([textField.text length] > 5) {
-        DLog(@"greater than 5 characters disable textField");
-    }
-}
+//- (void)textFieldDidBeginEditing:(UITextField *)textField {
+//    
+//    if ([textField.text length] > 5) {
+//        DLog(@"greater than 5 characters disable textField");
+//    }
+//}
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     
@@ -132,60 +132,22 @@
     return newString;
 }
 
-<<<<<<< HEAD
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     
-//    NSLog(@"-- range.location = %i", range.location);
-//    NSLog(@"-- range.length = %i", range.length);
-    
     NSMutableString* s = [NSMutableString stringWithString:textField.text];
-    NSLog(@"s length = %i", s.length);
+    
     if(range.location + range.length > textField.text.length) {
         [s appendString:string];
     }
     else {
         [s replaceCharactersInRange:range withString:string];
-=======
-//asks delegate if the textField contents should change to allow new char just typed (replace string
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    //if its in the control set char range allow the change in the specified text
-    if([[string stringByTrimmingCharactersInSet:[NSCharacterSet controlCharacterSet]]
-        isEqualToString:@""])
-        return YES;
-    //ass
-    NSString *previousValue = [[[textField.text stringByTrimmingCharactersInSet:[[NSCharacterSet decimalDigitCharacterSet] invertedSet]] stringByReplacingOccurrencesOfString:@"." withString:@""] stringByReplacingOccurrencesOfString:@"," withString:@""];//empty until after 1st entry becomes 002 strips out . ,
-    DLog(@"previousValue>>>>>: %@", previousValue);//on 0.25 -> 025 remove dec
-    
-    string = [string stringByTrimmingCharactersInSet:[[NSCharacterSet decimalDigitCharacterSet] invertedSet]];
-    DLog(@"string>>>>>: %@", string);//single current char
-    NSString *modifiedValue = [NSString stringWithFormat:@"%@%@", previousValue, string];
-    DLog(@"modifiedValue>>>>>: %@", modifiedValue);//adds together accepts the 0 -> ie 0250
-    if ([modifiedValue length] == 1) {
-        
-        modifiedValue = [NSString stringWithFormat:@"0.0%@", string];//ie 2 becomes 0.02
-        
     }
-    
-    else if ([modifiedValue length] == 2) {
-        //shift the prev value over 1
-        modifiedValue = [NSString stringWithFormat:@"0.%@%@", previousValue, string];
-        
-    }
-    
-    else if ([modifiedValue length] > 2) {
-        
-        modifiedValue = [NSString stringWithFormat:@"%@.%@",[modifiedValue substringToIndex: modifiedValue.length-2],[modifiedValue substringFromIndex:modifiedValue.length-2]];//on 0025 -> 00.25 -> 02.50
-        
->>>>>>> f2bf814d2954264efce09291f4798bcfa0ac13d5
-    }
+
     NSString* t = [s  stringByReplacingOccurrencesOfString:@"." withString:@""];
     
     long v = [t integerValue];
     long n = v / 100;
     long d = v % 100;
-    NSLog(@"==;;  %ld", n);
-    
-<<<<<<< HEAD
     
     if(v >= 100000) {
        // barBtnFinished.enabled = NO;
@@ -202,66 +164,8 @@
     _bagAmount = (double)textField.text.doubleValue;//assign to iVar here not in didEndEditing
 //    _bagCount += 1;
     return NO;
-=======
-//    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
-//    [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
-//    NSDecimalNumber *decimal = [NSDecimalNumber decimalNumberWithString:modifiedValue];
-//    modifiedValue = [formatter stringFromNumber:decimal];//typed digit ->2
-    
-    //if last entry is a 0 enter
-    if ([string isEqualToString:@"0"] && modifiedValue.length < 6) {//was <5 ->00250
-        DLog(@"Allow 0 entry");//goes in but not allowed by decimal
-//        textField.text = modifiedValue;
-        textField.text = [modifiedValue stringByAppendingString:string];
-        DLog(@"modifiedValue: %@", modifiedValue);//0.25
-//        return YES;
-    }
-    //else last entry isnt a 0 and less than 6 chars
-    else if (![string isEqualToString:@"0"] && modifiedValue.length <= 6) {
-        textField.text = modifiedValue;
-        DLog(@"Do not allow 0 entry");
-    }
-    
-    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
-    [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
-    NSDecimalNumber *decimal = [NSDecimalNumber decimalNumberWithString:modifiedValue];
-    modifiedValue = [formatter stringFromNumber:decimal];//typed digit ->2
-    //unhidden
-    if (modifiedValue.length > 7) {
-        DLog(@"Sorry value to big");
-        //NOTE: problem with the 0 entry
-        //show alert here
-        return NO;
-    }
-//    else
-//    {
-//        textField.text = modifiedValue;
-//    }
-//    textField.text = modifiedValue;
-    
-    
-        return NO;
->>>>>>> f2bf814d2954264efce09291f4798bcfa0ac13d5
     
 }
-
-
-//-(NSString*)formatCurrencyDecimal:(NSDecimalNumber*)v {
-//    NSNumberFormatter* formatter;
-//    formatter = [[NSNumberFormatter alloc] init];
-//    [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
-//
-//    NSString* r = [formatter stringFromNumber:v];
-//    NSRange range = [r rangeOfString:@"."];
-//    if(range.location == NSNotFound)
-//        r = [NSString stringWithFormat:@"%@.00", r];
-//    else if(range.location == ([r length] - 1))
-//        r = [NSString stringWithFormat:@"%@00", r];
-//    else if(range.location == ([r length] - 2))
-//        r = [NSString stringWithFormat:@"%@0", r];
-//    return r;
-//}
-
 
 //better approach
 //-(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {

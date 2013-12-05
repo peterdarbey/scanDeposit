@@ -25,6 +25,8 @@
     UIBarButtonItem *editBBtn, *doneBtn;
     NSMutableDictionary *xmlDataDict;
     double newAmount;//shouldChangeChars
+    
+    UIBarButtonItem *barBtnFinished;
 }
 
 
@@ -124,6 +126,9 @@
     [_depositsTV reloadData];
     
     doneBtn = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneBtnPressed:)];
+    //Dont enable till the user enters a value in textField
+    [doneBtn setEnabled:NO];
+    
     //set the done button as the current barButton
     [self.navigationItem setRightBarButtonItem:doneBtn];
     
@@ -142,6 +147,9 @@
     
     //set the edit button as the current barButton
     [self.navigationItem setRightBarButtonItem:editBBtn];
+    
+    //resign keyboard
+//    [textField resignFirstResponder];
     
 }
 
@@ -641,6 +649,9 @@
         [bagAmountTF setUserInteractionEnabled:NO];
         [bagAmountTF setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];//center
         [bagAmountTF setClearsOnBeginEditing:YES];
+        //set textField Keyboard setting
+        [bagAmountTF setKeyboardType:UIKeyboardTypeNumberPad];
+        [bagAmountTF setInputAccessoryView:[self createCustomKBView]];//add toolbar to keyboard
         //set delegate
         [bagAmountTF setDelegate:self];
         //add to view
@@ -685,6 +696,52 @@
         return cell;
 }
 
+//doesnt update amount ??
+- (void)doneKBPressed:(UIButton *)sender {
+    
+    DLog(@"DoneKB Pressed");
+    //done pressed re-enable proccedBtn
+    [proceedBtn setEnabled:YES];
+    
+    //    [_depositsTV endEditing:YES];//test
+    
+    _allowEdit = NO;
+    
+    [_depositsTV reloadData];
+    
+    //set the edit button as the current barButton
+    [self.navigationItem setRightBarButtonItem:editBBtn];
+    
+}
+
+- (void)cancelKBPressed:(UIButton *)sender {
+    
+    DLog(@"Cancel Pressed");
+}
+
+- (UIToolbar *)createCustomKBView {
+    
+    //construct barButtonItems
+    UIBarButtonItem *barBtnCancel = [[UIBarButtonItem alloc]initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(cancelKBPressed:)];
+    [barBtnCancel setTintColor:[UIColor blackColor]];
+    
+    barBtnFinished = [[UIBarButtonItem alloc]initWithTitle:@"Done" style:UIBarButtonItemStyleBordered target:self action:@selector(doneKBPressed:)];
+    [barBtnFinished setTintColor:[UIColor blueColor]];
+    barBtnFinished.enabled = NO;
+    
+    //Add a divider for the toolBar barButtonItems
+    UIBarButtonItem *flexible = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    
+    NSArray *barBtnArray = [NSArray arrayWithObjects:barBtnCancel, flexible, barBtnFinished, nil];
+    
+    UIToolbar *customTB = [[UIToolbar alloc]initWithFrame:CGRectMake(0 , 0, 50, 44)];
+    
+    [customTB setBarStyle:UIBarStyleBlackTranslucent];
+    customTB.items = barBtnArray;
+    return customTB;
+    
+}
+
 #pragma mark - UITextField delegate methods
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     
@@ -714,11 +771,15 @@
         return NO;
     }
     
-    if(v > 0) {
-//        barBtnFinished.enabled = YES;
+    if(v > 0) { //only executes in edit mode
+        //enable done + return key
+        doneBtn.enabled = YES;
+        barBtnFinished.enabled = YES;
     }
     else {
-//        barBtnFinished.enabled = NO;
+        //disable here
+        doneBtn.enabled = NO;
+        barBtnFinished.enabled = NO;
     }
     textField.text = [NSString stringWithFormat:@"%03ld.%02ld", n, d];
     newAmount = (double)textField.text.doubleValue;//assign to iVar here not in didEndEditing

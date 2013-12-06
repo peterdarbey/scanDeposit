@@ -214,7 +214,7 @@
     }
     else
     {   //pass code 6 digits -> staffID field
-        if (![textField.text isEqualToString:@""] && [textField.text length] >= 6) {
+        if (![textField.text isEqualToString:@""] && [textField.text length] >= 5) {
             //resign previous responder status
             [textField resignFirstResponder];
             

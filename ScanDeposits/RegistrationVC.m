@@ -302,7 +302,7 @@
     //Name
     if (indexPath.row == 0) {
         //if TF is not empty resign/assign
-        if (![textField.text isEqualToString:@""] && [textField.text length] > 5) {
+        if (![textField.text isEqualToString:@""] && [textField.text length] >= 5) {
             
             //assign text to user ivar
              self.name = textField.text;

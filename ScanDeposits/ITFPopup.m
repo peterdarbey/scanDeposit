@@ -98,12 +98,6 @@
     
     return YES;
 }
-//- (void)textFieldDidBeginEditing:(UITextField *)textField {
-//    
-//    if ([textField.text length] > 5) {
-//        DLog(@"greater than 5 characters disable textField");
-//    }
-//}
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     
@@ -168,51 +162,12 @@
     
 }
 
-//better approach
-//-(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-//    //replace what the user entered with this string
-//    
-//    //if entered text is > 5 lets check its content
-//    if ([string isEqualToString:@"."]) {
-//        DLog(@"Less than 4");
-//       
-//        [self validateStringFromUserInput:textField.text];
-////        NSMutableArray *editStrArray = (NSMutableArray *)[textField.text componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"."]];
-////        DLog(@"arrayOfStringComponents>>>>>: %@", editStrArray);
-////        [stringArray addObject:[editStrArray lastObject]];
-////        NSString *newString = [editStrArray objectAtIndex:0];
-////        DLog(@"newString: %@", newString);
-////        DLog(@"stringArray: %@", stringArray);
-//    }
-//    
-//    
-//    //Check the 4th character entered
-//    if ([[textField.text stringByReplacingCharactersInRange:range withString:string] length] == 4) {
-//        DLog(@"STRING: %@", string);//really a char //current value -> value just entered
-//        //4th character entered check if its a @"."
-//        if (![string isEqualToString:@"."]) {
-//            DLog(@"Right the string has a 4th 0 so too big: %@", string);//hits here
-//            // so remove last entry
-////            NSString *edString = [textField.text stringByDeletingLastPathComponent];//might work
-////            NSString *removeString = string;
-//            NSString *edString = [textField.text stringByReplacingCharactersInRange:range withString:@"."];
-//            DLog(@"edString: %@", edString);//321. worked now tell user
-//            textField.text = edString;
-////            textField.placeholder = edString;
-//        }
-//        
-//    }//close outter if
-//    
-//    
-//        return YES;//should be replaced
-//}
-
-
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     
     [textField resignFirstResponder];
     return YES;
 }
+
 -(void)dismissPopupAndResumeScanning {
     
     [UIView animateWithDuration:0.3 animations:^{
@@ -231,6 +186,7 @@
             }
             
         }//close if
+        //else cancel was pressed on ITFPopup
         else
         {
             //ToDo allow rescanning of the scanned bag again

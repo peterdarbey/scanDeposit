@@ -390,7 +390,7 @@
     NSString *processType;
     
     //if processString isEq to 291 then its "A Coin Only Dropsafe"
-    if ([processString isEqualToString:@"291"]) {
+    if ([processString isEqualToString:@"291"] || [processString isEqualToString:@"292"]) {//was 190
         DLog(@"Process Type: %@", processString);
         
         processType = @"A Coin Only Dropsafe";
@@ -400,11 +400,10 @@
         
         
     }//close if
-    
     //else its not a recognised barcode --> tin of beans
     else
     {
-        processType = @"Not a valid barcode";
+        processType = @"Not a valid barcode";//(tin of beans)
     }
     
     //construct a dict for 2/5 interleaved model

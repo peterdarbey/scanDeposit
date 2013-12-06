@@ -135,6 +135,10 @@
             //cancelled scanning device QR barcode so set to YES again
             _scanModeIsQR = YES;//correct
         }
+        //we are assuming that the user wants to remove all scanned Deposits as they are canceling scans
+        if ([_depositsArray count] > 0) {
+            [_depositsArray removeAllObjects];//or just last entry
+        }
     }];
     
 }
@@ -165,7 +169,7 @@
             //needs the deposits data from the AlertView
             //now pass the deposits data to DepositsVC to pop its tblView
             DepositsVC *depositsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"DepositsVC"];
-            depositsVC.title = NSLocalizedString(@"Contents Listing", @"Contents Listing");
+            depositsVC.title = NSLocalizedString(@"Contents List", @"Contents Listing");
             depositsVC.depositsCollection = _depositsArray;//bag/deposit data
             depositsVC.barcodeArray = _barcodeArray;//pass all barcode data to deposits
             //set delegate here
@@ -339,7 +343,12 @@
     _isAdmin = NO;
     _isUser = NO;
     _scanModeIsQR = YES;
-    //dont need to do any of that the LogInVC dismiss will call viewWillAppear again
+    //why dont I wipe data here
+    if ([_uniqueBagArray count] > 0) {
+        DLog(@"uniqueBagArray before: %@", _uniqueBagArray);
+        [_uniqueBagArray removeAllObjects];//correct
+        DLog(@"uniqueBagArray after: %@", _uniqueBagArray);//what about depositsCollection
+    }
     
     //present LogInVC as viewWillAppear is not called here on button press
     [self presentLogInVC];//test
@@ -821,7 +830,7 @@
     itfPopup.barcodeArray = _barcodeArray;//we dont know at this point if user wants to cancel so leave as is
     
     //Add another Prefix test from the 2/5 interleaved barcode
-    if ([barcodeString hasPrefix:@"190"]) {
+    if ([barcodeString hasPrefix:@"190"]) {//change to 291 or 292
         
         //populate the 2/5 interleave barcode popup 
         itfPopup.branchLbl.text = [NSString stringWithFormat:@"Unique Bag Number:%@", [_eightBarcode barcodeUniqueBagNumber]];

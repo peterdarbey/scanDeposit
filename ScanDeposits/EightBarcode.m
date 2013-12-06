@@ -31,7 +31,7 @@
 
 - (void)commonInit:(NSDictionary *)dict {
     
-    _symbology = dict[@"Symbology"];
+    _symbology = dict[@"Symbology"];//pass the QR Process value to ITF Process type
     _processType = dict[@"Process Type"];//(coin only)comes from the unique bag no 1st 3 digits
     _uniqueBagNumber = dict[@"Unique Bag Number"];//12 digit code with 1st 3 deter processType--> its the barcode key
     

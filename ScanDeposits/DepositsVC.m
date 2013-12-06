@@ -402,6 +402,8 @@
         [mailController setCcRecipients:emailRecipArray];
         [mailController setToRecipients:emailRecipArray];//currently me will be --> emailRecipientsArray
         [mailController setMailComposeDelegate:self];
+        [mailController setEditing:NO];
+        mailController.editing = NO;
     
         //Email container settings
         //need to remove from here when deleted and edited

@@ -44,7 +44,6 @@
 @implementation HomeVC
 
 #pragma mark - Custom delegate method for DepositsVC
-//- (void)resetDataAndPresentLogInVC {
 - (void)resetDataAndPresentWithFlag:(NSNumber *)shouldDismiss {
     
     DLog(@"Delegate method called to reset and present LoginVC");//called
@@ -121,15 +120,21 @@
 //Note: 2/5 interleaved barcode
 - (void)cancelScanPressed:(UIButton *)sender {
 
-   
 //    [picker stopScanning];
 //     [self dismissViewControllerAnimated:YES completion:nil];
     
     [self dismissViewControllerAnimated:YES completion:^{
         //Stop the picker scanning
         [picker stopScanning];
-        //cancelled scanning device QR barcode so set to YES again
-        _scanModeIsQR = YES;//this may vary
+        if (_didCancelDeposit) {
+            //cancelled ITF scan means QR already scanned so set to NO
+            _scanModeIsQR = NO;//correct
+        }
+        else
+        {
+            //cancelled scanning device QR barcode so set to YES again
+            _scanModeIsQR = YES;//correct
+        }
     }];
     
 }
@@ -318,7 +323,8 @@
     _scanModeIsQR = YES;//hardcode YES here
     
     
-    UIImage *aibImg = [UIImage imageNamed:@"logo_80_121.png"];//not great resolution
+//    UIImage *aibImg = [UIImage imageNamed:@"logo_80_121.png"];
+     UIImage *aibImg = [UIImage imageNamed:@"aib_logo.gif"];
     UIImageView *aibImgV = [[UIImageView alloc]initWithImage:aibImg];
     [aibImgV setFrame:CGRectMake(10, 54, aibImg.size.width, aibImg.size.height)];
     
@@ -394,6 +400,15 @@
 - (void)viewWillAppear:(BOOL)animated {
     //moved here because wipeData sets to nil and not created again as in viewDidLoad
 //     _depositsArray = [NSMutableArray array];
+    DLog(@"<< _scanModeIsQR >>: %d", _scanModeIsQR);// --> NO correct
+    
+    
+    //NSUserDefaults
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    //retrieve the app state for use case app flow
+    //    _isAdmin = [[userDefaults objectForKey:@"Is Administrator"]boolValue];
+    _isSetup = [[userDefaults objectForKey:@"Is Setup"]boolValue];
+    
     
     //if scan QR barcode
     if (_scanModeIsQR) {
@@ -424,14 +439,6 @@
         
     }
 
-    
-
-    //NSUserDefaults
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    
-    //retrieve the app state for use case app flow
-    //    _isAdmin = [[userDefaults objectForKey:@"Is Administrator"]boolValue];
-    _isSetup = [[userDefaults objectForKey:@"Is Setup"]boolValue];
     
     //NOTE: when setup has occurred then the app flow is LogInVC for both users
     if (_isSetup) {
@@ -546,17 +553,21 @@
 - (void)resetBarcodeHistoryWithStatus:(NSNumber *)didCancel {
     _didCancelDeposit = didCancel.boolValue;
     
+    //if user cancelled scan of ITF
     if (_didCancelDeposit) {
+        //cancelled ITF scan means QR already scanned so set to NO
+        _scanModeIsQR = NO;
+        
         //ToDO wipe barcodeArray for stored history of scans
         if (_uniqueBagArray && _barcodeArray) {
             //Dont need to check if it contains the barcodeString as its an ordered collection
             //So remove lastObject will work fine
             [_uniqueBagArray removeLastObject];
-            DLog(@"UniqueBagArray after removal: %@", _uniqueBagArray);
+            DLog(@"UniqueBagArray after removal: %@", _uniqueBagArray);//removed
             
             //remove the EightBarcode object from the barcodeArray
             [_barcodeArray removeLastObject];// correct i think
-            //dont need to remove from _depositsCollection as it never gets there until finishedScans is pressed
+            DLog(@"_barcodeArray after removal: %@", _barcodeArray);//just QR inside
             
             //disable finishedScans button again
              barBtnFinished.enabled = NO;//correct
@@ -604,7 +615,7 @@
 - (void)startScanningWithScanMode:(NSNumber *)mode {
 
     //if the mode is NO set the scanMode to 2/5 interleaved
-    if (!mode.boolValue) {
+    if (!mode.boolValue) { //NO
     
         //set _scanModel to bag barcode now as we have a successful QR scan
        _scanModeIsQR = mode.boolValue;//is always NO -> correct

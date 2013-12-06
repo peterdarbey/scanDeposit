@@ -55,7 +55,7 @@
     } completion:^(BOOL finished) {
         [_backgroundView removeFromSuperview];
         
-        //only executed if user presses confirm
+        //only executed if user presses proceed
         if (_confirmed) {
        
             //dismissed popup and resume scanning mode and

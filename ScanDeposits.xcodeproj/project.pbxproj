@@ -107,6 +107,9 @@
 		BFB13642183CF8AF0051CB0F /* SuccessPopupVC.m in Sources */ = {isa = PBXBuildFile; fileRef = BFB13640183CF8AF0051CB0F /* SuccessPopupVC.m */; };
 		BFB13643183CF8AF0051CB0F /* SuccessPopupVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = BFB13641183CF8AF0051CB0F /* SuccessPopupVC.xib */; };
 		BFDBD8541850BC3500C08006 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFDBD8531850BC3500C08006 /* QuartzCore.framework */; };
+		BFDBD8561851D87B00C08006 /* aib_logo.gif in Resources */ = {isa = PBXBuildFile; fileRef = BFDBD8551851D87B00C08006 /* aib_logo.gif */; };
+		BFDBD8581851D8BB00C08006 /* purple-arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = BFDBD8571851D8BB00C08006 /* purple-arrow.png */; };
+		BFDBD85A1851D9AE00C08006 /* aib-logo-26-40.png in Resources */ = {isa = PBXBuildFile; fileRef = BFDBD8591851D9AE00C08006 /* aib-logo-26-40.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -247,6 +250,9 @@
 		BFB13640183CF8AF0051CB0F /* SuccessPopupVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SuccessPopupVC.m; sourceTree = "<group>"; };
 		BFB13641183CF8AF0051CB0F /* SuccessPopupVC.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SuccessPopupVC.xib; sourceTree = "<group>"; };
 		BFDBD8531850BC3500C08006 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		BFDBD8551851D87B00C08006 /* aib_logo.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = aib_logo.gif; sourceTree = "<group>"; };
+		BFDBD8571851D8BB00C08006 /* purple-arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "purple-arrow.png"; sourceTree = "<group>"; };
+		BFDBD8591851D9AE00C08006 /* aib-logo-26-40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "aib-logo-26-40.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -408,6 +414,7 @@
 				BF99DD531832288100183FE2 /* accountIcon.png */,
 				BF99DD541832288100183FE2 /* accountIcon@2x.png */,
 				BF99DD4F1832287900183FE2 /* rightArrow.png */,
+				BFDBD8571851D8BB00C08006 /* purple-arrow.png */,
 				BF99DD501832287900183FE2 /* rightArrow@2x.png */,
 				BF99DD3B1832283400183FE2 /* greenButton.png */,
 				BF99DD3C1832283400183FE2 /* greenButton@2x.png */,
@@ -421,6 +428,8 @@
 				BF99DD4A1832286600183FE2 /* singleCellSelected@2x.png */,
 				BF92211A18214DC80084DCA0 /* aib_logo_original_cut.png */,
 				BF92211C18214E290084DCA0 /* logo_80_121.png */,
+				BFDBD8591851D9AE00C08006 /* aib-logo-26-40.png */,
+				BFDBD8551851D87B00C08006 /* aib_logo.gif */,
 				BF37033C180EAEF10027AE4F /* Default-568h.png */,
 				BF37033D180EAEF10027AE4F /* Default-568h@2x.png */,
 				BF37033E180EAEF10027AE4F /* Default.png */,
@@ -603,8 +612,10 @@
 				BF99DD551832288100183FE2 /* accountIcon.png in Resources */,
 				BF99DDF01836414700183FE2 /* WarningPopup.xib in Resources */,
 				BF99DDE01835223000183FE2 /* flashlight-turn-on-icon-pressed@2x.png in Resources */,
+				BFDBD8561851D87B00C08006 /* aib_logo.gif in Resources */,
 				BF99DD4D1832286600183FE2 /* singleCellSelected.png in Resources */,
 				BF92212318227AEC0084DCA0 /* usersCollection.plist in Resources */,
+				BFDBD8581851D8BB00C08006 /* purple-arrow.png in Resources */,
 				BF99DD561832288100183FE2 /* accountIcon@2x.png in Resources */,
 				BF92211D18214E290084DCA0 /* logo_80_121.png in Resources */,
 				BF99DD401832283400183FE2 /* greenButton@2x.png in Resources */,
@@ -634,6 +645,7 @@
 				BF9B6DA3182BE58700BC0E13 /* admins.plist in Resources */,
 				BF9B6D9E182AA03A00BC0E13 /* users.plist in Resources */,
 				BF99DDDB1835223000183FE2 /* flashlight-turn-off-icon-pressed.png in Resources */,
+				BFDBD85A1851D9AE00C08006 /* aib-logo-26-40.png in Resources */,
 				BF2C4FCE1806FEB100A87C18 /* blueButton.png in Resources */,
 				BF370345180EAEF10027AE4F /* Default@2x.png in Resources */,
 				BF99DDE818353A9400183FE2 /* QRPopup.xib in Resources */,
@@ -829,7 +841,7 @@
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Denver Corrigan (J92MY45J3C)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ScanDeposits/ScanDeposits-Prefix.pch";
@@ -840,7 +852,7 @@
 					./ScanditSDK,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "A9E322AA-6798-4252-B9DB-F5378288B4DD";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -851,7 +863,7 @@
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Denver Corrigan (J92MY45J3C)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ScanDeposits/ScanDeposits-Prefix.pch";
@@ -862,7 +874,7 @@
 					./ScanditSDK,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "A9E322AA-6798-4252-B9DB-F5378288B4DD";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

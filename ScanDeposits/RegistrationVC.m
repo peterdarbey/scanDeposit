@@ -302,7 +302,7 @@
     //Name
     if (indexPath.row == 0) {
         //if TF is not empty resign/assign
-        if (![textField.text isEqualToString:@""] && [textField.text length] > 6) {
+        if (![textField.text isEqualToString:@""] && [textField.text length] > 5) {
             
             //assign text to user ivar
              self.name = textField.text;
@@ -347,7 +347,7 @@
     //Staff ID then generate Adminstrator password
     else if (indexPath.row == 2)
     {
-        if (![textField.text isEqualToString:@""] && [textField.text length] >= 6) {
+        if (![textField.text isEqualToString:@""] && [textField.text length] >= 5) {
             //resign previous responder status
             [textField resignFirstResponder];
             //assign text to user ivar

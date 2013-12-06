@@ -123,8 +123,6 @@
         isEqualToString:@""])
         return YES;
     
-   
-    
     return NO;
     
 }

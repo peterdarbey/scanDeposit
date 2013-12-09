@@ -328,7 +328,7 @@
     
     
 //    UIImage *aibImg = [UIImage imageNamed:@"logo_80_121.png"];
-     UIImage *aibImg = [UIImage imageNamed:@"aib_logo.gif"];
+     UIImage *aibImg = [UIImage imageNamed:@"tablet-header-icon-less-flash.png"];
     UIImageView *aibImgV = [[UIImageView alloc]initWithImage:aibImg];
     [aibImgV setFrame:CGRectMake(10, 54, aibImg.size.width, aibImg.size.height)];
     

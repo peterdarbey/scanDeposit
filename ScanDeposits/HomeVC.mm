@@ -118,48 +118,40 @@
 }
 
 - (void)cancelScanPressed:(UIButton *)sender {
-    _didCancelScan = YES;
-    
     /* 
-     NOTE 1:Proceed on QRPopup auto dismisses the picker so cancelScan can only be pressed before QR is captured, resulting in no valid QR -> means _scanModeIsQR is set to YES, as only set to NO in didScan delegate method once QR condition is met
-     
-     NOTE 2:If cancelScan is actually pressed its when _scanModeIsQR = NO (ITF mode enabled)
-     
+     NOTE 1:Proceed on QRPopup auto dismisses the picker so cancelScan can only be pressed before QR is captured, resulting in no valid QR -> _scanModeIsQR is set to YES, as only set to NO in didScan delegate method once QR condition is met NOTE 2:If cancelScan is pressed its when _scanModeIsQR = NO (ITF mode enabled)
     */
     
-//     [picker dismissViewControllerAnimated:YES completion:nil];
+    //set here
+    _didCancelScan = YES;
+    //cancelled ITF scan means QR already scanned so set to NO
+    _scanModeIsQR = NO;
+    
+    //picker dismissVC
     [self dismissViewControllerAnimated:YES completion:^{
-        //Stop the picker scanning
         [picker stopScanning];
         
-        //called if cancelPressed on ITF Popup
-        if (_didCancelDeposit) {
-            //cancelled ITF scan means QR already scanned so set to NO
-            _scanModeIsQR = NO;//correct
-        }
-        //called else when _confirmPressed then user presses cancelScan
-        else
-        {
-            //cancelled scanning device QR barcode so set to YES again
-            _scanModeIsQR = NO;//set to YES if user scanned wrong QR ->not likely with valid conditions in place
+        //called if when _confirmPressed of _cancelPressed ITF Popup then user presses cancelScan
+        if (_didCancelScan) {
+//            _scanModeIsQR = YES;//could be reset here if the external device is damaged
             
-            //User pressed cancelScans so wipe all data concerning barocodes barcodeArray and history including scanned Deposits
+            //User pressed cancelScans so wipe all data concerning barocodes barcodeArray,history including scanned Deposits
             if (_uniqueBagArray && _barcodeArray) {
-                //So remove lastObject will work fine
-                [_uniqueBagArray removeLastObject];
-                //remember no deposit here as we cancelled
-                //remove the EightBarcode object from the barcodeArray
-                [_barcodeArray removeLastObject];// correct i think leaves just QR inside
+                [_uniqueBagArray removeAllObjects];//cancelScan means reset all data in history
+        
+                //note: no deposit required here as only constructed on Proceed Press ITF Popup
                 
-            }//close if
-            //remove deposits also
-            if ([_depositsArray count] > 0) {
-                [_depositsArray removeAllObjects];
+                [_barcodeArray removeLastObject];//removes the EightBarcode but leaves QR inside
+//                [_barcodeArray removeAllObjects];//actually remove all items
             }
-        }
-        //we are assuming that the user wants to remove all scanned Deposits as they are canceling scans
-        if ([_depositsArray count] > 0) {
-            [_depositsArray removeAllObjects];
+            //we are assuming that the user wants to remove all scanned Deposits as they are canceling scans
+            if ([_depositsArray count] > 0) {
+                [_depositsArray removeAllObjects];//remove all Deposit instances
+            }
+            
+            //reset the class Deposit static methods
+            [Deposit setTotalBagsAmount:0.0];
+            [Deposit setTotalbagCount:0];
         }
     }];
     
@@ -192,10 +184,14 @@
             //now pass the deposits data to DepositsVC to pop its tblView
             DepositsVC *depositsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"DepositsVC"];
             depositsVC.title = NSLocalizedString(@"Contents List", @"Contents Listing");
-            //should work
-            if (_didCancelScan) {
-                [_depositsArray removeLastObject];
-            }
+//            //should only delete when the user presses cancelScans
+//            if (_didCancelScan) {
+//                DLog(@"DepositsArray: %@", _depositsArray);
+//                if ([_depositsArray count] > 0) {
+//                    [_depositsArray removeLastObject];
+//                }
+//            }//close if
+            
             depositsVC.depositsCollection = _depositsArray;//bag/deposit data
             depositsVC.barcodeArray = _barcodeArray;//pass all barcode data to deposits
             //set delegate here
@@ -252,8 +248,20 @@
     
     barBtnFinished = [[UIBarButtonItem alloc]initWithTitle:@"FinishedScan" style:UIBarButtonItemStyleBordered target:self action:@selector(finishedScanPressed:)];
     [barBtnFinished setTintColor:[UIColor blackColor]];
-    //set to disabled until a valid QR and at least 1 2/5 interleaved is scanned
-    [barBtnFinished setEnabled:NO];
+    
+    //disable finishedScans button if depositsArray has no data inside
+    
+    //need minimum of 1  2/5 interleaved to be scanned + a Deposit model created via (Proceed pressed)
+    if ([_depositsArray count] == 0) {
+        //set to disabled until a valid QR
+        barBtnFinished.enabled = NO;
+    }
+    else
+    {
+        barBtnFinished.enabled = YES;
+    }
+    
+//    [barBtnFinished setEnabled:NO];
     
     
     //Add a divider for the toolBar barButtonItems
@@ -372,6 +380,19 @@
         [_uniqueBagArray removeAllObjects];//correct
         DLog(@"uniqueBagArray after: %@", _uniqueBagArray);//what about depositsCollection
     }
+    
+    DLog(@"DepositsArray: %@", _depositsArray);
+    if ([_depositsArray count] > 0) {
+        [_depositsArray removeAllObjects];
+    }
+    
+    if ([_barcodeArray count] > 0) {
+        [_barcodeArray removeAllObjects];
+    }
+    
+    //reset the class Deposit static methods
+    [Deposit setTotalBagsAmount:0.0];
+    [Deposit setTotalbagCount:0];
     
     //present LogInVC as viewWillAppear is not called here on button press
     [self presentLogInVC];//test
@@ -585,42 +606,44 @@
 - (void)resetBarcodeHistoryWithStatus:(NSNumber *)didCancel {
     _didCancelDeposit = didCancel.boolValue;
     
-    //if user cancelled scan of ITF
+    //if user cancelled scan of ITF --> if cancelPressed on ITF Popup
     if (_didCancelDeposit) {
         //cancelled ITF scan means QR already scanned so set to NO and wipe last ITF barcode from barcodesArray
         //and history
         _scanModeIsQR = NO;
         
-        //ToDO wipe barcodeArray for stored history of scans
-        if (_uniqueBagArray && _barcodeArray) {
+        //ToDO wipe barcodeArray for stored history of scans so we can scan the bag again
+        if ([_uniqueBagArray count] > 0 && [_barcodeArray count] > 0) {
             //Dont need to check if it contains the barcodeString as its an ordered collection
             //So remove lastObject will work fine
-            [_uniqueBagArray removeLastObject];
+            [_uniqueBagArray removeLastObject];//correct just last object as possible user wants to change bag
             DLog(@"UniqueBagArray after removal: %@", _uniqueBagArray);//removed
             //remember no deposit here as we cancelled
             //remove the EightBarcode object from the barcodeArray
             [_barcodeArray removeLastObject];// correct i think
             DLog(@"_barcodeArray after removal: %@", _barcodeArray);//just QR inside
             
-            //disable finishedScans button again
-             barBtnFinished.enabled = NO;//correct
-            //ToDo: Note need to scan QR code again --> look at in the morning
+            //disable finishedScans button if depositsArray has no data inside
+            if ([_depositsArray count] == 0) {
+                barBtnFinished.enabled = NO;//correct
+            }
+            else
+            {
+                barBtnFinished.enabled = YES;
+            }
             
         }//close if
-        
-        [self cancelScanPressed:nil];//test
 //         [picker dismissViewControllerAnimated:YES completion:nil];//test
-        
     }
     
 }
 - (void)passScannedData:(Deposit *)deposit {
     
-    DLog(@"_depositsArray: %@", _depositsArray);
     //could set _scanModeIsQR = NO; here but set in delegate didScan condition
     
     //Pass the deposits data back to self and add to collection
-    [_depositsArray addObject:deposit];//has value
+    [_depositsArray addObject:deposit];
+     DLog(@"_depositsArray in delegate: %@", _depositsArray);//correct
     
     //enable finishedScans button now as a scanned deposit
     barBtnFinished.enabled = YES;

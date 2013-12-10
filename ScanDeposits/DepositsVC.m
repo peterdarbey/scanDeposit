@@ -235,7 +235,9 @@
     DLog(@"_barcodeArray: %@", _barcodeArray);
     DLog(@"_usersDict: %@", _usersDict);
     //wipe recorded QR and ITF barcode data
-    [_barcodeArray removeAllObjects];//dont nil just remove entries --> nil
+    if ([_barcodeArray count] > 0) {
+        [_barcodeArray removeAllObjects];//dont nil just remove entries --> nil
+    }
     
     //wipe recorded logged in users of the app
     _usersDict = nil;
@@ -557,11 +559,6 @@
         
         [bagLbl setText:[NSString stringWithFormat:@"Total bags: %i",[Deposit totalBagCount]]];
         
-//        if (_valueRemoved) {
-//            //reset to NO
-//            _valueEdited = NO;
-//        }
-       
         DLog(@"AFTER valueChanged: %f", [Deposit totalBagsAmount]);
         DLog(@"AFTER BAG COUNT: %i", [Deposit totalBagCount]);
         

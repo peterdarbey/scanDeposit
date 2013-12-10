@@ -527,6 +527,7 @@
         [bagLbl setBackgroundColor:[UIColor clearColor]];
         [bagLbl setFont:[UIFont fontWithName:@"Arial-BoldMT" size:15]];
         bagLbl.textAlignment = NSTextAlignmentLeft;
+        
         bagLbl.textColor = [UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0];//blue
         //remove shadows
 //        bagLbl.shadowColor = [UIColor grayColor];

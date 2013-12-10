@@ -65,5 +65,6 @@
 //new BOOL for dismissOfSuccessPopup
 @property BOOL shouldDismiss;
 @property BOOL didCancelDeposit;
+@property BOOL didCancelScan;
 
 @end

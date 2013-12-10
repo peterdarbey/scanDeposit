@@ -175,18 +175,19 @@
     } completion:^(BOOL finished) {
         [_backgroundView removeFromSuperview];
         
-        //only executed if user presses confirm
+        //only executed if user presses _confirmPressed on ITF Popup
         if (_confirmed) {
             
-            //Init custom model object and add to collection before passing to delegate
+            //construct Deposit model object and add to collection before passing to delegate
             Deposit *deposit = [self createDepositModelObject];
-            //call this delegate method from HomeVC if _confirmPressed
+            
             if ([self.delegate respondsToSelector:@selector(passScannedData:)]) {
                 [self.delegate performSelector:@selector(passScannedData:) withObject:deposit];
             }
             
         }//close if
-        //else cancel was pressed on ITFPopup
+        
+        //else _cancelPressed was pressed on ITFPopup
         else
         {
             //ToDo allow rescanning of the scanned bag again
@@ -198,7 +199,6 @@
         //dismissed popup and resume scanning mode and save barcode data if applicable
         if ([self.delegate respondsToSelector:@selector(startScanning)]) {
             [self.delegate performSelector:@selector(startScanning)];
-            DLog(@"Delgate performSelector");
         }
     }];
 
@@ -231,11 +231,9 @@
         qrBarcode = [_barcodeArray objectAtIndex:0];
     }
     
-    
     if ([[_barcodeArray lastObject] isKindOfClass:[EightBarcode class]]) {
          eightBarcode = [_barcodeArray lastObject];//always the last object as QR is first and its an ordered collection
     }
-    
     
     //Init custom model object have to pass the unique bag number here plus maybe the QR branch or something?
     Deposit *deposit = [[Deposit alloc]initWithBagNumber:[qrBarcode barcodeProcess]// --> think thats right

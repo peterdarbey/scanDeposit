@@ -117,27 +117,49 @@
     return self;
 }
 
-//Note: 2/5 interleaved barcode
 - (void)cancelScanPressed:(UIButton *)sender {
-
-//    [picker stopScanning];
-//     [self dismissViewControllerAnimated:YES completion:nil];
+    _didCancelScan = YES;
     
+    /* 
+     NOTE 1:Proceed on QRPopup auto dismisses the picker so cancelScan can only be pressed before QR is captured, resulting in no valid QR -> means _scanModeIsQR is set to YES, as only set to NO in didScan delegate method once QR condition is met
+     
+     NOTE 2:If cancelScan is actually pressed its when _scanModeIsQR = NO (ITF mode enabled)
+     
+    */
+    
+//     [picker dismissViewControllerAnimated:YES completion:nil];
     [self dismissViewControllerAnimated:YES completion:^{
         //Stop the picker scanning
         [picker stopScanning];
+        
+        //called if cancelPressed on ITF Popup
         if (_didCancelDeposit) {
             //cancelled ITF scan means QR already scanned so set to NO
             _scanModeIsQR = NO;//correct
         }
+        //called else when _confirmPressed then user presses cancelScan
         else
         {
             //cancelled scanning device QR barcode so set to YES again
-            _scanModeIsQR = YES;//correct
+            _scanModeIsQR = NO;//set to YES if user scanned wrong QR ->not likely with valid conditions in place
+            
+            //User pressed cancelScans so wipe all data concerning barocodes barcodeArray and history including scanned Deposits
+            if (_uniqueBagArray && _barcodeArray) {
+                //So remove lastObject will work fine
+                [_uniqueBagArray removeLastObject];
+                //remember no deposit here as we cancelled
+                //remove the EightBarcode object from the barcodeArray
+                [_barcodeArray removeLastObject];// correct i think leaves just QR inside
+                
+            }//close if
+            //remove deposits also
+            if ([_depositsArray count] > 0) {
+                [_depositsArray removeAllObjects];
+            }
         }
         //we are assuming that the user wants to remove all scanned Deposits as they are canceling scans
         if ([_depositsArray count] > 0) {
-            [_depositsArray removeAllObjects];//or just last entry
+            [_depositsArray removeAllObjects];
         }
     }];
     
@@ -170,14 +192,16 @@
             //now pass the deposits data to DepositsVC to pop its tblView
             DepositsVC *depositsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"DepositsVC"];
             depositsVC.title = NSLocalizedString(@"Contents List", @"Contents Listing");
+            //should work
+            if (_didCancelScan) {
+                [_depositsArray removeLastObject];
+            }
             depositsVC.depositsCollection = _depositsArray;//bag/deposit data
             depositsVC.barcodeArray = _barcodeArray;//pass all barcode data to deposits
             //set delegate here
 //            [depositsVC setDelegate:self];
             
             DLog(@"_depositsArray in picker dismiss: %@", _depositsArray);//empty
-            
-           
             
             //package off logged in users/admins data
             if (_validUsersDict) {
@@ -196,7 +220,6 @@
 //            _scanModeIsDevice = YES;//reset to scan QR barcode as viewDidLoad is Not called unless app is quit
             
         }];
-
         
     }//close else
     
@@ -327,8 +350,8 @@
     _scanModeIsQR = YES;//hardcode YES here
     
     
-//    UIImage *aibImg = [UIImage imageNamed:@"logo_80_121.png"];
-     UIImage *aibImg = [UIImage imageNamed:@"tablet-header-icon-less-flash.png"];
+    UIImage *aibImg = [UIImage imageNamed:@"logo_80_121.png"];
+//     UIImage *aibImg = [UIImage imageNamed:@"tablet-header-icon-less-flash.png"];
     UIImageView *aibImgV = [[UIImageView alloc]initWithImage:aibImg];
     [aibImgV setFrame:CGRectMake(10, 54, aibImg.size.width, aibImg.size.height)];
     
@@ -564,7 +587,8 @@
     
     //if user cancelled scan of ITF
     if (_didCancelDeposit) {
-        //cancelled ITF scan means QR already scanned so set to NO
+        //cancelled ITF scan means QR already scanned so set to NO and wipe last ITF barcode from barcodesArray
+        //and history
         _scanModeIsQR = NO;
         
         //ToDO wipe barcodeArray for stored history of scans
@@ -573,7 +597,7 @@
             //So remove lastObject will work fine
             [_uniqueBagArray removeLastObject];
             DLog(@"UniqueBagArray after removal: %@", _uniqueBagArray);//removed
-            
+            //remember no deposit here as we cancelled
             //remove the EightBarcode object from the barcodeArray
             [_barcodeArray removeLastObject];// correct i think
             DLog(@"_barcodeArray after removal: %@", _barcodeArray);//just QR inside
@@ -584,12 +608,16 @@
             
         }//close if
         
+        [self cancelScanPressed:nil];//test
+//         [picker dismissViewControllerAnimated:YES completion:nil];//test
+        
     }
     
 }
 - (void)passScannedData:(Deposit *)deposit {
     
-    DLog(@"dataArray: %@", deposit);
+    DLog(@"_depositsArray: %@", _depositsArray);
+    //could set _scanModeIsQR = NO; here but set in delegate didScan condition
     
     //Pass the deposits data back to self and add to collection
     [_depositsArray addObject:deposit];//has value
@@ -673,7 +701,7 @@
     if (_scanModeIsQR && [barcodeType isEqualToString:@"QR"] && [barcodeString hasPrefix:@"Branch NSC"]) {
         
         DLog(@"barcodeType: %@", barcodeType);//QR - correct if execution enters here we have a valid QR for app
-        
+        //dont actually need here as custom delegate (startsScanningWithScanMode:) sets to NO on return
         _scanModeIsQR = NO; // --> NOTE flag to say scanned QR already
         
         //parses a barcode string and creates a dictionary

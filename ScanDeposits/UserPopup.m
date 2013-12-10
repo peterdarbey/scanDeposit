@@ -127,46 +127,6 @@
     
 }
 
-//better approach
-//-(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-//    //replace what the user entered with this string
-//
-//    //if entered text is > 5 lets check its content
-//    if ([string isEqualToString:@"."]) {
-//        DLog(@"Less than 4");
-//
-//        [self validateStringFromUserInput:textField.text];
-////        NSMutableArray *editStrArray = (NSMutableArray *)[textField.text componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"."]];
-////        DLog(@"arrayOfStringComponents>>>>>: %@", editStrArray);
-////        [stringArray addObject:[editStrArray lastObject]];
-////        NSString *newString = [editStrArray objectAtIndex:0];
-////        DLog(@"newString: %@", newString);
-////        DLog(@"stringArray: %@", stringArray);
-//    }
-//
-//
-//    //Check the 4th character entered
-//    if ([[textField.text stringByReplacingCharactersInRange:range withString:string] length] == 4) {
-//        DLog(@"STRING: %@", string);//really a char //current value -> value just entered
-//        //4th character entered check if its a @"."
-//        if (![string isEqualToString:@"."]) {
-//            DLog(@"Right the string has a 4th 0 so too big: %@", string);//hits here
-//            // so remove last entry
-////            NSString *edString = [textField.text stringByDeletingLastPathComponent];//might work
-////            NSString *removeString = string;
-//            NSString *edString = [textField.text stringByReplacingCharactersInRange:range withString:@"."];
-//            DLog(@"edString: %@", edString);//321. worked now tell user
-//            textField.text = edString;
-////            textField.placeholder = edString;
-//        }
-//
-//    }//close outter if
-//
-//
-//        return YES;//should be replaced
-//}
-
-
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     
     [textField resignFirstResponder];
@@ -190,8 +150,6 @@
 //_saveBtn
 -(void)confirmPressed:(UIButton *)sender {
     
-    DLog(@"_popupTV.staffID: %@", _popupTV.staffID);//null why
-    
     if (_popupTV.name && _popupTV.eMail && _popupTV.staffID && _popupTV.initials) {
         DLog(@"Enter create User model conditional");
         //Not right place for User model init
@@ -201,39 +159,23 @@
         //if I did that though they couldnt use app 
         //create user model set NO as default for isAdmin and pass back to the UserVC
         User *user = [[User alloc]initWithName:_popupTV.name eMail:_popupTV.eMail
-                                       staffID:_popupTV.staffID Initials:_popupTV.initials isAdmin:NO withPassword:@"Not Authorized"];//was nil -> fixed
+                                       staffID:_popupTV.staffID Initials:_popupTV.initials isAdmin:NO withPassword:@"Not Authorized"];
         
         //NOTE never Admin when this method is called from the PopupTV class
         DLog(@"User>>>>>: %@", user);
         //create a delegate method
-        //Test
         if ([self.userDelegate respondsToSelector:@selector(returnUserModel:)]) {
             [self.userDelegate performSelector:@selector(returnUserModel:) withObject:user];
             DLog(@"Custom User Delegate preformed");
             //need another delegate method to refresh the tblView
         }
         if ([self.userDelegate respondsToSelector:@selector(refreshView)]) {
-            [self.userDelegate performSelector:@selector(refreshView)];//called works
+            [self.userDelegate performSelector:@selector(refreshView)];
         }
     }
     [self dismissPopup];
     
 }
-
-#pragma factory method
-//- (User *)createDepositModelObject {
-//    
-//    //    NSMutableArray *array = [NSMutableArray array];
-//    
-//    //Init custom model object
-//    User *user = [[Deposit alloc]initWithBagNumber:@"987565-4646" bagBarcode:@"987565-4646"
-//                                               bagAmount: _bagAmount bagCount:_bagCount timeStamp:_timeString];
-//    
-//    //Add to collection before passing to delegate
-//    //    [array addObject:deposit];
-//    return user;
-//}
-
 +(UserPopup *)loadFromNibNamed:(NSString*)nibName {
     NSArray *xib = [[NSBundle mainBundle] loadNibNamed:nibName owner:self options:nil];
     UserPopup *userPopup = [xib objectAtIndex:0];

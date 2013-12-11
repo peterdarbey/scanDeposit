@@ -53,6 +53,9 @@
 		BF37035A1816E1880027AE4F /* PopupTV.m in Sources */ = {isa = PBXBuildFile; fileRef = BF3703591816E1880027AE4F /* PopupTV.m */; };
 		BF37035F1817C6480027AE4F /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = BF37035E1817C6480027AE4F /* User.m */; };
 		BF9013861855D28F00E41840 /* tablet-header-icon-less-flash.png in Resources */ = {isa = PBXBuildFile; fileRef = BF9013851855D28F00E41840 /* tablet-header-icon-less-flash.png */; };
+		BF9013881858868E00E41840 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF9013871858868E00E41840 /* MobileCoreServices.framework */; };
+		BF90138A1858869900E41840 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF9013891858869900E41840 /* CFNetwork.framework */; };
+		BF90138C185886C300E41840 /* libcorecrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BF90138B185886C300E41840 /* libcorecrypto.dylib */; };
 		BF92211B18214DC80084DCA0 /* aib_logo_original_cut.png in Resources */ = {isa = PBXBuildFile; fileRef = BF92211A18214DC80084DCA0 /* aib_logo_original_cut.png */; };
 		BF92211D18214E290084DCA0 /* logo_80_121.png in Resources */ = {isa = PBXBuildFile; fileRef = BF92211C18214E290084DCA0 /* logo_80_121.png */; };
 		BF922120182279340084DCA0 /* PersistenceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BF92211F182279340084DCA0 /* PersistenceManager.m */; };
@@ -185,6 +188,9 @@
 		BF37035D1817C6480027AE4F /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
 		BF37035E1817C6480027AE4F /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		BF9013851855D28F00E41840 /* tablet-header-icon-less-flash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tablet-header-icon-less-flash.png"; sourceTree = "<group>"; };
+		BF9013871858868E00E41840 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		BF9013891858869900E41840 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		BF90138B185886C300E41840 /* libcorecrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcorecrypto.dylib; path = usr/lib/system/libcorecrypto.dylib; sourceTree = SDKROOT; };
 		BF92211A18214DC80084DCA0 /* aib_logo_original_cut.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = aib_logo_original_cut.png; sourceTree = "<group>"; };
 		BF92211C18214E290084DCA0 /* logo_80_121.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo_80_121.png; sourceTree = "<group>"; };
 		BF92211E182279340084DCA0 /* PersistenceManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersistenceManager.h; sourceTree = "<group>"; };
@@ -262,6 +268,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BF90138C185886C300E41840 /* libcorecrypto.dylib in Frameworks */,
+				BF90138A1858869900E41840 /* CFNetwork.framework in Frameworks */,
+				BF9013881858868E00E41840 /* MobileCoreServices.framework in Frameworks */,
 				BFDBD8541850BC3500C08006 /* QuartzCore.framework in Frameworks */,
 				BF9B6D4818290F8300BC0E13 /* MessageUI.framework in Frameworks */,
 				BF2C4FC11806B16B00A87C18 /* AVFoundation.framework in Frameworks */,
@@ -313,6 +322,9 @@
 		BF2C4F4B1805C08B00A87C18 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BF90138B185886C300E41840 /* libcorecrypto.dylib */,
+				BF9013891858869900E41840 /* CFNetwork.framework */,
+				BF9013871858868E00E41840 /* MobileCoreServices.framework */,
 				BFDBD8531850BC3500C08006 /* QuartzCore.framework */,
 				BF9B6D4718290F8300BC0E13 /* MessageUI.framework */,
 				BF2C4FC01806B16B00A87C18 /* AVFoundation.framework */,
@@ -854,6 +866,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					./ScanditSDK,
+					"$(SDKROOT)/usr/lib/system",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "A9E322AA-6798-4252-B9DB-F5378288B4DD";
@@ -876,6 +889,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					./ScanditSDK,
+					"$(SDKROOT)/usr/lib/system",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "A9E322AA-6798-4252-B9DB-F5378288B4DD";

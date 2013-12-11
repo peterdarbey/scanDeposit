@@ -404,7 +404,8 @@
         [mailController setCcRecipients:emailRecipArray];
         [mailController setToRecipients:emailRecipArray];//currently me will be --> emailRecipientsArray
         [mailController setMailComposeDelegate:self];
-        [mailController setEditing:NO];
+//        [mailController setEditing:NO];
+        [mailController setEditing:NO animated:NO];
     
         //Email container settings
         //need to remove from here when deleted and edited
@@ -436,38 +437,91 @@
     
 }
 
-
+- (void)sentMailWithSuccess:(BOOL)sent {
+    
+    //disable the send email button on succces
+    [proceedBtn setEnabled:NO];
+    
+    //dismiss mailComposer
+    [self dismissViewControllerAnimated:YES completion:nil];
+    
+    double delayInSeconds = 1.0;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        
+        //custom Success Popup may add a pause here
+        [self showSuccessPopupWithTitle:@"Success email sent" andMessage:@"Email successfully sent to recipients" forBarcode:nil];//put in completion block above
+    });
+}
+- (void)sentMailWithError:(BOOL)failed {
+    
+    [self dismissViewControllerAnimated:YES completion:^{
+        //custom Warning Popup
+        [self showWarningPopupWithTitle:@"Error: Unable to send email" andMessage:@"Please check you have coverage" forBarcode:nil];
+        //ToDo decide where to go from here if it fails can we send again
+        [proceedBtn setEnabled:YES];//maybe
+    }];
+}
 
 #pragma mark - MFMailCompose delegate callbacks
 - (void)mailComposeController:(MFMailComposeViewController*)mailController didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error
 {
-    if (result) {
-
-        //disable the send email button on succces
-        [proceedBtn setEnabled:NO];
-        
-        //dismiss mailComposer
-        [self dismissViewControllerAnimated:YES completion:nil];
-        
-        double delayInSeconds = 1.0;
-        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-
-            //custom Success Popup may add a pause here
-            [self showSuccessPopupWithTitle:@"Success email sent" andMessage:@"Email successfully sent to recipients" forBarcode:nil];//put in completion block above
-        });
-                
-    }//close if
     
-    else if (error) {
-        
-        [self dismissViewControllerAnimated:YES completion:^{
-             //custom Warning Popup
-            [self showWarningPopupWithTitle:@"Error: Unable to send email" andMessage:@"Please check you have coverage" forBarcode:nil];
-            //ToDo decide where to go from here if it fails can we send again
-            [proceedBtn setEnabled:YES];//maybe
-        }];
+    switch (result) {
+        case MFMailComposeResultCancelled:
+            [self dismissViewControllerAnimated:YES completion:^{
+                //ToDo perhaps Pop to rootViewConroller and Logout
+                DLog(@"Mail cancelled: you cancelled the operation and no email message was queued.");
+            }];
+//            DLog(@"Mail cancelled: you cancelled the operation and no email message was queued.");
+            break;
+        case MFMailComposeResultSaved:
+            //ToDo -> NO dont save
+            [self dismissViewControllerAnimated:YES completion:nil];
+            DLog(@"Mail saved: you saved the email message in the drafts folder.");
+            break;
+        case MFMailComposeResultSent:
+            [self sentMailWithSuccess:YES];
+            DLog(@"Mail send: the email message is queued in the outbox. It is ready to send.");
+            break;
+        case MFMailComposeResultFailed:
+            [self sentMailWithError:YES];
+            DLog(@"Mail failed: the email message was not saved or queued, possibly due to an error.");
+            break;
     }
+    
+    if (error) {
+        DLog(@"Failed with error: %@", [error localizedDescription]);
+        [self sentMailWithError:YES];//perhaps pop to rootViewController and Logout
+    }
+    
+//    if (result) {
+//
+//        //disable the send email button on succces
+//        [proceedBtn setEnabled:NO];
+//        
+//        //dismiss mailComposer
+//        [self dismissViewControllerAnimated:YES completion:nil];
+//        
+//        double delayInSeconds = 1.0;
+//        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+//        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+//
+//            //custom Success Popup may add a pause here
+//            [self showSuccessPopupWithTitle:@"Success email sent" andMessage:@"Email successfully sent to recipients" forBarcode:nil];//put in completion block above
+//        });
+//        
+//    }//close if
+    
+//    else if (error) {
+//        
+//        [self dismissViewControllerAnimated:YES completion:^{
+//             //custom Warning Popup
+//            [self showWarningPopupWithTitle:@"Error: Unable to send email" andMessage:@"Please check you have coverage" forBarcode:nil];
+//            //ToDo decide where to go from here if it fails can we send again
+//            [proceedBtn setEnabled:YES];//maybe
+//        }];
+//    }
     
 }
 

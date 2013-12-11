@@ -358,8 +358,8 @@
     _scanModeIsQR = YES;//hardcode YES here
     
     
-    UIImage *aibImg = [UIImage imageNamed:@"logo_80_121.png"];
-//     UIImage *aibImg = [UIImage imageNamed:@"tablet-header-icon-less-flash.png"];
+//    UIImage *aibImg = [UIImage imageNamed:@"logo_80_121.png"];
+    UIImage *aibImg = [UIImage imageNamed:@"aib-logo-26-40.png"];
     UIImageView *aibImgV = [[UIImageView alloc]initWithImage:aibImg];
     [aibImgV setFrame:CGRectMake(10, 54, aibImg.size.width, aibImg.size.height)];
     

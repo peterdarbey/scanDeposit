@@ -453,6 +453,7 @@
     //properties
     UITextField *userNameTF;
     UILabel *userNameLbl;
+    UIImageView *arrowImage;
     
     
     if (cell == nil) {
@@ -485,8 +486,15 @@
         userNameLbl.shadowOffset = CGSizeMake(1.0, 1.0);
         userNameLbl.backgroundColor = [UIColor clearColor];
         [userNameLbl setUserInteractionEnabled:NO];
-        
+        //add to cells view hierarchy
         [cell.contentView addSubview:userNameLbl];
+        
+        //construct an image for Arrow
+        arrowImage = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"rightArrow.png"]];
+        [arrowImage setFrame:CGRectMake(10, 15, [UIImage imageNamed:@"rightArrow.png"].size.width, [UIImage imageNamed:@"rightArrow.png"].size.height)];
+        arrowImage.tag = ARROW_IMG;
+        
+        
         
     }//close if
     
@@ -494,6 +502,7 @@
     {   //retrieve the properties
         userNameTF = (UITextField *)[cell.contentView viewWithTag:USER_NAME_TF];
         userNameLbl = (UILabel *)[cell.contentView viewWithTag:USER_NAME_LBL];
+        arrowImage = (UIImageView *)[cell.contentView viewWithTag:ARROW_IMG];
     }
     
     //if we have data from user model(returnUsermodel called returning a user) or data loaded from file to display
@@ -525,6 +534,17 @@
         
     }//close if
     
+    if (indexPath.row == 0) {
+        
+//        cell.imageView.image = [UIImage imageNamed:@"rightArrow.png"];//button_plus.png
+        //add to cells contentView
+        [cell.contentView addSubview:arrowImage];
+    }
+    else
+    {
+        arrowImage = nil;
+    }
+    
         if ([_displayArray count] >= 1) {//was _dataSource
             
             if (indexPath.row == 0) {// && [_userTV numberOfRowsInSection:indexPath.section] == 1) {
@@ -540,23 +560,11 @@
                 
 //                cell.backgroundColor = [UIColor colorWithRed:210.0/255.0 green:210.0/255.0 blue:210.0/255.0 alpha:1.0];//light white
                 
-//                cell.imageView.image = [UIImage imageNamed:@"rightArrow.png"];//add resource
-                
-                
             }
             else
             {
                 cell.backgroundColor = [UIColor whiteColor];
-//                cell.imageView.image = nil;
             }
-            
-//            if (indexPath.row == 0 && !_isExpanded) {
-//                cell.imageView.image = [UIImage imageNamed:@"button_plus.png"];
-//            }
-//            else if (indexPath.row == 0 && _isExpanded)
-//            {
-//                cell.imageView.image = [UIImage imageNamed:@"button_minus.png"];
-//            }
         }//close if
     
     return cell;
@@ -636,7 +644,7 @@
         else if (_isSelected && !_isExpanded) //&& indexPath.row == index.row)
         {
             
-            [self expandMyTableViewWithIndex:selectedIP];//crashing here
+            [self expandMyTableViewWithIndex:selectedIP];
             
         }
     }//close if
@@ -648,7 +656,8 @@
 - (void)expandMyTableViewWithIndex:(NSIndexPath *)indexPath {
     
     //Need a conditional test to check the collection as it has not been created via the returnUserModel call
-
+    UIImageView *arrow;
+    
     if (_fileExists && _storedArray) {
        
         //retrieve from stored file first Note values/entries already in the collection dont add again
@@ -675,8 +684,17 @@
             [indexArray addObject:index];
             //Add just 3 entries to displayArray
             [[_displayArray objectAtIndex:indexPath.section]addObject:[tempArray objectAtIndex:i]];
+            
+            //do anim
+            
         }
          DLog(@"new _displayArray: %@", _displayArray);//correct
+        UITableViewCell *cell = (UITableViewCell *)[_userTV cellForRowAtIndexPath:indexPath];
+        arrow = (UIImageView *)[cell.contentView viewWithTag:ARROW_IMG];
+        
+        [UIView animateWithDuration:0.3 animations:^{
+            arrow.transform = CGAffineTransformMakeRotation(M_PI_2);
+        }];
         
         [_userTV insertRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationBottom];
     }//close if
@@ -685,6 +703,8 @@
 }
 
 - (void)collaspeMyTableViewWithIndex:(NSIndexPath *)indexPath {
+    
+    UIImageView *arrow;
     
     NSMutableArray *indexArray = [NSMutableArray array];
     
@@ -704,6 +724,13 @@
         [[_displayArray objectAtIndex:selectedIP.section]removeLastObject];
     }
     
+        UITableViewCell *cell = (UITableViewCell *)[_userTV cellForRowAtIndexPath:indexPath];
+        arrow = (UIImageView *)[cell.contentView viewWithTag:ARROW_IMG];
+        
+        [UIView animateWithDuration:0.3 animations:^{
+            arrow.transform = CGAffineTransformMakeRotation(0.0);
+        }];
+        
     [_userTV deleteRowsAtIndexPaths:indexArray withRowAnimation:UITableViewRowAnimationBottom];
         
     }//close if check

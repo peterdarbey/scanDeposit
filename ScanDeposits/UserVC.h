@@ -16,6 +16,7 @@
 
 #define USER_NAME_TF 100
 #define USER_NAME_LBL 200
+#define ARROW_IMG 300
 
 
 @interface UserVC : UIViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UserModelDelegate>

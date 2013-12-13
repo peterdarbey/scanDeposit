@@ -249,19 +249,16 @@
     barBtnFinished = [[UIBarButtonItem alloc]initWithTitle:@"FinishedScan" style:UIBarButtonItemStyleBordered target:self action:@selector(finishedScanPressed:)];
     [barBtnFinished setTintColor:[UIColor blackColor]];
     
-    //disable finishedScans button if depositsArray has no data inside
-    
-    //need minimum of 1  2/5 interleaved to be scanned + a Deposit model created via (Proceed pressed)
-    if ([_depositsArray count] == 0) {
-        //set to disabled until a valid QR
-        barBtnFinished.enabled = NO;
+    if ([_depositsArray count] > 0) {
+        [barBtnFinished setEnabled:YES];
     }
     else
     {
-        barBtnFinished.enabled = YES;
+        [barBtnFinished setEnabled:NO];
     }
+   
     
-//    [barBtnFinished setEnabled:NO];
+    //disable finishedScans button if depositsArray has no data inside
     
     
     //Add a divider for the toolBar barButtonItems
@@ -293,8 +290,6 @@
     _depositsArray = [NSMutableArray array];
     
     _uniqueBagArray = [NSMutableArray array];
-    
-    barBtnFinished.enabled = NO;
     
     
     
@@ -453,7 +448,6 @@
     //moved here because wipeData sets to nil and not created again as in viewDidLoad
 //     _depositsArray = [NSMutableArray array];
     DLog(@"<< _scanModeIsQR >>: %d", _scanModeIsQR);// --> NO correct
-    
     
     //NSUserDefaults
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -623,12 +617,13 @@
             DLog(@"_barcodeArray after removal: %@", _barcodeArray);//just QR inside
             
             //disable finishedScans button if depositsArray has no data inside
-            if ([_depositsArray count] == 0) {
-                barBtnFinished.enabled = NO;//correct
+            //need minimum of 1  2/5 interleaved to be scanned + a Deposit model created via (Proceed pressed)
+            if ([_depositsArray count] > 0) {
+                [barBtnFinished setEnabled:YES];//correct
             }
             else
             {
-                barBtnFinished.enabled = YES;
+                [barBtnFinished setEnabled:NO];
             }
             
         }//close if
@@ -644,6 +639,7 @@
     [_depositsArray addObject:deposit];
      DLog(@"_depositsArray in delegate: %@", _depositsArray);//correct
     
+    //need minimum of 1  2/5 interleaved to be scanned + a Deposit model created via (Proceed pressed)
     //enable finishedScans button now as a scanned deposit
     barBtnFinished.enabled = YES;
     
@@ -790,12 +786,7 @@
             //Add to collection -> we have a key value pair here to ID the type of barcode object so add to same array as QRBarcode
             //leave this wrong place for didResetBarcode bool
             [_barcodeArray addObject:_eightBarcode];
-            
-            if (_eightBarcode) {
-                //set to enabled when we have a valid QR and at least 1 2/5 interleaved scanned
-                [barBtnFinished setEnabled:YES];
-            }
-            
+        
             //Construct custom popup here for 2/5 interleaved barcode
             //present the 2/5 interleaved popup
             [self showITFPopup:barcodeString];//pass relevant custom model or dictionary

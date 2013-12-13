@@ -211,6 +211,11 @@
     }
     
     _allowEdit = NO;
+    
+//    if ([_depositsCollection count] > 0) {
+//        barBtnFinished.enabled = YES;
+//        DLog(@"Enable the finished Scan button");
+//    }
 
 }
 

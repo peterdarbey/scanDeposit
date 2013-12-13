@@ -18,6 +18,8 @@
     NSFileManager *fileManager;
     NSString *fullPath;
     NSString *usersPath;
+    CGRect labelOffset;
+    CGRect textFieldOffset;
 }
 
 @end
@@ -300,6 +302,11 @@
             cell.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"singleCell.png"]];
             cell.selectedBackgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"singleCellSelected.png"]];
         }
+        else
+        {
+            DLog(@"No bckGrd color");
+            cell.backgroundColor = [UIColor whiteColor];
+        }
     }
     
 }
@@ -455,6 +462,10 @@
     UILabel *userNameLbl;
     UIImageView *arrowImage;
     
+    //construct an image for Arrow
+    arrowImage = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"rightArrow.png"]];
+    [arrowImage setFrame:CGRectMake(10, 15, [UIImage imageNamed:@"rightArrow.png"].size.width, [UIImage imageNamed:@"rightArrow.png"].size.height)];
+    arrowImage.tag = ARROW_IMG;
     
     if (cell == nil) {
         
@@ -469,6 +480,9 @@
         userNameTF.textColor = [UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0];//blue
         //ToDo add a BOOL for editable or not
 //        [userNameTF setUserInteractionEnabled:YES];
+        
+        //create offset
+        textFieldOffset = CGRectMake(90 + 25, cell.bounds.size.height/4, 200 - 25, 25);
         
         [userNameTF setUserInteractionEnabled:NO];
         [userNameTF setEnablesReturnKeyAutomatically:YES];
@@ -486,13 +500,17 @@
         userNameLbl.shadowOffset = CGSizeMake(1.0, 1.0);
         userNameLbl.backgroundColor = [UIColor clearColor];
         [userNameLbl setUserInteractionEnabled:NO];
+        
+        //create offset
+        labelOffset = CGRectMake(10 +25, cell.bounds.size.height/4, 70, 25);
+        
         //add to cells view hierarchy
         [cell.contentView addSubview:userNameLbl];
         
-        //construct an image for Arrow
-        arrowImage = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"rightArrow.png"]];
-        [arrowImage setFrame:CGRectMake(10, 15, [UIImage imageNamed:@"rightArrow.png"].size.width, [UIImage imageNamed:@"rightArrow.png"].size.height)];
-        arrowImage.tag = ARROW_IMG;
+//        //construct an image for Arrow
+//        arrowImage = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"rightArrow.png"]];
+//        [arrowImage setFrame:CGRectMake(10, 15, [UIImage imageNamed:@"rightArrow.png"].size.width, [UIImage imageNamed:@"rightArrow.png"].size.height)];
+//        arrowImage.tag = ARROW_IMG;
         
         
         
@@ -536,35 +554,39 @@
     
     if (indexPath.row == 0) {
         
-//        cell.imageView.image = [UIImage imageNamed:@"rightArrow.png"];//button_plus.png
+        //if row 0 move frame to accomadate the arrow
+        [userNameTF setFrame:textFieldOffset];
+        [userNameTF setTextColor:[UIColor darkGrayColor]];
+        [userNameTF setBackgroundColor:[UIColor clearColor]];
+        [userNameLbl setFrame:labelOffset];
+        [userNameLbl setTextColor:[UIColor brownColor]];
+//        userNameLbl.shadowColor = [UIColor blackColor];
+        [userNameLbl setBackgroundColor:[UIColor clearColor]];
+    
         //add to cells contentView
         [cell.contentView addSubview:arrowImage];
     }
     else
     {
+        //explicitly set frame -> now works
+        [userNameTF setFrame:CGRectMake(90, cell.bounds.size.height/4, 200, 25)];
+        //explictly reset styling as cell only enters if once were style setup occurs
+        userNameTF.textColor = [UIColor colorWithRed:0.0/255.0 green:145.0/255.0 blue:210.0/255.0 alpha:1.0];//blue
+        [userNameLbl setFrame:CGRectMake(10, cell.bounds.size.height/4, 70 , 25)];
+        userNameLbl.textColor = [UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0];//darkGray
+        userNameLbl.shadowColor = [UIColor grayColor];
+        
+        //bug is its reusing the style applied to the specific dequeued cell and using that cell for differ rows
+        //fix by explicitly setting style back to default in else
+//        [arrowImage removeFromSuperview];
         arrowImage = nil;
+        //may need to remove arrow from view hierarchy
+        
+         cell.backgroundColor = [UIColor whiteColor];
     }
     
         if ([_displayArray count] >= 1) {//was _dataSource
             
-            if (indexPath.row == 0) {// && [_userTV numberOfRowsInSection:indexPath.section] == 1) {
-                
-                //retrieve the properties
-//                userNameTF = (UITextField *)[cell.contentView viewWithTag:USER_NAME_TF];
-//                userNameLbl = (UILabel *)[cell.contentView viewWithTag:USER_NAME_LBL];
-//                //if row 0 move frame to accomadate the arrow
-//                [userNameTF setFrame:CGRectMake(190, cell.bounds.size.height/4, 100, 25)];
-//                [userNameTF setBackgroundColor:[UIColor greenColor]];//test
-//                [userNameLbl setFrame:CGRectMake(110, cell.bounds.size.height/4, 70 , 25)];
-//                [userNameLbl setBackgroundColor:[UIColor orangeColor]];//test
-                
-//                cell.backgroundColor = [UIColor colorWithRed:210.0/255.0 green:210.0/255.0 blue:210.0/255.0 alpha:1.0];//light white
-                
-            }
-            else
-            {
-                cell.backgroundColor = [UIColor whiteColor];
-            }
         }//close if
     
     return cell;

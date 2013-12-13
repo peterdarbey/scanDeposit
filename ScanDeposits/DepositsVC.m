@@ -406,6 +406,8 @@
         [mailController setMailComposeDelegate:self];
 //        [mailController setEditing:NO];
         [mailController setEditing:NO animated:NO];
+        mailController.editing = NO;
+        [mailController.view setUserInteractionEnabled:NO];//nope
     
         //Email container settings
         //need to remove from here when deleted and edited
@@ -426,7 +428,7 @@
         [mailController addAttachmentData:dataString mimeType:@"text/csv" fileName:@"mailData.csv"];
 
         //add attachment to email as Excel SpreadSheet xls format
-        [mailController addAttachmentData:xmlDataString mimeType:@"application/vnd.ms-excel" fileName:@"processReport.xls"];
+        [mailController addAttachmentData:xmlDataString mimeType:@"application/vnd.ms-excel" fileName:@"ProcessReport.xls"];
     
         //if mail isnt setup return
         if (mailController == nil)
@@ -466,7 +468,7 @@
 #pragma mark - MFMailCompose delegate callbacks
 - (void)mailComposeController:(MFMailComposeViewController*)mailController didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error
 {
-    
+    [mailController setEditing:NO];
     switch (result) {
         case MFMailComposeResultCancelled:
             [self dismissViewControllerAnimated:YES completion:^{

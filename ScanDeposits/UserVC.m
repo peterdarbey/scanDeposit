@@ -549,6 +549,14 @@
                 cell.backgroundColor = [UIColor whiteColor];
 //                cell.imageView.image = nil;
             }
+            
+//            if (indexPath.row == 0 && !_isExpanded) {
+//                cell.imageView.image = [UIImage imageNamed:@"button_plus.png"];
+//            }
+//            else if (indexPath.row == 0 && _isExpanded)
+//            {
+//                cell.imageView.image = [UIImage imageNamed:@"button_minus.png"];
+//            }
         }//close if
     
     return cell;
@@ -560,11 +568,8 @@
     //if we have something to display then display
     if ([_displayArray count] >= 1) {
         
-        DLog(@"_displayedArray: %@", _displayArray);
-        return [_displayArray count];//thinks that there is 6 but only 5now after delete
-//        return [_storedArray count];//hack but didnt work
-        
-    }//close if
+        return [_displayArray count];
+    }
     //else if no data yet
     else if ([_displayArray count] < 1) {
         

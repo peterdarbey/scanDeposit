@@ -105,6 +105,8 @@
 		BF9B6D9E182AA03A00BC0E13 /* users.plist in Resources */ = {isa = PBXBuildFile; fileRef = BF9B6D9D182AA03A00BC0E13 /* users.plist */; };
 		BF9B6DA1182AA34600BC0E13 /* LogInVC.m in Sources */ = {isa = PBXBuildFile; fileRef = BF9B6DA0182AA34600BC0E13 /* LogInVC.m */; };
 		BF9B6DA3182BE58700BC0E13 /* admins.plist in Resources */ = {isa = PBXBuildFile; fileRef = BF9B6DA2182BE58700BC0E13 /* admins.plist */; };
+		BFAAB021185B287E0018400D /* button_minus.png in Resources */ = {isa = PBXBuildFile; fileRef = BFAAB01F185B287E0018400D /* button_minus.png */; };
+		BFAAB022185B287E0018400D /* button_plus.png in Resources */ = {isa = PBXBuildFile; fileRef = BFAAB020185B287E0018400D /* button_plus.png */; };
 		BFB13639183A1F240051CB0F /* StringParserHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BFB13638183A1F240051CB0F /* StringParserHelper.m */; };
 		BFB1363C183BD38C0051CB0F /* SuccessPopup.m in Sources */ = {isa = PBXBuildFile; fileRef = BFB1363B183BD38C0051CB0F /* SuccessPopup.m */; };
 		BFB1363E183BD47B0051CB0F /* SuccessPopup.xib in Resources */ = {isa = PBXBuildFile; fileRef = BFB1363D183BD47B0051CB0F /* SuccessPopup.xib */; };
@@ -249,6 +251,8 @@
 		BF9B6D9F182AA34600BC0E13 /* LogInVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogInVC.h; sourceTree = "<group>"; };
 		BF9B6DA0182AA34600BC0E13 /* LogInVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogInVC.m; sourceTree = "<group>"; };
 		BF9B6DA2182BE58700BC0E13 /* admins.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = admins.plist; sourceTree = "<group>"; };
+		BFAAB01F185B287E0018400D /* button_minus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_minus.png; sourceTree = "<group>"; };
+		BFAAB020185B287E0018400D /* button_plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button_plus.png; sourceTree = "<group>"; };
 		BFB13637183A1F240051CB0F /* StringParserHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringParserHelper.h; sourceTree = "<group>"; };
 		BFB13638183A1F240051CB0F /* StringParserHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StringParserHelper.m; sourceTree = "<group>"; };
 		BFB1363A183BD38C0051CB0F /* SuccessPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SuccessPopup.h; sourceTree = "<group>"; };
@@ -425,6 +429,8 @@
 		BF2C4FC91806FE7900A87C18 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				BFAAB01F185B287E0018400D /* button_minus.png */,
+				BFAAB020185B287E0018400D /* button_plus.png */,
 				BF9013851855D28F00E41840 /* tablet-header-icon-less-flash.png */,
 				BF99DD531832288100183FE2 /* accountIcon.png */,
 				BF99DD541832288100183FE2 /* accountIcon@2x.png */,
@@ -648,7 +654,9 @@
 				BF2C4F571805C08B00A87C18 /* InfoPlist.strings in Resources */,
 				BF99DDDD1835223000183FE2 /* flashlight-turn-off-icon.png in Resources */,
 				BF370342180EAEF10027AE4F /* Default-568h.png in Resources */,
+				BFAAB022185B287E0018400D /* button_plus.png in Resources */,
 				BF99DD451832285400183FE2 /* whiteCell.png in Resources */,
+				BFAAB021185B287E0018400D /* button_minus.png in Resources */,
 				BF3703241808229A0027AE4F /* ITFPopup.xib in Resources */,
 				BF99DDD71835223000183FE2 /* camera-swap-icon@2x.png in Resources */,
 				BF99DDD91835223000183FE2 /* scanditsdk.strings in Resources */,

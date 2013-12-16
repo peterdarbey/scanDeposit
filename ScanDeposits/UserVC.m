@@ -533,22 +533,22 @@
         NSArray *userKeys = @[@"Initials", @"Name", @"Email", @"Staff ID"];
         
         //if selected add extra entries to array in expand method
-        if (_isSelected && _isExpanded) {
-            
+//        if (_isSelected && _isExpanded) {
+        
             //_dataSource has the appropreiate _userArray containing the 3 fields of each user
             [userNameTF setText:[NSString stringWithFormat:@"%@", [[_displayArray objectAtIndex:indexPath.section]    objectAtIndex:indexPath.row]]];
             [userNameLbl setText:[NSString stringWithFormat:@"%@", [userKeys objectAtIndex:indexPath.row]]];
             
-        }//close if -> NOTE: dont need else here as the numOf rows and sections take care of count etc..
+//        }//close if -> NOTE: dont need else here as the numOf rows and sections take care of count etc..
         
         //not expanded and not selected so just show 1 entry -> the initials -> NOTE: these should probably be treated uniform also
-        else
-        {
-            //Added this -> if file exists display its data
-                [userNameTF setText:[NSString stringWithFormat:@"%@", [[_displayArray objectAtIndex:indexPath.section]objectAtIndex:indexPath.row]]];//0
-                //set UILabel name, should be uniform
-                [userNameLbl setText:[NSString stringWithFormat:@"%@", [userKeys objectAtIndex:indexPath.row]]];
-        }//close else
+//        else
+//        {
+//            //Added this -> if file exists display its data
+//                [userNameTF setText:[NSString stringWithFormat:@"%@", [[_displayArray objectAtIndex:indexPath.section]objectAtIndex:indexPath.row]]];//0
+//                //set UILabel name, should be uniform
+//                [userNameLbl setText:[NSString stringWithFormat:@"%@", [userKeys objectAtIndex:indexPath.row]]];
+//        }//close else
         
         
     }//close if

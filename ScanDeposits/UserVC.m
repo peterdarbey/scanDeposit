@@ -550,6 +550,7 @@
                 [userNameLbl setText:[NSString stringWithFormat:@"%@", [userKeys objectAtIndex:indexPath.row]]];
         }//close else
         
+        
     }//close if
     
     if (indexPath.row == 0) {
@@ -567,15 +568,16 @@
             arrowImage = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"rightArrow.png"]];
             [arrowImage setFrame:CGRectMake(10, 15, [UIImage imageNamed:@"rightArrow.png"].size.width, [UIImage imageNamed:@"rightArrow.png"].size.height)];
             arrowImage.tag = ARROW_IMG;
-//            arrowImage = (UIImageView *)[cell.contentView viewWithTag:ARROW_IMG];
+            //only alter if its reset
+            if (_isExpanded && _isSelected && arrowImage) {
+                arrowImage.transform = CGAffineTransformMakeRotation(M_PI_2);
+            }
+            else
+            {
+                arrowImage.transform = CGAffineTransformMakeRotation(0.0);
+            }
         }
-        if (_isExpanded && _isSelected && arrowImage) {
-            arrowImage.transform = CGAffineTransformMakeRotation(M_PI_2);
-        }
-        else
-        {
-            arrowImage.transform = CGAffineTransformMakeRotation(0.0);
-        }
+        
     
         //add to cells contentView
         [cell.contentView addSubview:arrowImage];
@@ -595,10 +597,6 @@
         [arrowImage removeFromSuperview];
 //        arrowImage = nil;
     }
-    
-        if ([_displayArray count] >= 1) {//was _dataSource
-            
-        }//close if
     
     return cell;
     

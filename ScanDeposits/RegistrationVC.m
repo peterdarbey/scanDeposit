@@ -567,12 +567,27 @@
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if( indexPath.row == 0 ) {
+    
+    if(indexPath.row == 0) {
         if ([tableView numberOfRowsInSection:indexPath.section] == 1) {
             cell.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"singleCell.png"]];
             cell.selectedBackgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"singleCellSelected.png"]];
         }
+        else
+        {
+            cell.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"singleCell.png"]];
+            cell.selectedBackgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"singleCellSelected.png"]];//whiteCell.png
+        }
     }
+    else
+    {
+        DLog(@"default style here");
+        //ToDo reset the backgroundView to default
+        UIImage *stretchImg = [[UIImage imageNamed:@"whiteCell.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 10, 10, 10)];
+        cell.backgroundView = [[UIImageView alloc]initWithImage:stretchImg];
+        cell.selectedBackgroundView = [[UIImageView alloc]initWithImage:stretchImg];
+    }
+
     
 }
 

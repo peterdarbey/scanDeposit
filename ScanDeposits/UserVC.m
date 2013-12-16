@@ -297,16 +297,24 @@
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if( indexPath.row == 0 ) {
+    if(indexPath.row == 0) {
         if ([tableView numberOfRowsInSection:indexPath.section] == 1) {
             cell.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"singleCell.png"]];
             cell.selectedBackgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"singleCellSelected.png"]];
         }
         else
         {
-            DLog(@"No bckGrd color");
-            cell.backgroundColor = [UIColor whiteColor];
+            cell.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"singleCell.png"]];
+            cell.selectedBackgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"singleCellSelected.png"]];//whiteCell.png
         }
+    }
+    else
+    {
+        DLog(@"default style here");
+        //ToDo reset the backgroundView to default
+        UIImage *stretchImg = [[UIImage imageNamed:@"whiteCell.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 10, 10, 10)];
+        cell.backgroundView = [[UIImageView alloc]initWithImage:stretchImg];
+        cell.selectedBackgroundView = [[UIImageView alloc]initWithImage:stretchImg];
     }
     
 }
@@ -462,11 +470,6 @@
     UILabel *userNameLbl;
     UIImageView *arrowImage;
     
-    //construct an image for Arrow
-    arrowImage = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"rightArrow.png"]];
-    [arrowImage setFrame:CGRectMake(10, 15, [UIImage imageNamed:@"rightArrow.png"].size.width, [UIImage imageNamed:@"rightArrow.png"].size.height)];
-    arrowImage.tag = ARROW_IMG;
-    
     if (cell == nil) {
         
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:myIdentifier];
@@ -507,10 +510,10 @@
         //add to cells view hierarchy
         [cell.contentView addSubview:userNameLbl];
         
-//        //construct an image for Arrow
-//        arrowImage = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"rightArrow.png"]];
-//        [arrowImage setFrame:CGRectMake(10, 15, [UIImage imageNamed:@"rightArrow.png"].size.width, [UIImage imageNamed:@"rightArrow.png"].size.height)];
-//        arrowImage.tag = ARROW_IMG;
+        //construct an image for Arrow
+        arrowImage = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"rightArrow.png"]];
+        [arrowImage setFrame:CGRectMake(10, 15, [UIImage imageNamed:@"rightArrow.png"].size.width, [UIImage imageNamed:@"rightArrow.png"].size.height)];
+        arrowImage.tag = ARROW_IMG;
         
         
         
@@ -542,12 +545,9 @@
         else
         {
             //Added this -> if file exists display its data
-//            if (_fileExists && _isWritten) {
                 [userNameTF setText:[NSString stringWithFormat:@"%@", [[_displayArray objectAtIndex:indexPath.section]objectAtIndex:indexPath.row]]];//0
                 //set UILabel name, should be uniform
                 [userNameLbl setText:[NSString stringWithFormat:@"%@", [userKeys objectAtIndex:indexPath.row]]];
-//              [userNameLbl setText:@"Initials"];//was in an else within this else
-//            }
         }//close else
         
     }//close if
@@ -560,8 +560,22 @@
         [userNameTF setBackgroundColor:[UIColor clearColor]];
         [userNameLbl setFrame:labelOffset];
         [userNameLbl setTextColor:[UIColor brownColor]];
-//        userNameLbl.shadowColor = [UIColor blackColor];
         [userNameLbl setBackgroundColor:[UIColor clearColor]];
+        
+        if (arrowImage == nil) {
+            //construct an image for Arrow
+            arrowImage = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"rightArrow.png"]];
+            [arrowImage setFrame:CGRectMake(10, 15, [UIImage imageNamed:@"rightArrow.png"].size.width, [UIImage imageNamed:@"rightArrow.png"].size.height)];
+            arrowImage.tag = ARROW_IMG;
+//            arrowImage = (UIImageView *)[cell.contentView viewWithTag:ARROW_IMG];
+        }
+        if (_isExpanded && _isSelected && arrowImage) {
+            arrowImage.transform = CGAffineTransformMakeRotation(M_PI_2);
+        }
+        else
+        {
+            arrowImage.transform = CGAffineTransformMakeRotation(0.0);
+        }
     
         //add to cells contentView
         [cell.contentView addSubview:arrowImage];
@@ -578,11 +592,8 @@
         
         //bug is its reusing the style applied to the specific dequeued cell and using that cell for differ rows
         //fix by explicitly setting style back to default in else
-//        [arrowImage removeFromSuperview];
-        arrowImage = nil;
-        //may need to remove arrow from view hierarchy
-        
-         cell.backgroundColor = [UIColor whiteColor];
+        [arrowImage removeFromSuperview];
+//        arrowImage = nil;
     }
     
         if ([_displayArray count] >= 1) {//was _dataSource

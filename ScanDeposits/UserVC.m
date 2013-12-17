@@ -346,8 +346,8 @@
     //ToDO bring up a xib view
     UserPopup *userPopup = [UserPopup loadFromNibNamed:@"UserPopup"];
     //Add delegate if required -> its the UserPopup delegate set to self this UserVC class
-    [userPopup setUserDelegate:self];//correct
-    [userPopup showOnView:self.view];//test
+    [userPopup setUserDelegate:self];
+    [userPopup showOnView:self.view];
     
 }
 #pragma tableView presentation methods
@@ -355,11 +355,11 @@
 
     if (section == 0) {
     
-        UIView *topView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, _userTV.frame.size.width, 25)];
+        UIView *topView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, _userTV.frame.size.width, 89)];
         [topView setBackgroundColor:[UIColor clearColor]];
 
         //construct a UILabel for the contorl user section
-        UILabel *userLbl = [[UILabel alloc]initWithFrame:CGRectMake(20, 0, 180, 25)];
+        UILabel *userLbl = [[UILabel alloc]initWithFrame:CGRectMake(20, 54.0, 180, 25)];//correct
         [userLbl setText:[NSString stringWithFormat:@"Control User: %i", section +1]];
 
         [userLbl setFont:[UIFont fontWithName:@"Arial-BoldMT" size:17]];
@@ -374,26 +374,31 @@
     }
     else
     {
-        return nil;
+        UIView *topView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, _userTV.frame.size.width, 35)];
+        [topView setBackgroundColor:[UIColor clearColor]];
+        UILabel *userLbl = [[UILabel alloc]initWithFrame:CGRectMake(20, 0, 180, 25)];
+        [userLbl setText:[NSString stringWithFormat:@"Control User: %i", section +1]];
+        [userLbl setFont:[UIFont fontWithName:@"Arial-BoldMT" size:17]];
+        [userLbl setTextColor:[UIColor whiteColor]];
+        [userLbl setTextAlignment:NSTextAlignmentLeft];
+        [userLbl setBackgroundColor:[UIColor clearColor]];
+        userLbl.shadowColor = [UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0];//darkGray
+        userLbl.shadowOffset = CGSizeMake(0.0, 1.0);
+        [topView addSubview:userLbl];
+        
+        return topView;
     }
 
 }
 
-//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-//    
-//    //increment the control user by 1
-//    NSString *titleName = [NSString stringWithFormat:@"Control User: %i", section +1];
-//    return titleName;
-//    
-//}
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     
     if (section == 0) {
-        return 84;
+        return 89;//84
     }
     else
     {
-        return 20;
+        return 35;
     }
     
 }

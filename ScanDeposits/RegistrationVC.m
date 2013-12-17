@@ -645,7 +645,7 @@
     
     if (section == 0) {// && ADMIN) {
         //+44 for navigation bar
-        UIView *topView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, _registerTV.frame.size.width, 143)];//128
+        UIView *topView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, _registerTV.frame.size.width, 153)];//143
         [topView setBackgroundColor:[UIColor clearColor]];
         
         //construct an innerView for the admin section
@@ -655,7 +655,7 @@
         
         //construct a UILabel for the Admin section
         UILabel *adminLbl = [[UILabel alloc]initWithFrame:CGRectMake(20, 118, 180, 25)];
-        [adminLbl setText:@"Administrator 1"];
+        [adminLbl setText:@"Administrator: 1"];
 //        [adminLbl setFont:[UIFont fontWithName:@"Helvetica" size:17]];
         [adminLbl setFont:[UIFont fontWithName:@"Arial-BoldMT" size:17]];
         [adminLbl setTextAlignment:NSTextAlignmentLeft];
@@ -709,7 +709,7 @@
         
         //construct a UILabel for the Admin section
         UILabel *adminLbl = [[UILabel alloc]initWithFrame:CGRectMake(20, 0, 180, 25)];
-        [adminLbl setText:@"Administrator 2"];
+        [adminLbl setText:@"Administrator: 2"];
         
         [adminLbl setFont:[UIFont fontWithName:@"Arial-BoldMT" size:17]];
         [adminLbl setTextColor:[UIColor whiteColor]];
@@ -727,11 +727,11 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     
     if (section == 0) {
-        return 143;//+ height for string title -> 128 + 25
+        return 153;//143
     }
     else
     {
-        return 25;
+        return 35;
     }
     
 }

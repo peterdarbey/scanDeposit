@@ -655,7 +655,8 @@
         
         //construct a UILabel for the Admin section
         UILabel *adminLbl = [[UILabel alloc]initWithFrame:CGRectMake(20, 118, 180, 25)];
-        [adminLbl setText:@"Administrator: 1"];
+//        [adminLbl setText:@"Administrator: 1"];
+        [adminLbl setText:[NSString stringWithFormat:@"Administrator: %i", section +1]];
 //        [adminLbl setFont:[UIFont fontWithName:@"Helvetica" size:17]];
         [adminLbl setFont:[UIFont fontWithName:@"Arial-BoldMT" size:17]];
         [adminLbl setTextAlignment:NSTextAlignmentLeft];
@@ -709,7 +710,7 @@
         
         //construct a UILabel for the Admin section
         UILabel *adminLbl = [[UILabel alloc]initWithFrame:CGRectMake(20, 0, 180, 25)];
-        [adminLbl setText:@"Administrator: 2"];
+         [adminLbl setText:[NSString stringWithFormat:@"Administrator: %i", section +1]];
         
         [adminLbl setFont:[UIFont fontWithName:@"Arial-BoldMT" size:17]];
         [adminLbl setTextColor:[UIColor whiteColor]];

@@ -319,13 +319,6 @@
     
 }
 
-
-//not called
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:YES];
-
-}
-
 - (void)donePressed:(UIButton *)sender {
     
     

@@ -24,8 +24,6 @@
 
 @interface LogInVC : UIViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
 {
-    
-    UIBarButtonItem *doneBtn;
     NSFileManager *fileManager;
     NSIndexPath *selectedIndex;
 }

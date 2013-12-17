@@ -294,13 +294,15 @@
     
     
     //How to use the app wording to be revised
-    helpTV = [[UITextView alloc]initWithFrame:CGRectMake(10, 175, self.view.frame.size.width -20, 250)];
+    helpTV = [[UITextView alloc]initWithFrame:CGRectMake(10, 160, self.view.frame.size.width -20, 250)];
 //    [helpTV setText:@"How to use this app\nPlease scan the external device (ATM) barcode.\n\nThen scan the bag barcode and enter the amount for each deposit.\n\nFinally press proceed to confirm email"];
     
     [helpTV setBackgroundColor:[UIColor clearColor]];
     [helpTV setFont:[UIFont systemFontOfSize:21]];
     //    [helpTV setTextColor:[UIColor colorWithRed:172.0/255.0 green:74.0/255.0 blue:0.0/255.0 alpha:1.0]];//orange
     [helpTV setTextColor:[UIColor whiteColor]];
+    [helpTV setFont:[UIFont fontWithName:@"Arial-BoldMT" size:21.0]];
+//    [helpTV setShadowColor:[UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0]];//darkGray
     [helpTV setEditable:NO];
     [helpTV setUserInteractionEnabled:NO];
     [helpTV setTextAlignment:NSTextAlignmentCenter];
@@ -312,7 +314,7 @@
     
 //    [self.navigationController.navigationBar setTintColor:[UIColor blackColor]];
     self.navigationController.navigationBar.barStyle = UIBarStyleBlackTranslucent;
-    self.title = NSLocalizedString(@"Home Screen", @"Home Screen");
+    self.title = NSLocalizedString(@"Home", @"Home Screen");
     
     //Construct a imageView
     UIImageView *imgView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"Default-568h.png"]];
@@ -353,12 +355,28 @@
     _scanModeIsQR = YES;//hardcode YES here
     
     
-    UIImage *aibImg = [UIImage imageNamed:@"logo_80_121.png"];
-//    UIImage *aibImg = [UIImage imageNamed:@"aib-logo-26-40.png"];
-    UIImageView *aibImgV = [[UIImageView alloc]initWithImage:aibImg];
-    [aibImgV setFrame:CGRectMake(10, 54, aibImg.size.width, aibImg.size.height)];
     
-    [self.view addSubview:aibImgV];
+    
+    UIImageView* logo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"logo_80_121.png"]];
+    logo.frame = CGRectMake(20, 64, 40, 60);
+    
+    UILabel *logoName = [[UILabel alloc]initWithFrame:CGRectMake(65, 81.5, 120, 25)];
+    [logoName setBackgroundColor:[UIColor clearColor]];
+    [logoName setText:@"AIB eRegister"];
+    [logoName setTextColor:[UIColor whiteColor]];
+    [logoName setFont:[UIFont fontWithName:@"Arial-BoldMT" size:18.0]];
+    [logoName setShadowColor:[UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0]];//darkGray
+    [logoName setShadowOffset:CGSizeMake(1.0, 1.0)];
+    [logoName setUserInteractionEnabled:NO];
+    [self.view addSubview:logoName];
+    
+    
+    
+//    UIImage *aibImg = [UIImage imageNamed:@"logo_80_121.png"];
+//    UIImageView *aibImgV = [[UIImageView alloc]initWithImage:aibImg];
+//    [aibImgV setFrame:CGRectMake(10, 54, aibImg.size.width, aibImg.size.height)];
+    
+    [self.view addSubview:logo];//aibImgV
     
 }
 //test

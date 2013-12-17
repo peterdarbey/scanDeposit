@@ -33,12 +33,6 @@
     return self;
 }
 
-- (void)donePressed:(UIButton *)sender {
-    
-    
-    
-}
-
 - (void)loginPressed:(UIButton *)sender {
     
     BOOL __block isAdmin;// -> flag for HomeVC view presentation
@@ -339,12 +333,6 @@
     
     [self.navigationController.navigationBar setBarStyle:UIBarStyleBlackTranslucent];
     
-    doneBtn = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(donePressed:)];
-    
-    [self.navigationItem setRightBarButtonItem:doneBtn];
-    //disable doneBtn on launch only enable when the user creds yield true
-    [doneBtn setEnabled:NO];
-    
     //Construct a imageView
     UIImageView *imgView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"Default-568h.png"]];
 //    [self.view addSubview:imgView];//for the moment
@@ -420,10 +408,11 @@
     //if 1st section
     if (section == 0) {
         
-        UIView *aView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, _loginTV.frame.size.width, 100)];
+        UIView *aView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, _loginTV.frame.size.width, 90)];
         [aView setBackgroundColor:[UIColor clearColor]];
         
-        UILabel *adminLbl = [[UILabel alloc]initWithFrame:CGRectMake(10, 59.5, 165, 25)];
+        UILabel *adminLbl = [[UILabel alloc]initWithFrame:CGRectMake(20, 54.5, 165, 25)];
+        adminLbl.backgroundColor = [UIColor clearColor];
        
         adminLbl.textAlignment = NSTextAlignmentLeft;
         adminLbl.font = [UIFont fontWithName:@"Arial-BoldMT" size:17];
@@ -431,7 +420,6 @@
         [adminLbl setTextColor:[UIColor whiteColor]];
         adminLbl.shadowColor = [UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0];//darkGray
         adminLbl.shadowOffset = CGSizeMake(1.0, 1.0);
-        adminLbl.backgroundColor = [UIColor clearColor];
         [adminLbl setUserInteractionEnabled:NO];
         [adminLbl setText:@"Administrator Only"];
         
@@ -442,10 +430,10 @@
     } //middle section
     else if (section == 1) {
         
-        UIView *aView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, _loginTV.frame.size.width, 50)];
+        UIView *aView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, _loginTV.frame.size.width, 45)];//50
         [aView setBackgroundColor:[UIColor clearColor]];
         //
-        UILabel *adminLbl = [[UILabel alloc]initWithFrame:CGRectMake(10, 12.5, 165, 25)];
+        UILabel *adminLbl = [[UILabel alloc]initWithFrame:CGRectMake(20, 10, 165, 25)];
         //
         adminLbl.textAlignment = NSTextAlignmentLeft;
         adminLbl.font = [UIFont fontWithName:@"Arial-BoldMT" size:17];
@@ -478,11 +466,11 @@
     //middle section
     else if (section == 1) {
         
-        return 50;//for now
+        return 45;//50
     }
     else //1st section
     {
-        return 100;
+        return 90;//100
     }
 }
 

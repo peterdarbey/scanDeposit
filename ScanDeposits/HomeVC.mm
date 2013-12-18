@@ -354,9 +354,6 @@
     //Set to YES on app launch as first time will always be QR external device barcode
     _scanModeIsQR = YES;//hardcode YES here
     
-    
-    
-    
     UIImageView* logo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"logo_80_121.png"]];
     logo.frame = CGRectMake(20, 64, 40, 60);
     

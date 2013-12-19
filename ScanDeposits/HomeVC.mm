@@ -367,12 +367,6 @@
     [logoName setUserInteractionEnabled:NO];
     [self.view addSubview:logoName];
     
-    
-    
-//    UIImage *aibImg = [UIImage imageNamed:@"logo_80_121.png"];
-//    UIImageView *aibImgV = [[UIImageView alloc]initWithImage:aibImg];
-//    [aibImgV setFrame:CGRectMake(10, 54, aibImg.size.width, aibImg.size.height)];
-    
     [self.view addSubview:logo];//aibImgV
     
 }

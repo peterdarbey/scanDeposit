@@ -310,7 +310,7 @@
     }
     else
     {
-        DLog(@"default style here");
+//        DLog(@"default style here"); //update with nice cell styles
         //ToDo reset the backgroundView to default
         UIImage *stretchImg = [[UIImage imageNamed:@"whiteCell.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 10, 10, 10)];
         cell.backgroundView = [[UIImageView alloc]initWithImage:stretchImg];
@@ -513,8 +513,6 @@
         [arrowImage setFrame:CGRectMake(10, 15, [UIImage imageNamed:@"rightArrow.png"].size.width, [UIImage imageNamed:@"rightArrow.png"].size.height)];
         arrowImage.tag = ARROW_IMG;
         
-        
-        
     }//close if
     
     else
@@ -550,9 +548,9 @@
         
         
     }//close if
-    
+    DLog(@"arrowImage at indexPath.row: %i with arrow: %@", indexPath.row, arrowImage);
     if (indexPath.row == 0) {
-        
+
         //if row 0 move frame to accomadate the arrow
         [userNameTF setFrame:textFieldOffset];
         [userNameTF setTextColor:[UIColor darkGrayColor]];
@@ -567,10 +565,10 @@
             [arrowImage setFrame:CGRectMake(10, 15, [UIImage imageNamed:@"rightArrow.png"].size.width, [UIImage imageNamed:@"rightArrow.png"].size.height)];
             arrowImage.tag = ARROW_IMG;
             //only alter if its reset
-            if (_isExpanded && _isSelected && arrowImage) {
+            if (_isExpanded && _isSelected) {
                 arrowImage.transform = CGAffineTransformMakeRotation(M_PI_2);
             }
-            else
+            else if (!_isExpanded)
             {
                 arrowImage.transform = CGAffineTransformMakeRotation(0.0);
             }
@@ -593,7 +591,7 @@
         //bug is its reusing the style applied to the specific dequeued cell and using that cell for differ rows
         //fix by explicitly setting style back to default in else
         [arrowImage removeFromSuperview];
-//        arrowImage = nil;
+
     }
     
     return cell;
@@ -665,16 +663,16 @@
         DLog(@"index: %@", index);
         
         //call expand here but also check for expansion 1st]
-        if (_isSelected && _isExpanded) {
-            [self collaspeMyTableViewWithIndex:selectedIP];
+//        if (_isSelected && _isExpanded) {
+        if (_isSelected && [[_displayArray objectAtIndex:selectedIP.section]count] > 1) {
+            [self collaspeMyTableViewWithIndex:selectedIP];//issue here ?
 //            _isExpanded = NO;
         }
         //selected and data loaded and not expanded && selection index is the same as the cells index
-        else if (_isSelected && !_isExpanded) //&& indexPath.row == index.row)
+//        else if (_isSelected && !_isExpanded) //&& indexPath.row == index.row)
+        else if (_isSelected && [[_displayArray objectAtIndex:selectedIP.section]count] >! 1)
         {
-            
             [self expandMyTableViewWithIndex:selectedIP];
-            
         }
     }//close if
     

@@ -87,12 +87,11 @@
 }
 
 #pragma mark - custom popup xibs
-
 - (void)showSuccessPopupWithTitle:(NSString *)title andMessage:(NSString *)message
                        forBarcode:(NSString *)barcodeString {
     
-//    //Create a custom SuccessPopup.xib
-//    //Now gobal which resolved the issue
+
+    //Now gobal which resolved the issue
     successPopup = [SuccessPopup loadFromNibNamed:@"SuccessPopup"];
     
     for (UIViewController *viewController in self.navigationController.viewControllers) {

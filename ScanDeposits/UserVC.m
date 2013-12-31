@@ -623,7 +623,7 @@
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
     //if we have data
-    DLog(@"_displayed ? %@", _displayArray);
+//    DLog(@"_displayed ? %@", _displayArray);
     
     if ([_displayArray count] >= 1) {
         //then check if its expanded or not
@@ -740,10 +740,11 @@
     if([[_displayArray objectAtIndex:selectedIP.section]count] > 1) {
     // Already expanded, close it up! //check that its not open
     NSInteger numRows = [self.userTV numberOfRowsInSection:selectedIP.section];
+        
+//        UITableViewCell *cell = (UITableViewCell *)[_userTV cellForRowAtIndexPath:indexPath];//indexPath > 0 no arrow subView
+        UITableViewCell *cell = (UITableViewCell *)[_userTV cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section]];
+        arrow = (UIImageView *)[cell.contentView viewWithTag:ARROW_IMG];
     
-        [UIView animateWithDuration:0.3 animations:^{
-            iv.transform = CGAffineTransformMakeRotation(0);
-        }];
         //May need if here to stop removing from file if exists dont writew to file here as will lose entries
         //also watch that when it calls cellForRow again it doesnt overwrite withput the add user details?
     for (int i = 1; i < numRows; i++)
@@ -753,9 +754,6 @@
         [[_displayArray objectAtIndex:selectedIP.section]removeLastObject];
     }
     
-        UITableViewCell *cell = (UITableViewCell *)[_userTV cellForRowAtIndexPath:indexPath];
-        arrow = (UIImageView *)[cell.contentView viewWithTag:ARROW_IMG];
-        
         [UIView animateWithDuration:0.3 animations:^{
             arrow.transform = CGAffineTransformMakeRotation(0.0);
         }];

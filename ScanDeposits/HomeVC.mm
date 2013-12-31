@@ -306,10 +306,7 @@
     [helpTV setEditable:NO];
     [helpTV setUserInteractionEnabled:NO];
     [helpTV setTextAlignment:NSTextAlignmentCenter];
-    
-//    [self.view addSubview:helpTV];
-    
-    
+        
     
     
 //    [self.navigationController.navigationBar setTintColor:[UIColor blackColor]];
@@ -323,8 +320,7 @@
     //construct the scanBtn for DEVICE -> QR
     scanDeviceBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [self buttonStyle:scanDeviceBtn WithImgName:@"blueButton.png" imgSelectedName:@"bluebuttonSelected.png" withTitle:@"Scan Device Barcode"];
-//    scanBtn.titleLabel.font = [UIFont fontWithName:@"Helvetica" size:18.0];
-    scanDeviceBtn.titleLabel.font = [UIFont systemFontOfSize:17.0];
+    scanDeviceBtn.titleLabel.font = [UIFont systemFontOfSize:17.0];//[UIFont fontWithName:@"Helvetica" size:18.0];
     [scanDeviceBtn setFrame:CGRectMake(20, self.view.frame.size.height -124, 280, 44)];
     [scanDeviceBtn addTarget:self action:@selector(scanBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
     //see condition below

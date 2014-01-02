@@ -535,24 +535,11 @@
         //Construct keys for iteration
         NSArray *userKeys = @[@"Initials", @"Name", @"Email", @"Staff ID"];
         
-        //if selected add extra entries to array in expand method
-//        if (_isSelected && _isExpanded) {
-        
             //_dataSource has the appropreiate _userArray containing the 3 fields of each user
             [userNameTF setText:[NSString stringWithFormat:@"%@", [[_displayArray objectAtIndex:indexPath.section]    objectAtIndex:indexPath.row]]];
             [userNameLbl setText:[NSString stringWithFormat:@"%@", [userKeys objectAtIndex:indexPath.row]]];
-            
-//        }//close if -> NOTE: dont need else here as the numOf rows and sections take care of count etc..
         
         //not expanded and not selected so just show 1 entry -> the initials -> NOTE: these should probably be treated uniform also
-//        else
-//        {
-//            //Added this -> if file exists display its data
-//                [userNameTF setText:[NSString stringWithFormat:@"%@", [[_displayArray objectAtIndex:indexPath.section]objectAtIndex:indexPath.row]]];//0
-//                //set UILabel name, should be uniform
-//                [userNameLbl setText:[NSString stringWithFormat:@"%@", [userKeys objectAtIndex:indexPath.row]]];
-//        }//close else
-        
         
     }//close if
     
@@ -565,15 +552,12 @@
         [userNameLbl setTextColor:[UIColor brownColor]];
         [userNameLbl setBackgroundColor:[UIColor clearColor]];
         
-        if (_isExpanded && [_userTV numberOfRowsInSection:selectedIP.section] > 1) {
-            arrowImage.transform = CGAffineTransformMakeRotation(M_PI_2);
+        if ([_userTV numberOfRowsInSection:selectedIP.section] > 1 && _isSelected) {
+            arrowImage.transform = CGAffineTransformMakeRotation(M_PI_2);//when collaps is called it sets _isexpanded -> NO
         }
-        else if (!_isExpanded && [_userTV numberOfRowsInSection:selectedIP.section] == 1) {
+        else if ([_userTV numberOfRowsInSection:selectedIP.section] == 1 && !_isSelected) {
             arrowImage.transform = CGAffineTransformMakeRotation(0);
         }
-
-//        //add to cells contentView
-//        [cell.contentView addSubview:arrowImage];
     }
     
     else
@@ -588,7 +572,7 @@
         
         //fix by explicitly setting style back to default in else
 //        [arrowImage removeFromSuperview];
-        arrowImage.image = nil;
+        arrowImage.image = nil;//better approach
     }
     
     return cell;

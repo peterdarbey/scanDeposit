@@ -513,6 +513,9 @@
         [arrowImage setFrame:CGRectMake(10, 15, [UIImage imageNamed:@"rightArrow.png"].size.width, [UIImage imageNamed:@"rightArrow.png"].size.height)];
         arrowImage.tag = ARROW_IMG;
         
+        //add to cells contentView
+        [cell.contentView addSubview:arrowImage];
+        
     }//close if
     
     else
@@ -520,6 +523,10 @@
         userNameTF = (UITextField *)[cell.contentView viewWithTag:USER_NAME_TF];
         userNameLbl = (UILabel *)[cell.contentView viewWithTag:USER_NAME_LBL];
         arrowImage = (UIImageView *)[cell.contentView viewWithTag:ARROW_IMG];
+        if (arrowImage.image == nil) {
+            //create image
+            arrowImage.image = [UIImage imageNamed:@"rightArrow.png"];
+        }
     }
     
     //if we have data from user model(returnUsermodel called returning a user) or data loaded from file to display
@@ -548,9 +555,8 @@
         
         
     }//close if
-    DLog(@"arrowImage at indexPath.row: %i with arrow: %@", indexPath.row, arrowImage);
+    
     if (indexPath.row == 0) {
-
         //if row 0 move frame to accomadate the arrow
         [userNameTF setFrame:textFieldOffset];
         [userNameTF setTextColor:[UIColor darkGrayColor]];
@@ -559,25 +565,17 @@
         [userNameLbl setTextColor:[UIColor brownColor]];
         [userNameLbl setBackgroundColor:[UIColor clearColor]];
         
-        if (arrowImage == nil) {
-            //construct an image for Arrow
-            arrowImage = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"rightArrow.png"]];
-            [arrowImage setFrame:CGRectMake(10, 15, [UIImage imageNamed:@"rightArrow.png"].size.width, [UIImage imageNamed:@"rightArrow.png"].size.height)];
-            arrowImage.tag = ARROW_IMG;
-            //only alter if its reset
-            if (_isExpanded && _isSelected) {
-                arrowImage.transform = CGAffineTransformMakeRotation(M_PI_2);
-            }
-            else if (!_isExpanded)
-            {
-                arrowImage.transform = CGAffineTransformMakeRotation(0.0);
-            }
+        if (_isExpanded && [_userTV numberOfRowsInSection:selectedIP.section] > 1) {
+            arrowImage.transform = CGAffineTransformMakeRotation(M_PI_2);
         }
-        
-    
-        //add to cells contentView
-        [cell.contentView addSubview:arrowImage];
+        else if (!_isExpanded && [_userTV numberOfRowsInSection:selectedIP.section] == 1) {
+            arrowImage.transform = CGAffineTransformMakeRotation(0);
+        }
+
+//        //add to cells contentView
+//        [cell.contentView addSubview:arrowImage];
     }
+    
     else
     {
         //explicitly set frame -> now works
@@ -588,10 +586,9 @@
         userNameLbl.textColor = [UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0];//darkGray
         userNameLbl.shadowColor = [UIColor grayColor];
         
-        //bug is its reusing the style applied to the specific dequeued cell and using that cell for differ rows
         //fix by explicitly setting style back to default in else
-        [arrowImage removeFromSuperview];
-
+//        [arrowImage removeFromSuperview];
+        arrowImage.image = nil;
     }
     
     return cell;

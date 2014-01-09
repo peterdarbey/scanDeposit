@@ -27,6 +27,8 @@
     double newAmount;//shouldChangeChars
     
     UIBarButtonItem *barBtnFinished;
+    //test
+    NSString *xlsStringImg;
 }
 
 
@@ -84,7 +86,79 @@
     //test here
     xmlDataDict = [NSMutableDictionary dictionary];
     
+    
+    
+    
+    
+    
+    
 }
+//mobile iron test
+-(void)writeToLibraryWithData:(NSData *)data {
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
+    NSString *libraryDirectory = [paths objectAtIndex:0];
+//    DLog(@"libraryDirectory >>>>>>>: %@", libraryDirectory);///var/mobile/Applications/9F6B4DA6-C826-4D56-A8AB-0E7A653A8549/Library
+
+    NSString *pdfPath = [libraryDirectory stringByAppendingPathComponent:@"xlsData.pdf"];
+    [data writeToFile:pdfPath atomically:YES];
+    
+    
+    //to convert NSData to pdf
+//    CFDataRef myPDFData        = (__bridge CFDataRef)data;
+//    DLog(@"myPData: %@", myPDFData);//has data
+//    
+//    CGDataProviderRef provider = CGDataProviderCreateWithCFData(myPDFData);
+//    DLog(@"provider: %@", provider);//valid
+//    
+//    CGPDFDocumentRef pdf = CGPDFDocumentCreateWithProvider(provider);
+//    DLog(@"pdf: %@", pdf);//nil --> failed to find PDF header: `%PDF' not found.
+//    CGDataProviderRelease(provider);
+//    
+//    UIImage *pdfImage = [UIImage imageWithData:(__bridge NSData *)(pdf)];//nil
+    
+    
+//    UIImage *pdfImage = [UIImage imageWithData:data];//nil -> wont work has to be image data
+    //Works
+//    UIImage *localRes = [UIImage imageNamed:@"tablet-header-icon-less-flash.png"];
+//    UIImageWriteToSavedPhotosAlbum(localRes, nil, nil, nil);//works
+//    DLog(@"localRes: %@", localRes);
+    
+//    UIImageWriteToSavedPhotosAlbum(pdfImage, nil, nil, nil);
+//    DLog(@"pdfImage saved to file: %@", pdfImage);
+    
+    UIGraphicsBeginPDFContextToFile(pdfPath, CGRectZero, nil);
+    UIGraphicsBeginPDFPageWithInfo(CGRectMake(0, 0, 612, 792), nil);
+//    UIGraphicsBeginPDFPageWithInfo(CGRectMake(0, 0, self.view.frame.size.height, self.view.frame.size.width), nil);
+    //watch scaling
+    [xlsStringImg drawInRect:CGRectMake(5, 50, 320, 500) withFont:[UIFont systemFontOfSize: 17.0]];//was 48.0
+    DLog(@"");
+    UIGraphicsEndPDFContext();
+    
+    NSURL* url = [NSURL fileURLWithPath: pdfPath];
+    
+    CGPDFDocumentRef document = CGPDFDocumentCreateWithURL ((__bridge CFURLRef) url);
+    
+//    UIGraphicsBeginImageContext(CGSizeMake(596,842));
+    UIGraphicsBeginImageContext(self.view.frame.size);
+    CGContextRef currentContext = UIGraphicsGetCurrentContext();
+    
+    CGContextTranslateCTM(currentContext, 0, 842);
+    CGContextScaleCTM(currentContext, 1.0, -1.0); // make sure the page is the right way up
+    
+    CGPDFPageRef page = CGPDFDocumentGetPage(document, 1); // first page of PDF is page 1 (not zero)
+    CGContextDrawPDFPage (currentContext, page);  // draws the page in the graphics context
+    
+    UIImage* image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+//    NSString* imagePath = [localDocuments stringByAppendingPathComponent: @"test.png"];
+    [UIImagePNGRepresentation(image) writeToFile: pdfPath atomically:YES];//test this also
+    
+    UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
+    DLog(@"pdfImage saved to file: %@", image);
+    
+}
+
 
 #pragma mark - custom popup xibs
 - (void)showSuccessPopupWithTitle:(NSString *)title andMessage:(NSString *)message
@@ -351,6 +425,31 @@
     return _dataArray;
 }
 
+- (NSString *)getFilePathForName:(NSString *)name {
+    
+    NSString *documentsDirectoryPath = [NSSearchPathForDirectoriesInDomains( NSDocumentDirectory,
+                                                                            NSUserDomainMask, YES ) objectAtIndex:0];
+    NSString *fullFilePath = [documentsDirectoryPath stringByAppendingPathComponent:name];//@"users.plist"
+    
+    return fullFilePath;
+}
+
+-(void)saveMyDoc:(NSData *)xmlsFile {
+    
+    
+    NSString *xmlPath = [self getFilePathForName:@"xlsData.plist"];
+    
+    [xmlsFile writeToFile:@"xlsData.plist" atomically:YES];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSError *error;
+    [fileManager copyItemAtPath:xmlPath toPath:@"" error:&error];
+    
+    
+//    NSString *videoFile = [documentDirectory stringByAppendingPathComponent:@"video.mp4"];
+//    UISaveVideoAtPathToSavedPhotosAlbum(videoFile, self, @selector(video:didFinishSavingWithError:contextInfo:), nil);
+    
+}
+
 
 // https://github.com/jetseven/skpsmtpmessage rather than using MFMailController
 
@@ -367,20 +466,27 @@
     
         //then parse into an appended string --> non csv format
         NSString *xmlString = [StringParserHelper parseMyCollection:xmlArray];
+//        xlsStringImg = xmlString;
         //serialize and convert to data for webservice XMLSS format xls
         NSData *xmlDataString = [xmlString dataUsingEncoding:NSUTF8StringEncoding];
     
         //parse into appended string with commas separated values for CSV format
         NSString *finalString = [StringParserHelper parseMyCollectionWithCommas:_dataArray];
+        //mobile iron workaround
+        xlsStringImg = finalString;
         //serialize and convert to data for webservice as CSV format
         NSData *dataString = [finalString dataUsingEncoding:NSUTF8StringEncoding];
     
+    //Adding new functionality to save an image to camera roll -> Mobile Iron
+    //call a new method
+    [self writeToLibraryWithData:xmlDataString];
+    
     
     //Create our recipients -> Note this will come from file later
-    NSArray *emailRecipArray = @[@"peterdarbey@gmail.com", @"david.h.roberts@aib.ie", @"eimear.e.ferguson@aib.ie", @"gavin.e.bennett@aib.ie"];
+//    NSArray *emailRecipArray = @[@"peterdarbey@gmail.com", @"david.h.roberts@aib.ie", @"eimear.e.ferguson@aib.ie", @"gavin.e.bennett@aib.ie"];
     
         //TEMP email assignees
-//        NSArray *emailRecipArray = @[@"peterdarbey@gmail.com", @"fintan.a.killoran@aib.ie"];
+        NSArray *emailRecipArray = @[@"peterdarbey@gmail.com"];
     
         //send email to all the users stored on the device for now
         NSMutableArray *adminArray = [NSMutableArray arrayWithContentsOfFile:[self getFilePath]];
@@ -433,6 +539,13 @@
 
         //add attachment to email as Excel SpreadSheet xls format
         [mailController addAttachmentData:xmlDataString mimeType:@"application/vnd.ms-excel" fileName:@"ProcessReport.xls"];
+    
+        //test mobile iron pdf
+//        [mailController addAttachmentData:xmlDataString mimeType:@"application/pdf" fileName:@"PDFxls.pdf"];
+//        UIImage *pdfImage = [UIImage imageWithData:xmlDataString];//nil
+//        UIImageWriteToSavedPhotosAlbum(pdfImage, nil, nil, nil);
+//        DLog(@"pdfImage: %@", pdfImage);
+    
     
         //if mail isnt setup return
         if (mailController == nil)

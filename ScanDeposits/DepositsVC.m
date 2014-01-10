@@ -27,8 +27,12 @@
     double newAmount;//shouldChangeChars
     
     UIBarButtonItem *barBtnFinished;
+    
     //test
     NSString *xlsStringImg;
+    //Mobile Iron workaround
+    UIBarButtonItem *attachButton;
+    NSData *xmlDataString;
 }
 
 
@@ -86,21 +90,33 @@
     //test here
     xmlDataDict = [NSMutableDictionary dictionary];
     
-    
-    
-    
-    
+    //Mobile Iron workaround
+//    attachButton = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(uploadData)];
+//    [self addToolBarMobileIron:attachButton];
     
     
 }
+
+//-(void)uploadData {
+//    
+//    DLog(@"Attach the data bypass Mobile Iron");
+//    if (xmlDataString) {
+//        DLog(@"xmlDataString in uploadData: %@", xmlDataString);
+//        //add attachment to email as Excel SpreadSheet xls format
+//        [mailController addAttachmentData:xmlDataString mimeType:@"application/vnd.ms-excel" fileName:@"ProcessReportMobile_Iron.xls"];
+//    }
+//    
+//}
+
 //mobile iron test
 -(void)writeToLibraryWithData:(NSData *)data {
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);//NSPicturesDirectory
     NSString *libraryDirectory = [paths objectAtIndex:0];
-//    DLog(@"libraryDirectory >>>>>>>: %@", libraryDirectory);///var/mobile/Applications/9F6B4DA6-C826-4D56-A8AB-0E7A653A8549/Library
 
-    NSString *pdfPath = [libraryDirectory stringByAppendingPathComponent:@"xlsData.pdf"];
-    [data writeToFile:pdfPath atomically:YES];
+    NSString *xmlPath = [libraryDirectory stringByAppendingPathComponent:@"xlsData.xls"];
+    [data writeToFile:xmlPath atomically:YES];
+    DLog(@"%@ written to file: %@", xmlDataString, xmlPath);// /var/mobile/Applications/9F6B4DA6-C826-4D56-A8AB-0E7A653A8549/Library/xlsData.xls -> with data does write
     
     
     //to convert NSData to pdf
@@ -126,36 +142,36 @@
 //    UIImageWriteToSavedPhotosAlbum(pdfImage, nil, nil, nil);
 //    DLog(@"pdfImage saved to file: %@", pdfImage);
     
-    UIGraphicsBeginPDFContextToFile(pdfPath, CGRectZero, nil);
-    UIGraphicsBeginPDFPageWithInfo(CGRectMake(0, 0, 612, 792), nil);
-//    UIGraphicsBeginPDFPageWithInfo(CGRectMake(0, 0, self.view.frame.size.height, self.view.frame.size.width), nil);
-    //watch scaling
-    [xlsStringImg drawInRect:CGRectMake(5, 50, 320, 500) withFont:[UIFont systemFontOfSize: 16.0]];//was 48.0
-    DLog(@"");
-    UIGraphicsEndPDFContext();
-    
-    NSURL* url = [NSURL fileURLWithPath: pdfPath];
-    
-    CGPDFDocumentRef document = CGPDFDocumentCreateWithURL ((__bridge CFURLRef) url);
-    
-//    UIGraphicsBeginImageContext(CGSizeMake(596,842));
-    UIGraphicsBeginImageContext(self.view.frame.size);
-    CGContextRef currentContext = UIGraphicsGetCurrentContext();
-    
-    CGContextTranslateCTM(currentContext, 0, 842);
-    CGContextScaleCTM(currentContext, 1.0, -1.0); // make sure the page is the right way up
-    
-    CGPDFPageRef page = CGPDFDocumentGetPage(document, 1); // first page of PDF is page 1 (not zero)
-    CGContextDrawPDFPage (currentContext, page);  // draws the page in the graphics context
-    
-    UIImage* image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-//    NSString* imagePath = [localDocuments stringByAppendingPathComponent: @"test.png"];
-    [UIImagePNGRepresentation(image) writeToFile: pdfPath atomically:YES];//test this also
-    
-    UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
-    DLog(@"pdfImage saved to file: %@", image);
+    //WORKS as PDF
+//    UIGraphicsBeginPDFContextToFile(xmlPath, CGRectZero, nil);
+//    UIGraphicsBeginPDFPageWithInfo(CGRectMake(0, 0, 612, 792), nil);
+////    UIGraphicsBeginPDFPageWithInfo(CGRectMake(0, 0, self.view.frame.size.height, self.view.frame.size.width), nil);
+//    //watch scaling
+//    [xlsStringImg drawInRect:CGRectMake(5, 50, 320, 500) withFont:[UIFont systemFontOfSize: 16.0]];//was 48.0
+//    UIGraphicsEndPDFContext();
+//    
+//    NSURL* url = [NSURL fileURLWithPath: xmlPath];
+//    
+//    CGPDFDocumentRef document = CGPDFDocumentCreateWithURL ((__bridge CFURLRef) url);
+//    
+////    UIGraphicsBeginImageContext(CGSizeMake(596,842));
+//    UIGraphicsBeginImageContext(self.view.frame.size);
+//    CGContextRef currentContext = UIGraphicsGetCurrentContext();
+//    
+//    CGContextTranslateCTM(currentContext, 0, 842);
+//    CGContextScaleCTM(currentContext, 1.0, -1.0); // make sure the page is the right way up
+//    
+//    CGPDFPageRef page = CGPDFDocumentGetPage(document, 1); // first page of PDF is page 1 (not zero)
+//    CGContextDrawPDFPage (currentContext, page);  // draws the page in the graphics context
+//    
+//    UIImage* image = UIGraphicsGetImageFromCurrentImageContext();
+//    UIGraphicsEndImageContext();
+//    
+////    NSString* imagePath = [localDocuments stringByAppendingPathComponent: @"test.png"];
+//    [UIImagePNGRepresentation(image) writeToFile: xmlPath atomically:YES];//test this also
+//    
+//    UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
+//    DLog(@"pdfImage saved to file: %@", image);
     
 }
 
@@ -444,10 +460,6 @@
     NSError *error;
     [fileManager copyItemAtPath:xmlPath toPath:@"" error:&error];
     
-    
-//    NSString *videoFile = [documentDirectory stringByAppendingPathComponent:@"video.mp4"];
-//    UISaveVideoAtPathToSavedPhotosAlbum(videoFile, self, @selector(video:didFinishSavingWithError:contextInfo:), nil);
-    
 }
 
 
@@ -468,25 +480,25 @@
         NSString *xmlString = [StringParserHelper parseMyCollection:xmlArray];
 //        xlsStringImg = xmlString;
         //serialize and convert to data for webservice XMLSS format xls
-        NSData *xmlDataString = [xmlString dataUsingEncoding:NSUTF8StringEncoding];
+        xmlDataString = [xmlString dataUsingEncoding:NSUTF8StringEncoding];
     
         //parse into appended string with commas separated values for CSV format
         NSString *finalString = [StringParserHelper parseMyCollectionWithCommas:_dataArray];
         //mobile iron workaround
-        xlsStringImg = finalString;
+        xlsStringImg = finalString;//not using anymore
         //serialize and convert to data for webservice as CSV format
         NSData *dataString = [finalString dataUsingEncoding:NSUTF8StringEncoding];
     
-    //Adding new functionality to save an image to camera roll -> Mobile Iron
-    //call a new method
-    [self writeToLibraryWithData:xmlDataString];
+        //Adding new functionality to save an image to camera roll -> Mobile Iron
+        //call a new method
+        [self writeToLibraryWithData:xmlDataString];//write to NSLibraryDirectory
     
     
     //Create our recipients -> Note this will come from file later
-//    NSArray *emailRecipArray = @[@"peterdarbey@gmail.com", @"david.h.roberts@aib.ie", @"eimear.e.ferguson@aib.ie", @"gavin.e.bennett@aib.ie"];
+    NSArray *emailRecipArray = @[@"peterdarbey@gmail.com", @"david.h.roberts@aib.ie", @"eimear.e.ferguson@aib.ie", @"gavin.e.bennett@aib.ie"];
     
         //TEMP email assignees
-        NSArray *emailRecipArray = @[@"peterdarbey@gmail.com"];
+//        NSArray *emailRecipArray = @[@"peterdarbey@gmail.com"];
     
         //send email to all the users stored on the device for now
         NSMutableArray *adminArray = [NSMutableArray arrayWithContentsOfFile:[self getFilePath]];
@@ -508,6 +520,7 @@
 
         //construct the mailVC and set its necessary parameters
         MFMailComposeViewController *mailController = [[MFMailComposeViewController alloc]init];
+    
     
         [mailController setTitle:@"Please find the attached documents."];
         [mailController setSubject:NSLocalizedString(@"Device Manager Report + Date/time ->Process", @"Device Manager Report")];
@@ -539,13 +552,7 @@
 
         //add attachment to email as Excel SpreadSheet xls format
         [mailController addAttachmentData:xmlDataString mimeType:@"application/vnd.ms-excel" fileName:@"ProcessReport.xls"];
-    
-        //test mobile iron pdf
-//        [mailController addAttachmentData:xmlDataString mimeType:@"application/pdf" fileName:@"PDFxls.pdf"];
-//        UIImage *pdfImage = [UIImage imageWithData:xmlDataString];//nil
-//        UIImageWriteToSavedPhotosAlbum(pdfImage, nil, nil, nil);
-//        DLog(@"pdfImage: %@", pdfImage);
-    
+        
     
         //if mail isnt setup return
         if (mailController == nil)
@@ -554,6 +561,16 @@
         else
             [self presentViewController:mailController animated:YES completion:nil];
     
+}
+
+-(void)addToolBarMobileIron:(UIBarButtonItem *)button {
+    
+    NSArray *barBtnArray = [NSArray arrayWithObjects:button, nil];
+    UIToolbar *customTB = [[UIToolbar alloc]initWithFrame:CGRectMake(0 , self.view.frame.size.height - 44, self.view.frame.size.width, 44)];
+    
+    [customTB setBarStyle:UIBarStyleBlackTranslucent];
+    customTB.items = barBtnArray;
+    [self.view addSubview:customTB];
 }
 
 - (void)sentMailWithSuccess:(BOOL)sent {

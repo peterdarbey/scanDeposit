@@ -130,7 +130,7 @@
     UIGraphicsBeginPDFPageWithInfo(CGRectMake(0, 0, 612, 792), nil);
 //    UIGraphicsBeginPDFPageWithInfo(CGRectMake(0, 0, self.view.frame.size.height, self.view.frame.size.width), nil);
     //watch scaling
-    [xlsStringImg drawInRect:CGRectMake(5, 50, 320, 500) withFont:[UIFont systemFontOfSize: 17.0]];//was 48.0
+    [xlsStringImg drawInRect:CGRectMake(5, 50, 320, 500) withFont:[UIFont systemFontOfSize: 16.0]];//was 48.0
     DLog(@"");
     UIGraphicsEndPDFContext();
     

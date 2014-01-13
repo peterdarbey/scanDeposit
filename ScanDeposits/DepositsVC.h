@@ -22,10 +22,18 @@
 #define BAG_AMOUNT 250
 #define BAG_NO_LBL 150
 
+#define gavURL @"http://10.28.111.95:9080/ie.aib.coindrop/SendData.jsp"
+
+//other URL
+#define URL @"http://10.28.111.95:9080/ie.aib.coindrop/CoinDrop"
+
+
+#define NOEL @"http://10.28.111.25:9080/ie.aib.coindrop/CoinDrop"
+
 //@class Deposit;
 
 
-@interface DepositsVC : UIViewController <UITableViewDataSource, UITableViewDelegate,MFMailComposeViewControllerDelegate, NotificationDelegate, UITextFieldDelegate>
+@interface DepositsVC : UIViewController <UITableViewDataSource, UITableViewDelegate,MFMailComposeViewControllerDelegate, NotificationDelegate, UITextFieldDelegate, NSURLConnectionDataDelegate, NSURLConnectionDelegate>
 {
     NSIndexPath *selectedIndexPath;
     AppDelegate *appDelegate;

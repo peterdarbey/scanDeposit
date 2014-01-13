@@ -33,6 +33,10 @@
     //Mobile Iron workaround
     UIBarButtonItem *attachButton;
     NSData *xmlDataString;
+    
+    //HTTP request
+    NSMutableData *responseData;
+    UIActivityIndicatorView *requestSpinner;
 }
 
 
@@ -54,6 +58,7 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    
     
     appDelegate = (AppDelegate*)[[UIApplication sharedApplication]delegate];
     
@@ -204,6 +209,145 @@
     //updated and set in class
     [successPopup showOnView:self.view withTitle:title andMessage:message];//nope
     
+}
+
+//- (void)callMyWebserviceWithData:(NSData *)appData {
+- (void)callMyWebserviceWithData:(NSMutableArray *)appData {
+    
+//    DLog(@"xmlDataString: %@", xmlDataString);
+    
+    NSMutableURLRequest *theRequest = [[NSMutableURLRequest alloc]initWithURL:[NSURL URLWithString:NOEL] cachePolicy:NSURLCacheStorageNotAllowed timeoutInterval:30.0];
+    
+    NSDictionary *dictHeaders = [theRequest allHTTPHeaderFields];//null
+    DLog(@"Headers: %@", dictHeaders);
+    //request the server response as JSON
+//    [theRequest setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    
+    
+    //call createPayloadWithData instead with xmlArray of data in xml format instead a collection
+    [self createPayloadWithData:appData forRequest:theRequest];
+    
+//    //fire off a request on the main thread for now
+//    NSURLConnection *connection = [[NSURLConnection alloc]initWithRequest:theRequest delegate:self];
+//    //just create standard for now
+//    [connection start];
+    
+}
+
+//- (void)createPayloadWithData:(NSData *)appData forRequest:(NSMutableURLRequest *)request {
+- (void)createPayloadWithData:(NSMutableArray *)appData forRequest:(NSMutableURLRequest *)request {
+
+    NSError *error;
+//     NSDictionary *payload = @{@"payload" : appData};
+    NSDictionary *payload = @{@"payload" : @"abcdefghijklnmopqrstuvwxyz"};
+    
+    NSData *jsonObject = [NSJSONSerialization dataWithJSONObject:payload options:NSJSONWritingPrettyPrinted error:&error];
+    DLog(@"<< jsonObject >>: %@", jsonObject);// --> was xmlArray -> valid JSON object
+//    DLog(@"jsonObjectWithData: %@", [[NSMutableString alloc]initWithData:jsonObject encoding:NSUTF8StringEncoding]);
+//    DLog(@"request>>>>>>>>>>: %@", request);//http://10.28.111.25:9080/ie.aib.coindrop/CoinDrop
+    
+    
+    //set the request values
+    [request setHTTPMethod:@"POST"];
+    [request setHTTPBody:jsonObject];
+    [request setHTTPShouldHandleCookies:NO];
+//    [request setHTTPMethod:@"GET"];
+    
+    
+    //create visual feedback via a UIActivity spinner
+    requestSpinner = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    [proceedBtn setEnabled:NO];
+    [requestSpinner setHidesWhenStopped:YES];
+    [requestSpinner setFrame:proceedBtn.frame];
+    //add to proceed button view
+    [proceedBtn addSubview:requestSpinner];
+    [requestSpinner startAnimating];
+    
+    
+    
+    //fire off a request on the main thread for now
+//    NSData* result [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+    NSURLConnection *connection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
+    //just create standard for now
+    [connection start];
+    
+    //Note: can update to be a asynch request
+//    responseData = (NSMutableData *)[NSURLConnection sendSynchronousRequest:theRequest returningResponse:&response error:&error];
+
+
+    
+}
+
+#pragma mark - NSURLConnection Delegate methods
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
+    //init data for response
+    responseData = [[NSMutableData alloc]init];
+    
+    //cast and query Status Code
+    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+    NSInteger statusCode = httpResponse.statusCode;
+    
+    if (statusCode == 200) {
+        NSLog(@"HTTP status is: %i, proceed", statusCode);//correct
+    }
+    else
+    {
+        //show error popup
+        [self showWarningPopupWithTitle:[NSString stringWithFormat:@"Error: %i", statusCode] andMessage:@"Did not receive a valid response" forBarcode:nil];
+    }
+
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
+    
+    [responseData appendData:data];
+//    DLog(@"receiving data: %@", data);
+    NSHTTPURLResponse *response = (NSHTTPURLResponse *)data;
+    DLog(@"response allHeaderFields: %@", response);
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+    
+    NSError *parseError;
+    NSDictionary *dict;
+    
+    //if we have a response parse it
+    if (responseData) {
+
+        id responseObject = [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingAllowFragments|NSJSONReadingMutableContainers error:&parseError];//was 0
+        //for test display only
+        NSMutableString *responseString = [[NSMutableString alloc]initWithData:responseData encoding:NSUTF8StringEncoding];
+        DLog(@"responseString: %@", responseString);//CoinDrop Servlet is processing your data ...
+        
+        if (parseError) { //we are receiving a parse error with returned response not json
+            DLog(@"error parsing the response: %@", parseError);
+        }
+        else
+        {
+            if (responseObject && [responseObject isKindOfClass:[NSDictionary class]]) {
+                dict = (NSDictionary *)responseObject;
+                DLog(@"dict: %@", dict);
+                if (dict) {
+                    DLog(@"Success");
+                }
+            }
+        }
+        
+    }//close outer if
+    
+    [requestSpinner stopAnimating];
+    [proceedBtn setEnabled:YES];
+    
+}
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+    
+        DLog(@"Error with response: %@", [error localizedDescription]);
+    
+    [requestSpinner stopAnimating];
+    [proceedBtn setEnabled:YES];
+    
+    //show error popup
+    [self showWarningPopupWithTitle:@"Error" andMessage:@"Failed to connect to server" forBarcode:nil];
 }
 
 - (void)editPressed:(UIButton *)sender {
@@ -553,6 +697,10 @@
         //add attachment to email as Excel SpreadSheet xls format
         [mailController addAttachmentData:xmlDataString mimeType:@"application/vnd.ms-excel" fileName:@"ProcessReport.xls"];
         
+        //call the request code
+//        [self callMyWebserviceWithData:xmlDataString];
+        [self callMyWebserviceWithData:xmlArray];//_dataArray
+    
     
         //if mail isnt setup return
         if (mailController == nil)

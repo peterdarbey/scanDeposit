@@ -255,10 +255,14 @@
     
     
     //create visual feedback via a UIActivity spinner
-    requestSpinner = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    requestSpinner = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     [proceedBtn setEnabled:NO];
     [requestSpinner setHidesWhenStopped:YES];
-    [requestSpinner setFrame:proceedBtn.frame];
+    //[requestSpinner setFrame:proceedBtn.frame];//CGRectMake(10, aView.frame.size.height -60, 300, 44)];
+    CGPoint spinnerPoint = CGPointMake(250, 22);//-10?? but correct
+    [requestSpinner setCenter:spinnerPoint];
+//    [requestSpinner setCenter:proceedBtn.center];//(150, 97, 20, 20);
+    DLog(@"requestSpinnerHeight: %f andWidth: %f", requestSpinner.frame.origin.x, requestSpinner.frame.origin.y);
     //add to proceed button view
     [proceedBtn addSubview:requestSpinner];
     [requestSpinner startAnimating];
@@ -273,8 +277,6 @@
     
     //Note: can update to be a asynch request
 //    responseData = (NSMutableData *)[NSURLConnection sendSynchronousRequest:theRequest returningResponse:&response error:&error];
-
-
     
 }
 
@@ -609,6 +611,34 @@
 
 // https://github.com/jetseven/skpsmtpmessage rather than using MFMailController
 
+- (void)proceedPressedWithRequest:(UIButton *)sender {
+    
+    //returns the complete ordered app data required for the XML structure
+    _dataArray = [self collectMyData];
+    
+    //convert collection into an excel XMLSS format
+    NSMutableArray *xmlArray;
+    //new method breaks after date/time key --> offset correct
+    xmlArray = [StringParserHelper createXMLFromCollectionFin:_dataArray andDeposits:_depositsCollection];//add _depositsArray
+    DLog(@"xmlArray is: %@", xmlArray);
+    
+    //then parse into an appended string --> non csv format
+    NSString *xmlString = [StringParserHelper parseMyCollection:xmlArray];
+    //serialize and convert to data for webservice XMLSS format xls
+    xmlDataString = [xmlString dataUsingEncoding:NSUTF8StringEncoding];
+    
+    //test
+    //Adding new functionality to save an image to camera roll -> Mobile Iron
+    //call a new method
+    [self writeToLibraryWithData:xmlDataString];//write to NSLibraryDirectory
+    
+    //call the request code
+//        [self callMyWebserviceWithData:xmlDataString];
+    [self callMyWebserviceWithData:xmlArray];//_dataArray
+    
+    
+}
+
 - (void)proceedPressed:(UIButton *)sender {
 
         //returns the complete ordered app data required for the XML structure
@@ -856,7 +886,9 @@
         proceedBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [proceedBtn setFrame:CGRectMake(10, aView.frame.size.height -60, 300, 44)];
         [proceedBtn setUserInteractionEnabled:YES];
-        [proceedBtn addTarget:self action:@selector(proceedPressed:) forControlEvents:UIControlEventTouchUpInside];
+        [proceedBtn addTarget:self action:@selector(proceedPressedWithRequest:) forControlEvents:UIControlEventTouchUpInside];
+        //Hide for now
+//        [proceedBtn addTarget:self action:@selector(proceedPressed:) forControlEvents:UIControlEventTouchUpInside];
         [self buttonStyle:proceedBtn WithImgName:@"blueButton.png" imgSelectedName:@"blueButtonSelected.png" withTitle:@"SEND EMAIL"];
         //add to parent view
         [aView addSubview:proceedBtn];

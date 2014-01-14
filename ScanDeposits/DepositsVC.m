@@ -259,7 +259,7 @@
     [proceedBtn setEnabled:NO];
     [requestSpinner setHidesWhenStopped:YES];
     //[requestSpinner setFrame:proceedBtn.frame];//CGRectMake(10, aView.frame.size.height -60, 300, 44)];
-    CGPoint spinnerPoint = CGPointMake(250, 22);//-10?? but correct
+    CGPoint spinnerPoint = CGPointMake(252.5, 22);//-10?? but correct
     [requestSpinner setCenter:spinnerPoint];
 //    [requestSpinner setCenter:proceedBtn.center];//(150, 97, 20, 20);
     DLog(@"requestSpinnerHeight: %f andWidth: %f", requestSpinner.frame.origin.x, requestSpinner.frame.origin.y);
@@ -269,14 +269,24 @@
     
     
     
-    //fire off a request on the main thread for now
-//    NSData* result [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-    NSURLConnection *connection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
-    //just create standard for now
-    [connection start];
+    //request code
+//    NSURLConnection *connection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
+//    //just create standard for now
+//    [connection start];
     
-    //Note: can update to be a asynch request
-//    responseData = (NSMutableData *)[NSURLConnection sendSynchronousRequest:theRequest returningResponse:&response error:&error];
+    //TEST
+   //create connection outside of dispatch queue
+    NSURLConnection *connection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
+    //dispatch a request on a background thread
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        //just create standard for now
+        [connection start];
+    });
+    
+    //fire off a request on the main thread for now
+//    NSHTTPURLResponse *response;
+//    responseData = (NSMutableData *)[NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
     
 }
 
@@ -294,8 +304,16 @@
     }
     else
     {
-        //show error popup
-        [self showWarningPopupWithTitle:[NSString stringWithFormat:@"Error: %i", statusCode] andMessage:@"Did not receive a valid response" forBarcode:nil];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [requestSpinner stopAnimating];
+            [proceedBtn setEnabled:YES];
+            //show error popup
+            [self showWarningPopupWithTitle:[NSString stringWithFormat:@"Error: %i", statusCode] andMessage:@"Did not receive a valid response" forBarcode:nil];
+        });
+        
+//        //show error popup
+//        [self showWarningPopupWithTitle:[NSString stringWithFormat:@"Error: %i", statusCode] andMessage:@"Did not receive a valid response" forBarcode:nil];
+        
     }
 
 }
@@ -337,19 +355,33 @@
         
     }//close outer if
     
-    [requestSpinner stopAnimating];
-    [proceedBtn setEnabled:YES];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [requestSpinner stopAnimating];
+        [proceedBtn setEnabled:YES];
+    });
+    
+//    [requestSpinner stopAnimating];
+//    [proceedBtn setEnabled:YES];
     
 }
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
     
         DLog(@"Error with response: %@", [error localizedDescription]);
     
-    [requestSpinner stopAnimating];
-    [proceedBtn setEnabled:YES];
+    //retrieve the main thread
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [requestSpinner stopAnimating];
+        [proceedBtn setEnabled:YES];
+        //show error popup
+        [self showWarningPopupWithTitle:@"Error" andMessage:@"Failed to connect to server" forBarcode:nil];
+    });
     
-    //show error popup
-    [self showWarningPopupWithTitle:@"Error" andMessage:@"Failed to connect to server" forBarcode:nil];
+    
+    //    [requestSpinner stopAnimating];
+    //    [proceedBtn setEnabled:YES];
+    //    //show error popup
+    //    [self showWarningPopupWithTitle:@"Error" andMessage:@"Failed to connect to server" forBarcode:nil];
+    
 }
 
 - (void)editPressed:(UIButton *)sender {

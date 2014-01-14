@@ -216,12 +216,12 @@
     
 //    DLog(@"xmlDataString: %@", xmlDataString);
     
-    NSMutableURLRequest *theRequest = [[NSMutableURLRequest alloc]initWithURL:[NSURL URLWithString:NOEL] cachePolicy:NSURLCacheStorageNotAllowed timeoutInterval:30.0];
+    NSMutableURLRequest *theRequest = [[NSMutableURLRequest alloc]initWithURL:[NSURL URLWithString:kURLNOEL] cachePolicy:NSURLCacheStorageNotAllowed timeoutInterval:30.0];
     
     NSDictionary *dictHeaders = [theRequest allHTTPHeaderFields];//null
     DLog(@"Headers: %@", dictHeaders);
     //request the server response as JSON
-//    [theRequest setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [theRequest setValue:@"application/json" forHTTPHeaderField:@"Accept"];
     
     
     //call createPayloadWithData instead with xmlArray of data in xml format instead a collection

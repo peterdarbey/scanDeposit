@@ -25,10 +25,10 @@
 #define gavURL @"http://10.28.111.95:9080/ie.aib.coindrop/SendData.jsp"
 
 //other URL
-#define URL @"http://10.28.111.95:9080/ie.aib.coindrop/CoinDrop"
+#define kURLGavin @"http://10.28.111.95:9080/ie.aib.coindrop/CoinDrop"
 
 
-#define NOEL @"http://10.28.111.25:9080/ie.aib.coindrop/CoinDrop"
+#define kURLNOEL @"http://10.28.111.25:9080/ie.aib.coindrop/CoinDrop"
 
 //@class Deposit;
 

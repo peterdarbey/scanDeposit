@@ -242,16 +242,19 @@
     NSDictionary *payload = @{@"payload" : @"abcdefghijklnmopqrstuvwxyz"};
     
     NSData *jsonObject = [NSJSONSerialization dataWithJSONObject:payload options:NSJSONWritingPrettyPrinted error:&error];
+    if ([NSJSONSerialization isValidJSONObject:jsonObject]) {
+        DLog(@"is VALID JSON");
+        //set the request values
+        [request setHTTPMethod:@"POST"];
+        [request setHTTPBody:jsonObject];
+        [request setHTTPShouldHandleCookies:NO];
+//    [request setHTTPMethod:@"GET"];
+    }
+    
     DLog(@"<< jsonObject >>: %@", jsonObject);// --> was xmlArray -> valid JSON object
 //    DLog(@"jsonObjectWithData: %@", [[NSMutableString alloc]initWithData:jsonObject encoding:NSUTF8StringEncoding]);
 //    DLog(@"request>>>>>>>>>>: %@", request);//http://10.28.111.25:9080/ie.aib.coindrop/CoinDrop
     
-    
-    //set the request values
-    [request setHTTPMethod:@"POST"];
-    [request setHTTPBody:jsonObject];
-    [request setHTTPShouldHandleCookies:NO];
-//    [request setHTTPMethod:@"GET"];
     
     
     //create visual feedback via a UIActivity spinner

@@ -238,11 +238,12 @@
 - (void)createPayloadWithData:(NSMutableArray *)appData forRequest:(NSMutableURLRequest *)request {
 
     NSError *error;
-//     NSDictionary *payload = @{@"payload" : appData};
-    NSDictionary *payload = @{@"payload" : @"abcdefghijklnmopqrstuvwxyz"};
+     NSDictionary *payload = @{@"payload" : appData};
+//    NSDictionary *payload = @{@"payload" : @"abcdefghijklnmopqrstuvwxyz"};
     
     NSData *jsonObject = [NSJSONSerialization dataWithJSONObject:payload options:NSJSONWritingPrettyPrinted error:&error];
-    if ([NSJSONSerialization isValidJSONObject:jsonObject]) {
+    
+    if ([NSJSONSerialization isValidJSONObject:payload]) { //YES valid
         DLog(@"is VALID JSON");
         //set the request values
         [request setHTTPMethod:@"POST"];

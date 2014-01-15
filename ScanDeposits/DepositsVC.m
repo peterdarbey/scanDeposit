@@ -211,50 +211,64 @@
     
 }
 
-//- (void)callMyWebserviceWithData:(NSData *)appData {
-- (void)callMyWebserviceWithData:(NSMutableArray *)appData {
-    
-//    DLog(@"xmlDataString: %@", xmlDataString);
+- (void)callMyWebserviceWithData:(NSString *)appData {
+//- (void)callMyWebserviceWithData:(NSMutableArray *)appData {
     
     NSMutableURLRequest *theRequest = [[NSMutableURLRequest alloc]initWithURL:[NSURL URLWithString:kURLNOEL] cachePolicy:NSURLCacheStorageNotAllowed timeoutInterval:30.0];
     
     NSDictionary *dictHeaders = [theRequest allHTTPHeaderFields];//null
     DLog(@"Headers: %@", dictHeaders);
     //request the server response as JSON
-    [theRequest setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+//    [theRequest setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [theRequest setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     
     
     //call createPayloadWithData instead with xmlArray of data in xml format instead a collection
     [self createPayloadWithData:appData forRequest:theRequest];
     
-//    //fire off a request on the main thread for now
-//    NSURLConnection *connection = [[NSURLConnection alloc]initWithRequest:theRequest delegate:self];
-//    //just create standard for now
-//    [connection start];
-    
 }
 
-//- (void)createPayloadWithData:(NSData *)appData forRequest:(NSMutableURLRequest *)request {
-- (void)createPayloadWithData:(NSMutableArray *)appData forRequest:(NSMutableURLRequest *)request {
+- (void)createPayloadWithData:(NSString *)appData forRequest:(NSMutableURLRequest *)request {
+//- (void)createPayloadWithData:(NSMutableArray *)appData forRequest:(NSMutableURLRequest *)request {
 
+    //Create our recipients -> Note this will come from file later
+    NSArray *emailRecipArray = @[@"peterdarbey@gmail.com", @"david.h.roberts@aib.ie", @"eimear.e.ferguson@aib.ie", @"gavin.e.bennett@aib.ie"];
+    
+    //send email to all the users stored on the device for now
+    NSMutableArray *adminArray = [NSMutableArray arrayWithContentsOfFile:[self getFilePath]];
+    //Create our default recipients from file for all emails
+    NSMutableArray *emailRecipients = [NSMutableArray array];
+    
+    //iterate through collection to retrieve the recipients
+    DLog(@"adminArray: %@", adminArray);
+    for (int i = 0; i < [adminArray count]; i++) {
+        NSString *recipient = [[adminArray objectAtIndex:i]objectAtIndex:1];//now email field
+        [emailRecipients addObject:recipient];
+    }
+    
+//    //data returned a dict for each user associated with the lodgement via log in
+//    //For message body
+//    NSDictionary *userOne = _usersDict[@1];
+//    NSDictionary *userTwo = _usersDict[@2];
+//    NSString *userOneName = userOne[@"Name"];
+//    NSString *userTwoName = userTwo[@"Name"];
+
+    
     NSError *error;
-     NSDictionary *payload = @{@"payload" : appData};
+    //2 Administrator's associated with device
+    NSDictionary *payload = @{@"payload" : appData, @"recipients" : @[emailRecipients[0], emailRecipients[1]]};
 //    NSDictionary *payload = @{@"payload" : @"abcdefghijklnmopqrstuvwxyz"};
     
-    NSData *jsonObject = [NSJSONSerialization dataWithJSONObject:payload options:NSJSONWritingPrettyPrinted error:&error];
+    NSData *jsonData;
     
     if ([NSJSONSerialization isValidJSONObject:payload]) { //YES valid
         DLog(@"is VALID JSON");
+        jsonData = [NSJSONSerialization dataWithJSONObject:payload options:NSJSONWritingPrettyPrinted error:&error];
         //set the request values
         [request setHTTPMethod:@"POST"];
-        [request setHTTPBody:jsonObject];
+        [request setHTTPBody:jsonData];
         [request setHTTPShouldHandleCookies:NO];
-//    [request setHTTPMethod:@"GET"];
     }
-    
-    DLog(@"<< jsonObject >>: %@", jsonObject);// --> was xmlArray -> valid JSON object
-//    DLog(@"jsonObjectWithData: %@", [[NSMutableString alloc]initWithData:jsonObject encoding:NSUTF8StringEncoding]);
-//    DLog(@"request>>>>>>>>>>: %@", request);//http://10.28.111.25:9080/ie.aib.coindrop/CoinDrop
     
     
     
@@ -272,26 +286,16 @@
     [requestSpinner startAnimating];
     
     
-    
-    //request code
-//    NSURLConnection *connection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
-//    //just create standard for now
-//    [connection start];
-    
     //TEST
    //create connection outside of dispatch queue
     NSURLConnection *connection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
+    [connection start];
     //dispatch a request on a background thread
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        
-        //just create standard for now
-        [connection start];
-    });
-    
-    //fire off a request on the main thread for now
-//    NSHTTPURLResponse *response;
-//    responseData = (NSMutableData *)[NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-    
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//        
+//        //just create standard for now
+//        [connection start];
+//    });
 }
 
 #pragma mark - NSURLConnection Delegate methods
@@ -314,9 +318,6 @@
             //show error popup
             [self showWarningPopupWithTitle:[NSString stringWithFormat:@"Error: %i", statusCode] andMessage:@"Did not receive a valid response" forBarcode:nil];
         });
-        
-//        //show error popup
-//        [self showWarningPopupWithTitle:[NSString stringWithFormat:@"Error: %i", statusCode] andMessage:@"Did not receive a valid response" forBarcode:nil];
         
     }
 
@@ -363,10 +364,6 @@
         [requestSpinner stopAnimating];
         [proceedBtn setEnabled:YES];
     });
-    
-//    [requestSpinner stopAnimating];
-//    [proceedBtn setEnabled:YES];
-    
 }
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
     
@@ -379,13 +376,6 @@
         //show error popup
         [self showWarningPopupWithTitle:@"Error" andMessage:@"Failed to connect to server" forBarcode:nil];
     });
-    
-    
-    //    [requestSpinner stopAnimating];
-    //    [proceedBtn setEnabled:YES];
-    //    //show error popup
-    //    [self showWarningPopupWithTitle:@"Error" andMessage:@"Failed to connect to server" forBarcode:nil];
-    
 }
 
 - (void)editPressed:(UIButton *)sender {
@@ -483,11 +473,6 @@
     
     _allowEdit = NO;
     
-//    if ([_depositsCollection count] > 0) {
-//        barBtnFinished.enabled = YES;
-//        DLog(@"Enable the finished Scan button");
-//    }
-
 }
 
 #pragma mark - Custom delegate method
@@ -500,7 +485,6 @@
         //dismiss the viewController and wipe data --> pops to HomeVC
        [self.navigationController popToRootViewControllerAnimated:YES];
     
-    
 }
 
 - (void)wipeAndResetData {
@@ -512,7 +496,7 @@
     DLog(@"_usersDict: %@", _usersDict);
     //wipe recorded QR and ITF barcode data
     if ([_barcodeArray count] > 0) {
-        [_barcodeArray removeAllObjects];//dont nil just remove entries --> nil
+        [_barcodeArray removeAllObjects];//dont nil just remove entries
     }
     
     //wipe recorded logged in users of the app
@@ -522,8 +506,6 @@
     [Deposit setTotalBagsAmount:0.0];
     [Deposit setTotalbagCount:0];
     
-    //reset bag data types also
-//    _totalDepositAmount = 0.0;//what are these
     _bagCount = 0;
     
     //Note wipe the uniqueBagArray containing barcodes that prexist
@@ -604,7 +586,7 @@
             [_dataArray addObject:userTwoDict[@"Name"]];
             [_dataArray addObject:userTwoDict[@"Email"]];
     
-        }//close userDict
+        }
 
     
     //each Administrator associated with device --> use the adminsCollection.plist for this data
@@ -617,8 +599,7 @@
             }
         }//close if
     
-    DLog(@"<<<<<<<< _dataArray contents >>>>>>>>>>: %@", _dataArray);//23 at moment
-//    DLog(@"<< xmlDataDict contents >>: %@", xmlDataDict);//crash 29 values verses 34 keys
+    DLog(@"<<<<<<<< _dataArray contents >>>>>>>>>>: %@", _dataArray);
     
     return _dataArray;
 }
@@ -660,6 +641,8 @@
     
     //then parse into an appended string --> non csv format
     NSString *xmlString = [StringParserHelper parseMyCollection:xmlArray];
+    DLog(@"xmlString sent to Noel: %@", xmlString);
+    
     //serialize and convert to data for webservice XMLSS format xls
     xmlDataString = [xmlString dataUsingEncoding:NSUTF8StringEncoding];
     
@@ -669,8 +652,8 @@
     [self writeToLibraryWithData:xmlDataString];//write to NSLibraryDirectory
     
     //call the request code
-//        [self callMyWebserviceWithData:xmlDataString];
-    [self callMyWebserviceWithData:xmlArray];//_dataArray
+        [self callMyWebserviceWithData:xmlString];
+//    [self callMyWebserviceWithData:xmlArray];//_dataArray
     
     
 }

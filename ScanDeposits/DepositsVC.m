@@ -239,7 +239,8 @@
     NSError *parseError;
     NSData *jsonData;
     
-    if ([NSJSONSerialization isValidJSONObject:payload]) { //YES valid
+    //if valid json convert/serialize and package in payload
+    if ([NSJSONSerialization isValidJSONObject:payload]) {
         DLog(@"is VALID JSON");
         jsonData = [NSJSONSerialization dataWithJSONObject:payload options:NSJSONWritingPrettyPrinted error:&parseError];
         //set the request values
@@ -285,16 +286,24 @@
     
     if (statusCode == 200) {
         NSLog(@"HTTP status is: %i, good to go", statusCode);
+//        [self sentMailWithSuccess:YES];//nah dont need here only when finished receiving data
     }
-    else
+    else if (statusCode == 400 || statusCode == 404)
     {
         //capture the main thread
         dispatch_async(dispatch_get_main_queue(), ^{
             [requestSpinner stopAnimating];
             [proceedBtn setEnabled:YES];
             //show error popup
+            //via this method
+//            [self sentMailWithError:YES];
             [self showWarningPopupWithTitle:[NSString stringWithFormat:@"Error: %i", statusCode] andMessage:@"Did not receive a valid response" forBarcode:nil];
         });
+        
+    }
+    else if (statusCode == 500) {
+        
+        [self sentMailWithError:YES];
         
     }
 
@@ -331,16 +340,19 @@
                 DLog(@"dict: %@", dict);
                 if (dict) {
                     DLog(@"Success");
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [requestSpinner stopAnimating];
+//                      [proceedBtn setEnabled:YES];//we dont want to allow user to send again
+                        [self sentMailWithSuccess:YES];//display success on screen
+                    });
+
                 }
             }
         }
         
     }//close outer if
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [requestSpinner stopAnimating];
-        [proceedBtn setEnabled:YES];
-    });
 }
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
     
@@ -352,6 +364,7 @@
         [proceedBtn setEnabled:YES];
         //show error popup
         [self showWarningPopupWithTitle:@"Error" andMessage:@"Failed to connect to server" forBarcode:nil];
+//        [self sentMailWithSuccess:YES];//for now test
     });
 }
 
@@ -745,7 +758,7 @@
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         
         //custom Success Popup may add a pause here
-        [self showSuccessPopupWithTitle:@"Success email sent" andMessage:@"Email successfully sent to recipients" forBarcode:nil];//put in completion block above
+        [self showSuccessPopupWithTitle:@"Success deposit sent" andMessage:@"Deposit data successfully sent to recipients" forBarcode:nil];//put in completion block above
     });
 }
 - (void)sentMailWithError:(BOOL)failed {

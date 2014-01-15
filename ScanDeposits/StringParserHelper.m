@@ -194,8 +194,6 @@
 + (NSMutableArray *)parseValue:(id)obj forKey:(NSString *)key addToCollection:(NSMutableArray *)array  {
     
     //row contruction
-//    NSString *xmlRowOpen = @"<ss:Row>";
-//    NSString *xmlRowClose = @"</ss:Row>";
     NSString *xmlCellOpen = @"<ss:Cell>";
     NSString *xmlCellClose = @"</ss:Cell>";
     NSString *string;
@@ -207,7 +205,6 @@
         
         //if its the 1st item add a row and a cell
         if ([key isEqualToString:@"Branch NSC"]) {
-//            [array addObject:xmlRowOpen];
             [array addObject:xmlCellOpen];
             [array addObject:string];
             [array addObject:xmlCellClose];
@@ -217,7 +214,6 @@
             [array addObject:xmlCellOpen];
             [array addObject:string];
             [array addObject:xmlCellClose];
-//            [array addObject:xmlRowClose];
         }
         //else its just a regular entry
         else
@@ -283,7 +279,7 @@
             finalString = parsingString;
         }
         
-        DLog(@"finalString: %@", finalString);//correct
+        DLog(@"finalString: %@", finalString);//nice
         
     }
     return finalString;
@@ -321,8 +317,8 @@
         DLog(@"finalString: %@", finalString);//correct
         
         
-        //test building xml for csv file
-        //        NSString *XML= [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE en-note SYSTEM \"http://xml.evernote.com/pub/enml2.dtd\">\n<en-note>%@",finalString];
+    //test building xml for csv file
+    //        NSString *XML= [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE en-note SYSTEM \"http://xml.evernote.com/pub/enml2.dtd\">\n<en-note>%@",finalString];
         
         
     }
@@ -373,7 +369,6 @@
         
     }//close outer for
     
-    //        DLog(@"kvPairsArray: %@", kvPairsArray);//nice
     
     return dict;
 }
@@ -562,7 +557,7 @@
     NSString *xmlWSClose = @"</ss:Worksheet>";
     NSString *xmlTblOpen = @"<ss:Table>";
     NSString *xmlTblClose = @"</ss:Table>";
-    NSString *xmlColumn = @"<ss:Column ss:Width=\"90\"/>";//donmt need I reckon
+    NSString *xmlColumn = @"<ss:Column ss:Width=\"90\"/>";//dont need
     NSString *xmlColumnSpan = @"<Column ss:Span=\"16\" ss:Width=\"90\"/>";
     //styles
     NSString *xmlStyles = @"<Styles><Style ss:ID=\"s1\"><Interior ss:Color=\"#800008\" ss:Pattern=\"Solid\"/></Style></Styles>";

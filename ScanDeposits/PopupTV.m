@@ -7,7 +7,6 @@
 //
 
 #import "PopupTV.h"
-//#import "User.h"
 
 @implementation PopUpTV
 
@@ -23,7 +22,7 @@
         UIView *view = [[UIView alloc]init];
         view.frame = self.bounds;
         view.backgroundColor = [UIColor clearColor];
-        self.backgroundView = view;//works
+        self.backgroundView = view;
         
         self.delegate = self;
         self.dataSource = self;
@@ -71,7 +70,7 @@
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     
     if([string isEqualToString:@"@"]) {
-        //        DLog(@"STRING: %@", string);
+//        DLog(@"STRING: %@", string);
         [textField resignFirstResponder];
         return NO;//works
     }
@@ -298,9 +297,8 @@
     }
     
     if (indexPath.row == 0) {
-//        [userNameTF setText:[NSString stringWithFormat:@"David Roberts"]];//temp will be dynamic
-        [userNameLbl setText:@"Name"];
         
+        [userNameLbl setText:@"Name"];
         //set keyboard type
         [userNameTF setKeyboardType:UIKeyboardTypeDefault];
         [userNameTF setReturnKeyType:UIReturnKeyNext];

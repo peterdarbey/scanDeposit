@@ -17,7 +17,6 @@
 //Private members
 @property (strong, nonatomic) NSString *bagNumber;
 @property (nonatomic)  int bagCount;
-//@property (nonatomic) double bagAmount;
 @property (strong, nonatomic) NSString *bagBarcode;
 @property (strong, nonatomic) NSString *timeStamp;
 @property (strong, nonatomic) NSDictionary *internalDict;

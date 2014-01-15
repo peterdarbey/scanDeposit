@@ -24,8 +24,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
-//        [self setupView];
+       
     }
     return self;
 }
@@ -33,8 +32,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
-    DLog(@"viewDidLoad");
     
     [self setupView];
     
@@ -60,7 +57,6 @@
     
     [_backgroundView addSubview:_bckGrView];
     self.view = _backgroundView;
-    DLog(@"_bckGrView in setupView: %@", _bckGrView);//correct --> (0, 0, 260, 175); (95, 208.25, 130, 87.5);
 
 }
 
@@ -85,8 +81,6 @@
 - (void)okPressed:(UIButton *)sender {
     
     _confirmed = YES;
-
-//    [self dismissPopupAndResumeScanning];
 }
 
 

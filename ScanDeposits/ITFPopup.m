@@ -101,11 +101,10 @@
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     
-    if ([textField.text length]) {// > 1 && [textField.text length] <= 6) {
-        //leave this as is
+    if ([textField.text length]) {
+       
         _saveBtn.enabled = YES;
-   
-//        _bagAmount = (double)textField.text.doubleValue;
+
         _bagCount += 1;
         DLog(@"_bagAmount: %f", _bagAmount);
         
@@ -236,7 +235,7 @@
     }
     
     //Init custom model object have to pass the unique bag number here plus maybe the QR branch or something?
-    Deposit *deposit = [[Deposit alloc]initWithBagNumber:[qrBarcode barcodeProcess]// --> think thats right
+    Deposit *deposit = [[Deposit alloc]initWithBagNumber:[qrBarcode barcodeProcess]// --> thats right
                                               bagBarcode:[eightBarcode barcodeUniqueBagNumber] bagAmount: _bagAmount bagCount:_bagCount timeStamp:_timeString];
     
     return deposit;

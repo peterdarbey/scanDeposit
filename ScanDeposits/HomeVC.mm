@@ -7,7 +7,6 @@
 //
 
 #import "HomeVC.h"
-//#import "DepositsVC.h"
 
 //models
 #import "Deposit.h"
@@ -26,7 +25,6 @@
 @interface HomeVC ()
 {
     ScanditSDKBarcodePicker *picker;
-//    NSMutableArray *uniqueBagArray;
     UITextView *helpTV;
 }
 
@@ -46,8 +44,6 @@
 #pragma mark - Custom delegate method for DepositsVC
 - (void)resetDataAndPresentWithFlag:(NSNumber *)shouldDismiss {
     
-    DLog(@"Delegate method called to reset and present LoginVC");//called
-    
     //ToDo:1 reset all deposit data on app --> except usersCollection.plist/adminsCollection.plist
     
     //QR required first before scanning bags commences
@@ -56,7 +52,6 @@
     _isAdmin = NO;
     _isUser = NO;
     
-    //test
     _shouldDismiss = shouldDismiss.boolValue;
     
     //set the picker into scan mode again
@@ -66,10 +61,8 @@
 #pragma mark - Custom delegate method for LoginVC
 - (void)dismissLoginVC:(NSMutableDictionary *)users isAdmin:(NSNumber *)admin {
     
-    DLog(@"admin passed by dimissLoginVC method: %d", admin.boolValue);
     _isAdmin = admin.boolValue;//set by object returned -> NO for users
     
-    //NOTE: Logout button required?
     if (_isAdmin) {
         
         //if admin not a user
@@ -79,10 +72,9 @@
     }
     else
     {
-        DLog(@"is USERS: %@", users);//is dictionary
         _isUser = YES;
         //Note: _isAdmin is NO if execution enters here
-        
+
         //will need for packaging off to email with other data
         _validUsersDict = users;
     }
@@ -140,7 +132,6 @@
                 [_uniqueBagArray removeAllObjects];//cancelScan means reset all data in history
         
                 //note: no deposit required here as only constructed on Proceed Press ITF Popup
-                
                 [_barcodeArray removeLastObject];//removes the EightBarcode but leaves QR inside
 //                [_barcodeArray removeAllObjects];//actually remove all items
             }
@@ -167,7 +158,7 @@
         [picker dismissViewControllerAnimated:YES completion:^{
             [picker stopScanning];
             //scanned device QR barcode, now set to 2/5 interleaved barcode
-            _scanModeIsQR = NO;//correct
+            _scanModeIsQR = NO;
         }];
 
         
@@ -194,10 +185,6 @@
             
             depositsVC.depositsCollection = _depositsArray;//bag/deposit data
             depositsVC.barcodeArray = _barcodeArray;//pass all barcode data to deposits
-            //set delegate here
-//            [depositsVC setDelegate:self];
-            
-            DLog(@"_depositsArray in picker dismiss: %@", _depositsArray);//empty
             
             //package off logged in users/admins data
             if (_validUsersDict) {
@@ -214,7 +201,6 @@
             
             //careful though as user may want to scan more
 //            _scanModeIsDevice = YES;//reset to scan QR barcode as viewDidLoad is Not called unless app is quit
-            
         }];
         
     }//close else
@@ -257,10 +243,6 @@
         [barBtnFinished setEnabled:NO];
     }
    
-    
-    //disable finishedScans button if depositsArray has no data inside
-    
-    
     //Add a divider for the toolBar barButtonItems
     UIBarButtonItem *flexible = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     
@@ -275,7 +257,7 @@
 
     [self.navigationController presentViewController:picker animated:YES completion:nil];
     [picker startScanning];
-    //Dont need Observer currently
+    //Dont need Observer now
 //    [self dispatchEventOnTouch];
     
 }
@@ -284,32 +266,23 @@
 {
     [super viewDidLoad];
     
-    
+    //collections
     _barcodeArray = [NSMutableArray array];
-    
     _depositsArray = [NSMutableArray array];
-    
     _uniqueBagArray = [NSMutableArray array];
-    
-    
     
     //How to use the app wording to be revised
     helpTV = [[UITextView alloc]initWithFrame:CGRectMake(10, 160, self.view.frame.size.width -20, 250)];
-//    [helpTV setText:@"How to use this app\nPlease scan the external device (ATM) barcode.\n\nThen scan the bag barcode and enter the amount for each deposit.\n\nFinally press proceed to confirm email"];
     
     [helpTV setBackgroundColor:[UIColor clearColor]];
     [helpTV setFont:[UIFont systemFontOfSize:21]];
-    //    [helpTV setTextColor:[UIColor colorWithRed:172.0/255.0 green:74.0/255.0 blue:0.0/255.0 alpha:1.0]];//orange
     [helpTV setTextColor:[UIColor whiteColor]];
     [helpTV setFont:[UIFont fontWithName:@"Arial-BoldMT" size:21.0]];
 //    [helpTV setShadowColor:[UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0]];//darkGray
     [helpTV setEditable:NO];
     [helpTV setUserInteractionEnabled:NO];
     [helpTV setTextAlignment:NSTextAlignmentCenter];
-        
     
-    
-//    [self.navigationController.navigationBar setTintColor:[UIColor blackColor]];
     self.navigationController.navigationBar.barStyle = UIBarStyleBlackTranslucent;
     self.title = NSLocalizedString(@"Home", @"Home Screen");
     
@@ -323,8 +296,6 @@
     scanDeviceBtn.titleLabel.font = [UIFont systemFontOfSize:17.0];//[UIFont fontWithName:@"Helvetica" size:18.0];
     [scanDeviceBtn setFrame:CGRectMake(20, self.view.frame.size.height -124, 280, 44)];
     [scanDeviceBtn addTarget:self action:@selector(scanBtnPressed:) forControlEvents:UIControlEventTouchUpInside];
-    //see condition below
-//    [self.view addSubview:scanDeviceBtn];
     
     //Construct new scan device button for BAG -> 128
     scanBagBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -363,10 +334,10 @@
     [logoName setUserInteractionEnabled:NO];
     [self.view addSubview:logoName];
     
-    [self.view addSubview:logo];//aibImgV
+    [self.view addSubview:logo];
     
 }
-//test
+
 - (void)logOutPressed:(UIButton *)sender {
     
     _isLoggedOut = YES;
@@ -376,7 +347,7 @@
     //why dont I wipe data here
     if ([_uniqueBagArray count] > 0) {
         DLog(@"uniqueBagArray before: %@", _uniqueBagArray);
-        [_uniqueBagArray removeAllObjects];//correct
+        [_uniqueBagArray removeAllObjects];
         DLog(@"uniqueBagArray after: %@", _uniqueBagArray);//what about depositsCollection
     }
     
@@ -394,7 +365,7 @@
     [Deposit setTotalbagCount:0];
     
     //present LogInVC as viewWillAppear is not called here on button press
-    [self presentLogInVC];//test
+    [self presentLogInVC];
 }
 
 - (void)presentLogInVC {
@@ -451,13 +422,11 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     //moved here because wipeData sets to nil and not created again as in viewDidLoad
-//     _depositsArray = [NSMutableArray array];
     DLog(@"<< _scanModeIsQR >>: %d", _scanModeIsQR);// --> NO correct
     
     //NSUserDefaults
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     //retrieve the app state for use case app flow
-    //    _isAdmin = [[userDefaults objectForKey:@"Is Administrator"]boolValue];
     _isSetup = [[userDefaults objectForKey:@"Is Setup"]boolValue];
     
     
@@ -467,21 +436,19 @@
         //if first time using app dont show txt and buttons on HomeVC
         if (_isSetup) {
             
-            [self.view addSubview:scanDeviceBtn];//correct
+            [self.view addSubview:scanDeviceBtn];
             //Add other behaviour here
             [helpTV setText:@"How to use this app\n\nPlease scan the barcode on the Device/Process..."];
             [self.view addSubview:helpTV];
         }
 //        [self.view addSubview:scanDeviceBtn];//correct
-//        //Add other behaviour here
-//        [self.view addSubview:helpTV];
         
     }
     else //else 2/5 interleaved barcode
     {
         if (_isSetup) {
             
-            [self.view addSubview:scanBagBtn];//correct
+            [self.view addSubview:scanBagBtn];
             
             //Add other behaviour here 
             [helpTV setText:@"Now scan the barcode on each bag and enter a € value for each bag.\n\nNB - Any bag barcode can only be scanned once during a session"];
@@ -490,7 +457,6 @@
         
     }
 
-    
     //NOTE: when setup has occurred then the app flow is LogInVC for both users
     if (_isSetup) {
         
@@ -498,14 +464,11 @@
         if (!_isAdmin && _isUser) {
             
             //user has Logged in so now dismiss LogInVC
-//            DLog(@"User delegate protocol did dismiss LogInVC");
             //and present HomeVC to allow scanning by user
             DLog(@"Proceed and scan away");
         }
         //is admin via login and not user
         else if (_isAdmin && !_isUser) {
-            //admin has Logged in so now dismiss LogInVC
-            //and present Administration settings/RegisrationVC
             
             //Added 1.0 delay to presentation of RegistrationVC in method below
                 [self presentRegistrationVC];//correct
@@ -530,11 +493,10 @@
             dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
             dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
                 //added additional delay here as its required by dismissal event on Logout press but dont want in method below
-                [self presentLogInVC];//needs this duration
+                [self presentLogInVC];//duration required
                 
             });
         }
-        
         
     }//close if
     
@@ -558,7 +520,6 @@
     //register the control object and associated key with a notification 
     NSDictionary *userInfo = @{@"scanBtnPressed" : scanDeviceBtn};
     [notificationCenter postNotificationName: @"scanBtnPressed" object:nil userInfo:userInfo];
-    DLog(@"EVENT DISPATCHED");
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -576,13 +537,12 @@
 }
 - (void)xibDismissed:(NSNotification *)notification {
     
-    
     NSDictionary *userInfo = notification.userInfo;
     DLog(@"userInfo: %@", userInfo.description);
     
     DLog(@"Test this notification: %@", notification.name);
     if ([notification.name isEqualToString:@"scanBtnPressed"]) {
-        DLog(@"Notified");//works
+        DLog(@"Notified");//correct
     }
     
 }
@@ -607,7 +567,6 @@
     //if user cancelled scan of ITF --> if cancelPressed on ITF Popup
     if (_didCancelDeposit) {
         //cancelled ITF scan means QR already scanned so set to NO and wipe last ITF barcode from barcodesArray
-        //and history
         _scanModeIsQR = NO;
         
         //ToDO wipe barcodeArray for stored history of scans so we can scan the bag again
@@ -632,17 +591,15 @@
             }
             
         }//close if
-//         [picker dismissViewControllerAnimated:YES completion:nil];//test
+
     }
     
 }
 - (void)passScannedData:(Deposit *)deposit {
     
-    //could set _scanModeIsQR = NO; here but set in delegate didScan condition
-    
     //Pass the deposits data back to self and add to collection
     [_depositsArray addObject:deposit];
-     DLog(@"_depositsArray in delegate: %@", _depositsArray);//correct
+     DLog(@"_depositsArray in delegate: %@", _depositsArray);
     
     //need minimum of 1  2/5 interleaved to be scanned + a Deposit model created via (Proceed pressed)
     //enable finishedScans button now as a scanned deposit
@@ -659,7 +616,7 @@
 - (void)resumeScanning {
     
     [picker startScanning];
-    //not sure what mode we are in yet??
+
 //    _scanModeIsQR = ;// -> NO as called in differ instances
     
 }
@@ -778,9 +735,6 @@
             //need to addObj after 1st check
             [_uniqueBagArray addObject:uniqueSubString];//possibly from file as may save
             
-            //Note: replaced by helper
-//            barcode = [self parseILBarcodeFromString:barcodeString withBarcodeType:barcodeResult[@"symbology"]];
-            
             //Note: need to parse the 2/5 interleaved barcode before constructing dictionary
             barcode = [StringParserHelper parseILBarcodeFromString:barcodeString
                                                    withBarcodeType:barcodeResult[@"symbology"]];//--> changed to class Helper method
@@ -794,8 +748,8 @@
         
             //Construct custom popup here for 2/5 interleaved barcode
             //present the 2/5 interleaved popup
-            [self showITFPopup:barcodeString];//pass relevant custom model or dictionary
-        }//close else
+            [self showITFPopup:barcodeString];
+        }
         
     }//close else if
     
@@ -803,7 +757,7 @@
     {
         //Construct custom warning popup
         [picker stopScanning];
-        //Display warning popup and dont allow scanning
+        
         NSString *title = @"Warning: QR code already scanned!";
         NSString *message = @"To continue please scan a bag barcode!";
         [self showWarningPopupWithTitle:title andMessage:message forBarcode:barcodeString];
@@ -836,7 +790,6 @@
     //set text
     warningPopup.titleLbl.text = title;
     warningPopup.messageLbl.text = message;
-    
     
     //ToDo add whatever setup code required here
     [warningPopup showOnView:picker.view];
@@ -888,12 +841,11 @@
     [itfPopup showOnView:picker.view];
     
 }
-
+//remove manual scanning functionality
 - (void)scanditSDKOverlayController:
 (ScanditSDKOverlayController *)scanditSDKOverlayController didCancelWithStatus:(NSDictionary *)status {
     
     DLog(@"status dictionary: %@", status);
-//    [picker.overlayController searchBarTextDidEndEditing:picker.overlayController];
     [self dismissViewControllerAnimated:YES completion:^{
         [picker stopScanning];
     }];
@@ -908,19 +860,7 @@
     //Create our custom model object
     Barcode *barcodeObject = [Barcode instanceFromDictionary:manualDict];
     [_barcodeArray addObject:barcodeObject];
-    
-    //Create a custom Alert -> AlertView.xib
-//    [self showPopup:manualDict];//TEMP
-    
-    
-//    //Create a custom Alert -> AlertView.xib
-//    AlertView *popup = [AlertView loadFromNibNamed:@"AlertView"];
-//    //Add custom delegate method here to restart picker scanning
-//    [popup setDelegate:self];
-//    //set the barcode text
-//    popup.barcodeString.text = [NSString stringWithFormat:@"%@", barcodeObject.barcode];
-//    [popup showOnView:picker.view];
-    
+        
     DLog(@"didManualSearch with Inputed from barcodeObject: %@", [barcodeObject barcodeData]);
 }
 

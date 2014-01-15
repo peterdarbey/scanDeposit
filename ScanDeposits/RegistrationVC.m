@@ -209,18 +209,13 @@
 - (void)keyboardWillHide:(NSNotification *)notification
 {
     DLog(@"KeyBoardWillHide");
-    
-//    NSDictionary *info = [notification userInfo];
-//    NSNumber *number = [info objectForKey:UIKeyboardAnimationDurationUserInfoKey];
-//    double duration = [number doubleValue];
-    
-    
+
     if (activeTF && _isSelectedTF) {
         
         //retrieve the cell for the hidden content
         UITableViewCell *cell = (UITableViewCell *)[activeTF.superview superview];
         
-        CGRect aRect = self.view.frame;// -> (0, 0,320, 548);
+        CGRect aRect = self.view.frame;
         aRect.size.height -= keyboardSize.height;
         CGPoint scrollPoint;
         
@@ -241,7 +236,6 @@
 
 -(void)buttonStyle:(UIButton *)button WithImgName:(NSString *)imgName imgSelectedName:(NSString *)selectedName withTitle:(NSString *)title
 {
-    //button parameters
     UIImage *stretchButon = [[UIImage imageNamed:imgName] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 10, 10, 10)];
     [button setBackgroundImage:stretchButon forState:UIControlStateNormal];
     UIImage *stretchSelectedButton = [[UIImage imageNamed:selectedName] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 10, 10, 10)];
@@ -280,7 +274,7 @@
     //added to a specific cell
     if (indexPath.section == 1 && indexPath.row == 0) {
         activeTF = textField;
-        DLog(@"activeTF is: %@", activeTF);
+    
         _isSelectedTF = YES;
     }
     else
@@ -315,7 +309,7 @@
             
             //next TextField
             nextTF = [self returnNextTextField:textField];
-            [nextTF becomeFirstResponder];//[self.view endEditing:yes];
+            [nextTF becomeFirstResponder];
         }//close inner if
         else
         {
@@ -368,7 +362,6 @@
                 
                 //set to NO again when kB dismissed
                 [self doneEditingPressed:nil];//even better -> _allowEdit = NO;
-//                [_registerTV reloadData];//dont need now as doneEditingPressed does that
             }
             
         }//close inner if
@@ -407,7 +400,6 @@
     
     //Construct for the LoginVC functionality and add in the conditions below
     NSDictionary *adminsDict = [user adminDict];//administrator with password
-    DLog(@"adminsDict: %@", adminsDict);
     
     
     //Create a local specific array and add in conditioins below
@@ -442,7 +434,7 @@
         else if ([_adminArray count] == 1) { //only one admin setup
             
             //add each object to its particular collection at index 1
-            [_administratorArray insertObject:adminsDict atIndex:indexPath.section];//might crash out of bounds, ordered with only 1entry -> should be correct?
+            [_administratorArray insertObject:adminsDict atIndex:indexPath.section];// ordered with only 1entry -> is correct?
             //write to file here also
             [_administratorArray writeToFile:adminsPath atomically:YES];
             
@@ -502,7 +494,7 @@
         NSString *word = [initialsArray objectAtIndex:i];
         //extract 1st letter only
         if ([word length] > 0) {
-            NSString *firstLetter = [word substringToIndex:1];//works
+            NSString *firstLetter = [word substringToIndex:1];
             [lettersArray addObject:firstLetter];
         }
         else
@@ -528,7 +520,6 @@
         NSString *appendedInitials = [initials stringByAppendingString:[lettersArray objectAtIndex:1]];//crash
         appendedInitials = [appendedInitials stringByAppendingString:[lettersArray objectAtIndex:2]];
         self.initials = appendedInitials;
-//        DLog(@"<< 3 >> self.initials: %@", self.initials);//DHR
     }
     
 }
@@ -536,7 +527,7 @@
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     
     if([string isEqualToString:@"@"]) {
-        [textField resignFirstResponder];//ah could be this causing the keyboard to call hideKeyboard notification
+        [textField resignFirstResponder];//could be this causing the keyboard to call hideKeyboard notification
         return NO;
     }
     
@@ -615,8 +606,7 @@
 }
 
 - (void)editPressed:(UIButton *)sender {
-    
-    DLog(@"Edit pressed");
+
     _allowEdit = YES;
     
     //call cellForRow

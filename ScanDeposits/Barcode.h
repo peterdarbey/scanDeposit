@@ -13,8 +13,6 @@
     
 }
 
-
-//@property (strong, nonatomic) NSString *barcodeType;
 @property (strong, nonatomic) NSString *symbology;
 
 + (Barcode *)instanceFromDictionary:(NSDictionary *)aDictionary;

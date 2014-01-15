@@ -14,8 +14,6 @@
     
 }
 
-//@property (nonatomic) double bagAmount;
-
 //class methods
 + (NSInteger)totalBagCount;
 + (double)totalBagsAmount;

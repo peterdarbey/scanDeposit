@@ -28,8 +28,8 @@
     
     UIBarButtonItem *barBtnFinished;
     
-    //test
     NSString *xlsStringImg;
+    
     //Mobile Iron workaround
     UIBarButtonItem *attachButton;
     NSData *xmlDataString;
@@ -57,16 +57,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
-    
     
     appDelegate = (AppDelegate*)[[UIApplication sharedApplication]delegate];
     
     //register for callbacks
     [_depositsTV setDelegate:self];
     [_depositsTV setDataSource:self];
-    //self.view setBackgroundColor:[UIColor clearColor]];
-    [_depositsTV setBackgroundColor:[UIColor clearColor]];//right
+    [_depositsTV setBackgroundColor:[UIColor clearColor]];
     [_depositsTV setBackgroundView:[[UIImageView alloc]initWithImage:
                                                  [UIImage imageNamed:@"Default-568h.png"]]];
     
@@ -83,14 +80,6 @@
     if ([_depositsTV numberOfSections] <= 0) {
         [editBBtn setEnabled:NO];
     }
-    
-    
-//    //Moved here from viewWillAppear
-//    //if we can email enable the proceed button
-//    if([MFMailComposeViewController canSendMail]) {
-//        
-//        [proceedBtn setEnabled:YES];
-//    }
     
     //test here
     xmlDataDict = [NSMutableDictionary dictionary];
@@ -121,7 +110,7 @@
 
     NSString *xmlPath = [libraryDirectory stringByAppendingPathComponent:@"xlsData.xls"];
     [data writeToFile:xmlPath atomically:YES];
-    DLog(@"%@ written to file: %@", xmlDataString, xmlPath);// /var/mobile/Applications/9F6B4DA6-C826-4D56-A8AB-0E7A653A8549/Library/xlsData.xls -> with data does write
+    DLog(@"%@ written to file: %@", xmlDataString, xmlPath);// /var/mobile/Applications/9F6B4DA6-C826-4D56-A8AB-0E7A653A8549/Library/xlsData.xls
     
     
     //to convert NSData to pdf
@@ -199,13 +188,6 @@
     //test this delegate method
     [successPopup setNotDelegate:self];
     
-   
-    //set text
-//    successPopup.titleLbl.text = title;//the whole property is nil ???
-//    successPopup.messageLbl.text = message; //nil too even with string ???
-   
-    //ToDo add whatever setup code required here
-//    [successPopup showOnView:self.view];
     //updated and set in class
     [successPopup showOnView:self.view withTitle:title andMessage:message];//nope
     
@@ -215,12 +197,10 @@
 //- (void)callMyWebserviceWithData:(NSMutableArray *)appData {
     
     NSMutableURLRequest *theRequest = [[NSMutableURLRequest alloc]initWithURL:[NSURL URLWithString:kURLNOEL] cachePolicy:NSURLCacheStorageNotAllowed timeoutInterval:30.0];
-    
-    NSDictionary *dictHeaders = [theRequest allHTTPHeaderFields];//null
-    DLog(@"Headers: %@", dictHeaders);
+
     //request the server response as JSON
-//    [theRequest setValue:@"application/json" forHTTPHeaderField:@"Accept"];
     [theRequest setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+//    [theRequest setValue:@"application/json" forHTTPHeaderField:@"Accept"];
     
     
     //call createPayloadWithData instead with xmlArray of data in xml format instead a collection
@@ -232,7 +212,7 @@
 //- (void)createPayloadWithData:(NSMutableArray *)appData forRequest:(NSMutableURLRequest *)request {
 
     //Create our recipients -> Note this will come from file later
-    NSArray *emailRecipArray = @[@"peterdarbey@gmail.com", @"david.h.roberts@aib.ie", @"eimear.e.ferguson@aib.ie", @"gavin.e.bennett@aib.ie"];
+//    NSArray *emailRecipArray = @[@"peterdarbey@gmail.com", @"david.h.roberts@aib.ie", @"eimear.e.ferguson@aib.ie", @"gavin.e.bennett@aib.ie"];
     
     //send email to all the users stored on the device for now
     NSMutableArray *adminArray = [NSMutableArray arrayWithContentsOfFile:[self getFilePath]];
@@ -252,18 +232,16 @@
 //    NSDictionary *userTwo = _usersDict[@2];
 //    NSString *userOneName = userOne[@"Name"];
 //    NSString *userTwoName = userTwo[@"Name"];
-
     
-    NSError *error;
-    //2 Administrator's associated with device
+    //Pass the 2 Administrator's associated with device
     NSDictionary *payload = @{@"payload" : appData, @"recipients" : @[emailRecipients[0], emailRecipients[1]]};
-//    NSDictionary *payload = @{@"payload" : @"abcdefghijklnmopqrstuvwxyz"};
     
+    NSError *parseError;
     NSData *jsonData;
     
     if ([NSJSONSerialization isValidJSONObject:payload]) { //YES valid
         DLog(@"is VALID JSON");
-        jsonData = [NSJSONSerialization dataWithJSONObject:payload options:NSJSONWritingPrettyPrinted error:&error];
+        jsonData = [NSJSONSerialization dataWithJSONObject:payload options:NSJSONWritingPrettyPrinted error:&parseError];
         //set the request values
         [request setHTTPMethod:@"POST"];
         [request setHTTPBody:jsonData];
@@ -271,31 +249,29 @@
     }
     
     
-    
     //create visual feedback via a UIActivity spinner
     requestSpinner = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     [proceedBtn setEnabled:NO];
     [requestSpinner setHidesWhenStopped:YES];
-    //[requestSpinner setFrame:proceedBtn.frame];//CGRectMake(10, aView.frame.size.height -60, 300, 44)];
     CGPoint spinnerPoint = CGPointMake(252.5, 22);//-10?? but correct
     [requestSpinner setCenter:spinnerPoint];
-//    [requestSpinner setCenter:proceedBtn.center];//(150, 97, 20, 20);
-    DLog(@"requestSpinnerHeight: %f andWidth: %f", requestSpinner.frame.origin.x, requestSpinner.frame.origin.y);
+    
     //add to proceed button view
     [proceedBtn addSubview:requestSpinner];
     [requestSpinner startAnimating];
     
-    
-    //TEST
+
    //create connection outside of dispatch queue
     NSURLConnection *connection = [[NSURLConnection alloc]initWithRequest:request delegate:self];
     [connection start];
+    
     //dispatch a request on a background thread
 //    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-//        
+    
 //        //just create standard for now
 //        [connection start];
 //    });
+    
 }
 
 #pragma mark - NSURLConnection Delegate methods
@@ -308,10 +284,11 @@
     NSInteger statusCode = httpResponse.statusCode;
     
     if (statusCode == 200) {
-        NSLog(@"HTTP status is: %i, proceed", statusCode);//correct
+        NSLog(@"HTTP status is: %i, good to go", statusCode);
     }
     else
     {
+        //capture the main thread
         dispatch_async(dispatch_get_main_queue(), ^{
             [requestSpinner stopAnimating];
             [proceedBtn setEnabled:YES];
@@ -345,7 +322,7 @@
         DLog(@"responseString: %@", responseString);//CoinDrop Servlet is processing your data ...
         
         if (parseError) { //we are receiving a parse error with returned response not json
-            DLog(@"error parsing the response: %@", parseError);
+            DLog(@"error parsing the response: %@ probably not configured for json yet", parseError);
         }
         else
         {
@@ -382,8 +359,6 @@
     //edit pressed disable proceedBtn
     [proceedBtn setEnabled:NO];
     
-//    [_depositsTV setEditing:YES animated:YES];//test
-    
     _allowEdit = YES;
     [_depositsTV reloadData];
     
@@ -401,18 +376,11 @@
     //done pressed re-enable proccedBtn
     [proceedBtn setEnabled:YES];
     
-    //    [_depositsTV endEditing:YES];//test
-    
     [_depositsTV reloadData];
     _allowEdit = NO;
     
-//    [_depositsTV reloadData];
-    
     //set the edit button as the current barButton
     [self.navigationItem setRightBarButtonItem:editBBtn];
-    
-    //resign keyboard
-//    [textField resignFirstResponder];
     
 }
 
@@ -436,7 +404,6 @@
         //update class state for total amount
         [Deposit setTotalBagsAmount:newTotalAmount];
         
-        
         //set this first to update the conditional in numberOfSections
         _valueRemoved = YES;
         
@@ -454,7 +421,7 @@
             double delayInSeconds = 0.3;
             dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
             dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-                    [_depositsTV reloadData];//tricky
+                    [_depositsTV reloadData];
             });
 //        }//close if
 
@@ -472,7 +439,6 @@
     }
     
     _allowEdit = NO;
-    
 }
 
 #pragma mark - Custom delegate method
@@ -534,8 +500,6 @@
 
 //should be a helper object
 - (NSMutableArray *)collectMyData {
-    
-//    xmlDataDict = [NSMutableDictionary dictionary];
     
         //extract barcode data
         if (_barcodeArray) {
@@ -646,15 +610,13 @@
     //serialize and convert to data for webservice XMLSS format xls
     xmlDataString = [xmlString dataUsingEncoding:NSUTF8StringEncoding];
     
-    //test
+    
     //Adding new functionality to save an image to camera roll -> Mobile Iron
-    //call a new method
     [self writeToLibraryWithData:xmlDataString];//write to NSLibraryDirectory
     
     //call the request code
         [self callMyWebserviceWithData:xmlString];
 //    [self callMyWebserviceWithData:xmlArray];//_dataArray
-    
     
 }
 
@@ -748,7 +710,7 @@
         
         //call the request code
 //        [self callMyWebserviceWithData:xmlDataString];
-        [self callMyWebserviceWithData:xmlArray];//_dataArray
+//        [self callMyWebserviceWithData:xmlArray];//_dataArray -> changed to NSString from NSMutableArray
     
     
         //if mail isnt setup return
@@ -792,7 +754,7 @@
         //custom Warning Popup
         [self showWarningPopupWithTitle:@"Error: Unable to send email" andMessage:@"Please check you have coverage" forBarcode:nil];
         //ToDo decide where to go from here if it fails can we send again
-        [proceedBtn setEnabled:YES];//maybe
+        [proceedBtn setEnabled:YES];
     }];
 }
 
@@ -806,7 +768,6 @@
                 //ToDo perhaps Pop to rootViewConroller and Logout
                 DLog(@"Mail cancelled: you cancelled the operation and no email message was queued.");
             }];
-//            DLog(@"Mail cancelled: you cancelled the operation and no email message was queued.");
             break;
         case MFMailComposeResultSaved:
             //ToDo -> NO dont save
@@ -865,9 +826,6 @@
     
     //Create a custom WarningPopup.xib
     WarningPopup *warningPopup = [WarningPopup loadFromNibNamed:@"WarningPopup"];
-    //set delegate
-//    [warningPopup setDelegate:self];
-    
     //set text
     warningPopup.titleLbl.text = title;
     warningPopup.messageLbl.text = message;
@@ -924,10 +882,9 @@
 //        bagLbl.shadowColor = [UIColor grayColor];
 //        bagLbl.shadowOffset = CGSizeMake(1.0, 1.0);
         [bagLbl setUserInteractionEnabled:NO];
-        //add to view
+        
         [innerView addSubview:bagLbl];
         
-
         //Construct another label for amount
         UILabel *bagAmountLbl = [[UILabel alloc]initWithFrame:CGRectMake(210, 10, 80 , 25)];
         bagAmountLbl.textAlignment = NSTextAlignmentRight;
@@ -1093,12 +1050,8 @@
     //done pressed re-enable proccedBtn
     [proceedBtn setEnabled:YES];
     
-    //    [_depositsTV endEditing:YES];//test
-    
     [_depositsTV reloadData];
     _allowEdit = NO;
-    
-//    [_depositsTV reloadData];
     
     //set the edit button as the current barButton
     [self.navigationItem setRightBarButtonItem:editBBtn];
@@ -1187,9 +1140,8 @@
     if (_allowEdit && [textField.text length] > 0 && [textField.text length] <= 6) {
         
         _valueEdited = YES;
-        
-//        double newAmount = (double)textField.text.doubleValue;
-        DLog(@"newAmount in didEndEd: %f", newAmount);//should have value
+    
+        DLog(@"newAmount in didEndEd: %f", newAmount);
         
         //retrieve the deposit model for the TF index
         Deposit *deposit = [_depositsCollection objectAtIndex:indexPath.section];
@@ -1204,7 +1156,6 @@
         //then replace the retrieved deposit with the edited deposit in the collection
         [_depositsCollection replaceObjectAtIndex:indexPath.section withObject:deposit];
         
-        DLog(@"deposit current amount: %f", deposit.bagAmount);
         //resign the 1st responder
         [textField resignFirstResponder];
         //reset the editing values
@@ -1227,7 +1178,7 @@
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    
 }
 
 @end

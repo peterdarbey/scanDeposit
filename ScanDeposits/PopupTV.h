@@ -7,8 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-
-//@class User;
 #import "User.h"
 
 #define USER_NAME_TF 100

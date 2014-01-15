@@ -310,7 +310,6 @@
     }
     else
     {
-//        DLog(@"default style here"); //update with nice cell styles
         //ToDo reset the backgroundView to default
         UIImage *stretchImg = [[UIImage imageNamed:@"whiteCell.png"] resizableImageWithCapInsets:UIEdgeInsetsMake(10, 10, 10, 10)];
         cell.backgroundView = [[UIImageView alloc]initWithImage:stretchImg];
@@ -352,7 +351,7 @@
         [topView setBackgroundColor:[UIColor clearColor]];
 
         //construct a UILabel for the contorl user section
-        UILabel *userLbl = [[UILabel alloc]initWithFrame:CGRectMake(20, 54.0, 180, 25)];//correct
+        UILabel *userLbl = [[UILabel alloc]initWithFrame:CGRectMake(20, 54.0, 180, 25)];
         [userLbl setText:[NSString stringWithFormat:@"Control User: %i", section +1]];
 
         [userLbl setFont:[UIFont fontWithName:@"Arial-BoldMT" size:17]];
@@ -387,7 +386,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     
     if (section == 0) {
-        return 89;//84
+        return 89;
     }
     else
     {
@@ -553,7 +552,7 @@
         [userNameLbl setBackgroundColor:[UIColor clearColor]];
         
         if ([_userTV numberOfRowsInSection:selectedIP.section] > 1 && _isSelected) {
-            arrowImage.transform = CGAffineTransformMakeRotation(M_PI_2);//when collaps is called it sets _isexpanded -> NO
+            arrowImage.transform = CGAffineTransformMakeRotation(M_PI_2);//when collapsed is called it sets _isexpanded -> NO
         }
         else if ([_userTV numberOfRowsInSection:selectedIP.section] == 1 && !_isSelected) {
             arrowImage.transform = CGAffineTransformMakeRotation(0);
@@ -586,7 +585,7 @@
         
         return [_displayArray count];
     }
-    //else if no data yet
+    
     else if ([_displayArray count] < 1) {
         
         return 1;//Show the button on launch
@@ -600,9 +599,6 @@
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    
-    //if we have data
-//    DLog(@"_displayed ? %@", _displayArray);
     
     if ([_displayArray count] >= 1) {
         //then check if its expanded or not
@@ -620,7 +616,7 @@
     
     else
     {
-            return 0; //no data yet so return 0;
+            return 0; //no data yet return 0
     }
     
 }
@@ -631,9 +627,7 @@
     
     //tapped
     _isSelected = YES;
-    
    
-    
     //check we have a tblView 1st before expanding or collasping
     if ([_displayArray count] >= 1) {
         
@@ -693,10 +687,8 @@
             //Add just 3 entries to displayArray
             [[_displayArray objectAtIndex:indexPath.section]addObject:[tempArray objectAtIndex:i]];
             
-            //do anim
-            
         }
-         DLog(@"new _displayArray: %@", _displayArray);//correct
+         DLog(@"new _displayArray: %@", _displayArray);
         UITableViewCell *cell = (UITableViewCell *)[_userTV cellForRowAtIndexPath:indexPath];
         arrow = (UIImageView *)[cell.contentView viewWithTag:ARROW_IMG];
         
@@ -720,7 +712,6 @@
     // Already expanded, close it up! //check that its not open
     NSInteger numRows = [self.userTV numberOfRowsInSection:selectedIP.section];
         
-//        UITableViewCell *cell = (UITableViewCell *)[_userTV cellForRowAtIndexPath:indexPath];//indexPath > 0 no arrow subView
         UITableViewCell *cell = (UITableViewCell *)[_userTV cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section]];
         arrow = (UIImageView *)[cell.contentView viewWithTag:ARROW_IMG];
     
@@ -767,17 +758,10 @@
     DLog(@"-- userDict --: %@", userDict);
     [_usersArray addObject:userDict];//-> NSArray
     
-
     //then write to file
     [_usersArray writeToFile:[self getFilePathForName:@"users.plist"] atomically:YES];//users.plist
-    //for conditional
-//    _usersWritten = YES;
+
     DLog(@"**** new _usersArray **** %@", _usersArray);
-    
-    //read from new plist for Modal new class on log in
-    //NSDictionary *userDict = [NSDictionary dictionaryWithContentsOfFile:@"users.plist"];
-    
-   
     
 //    //Construct an array to populate the headers with initials
     NSMutableArray *initArray = [NSMutableArray array];
@@ -794,7 +778,6 @@
         [writableArray addObject:[user userName]];
          [writableArray addObject:[user userEMail]];
          [writableArray addObject:[user userStaffID]];
-       
     
         //Before adding/writing to file check that there is no data already stored
         if (_storedArray) {

@@ -38,7 +38,6 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *cancelBtn;
 @property (weak, nonatomic) IBOutlet UIButton *confirmBtn;
-//@property (strong, nonatomic) IBOutlet UIImageView *imagePlaceHolder;
 @property (strong, nonatomic) PopUpTV *popupTV;
 
 @end

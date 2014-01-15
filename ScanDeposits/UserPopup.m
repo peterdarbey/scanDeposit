@@ -70,9 +70,8 @@
 //    [_inputAmountTF setInputAccessoryView:[self createCustomKBView]];
     
     _popupTV = [[PopUpTV alloc]initWithFrame:CGRectMake(0, 0, _popupView.frame.size.width, _popupView.frame.size.height) style:UITableViewStyleGrouped];
-    //_popupTV has the delegate property so have to set from there
-//    [_popupTV setUserDelegate:self];
-    [self.popupView addSubview:_popupTV];//works
+    
+      [self.popupView addSubview:_popupTV];//works
     
     
     //Button styling
@@ -81,8 +80,6 @@
     
     [self buttonStyle:_confirmBtn WithImgName:@"blueButton.png" imgSelectedName:@"blueButtonSelected.png" withTitle:@"Confirm"];
     [_confirmBtn addTarget:self action:@selector(confirmPressed:) forControlEvents:UIControlEventTouchUpInside];
-    //Not convince that this is the best place to set delegate
-//    [self.inputAmountTF setDelegate:self];
     
 }
 

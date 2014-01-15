@@ -11,7 +11,6 @@
 
 @interface SuccessPopup ()
 {
-//    CGPoint offset;
    
 }
 

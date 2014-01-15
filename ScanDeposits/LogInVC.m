@@ -73,7 +73,6 @@
                 if ([self.delegate respondsToSelector:@selector(dismissLoginVC: isAdmin:)]) {
                     //dismissLoginVC -> sets isAdmin to YES and isUser to NO
                     [self.delegate performSelector:@selector(dismissLoginVC: isAdmin:) withObject:_packagedAdmins withObject:@(isAdmin)];// -> works @(YES) but dont hardcode
-                    DLog(@"New Admin delgate protocol implemented");
                     //dismiss
                     [self dismissViewControllerAnimated:YES completion:nil];//correct
                 }//close if
@@ -102,7 +101,7 @@
                 if ([aUser[@"Staff ID"] isEqualToString:_userOne]) { // -> User => StaffID CORRECT
                     //aUser is the specified user via Login textField add to collection
                     [_packagedUsers setObject:aUser forKey:@(1)];//number now associated with a user
-                    isAdmin = [aUser[@"Adminstrator"]boolValue];// check this user also 
+                    isAdmin = [aUser[@"Adminstrator"]boolValue];
                 }//close if
                 
             }//close for
@@ -133,7 +132,7 @@
                 }//close for
                 
             }//close if
-                if ([_packagedUsers count] == 2) {//set to 2
+                if ([_packagedUsers count] == 2) {
                 
                     //Its cause LoginVC is been presented again for some reason?
                     //check BOOL for _isAdmin auto calling that condition again??
@@ -349,8 +348,6 @@
     //check it exists and load if not then cant use app
         //ToDo load array from file
         _users = [NSMutableArray arrayWithContentsOfFile:[self getFilePathForName:@"users.plist"]];
-
-//    DLog(@"_users: %@", _users);//correct
     
     //Administrator setting
     if (![fileManager fileExistsAtPath:[self getFilePathForName:@"admins.plist"]]) {
@@ -364,7 +361,6 @@
     
     DLog(@"_admins collection: %@", _admins);//correct -> empty at the moment as still under construction
     if ([_admins count] < 1) {
-        DLog(@"if empty construct an array: %@", _admins);
         _admins = [NSMutableArray array];
     }
     
@@ -416,7 +412,6 @@
        
         adminLbl.textAlignment = NSTextAlignmentLeft;
         adminLbl.font = [UIFont fontWithName:@"Arial-BoldMT" size:17];
-//        adminLbl.textColor = [UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0];//darkGray
         [adminLbl setTextColor:[UIColor whiteColor]];
         adminLbl.shadowColor = [UIColor colorWithRed:60.0/255.0 green:80.0/255.0 blue:95.0/255.0 alpha:1.0];//darkGray
         adminLbl.shadowOffset = CGSizeMake(1.0, 1.0);

@@ -24,19 +24,16 @@
     SuccessPopup *successPopup;
     UIBarButtonItem *editBBtn, *doneBtn;
     NSMutableDictionary *xmlDataDict;
-    double newAmount;//shouldChangeChars
-    
+    double newAmount;
     UIBarButtonItem *barBtnFinished;
-    
     NSString *xlsStringImg;
+    //HTTP request
+    NSMutableData *responseData;
+    UIActivityIndicatorView *requestSpinner;
     
     //Mobile Iron workaround
     UIBarButtonItem *attachButton;
     NSData *xmlDataString;
-    
-    //HTTP request
-    NSMutableData *responseData;
-    UIActivityIndicatorView *requestSpinner;
 }
 
 
@@ -91,17 +88,6 @@
     
 }
 
-//-(void)uploadData {
-//    
-//    DLog(@"Attach the data bypass Mobile Iron");
-//    if (xmlDataString) {
-//        DLog(@"xmlDataString in uploadData: %@", xmlDataString);
-//        //add attachment to email as Excel SpreadSheet xls format
-//        [mailController addAttachmentData:xmlDataString mimeType:@"application/vnd.ms-excel" fileName:@"ProcessReportMobile_Iron.xls"];
-//    }
-//    
-//}
-
 //mobile iron test
 -(void)writeToLibraryWithData:(NSData *)data {
     
@@ -113,7 +99,7 @@
     DLog(@"%@ written to file: %@", xmlDataString, xmlPath);// /var/mobile/Applications/9F6B4DA6-C826-4D56-A8AB-0E7A653A8549/Library/xlsData.xls
     
     
-    //to convert NSData to pdf
+    //to convert NSData to PDF --> Mobile_Iron workaround
 //    CFDataRef myPDFData        = (__bridge CFDataRef)data;
 //    DLog(@"myPData: %@", myPDFData);//has data
 //    
@@ -189,7 +175,7 @@
     [successPopup setNotDelegate:self];
     
     //updated and set in class
-    [successPopup showOnView:self.view withTitle:title andMessage:message];//nope
+    [successPopup showOnView:self.view withTitle:title andMessage:message];//nil
     
 }
 
@@ -254,7 +240,7 @@
     requestSpinner = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     [proceedBtn setEnabled:NO];
     [requestSpinner setHidesWhenStopped:YES];
-    CGPoint spinnerPoint = CGPointMake(252.5, 22);//-10?? but correct
+    CGPoint spinnerPoint = CGPointMake(252.5, 22);
     [requestSpinner setCenter:spinnerPoint];
     
     //add to proceed button view
@@ -288,7 +274,7 @@
         NSLog(@"HTTP status is: %i, good to go", statusCode);
 //        [self sentMailWithSuccess:YES];//nah dont need here only when finished receiving data
     }
-    else if (statusCode == 400 || statusCode == 404)
+    else if (statusCode == 400 || statusCode == 401 || statusCode == 404)
     {
         //capture the main thread
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -302,7 +288,7 @@
         
     }
     else if (statusCode == 500) {
-        
+        //display custom error popup
         [self sentMailWithError:YES];
         
     }
@@ -324,7 +310,7 @@
     
     //if we have a response parse it
     if (responseData) {
-
+        //the responseData is not JSON but string
         id responseObject = [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingAllowFragments|NSJSONReadingMutableContainers error:&parseError];//was 0
         //for test display only
         NSMutableString *responseString = [[NSMutableString alloc]initWithData:responseData encoding:NSUTF8StringEncoding];
@@ -332,6 +318,7 @@
         
         if (parseError) { //we are receiving a parse error with returned response not json
             DLog(@"error parsing the response: %@ probably not configured for json yet", parseError);
+            return;
         }
         else
         {
